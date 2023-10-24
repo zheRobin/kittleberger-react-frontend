@@ -2,10 +2,10 @@ from django.db import models
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
-    role = models.CharField(max_length=255)
+    role = models.CharField(max_length=20, default="guest")
     email = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
-    username = None
+    username = models.CharField(max_length=255, default=None)
     groups = models.ManyToManyField(Group, related_name='custom_user_set')
     user_permissions = models.ManyToManyField(Permission, related_name='custom_user_set')
     USERNAME_FIELD = 'email' # login w/ email, unique identifier.

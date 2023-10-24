@@ -5,6 +5,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from app.util import *
 from accounts.serializers import *
+import re
 import jwt
 import datetime
 # Registration
@@ -12,8 +13,8 @@ class registerAPIView(APIView):
     def post(self,request,format=None): 
         try:
             body = request.data
-            if 'password' in body and 'username' in body:
-                        body['email']=body['username']
+            if 'password' in body and 'email' in body:
+                        body['username']=re.search(r'[^@\s]+', body['email']).group()
                         serializer = UserSerializer(data = body)
                         if serializer.is_valid(raise_exception = True):   #remove the the raise_exception = True
                             serializer.save()
