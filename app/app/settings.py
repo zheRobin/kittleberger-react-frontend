@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'rest_framework',
     'accounts',
+    'master'
 ]
 
 MIDDLEWARE = [
@@ -82,31 +83,14 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-     'default': {
+    'default': {
        'ENGINE': env('RDS_DB_ENGINE'),
        'NAME': env('RDS_DB_NAME'),
        'USER': env('RDS_DB_USER'),
        'PASSWORD': env('RDS_DB_PASSWORD'),
        'HOST': env('RDS_DB_HOST'),
        'PORT': env('RDS_DB_PORT'),
-   },
-    'xml-tool': {
-        'ENGINE':  env('MONGO_DB_ENGINE'),
-        'NAME': env('MONGO_DB_NAME'),
-        'ENFORCE_SCHEMA': False,
-            'CLIENT': {
-                'host': env('MONGO_DB_HOST'),
-            },
-            'LOGGING': {
-                'version': 1,
-                'loggers': {
-                    'djongo': {
-                        'level': 'DEBUG',
-                        'propagate': False,                        
-                    }
-                },
-             },
-    }
+    },
 }
 
 
@@ -145,7 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
+print (STATIC_ROOT)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
