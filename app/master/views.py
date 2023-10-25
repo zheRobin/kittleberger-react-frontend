@@ -3,18 +3,15 @@ from django.core.files.base import ContentFile
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from pymongo import MongoClient
+import gridfs
 import zipfile
 import json, xmltodict
-from itertools import islice
 from app.util import *
 from master.models import *
 import environ
 import pymongo.errors
 import sys
-def chunks(dictionary, size=1000):
-    it = iter(dictionary)
-    for _ in range(0, len(dictionary), size):
-        yield {k: dictionary[k] for k in islice(it, size)}
+import os
 env = environ.Env()
 environ.Env.read_env()
 # Create your views here.
@@ -23,7 +20,9 @@ class parseAPIView(APIView):
         file = request.FILES['file']
         filepath = default_storage.save(file.name, ContentFile(file.read()))
         try:
-            client = MongoClient(host=env('MONGO_DB_HOST')) 
+            client = MongoClient(host=env('MONGO_DB_HOST'))
+            db = client[env('MONGO_DB_NAME')]
+            fs = gridfs.GridFS(db) 
         except pymongo.errors.ServerSelectionTimeoutError as err:
             print(err)
             return Response(error(self, "Unable to connect to MongoDB"))
@@ -44,13 +43,20 @@ class parseAPIView(APIView):
                         data_dict = {'root': data_dict}
                     json_data = json.dumps(data_dict)
                     json_dict = json.loads(json_data)
-                    print(sys.getsizeof(json_dict)) 
                     assert isinstance(json_dict, dict)
-                    mongo_collec = client[env('MONGO_DB_NAME')][str(document.file_id)]
-                    for chunk in chunks(json_dict):
-                            mongo_collec.insert_one(chunk)
+                    json_data_bytes = json.dumps(json_dict).encode('utf-8')
+                    file_id = fs.put(json_data_bytes)
+                    result = fs.get(file_id).read()
+                    # mongo_collec = client[env('MONGO_DB_NAME')][str(document.file_id)]
+                    # if isinstance(records, list):
+                    #     for record_block in chunks(records, 500):
+                    #         doc = {'records': record_block}
+                    #         mongo_collec.insert_one(doc)
+
                         # try:
                         # except Exception as e:
                         #     return Response(error(self, "Unable to insert data into MongoDB"))
-        return Response(success(self, data_dict))
+            zip_ref.close() 
+            os.remove(filepath)
+        return Response(success(self, result))
         
