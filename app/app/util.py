@@ -1,5 +1,4 @@
 from rest_framework import status
-
 def success(self, data):
     response = {
         "data":data,
@@ -15,3 +14,7 @@ def error(self, data):
         "code"   : status.HTTP_400_BAD_REQUEST
     }
     return response
+
+def chunks(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]

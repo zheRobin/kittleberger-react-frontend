@@ -30,8 +30,40 @@ SECRET_KEY = 'django-insecure-4fm8z5rvx=_n*ew@cjt7mn2(^aum)t0j)7r@k68czzxszv+-91
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'django.log',
+            'formatter': 'verbose',
+        }
+    },
+    'loggers': {
+        'app':{
+            'handler'  : ['console'],
+            'level': 'ERROR'
+        },
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+        },
+    },
+}
 
 # Application definition
 
@@ -45,6 +77,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'rest_framework',
     'accounts',
+    'master'
 ]
 
 MIDDLEWARE = [
@@ -82,31 +115,14 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-     'default': {
+    'default': {
        'ENGINE': env('RDS_DB_ENGINE'),
        'NAME': env('RDS_DB_NAME'),
        'USER': env('RDS_DB_USER'),
        'PASSWORD': env('RDS_DB_PASSWORD'),
        'HOST': env('RDS_DB_HOST'),
        'PORT': env('RDS_DB_PORT'),
-   },
-    'xml-tool': {
-        'ENGINE':  env('MONGO_DB_ENGINE'),
-        'NAME': env('MONGO_DB_NAME'),
-        'ENFORCE_SCHEMA': False,
-            'CLIENT': {
-                'host': env('MONGO_DB_HOST'),
-            },
-            'LOGGING': {
-                'version': 1,
-                'loggers': {
-                    'djongo': {
-                        'level': 'DEBUG',
-                        'propagate': False,                        
-                    }
-                },
-             },
-    }
+    },
 }
 
 
@@ -145,7 +161,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
+print (STATIC_ROOT)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
