@@ -6,6 +6,9 @@ from pymongo import MongoClient
 from gridfs import GridFSBucket
 import zipfile
 import json, xmltodict
+from bson import ObjectId
+from lxml import etree
+from lxml.etree import XMLSyntaxError
 from app.util import *
 from master.models import *
 import environ
@@ -23,32 +26,36 @@ class parseAPIView(APIView):
             db = client[env('MONGO_DB_NAME')]
             bucket = GridFSBucket(db) 
         except pymongo.errors.ServerSelectionTimeoutError as err:
-            print(err)
-            return Response(error(self, "Unable to connect to MongoDB"))
-        
+            return Response(error(self, "Unable to connect to MongoDB"))        
 
         if not zipfile.is_zipfile(filepath):
             return Response(error(self, "Not a valid zip file"))
 
         # Unzip the file
         with zipfile.ZipFile(filepath, 'r') as zip_ref:
-            # XML parsing
+            errors = []
             for f in zip_ref.namelist():
                 if f.endswith('.xml'):  # Check if it's an XML
-                    file_data = zip_ref.read(f)
-                    data_dict = xmltodict.parse(file_data, dict_constructor=dict)
-                    if isinstance(data_dict, list):
-                        data_dict = {'root': data_dict}
-                    json_data = json.dumps(data_dict)
-                    json_dict = json.loads(json_data)
-                    assert isinstance(json_dict, dict)
-                    json_data_bytes = json.dumps(json_dict).encode('utf-8')
                     try:
-                        file_id = bucket.upload_from_stream('records',json_data_bytes)
+                        xml_doc = etree.parse(zip_ref.open(f))
+                        data_dict = xmltodict.parse(etree.tostring(xml_doc))
+                        json_data_bytes = json.dumps(data_dict).encode('utf-8')
+                        file_id = bucket.upload_from_stream(f,json_data_bytes)
                         Document.objects.create(file_id=file_id)
+                    except XMLSyntaxError:
+                        errors.append(f"File {f} is not a well-formed XML document.")
                     except Exception as e:
                         return Response(error(self, "Unable to insert data into MongoDB"))
-            zip_ref.close() 
-            os.remove(filepath)
-        return Response(success(self, "Successfully uploaded"))
+            print (errors)
+        zip_ref.close() 
+        os.remove(filepath)
+        return Response(success(self, "Data inserted successfully"))
+    
+    def get(self, request):
+        file_id = request.GET['file_id']
+        client = MongoClient(host=env('MONGO_DB_HOST'))
+        db = client[env('MONGO_DB_NAME')]
+        bucket = GridFSBucket(db)
+        grid_in = bucket.open_download_stream(ObjectId(file_id)).read()
+        return Response(success(self, json.loads(grid_in)))
         
