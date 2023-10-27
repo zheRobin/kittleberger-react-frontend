@@ -2,29 +2,11 @@ from django.contrib.sites.shortcuts import get_current_site
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from master.util import *
 from accounts.serializers import *
 import re
 import jwt
-import datetime
-
-def get_tokens_for_user(user):
-    refresh_token = RefreshToken.for_user(user)
-    access_token = AccessToken.for_user(user)
-    payload = {
-                "id": user.id,
-                "email": user.email,
-                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                "iat": datetime.datetime.utcnow()
-            }
-
-    jwt_token = jwt.encode(payload, 'secret', algorithm='HS256')
-    return {
-        'refresh_token': str(refresh_token),
-        'access_token': str(access_token),
-        'jwt_token': str(jwt_token)
-    }
+from app.util import *
+from accounts.util import *
 # Registration
 class RegisterAPIView(APIView):
     def post(self,request,format=None): 
@@ -41,7 +23,7 @@ class RegisterAPIView(APIView):
                             protocol = request.scheme
                             magic_link = f"{protocol}://{get_current_site(request).domain}/api/vi/user/login?token={token['jwt_token']}"
                             data = {'user':user_data,'magic_link':magic_link}
-                            return Response(success(self,data))
+                            return Response(created(self,data))
                         return Response(error(self,'Invalid Data'))
                         
             else:

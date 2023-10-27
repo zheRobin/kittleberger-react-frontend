@@ -13,7 +13,10 @@ from master.models import *
 from lxml import etree
 from lxml.etree import XMLSyntaxError
 from master.util import *
-
+from app.util import *
+import environ
+env = environ.Env()
+environ.Env.read_env()
 class parseAPIView(APIView):
     def post(self, request):
         file = request.FILES['file']
@@ -33,9 +36,9 @@ class parseAPIView(APIView):
                             collection.insert_many(chunk)
                             chunk.clear()  
                     except json.JSONDecodeError:
-                        print("Failed to decode JSON")
+                        return Response(error(self, "Failed to decode JSON"))
                     except Exception as e:
-                        print(f"Unexpected error: {str(e)}")
+                        return Response(server_error(self, f"Unexpected error: {str(e)}"))
                     finally:
                         elem.clear()
                         while elem.getprevious() is not None:
@@ -46,7 +49,7 @@ class parseAPIView(APIView):
                 Document.objects.create(file_id=collection_name)
 
         except pymongo.errors.ServerSelectionTimeoutError as err:
-            return Response(error(self, "Unable to connect to MongoDB"))
+            return Response(server_error(self, "Unable to connect to MongoDB"))
 
         if not zipfile.is_zipfile(filepath):
             return Response(error(self, "Not a valid zip file"))
@@ -71,8 +74,8 @@ class parseAPIView(APIView):
         os.remove(filepath)
 
         if errors.__len__() > 0:
-            return Response(error(self, errors))
-        return Response(success(self, "Data inserted successfully"))
+            return Response(created(self, errors))
+        return Response(created(self, "Data inserted successfully"))
 
     def get(self, request):
         try:
@@ -80,6 +83,6 @@ class parseAPIView(APIView):
             client = MongoClient(host=env('MONGO_DB_HOST'))
             db = client[env('MONGO_DB_NAME')]
         except pymongo.errors.ServerSelectionTimeoutError as err:
-            return Response(error(self, "Unable to connect to MongoDB"))
+            return Response(server_error(self, "Unable to connect to MongoDB"))
         data = db[file_id].find({}, {"CDN_URLS": 1, "_id": 0})
         return StreamingHttpResponse(stream(data, "CDN_URLS")) 
