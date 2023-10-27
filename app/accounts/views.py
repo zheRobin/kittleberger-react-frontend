@@ -26,7 +26,7 @@ def get_tokens_for_user(user):
         'jwt_token': str(jwt_token)
     }
 # Registration
-class registerAPIView(APIView):
+class RegisterAPIView(APIView):
     def post(self,request,format=None): 
         try:
             body = request.data

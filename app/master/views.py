@@ -12,10 +12,7 @@ import time
 from master.models import *
 from lxml import etree
 from lxml.etree import XMLSyntaxError
-import environ
 from master.util import *
-env = environ.Env()
-environ.Env.read_env()
 
 class parseAPIView(APIView):
     def post(self, request):
