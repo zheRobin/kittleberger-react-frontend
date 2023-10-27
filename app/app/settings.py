@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-4fm8z5rvx=_n*ew@cjt7mn2(^aum)t0j)7r@k68czzxszv+-91'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 LOGGING = {
@@ -42,7 +42,6 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
@@ -54,14 +53,18 @@ LOGGING = {
         }
     },
     'loggers': {
-        'app':{
+        'master':{
             'handler'  : ['console'],
-            'level': 'ERROR'
+            'level': 'INFO'
         },
         'django': {
             'handlers': ['file'],
             'level': 'ERROR',
         },
+        'root': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
     },
 }
 
@@ -77,10 +80,12 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'rest_framework',
     'accounts',
-    'master'
+    'master',
+    'compose'
 ]
 
 MIDDLEWARE = [
+    'app.middleware.RequestLogMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -162,7 +167,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
-print (STATIC_ROOT)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

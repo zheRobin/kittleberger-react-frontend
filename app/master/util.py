@@ -1,5 +1,6 @@
 from rest_framework import status
 from lxml import etree as ET
+import time
 ATTRIBUTES_XPATH = ET.XPath('.//attribute')
 LINKED_PRODUCTS_XPATH = ET.XPath('.//linked_products/product')
 LINKED_PRODUCT_ATTRIBUTES_XPATH = ET.XPath('.//attributes/attribute')
@@ -25,4 +26,4 @@ def stream(cursor, field):
     for document in cursor:
         if field in document and document[field] is not None:  # Add this check
             for url in document[field]:
-                yield url
+                yield url+'\n'

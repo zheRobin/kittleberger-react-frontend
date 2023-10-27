@@ -63,3 +63,10 @@ def not_found(self, message="Resource Not Found"):
         "code": status.HTTP_404_NOT_FOUND
     }
     return response
+def server_error(self, message="Unkown Error"):
+    response = {
+        "data": {"error": message},
+        "status": "failed",
+        "code": status.HTTP_501_NOT_IMPLEMENTED
+    }
+    return response

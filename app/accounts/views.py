@@ -8,7 +8,7 @@ import jwt
 from app.util import *
 from accounts.util import *
 # Registration
-class registerAPIView(APIView):
+class RegisterAPIView(APIView):
     def post(self,request,format=None): 
         try:
             body = request.data
@@ -23,7 +23,7 @@ class registerAPIView(APIView):
                             protocol = request.scheme
                             magic_link = f"{protocol}://{get_current_site(request).domain}/api/vi/user/login?token={token['jwt_token']}"
                             data = {'user':user_data,'magic_link':magic_link}
-                            return Response(success(self,data))
+                            return Response(created(self,data))
                         return Response(error(self,'Invalid Data'))
                         
             else:
