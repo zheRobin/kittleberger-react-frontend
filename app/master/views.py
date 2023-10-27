@@ -83,20 +83,37 @@ class parseAPIView(APIView):
         try:
             client = MongoClient(host=env('MONGO_DB_HOST'))
             db = client[env('MONGO_DB_NAME')]
-        except pymongo.errors.ServerSelectionTimeoutError as err:
-            return Response(server_error(self, "Unable to connect to MongoDB"))
-        query = request.GET['query']
-        file_id = Document.objects.latest('id').file_id
+        except pymongo.errors.ConnectionFailure:
+            return Response(server_error(self, "MongoDB server is not available"))
+        except Exception as e:
+            return Response(server_error(self, str(e)))
+        
+        try:
+            query = request.GET['query']
+        except KeyError:
+            return Response(server_error(self, "Missing 'query' parameter"))
+
+        try:
+            file_id = Document.objects.latest('id').file_id
+        except Document.DoesNotExist:
+            return Response(server_error(self, "No Document objects exist"))
+        
         regex = re.compile(query, re.IGNORECASE)
+        
         data = db[file_id].find({
             "linked_products": {
                 "$elemMatch": {
                     "$or": [
                         {"mfact_key": regex},
-                        {"name": regex}, 
+                        {"name": regex},
                         {"id": regex}
                     ]
                 }
             }
         })
-        return Response(filter(data,regex, "linked_products"))
+        
+        result = filter(data,regex, "linked_products")
+        if len(result) == 0:
+            return Response(not_found(self, "No matches found for query"))
+        
+        return Response(success(self, result))
