@@ -14,6 +14,7 @@ from lxml import etree
 from lxml.etree import XMLSyntaxError
 import environ
 from master.util import *
+from app.util import *
 env = environ.Env()
 environ.Env.read_env()
 
