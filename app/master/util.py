@@ -22,8 +22,21 @@ def convert(element):
 
     result.update(attributes)
     return result
+
 def stream(cursor, field):
     for document in cursor:
         if field in document and document[field] is not None:  # Add this check
-            for url in document[field]:
-                yield url+'\n'
+            for el in document[field]:
+                yield el+'\n'
+
+def filter(cursor,regex, field):
+    results = []
+    for document in cursor:
+        for product in document[field]:
+            if regex.search(product['mfact_key']) or regex.search(product['name']) or regex.search(product['id']):
+                results.append({
+                    'article number': product['mfact_key'],
+                    'name': product['name'],
+                    'CDN urls': document['CDN_URLS']
+                })
+    return results

@@ -7,6 +7,7 @@ from pymongo import MongoClient
 import zipfile
 import json
 import os
+import re
 import pymongo.errors
 import time
 from master.models import *
@@ -45,6 +46,7 @@ class parseAPIView(APIView):
                             del elem.getparent()[0]
                 if chunk:
                     collection.insert_many(chunk)
+                    chunk.clear()
 
                 Document.objects.create(file_id=collection_name)
 
@@ -79,10 +81,22 @@ class parseAPIView(APIView):
 
     def get(self, request):
         try:
-            file_id = request.GET['file_id']
             client = MongoClient(host=env('MONGO_DB_HOST'))
             db = client[env('MONGO_DB_NAME')]
         except pymongo.errors.ServerSelectionTimeoutError as err:
             return Response(server_error(self, "Unable to connect to MongoDB"))
-        data = db[file_id].find({}, {"CDN_URLS": 1, "_id": 0})
-        return StreamingHttpResponse(stream(data, "CDN_URLS")) 
+        query = request.GET['query']
+        file_id = Document.objects.latest('id').file_id
+        regex = re.compile(query, re.IGNORECASE)
+        data = db[file_id].find({
+            "linked_products": {
+                "$elemMatch": {
+                    "$or": [
+                        {"mfact_key": regex},
+                        {"name": regex}, 
+                        {"id": regex}
+                    ]
+                }
+            }
+        })
+        return Response(filter(data,regex, "linked_products"))
