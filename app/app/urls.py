@@ -26,3 +26,4 @@ urlpatterns = [
     path('api/v1/core/', include('master.urls')),
     path('api/v1/compose/', include('compose.urls')),
 ]
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
