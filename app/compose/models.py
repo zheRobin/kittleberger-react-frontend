@@ -5,11 +5,13 @@ from accounts.models import User
 class Brand(models.Model):
     name = models.CharField(max_length=50, unique=True)
     index = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
-
+    def __str__(self):
+        return self.name
 class Application(models.Model):
     name = models.CharField(max_length=50, unique=True)
     index = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
-
+    def __str__(self):
+        return self.name
 class ComposingArticleTemplate(models.Model):
     pos_index = models.IntegerField()
     position_x = models.IntegerField()
@@ -24,13 +26,13 @@ class ComposingArticleTemplate(models.Model):
 
 class ComposingTemplate(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.CharField(max_length=255, unique=True)
+    slug = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     brand = models.ManyToManyField(Brand)
     application = models.ManyToManyField(Application)
     is_shadow = models.BooleanField(default=False)
-    resolution_width = models.IntegerField()
-    resolution_height = models.IntegerField()
-    resolution_dpi = models.IntegerField()
+    resolution_width = models.IntegerField(default=800)
+    resolution_height = models.IntegerField(default=600)
+    resolution_dpi = models.IntegerField(default=72)
     file_type = models.CharField(max_length=10, default='png')
     bg_image_cdn_url = models.CharField(max_length=255)
     preview_image_cdn_url = models.CharField(max_length=255)
@@ -58,7 +60,7 @@ class Article(models.Model):
 
 class Composing(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.CharField(max_length=255, unique=True)
+    slug = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     template = models.ForeignKey(ComposingTemplate, related_name='template', on_delete=models.CASCADE)
     articles = models.ManyToManyField(Article, related_name='articles')
     created_by = models.ForeignKey(User, related_name='composings_created', on_delete=models.CASCADE)

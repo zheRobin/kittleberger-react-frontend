@@ -33,7 +33,7 @@ def filter(cursor,regex, field):
     results = []
     for document in cursor:
         for product in document[field]:
-            if regex.search(product['mfact_key']) or regex.search(product['name']) or regex.search(product['id']):
+            if regex.search(product['mfact_key']) or regex.search(product['name']):
                 results.append({
                     'article number': product['mfact_key'],
                     'name': product['name'],
