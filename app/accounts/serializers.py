@@ -3,7 +3,7 @@ from accounts.models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'role', 'email', 'password', 'username', 'date_joined']
+        fields = ['id', 'email', 'password']
 
     # hide password
         extra_kwargs = {

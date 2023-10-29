@@ -1,34 +1,51 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from django.contrib.auth.models import Group, Permission
-from django.contrib.auth.models import AbstractUser
-class User(AbstractUser):
-    role = models.CharField(max_length=20, default="guest")
-    email = models.CharField(max_length=255, unique=True)
-    password = models.CharField(max_length=255)
-    username = models.CharField(max_length=255, default=None)
-    groups = models.ManyToManyField(Group, related_name='custom_user_set')
-    user_permissions = models.ManyToManyField(Permission, related_name='custom_user_set')
-    USERNAME_FIELD = 'email' # login w/ email, unique identifier.
-    REQUIRED_FIELDS = [] 
 
-class AuthTransaction(models.Model):
-    token = models.TextField(verbose_name=("JWT Access Token"))
-    session = models.TextField(verbose_name=("Session Passed"))
-    refresh_token = models.TextField(
-        blank=True,
-        verbose_name=("JWT Refresh Token"),
-    )
-    expires_at = models.DateTimeField(
-        blank=True, null=True, verbose_name=("Expires At")
-    )
-    create_date = models.DateTimeField(
-        verbose_name=("Create Date/Time"), auto_now_add=True
-    )
-    update_date = models.DateTimeField(
-        verbose_name=("Date/Time Modified"), auto_now=True
-    )
-    created_by = models.ForeignKey(to=User, on_delete=models.PROTECT)
+class UserManager(BaseUserManager):
+    """Manager for user profiles"""
+    
+    def create_user(self, email, password=None, **extra_fields):
+        """Create a new user model"""
+        if not email:
+            raise ValueError('Users must have an email address')
 
-    def __str__(self):
-        return str(self.created_by.role) + " | " + str(self.created_by.username)
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+    def create_admin(self, email, password=None, **extra_fields):
+        """Create new superuser profile"""
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.create_user(email, password=password, **extra_fields)
+        user.is_superuser = False
+        user.is_staff = True
+        user.save(using=self._db)
+
+        return user
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Create new superuser profile"""
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.create_user(email, password=password, **extra_fields)
+        user.is_superuser = True
+        user.is_staff = True
+        user.save(using=self._db)
+
+        return user
+class User(AbstractBaseUser, PermissionsMixin):
+    """Custom User Model that support using email instead of username"""
+    email = models.EmailField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+
 

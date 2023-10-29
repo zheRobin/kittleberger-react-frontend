@@ -10,16 +10,24 @@ class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
         fields = '__all__'
-
-class ComposingTemplateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ComposingTemplate
-        fields = '__all__'
-
 class ComposingArticleTemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComposingArticleTemplate
         fields = '__all__'
+class ComposingTemplateSerializer(serializers.ModelSerializer):
+    brand = BrandSerializer(many=True)
+    application = ApplicationSerializer(many=True)
+    article_placements = ComposingArticleTemplateSerializer(many=True)
+    class Meta:
+        model = ComposingTemplate
+        fields = '__all__'
+    def create(self, validated_data):
+        brands_data = validated_data.pop('brand')
+        template = ComposingTemplate.objects.create(**validated_data)
+        for brand_data in brands_data:
+            template.brand.add(brand_data)
+        return template
+
         
 class ComposingSerializer(serializers.ModelSerializer):
     class Meta:

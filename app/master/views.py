@@ -89,25 +89,24 @@ class parseAPIView(APIView):
             return Response(server_error(self, str(e)))
         
         try:
-            query = request.GET['query']
+            product = request.GET['product']
         except KeyError:
-            return Response(server_error(self, "Missing 'query' parameter"))
+            return Response(server_error(self, "Missing 'product' parameter"))
 
         try:
             file_id = Document.objects.latest('id').file_id
         except Document.DoesNotExist:
             return Response(server_error(self, "No Document objects exist"))
         
-        regex = re.compile(query, re.IGNORECASE)
-        
+        regex = re.compile(product, re.IGNORECASE)
+        query_list = [
+            {"mfact_key": regex},
+            {"name": regex}
+        ]
         data = db[file_id].find({
             "linked_products": {
                 "$elemMatch": {
-                    "$or": [
-                        {"mfact_key": regex},
-                        {"name": regex},
-                        {"id": regex}
-                    ]
+                    "$or": query_list
                 }
             }
         })

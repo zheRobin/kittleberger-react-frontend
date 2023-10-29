@@ -2,7 +2,7 @@
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 import datetime
 import jwt
-
+from accounts.models import User
 def get_tokens_for_user(user):
     refresh_token = RefreshToken.for_user(user)
     access_token = AccessToken.for_user(user)
@@ -19,3 +19,8 @@ def get_tokens_for_user(user):
         'access_token': str(access_token),
         'jwt_token': str(jwt_token)
     }
+def get_user(request):
+    user = User.objects.filter(request.user)
+    if user:
+        return user
+    return False
