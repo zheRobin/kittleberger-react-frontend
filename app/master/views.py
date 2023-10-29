@@ -2,6 +2,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.http import StreamingHttpResponse
 from pymongo import MongoClient
 import zipfile
@@ -18,8 +19,19 @@ from app.util import *
 import environ
 env = environ.Env()
 environ.Env.read_env()
-class parseAPIView(APIView):
+from .models import APIKey
+from accounts.models import User
+from django.shortcuts import get_object_or_404
+class APIKeyGen(APIView):
+    permission_classes = (IsAuthenticated,IsAdminUser)
     def post(self, request):
+        user = User.objects.get(pk = request.user.pk)
+        ak_obj = APIKey.objects.create(user=user)
+        return Response(created(self, ak_obj.apikey))
+class ParseAPIView(APIView):
+    def post(self, request):
+        api_key = request.POST.get('api_key')
+        get_object_or_404(APIKey, apikey=api_key)
         file = request.FILES['file']
         filepath = default_storage.save(os.path.join('temp', file.name), ContentFile(file.read()))
 
