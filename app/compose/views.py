@@ -1,3 +1,5 @@
+from django.db.models import Count, Q
+from django.http import StreamingHttpResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -13,6 +15,7 @@ from rest_framework.exceptions import NotFound
 from django.shortcuts import get_object_or_404
 import environ
 from app.util import *
+from compose.util import *
 env = environ.Env()
 environ.Env.read_env()
 
@@ -82,9 +85,9 @@ class TemplateAPIView(APIView):
             return Response(error(self, "No AWS credentials found"))
         except Exception as e:
             return Response(error(self, str(e)))
-
-    def put(self, request, pk):
-        template = get_object_or_404(ComposingTemplate, pk=pk)
+    def put(self, request):
+        template_pk = request.POST.get('pk')
+        template = get_object_or_404(ComposingTemplate, pk=template_pk)
         s3_client, s3_bucket, s3_endpoint = get_s3_config(), env('S3_BUCKET_NAME'), env('S3_ENDPOINT_URL')
         
         preview_image = request.FILES.get('preview_image')
@@ -94,7 +97,7 @@ class TemplateAPIView(APIView):
             preview_image_name = f"{str(uuid.uuid4())}_{preview_image.name}"
             preview_image_cdn_url = s3_endpoint + '/mediafils/preview_images' + preview_image_name
             try:
-                s3_client.upload_fileobj(preview_image, s3_bucket, 'mediafiles/preview_images/' + preview_image_name)
+                # s3_client.upload_fileobj(preview_image, s3_bucket, 'mediafiles/preview_images/' + preview_image_name)
                 template.preview_image_cdn_url = preview_image_cdn_url
             except NoCredentialsError:
                 return Response(error(self, "No AWS credentials found"), status=400)
@@ -103,7 +106,7 @@ class TemplateAPIView(APIView):
             background_image_name = f"{str(uuid.uuid4())}_{background_image.name}"
             bg_image_cdn_url = s3_endpoint + '/mediafils/background_images' + background_image_name
             try:
-                s3_client.upload_fileobj(background_image, s3_bucket, 'mediafiles/background_images/' + background_image_name)
+                # s3_client.upload_fileobj(background_image, s3_bucket, 'mediafiles/background_images/' + background_image_name)
                 template.bg_image_cdn_url = bg_image_cdn_url
             except NoCredentialsError:
                 return Response(error(self, "No AWS credentials found"), status=400)
@@ -125,18 +128,51 @@ class TemplateAPIView(APIView):
         serializer = ComposingTemplateSerializer(template)
 
         return Response(serializer.data, status=200)
-
-    def delete(self, request, pk):
-        template = ComposingTemplate.objects.get(pk=pk)
+    def delete(self, request):
+        template_pk = request.POST.get('pk')
+        template = ComposingTemplate.objects.get(pk=template_pk)
         if template:
             template.is_deleted = True
+            template.modified_by_id = request.user.pk
             template.save()
 
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
+    def get(self, request, format=None):
+        templates = ComposingTemplate.objects.all()
+        serializer = ComposingTemplateSerializer(templates, many=True)
+        return StreamingHttpResponse(event_stream(serializer.data), content_type="text/event-stream")
+class ComposingTemplateDetail(APIView):
+    def get(self, request, pk):
+        template = get_object_or_404(ComposingTemplate, pk=pk)
+        serializer = ComposingTemplateSerializer(template)
+        return Response(serializer.data)
 
+class ComposingTemplateFilter(APIView):
+    def post(self, request, format=None):
+        brands = request.data.get('brand', [])
+        applications = request.data.get('application', [])
+        article_numbers = request.data.get('article_number', [])
+        article_filter = Q()
+        for number in article_numbers:
+            if '+' in number:
+                number = int(number.replace('+', ''))
+                article_filter |= Q(count__gte=number)
+            else:
+                number = int(number)
+                article_filter |= Q(count=number)
+        templates = ComposingTemplate.objects.all()
+        if brands:
+            templates = templates.filter(brand__pk__in=brands).distinct()
 
+        if applications:
+            templates = templates.filter(application__pk__in=applications).distinct()
+        templates = templates.annotate(count=Count('article_placements')).filter(article_filter)
+
+        serializer = ComposingTemplateSerializer(templates, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 class ComposingArticleTemplateList(APIView):
     def get(self, request):
         articles = ComposingArticleTemplate.objects.all()
@@ -150,7 +186,6 @@ class ComposingArticleTemplateList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class ComposingList(APIView):
     def get(self, request):
         products = Composing.objects.all()
@@ -163,33 +198,6 @@ class ComposingList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ComposingTemplateDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return ComposingTemplate.objects.get(pk=pk)
-        except ComposingTemplate.DoesNotExist as e:
-            raise e
-
-    def get(self, request, pk):
-        template = self.get_object(pk)
-        serializer = ComposingTemplateSerializer(template)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        template = self.get_object(pk)
-        serializer = ComposingTemplateSerializer(template, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        template = self.get_object(pk)
-        template.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class ComposingArticleTemplateDetail(APIView):
     def get_object(self, pk):
@@ -217,7 +225,6 @@ class ComposingArticleTemplateDetail(APIView):
         template.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
 class ComposingDetail(APIView):
     def get_object(self, pk):
         try:
@@ -243,7 +250,6 @@ class ComposingDetail(APIView):
         template.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
 class BrandAPIView(APIView):
     def get(self, request):
         brands = Brand.objects.all()
@@ -257,7 +263,6 @@ class BrandAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class ApplicationAPIView(APIView):
     def get(self, request):
         applications = Application.objects.all()
@@ -270,7 +275,6 @@ class ApplicationAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class ArticleAPIView(APIView):
     def get(self, request):
