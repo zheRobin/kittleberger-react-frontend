@@ -99,32 +99,28 @@ class ParseAPIView(APIView):
             return Response(server_error(self, "MongoDB server is not available"))
         except Exception as e:
             return Response(server_error(self, str(e)))
-        
-        try:
-            product = request.GET['product']
-        except KeyError:
-            return Response(server_error(self, "Missing 'product' parameter"))
-
         try:
             file_id = Document.objects.latest('id').file_id
         except Document.DoesNotExist:
-            return Response(server_error(self, "No Document objects exist"))
-        
-        regex = re.compile(product, re.IGNORECASE)
-        query_list = [
-            {"mfact_key": regex},
-            {"name": regex}
-        ]
-        data = db[file_id].find({
-            "linked_products": {
-                "$elemMatch": {
-                    "$or": query_list
-                }
+            return Response(server_error(self, "No Document objects exist"))        
+        product = request.GET.get('product', None)
+        country = request.GET.get('country', None)
+        regex_product = None
+        regex_country = None
+        query = []
+        if product:
+            regex_product = re.compile(product, re.IGNORECASE)
+            product_query = {
+                "$or": [
+                    {"linked_products.mfact_key": regex_product},
+                    {"linked_products.name": regex_product}
+                ]
             }
-        })
+            query.append(product_query)
+        if country:
+            regex_country = re.compile(country, re.IGNORECASE)
+            query.append({"1_COUNTRY": regex_country})
+
+        cursor = db[file_id].find({"$and": query})
         
-        result = filter(data,regex, "linked_products")
-        if len(result) == 0:
-            return Response(not_found(self, "No matches found for query"))
-        
-        return Response(success(self, result))
+        return StreamingHttpResponse(stream_results(self, cursor, regex_product),content_type='application/json')
