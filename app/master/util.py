@@ -1,6 +1,6 @@
 from rest_framework import status
 from lxml import etree as ET
-import time
+import json
 ATTRIBUTES_XPATH = ET.XPath('.//attribute')
 LINKED_PRODUCTS_XPATH = ET.XPath('.//linked_products/product')
 LINKED_PRODUCT_ATTRIBUTES_XPATH = ET.XPath('.//attributes/attribute')
@@ -23,20 +23,27 @@ def convert(element):
     result.update(attributes)
     return result
 
-def stream(cursor, field):
-    for document in cursor:
-        if field in document and document[field] is not None:  # Add this check
-            for el in document[field]:
-                yield el+'\n'
 
-def filter(cursor,regex, field):
-    results = []
+def stream_results(self, cursor, regex):    
     for document in cursor:
-        for product in document[field]:
-            if regex.search(product['mfact_key']) or regex.search(product['name']):
-                results.append({
-                    'article number': product['mfact_key'],
-                    'name': product['name'],
-                    'CDN urls': document['CDN_URLS']
-                })
-    return results
+        linked_products = document.get("linked_products", [])
+        cdn_urls = document.get('CDN_URLS')
+        
+        if not cdn_urls:
+            continue
+
+        for product in linked_products:
+            product_key = product.get('mfact_key', '')
+            product_name = product.get('name', '')
+
+            if regex is not None and not (regex.search(product_key) or 
+                               regex.search(product_name)):
+                continue
+
+            matched_product_data = {
+                'article number': product_key,
+                'name': product_name,
+                'cdn urls': cdn_urls
+            }
+            
+            yield json.dumps(matched_product_data) + "\n"
