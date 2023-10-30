@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('media/', views.ParseAPIView.as_view()),
-    path('apikey/', views.APIKeyGen.as_view()),
+    path('apikey/', views.APIKeyAPIView.as_view()),
+    path('apikey/<int:pk>', views.APIKeyAPIView.as_view()),
 ]

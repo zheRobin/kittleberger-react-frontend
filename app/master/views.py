@@ -17,17 +17,37 @@ from lxml.etree import XMLSyntaxError
 from master.util import *
 from app.util import *
 import environ
-env = environ.Env()
-environ.Env.read_env()
 from .models import APIKey
+from .serializers import *
 from accounts.models import User
 from django.shortcuts import get_object_or_404
-class APIKeyGen(APIView):
-    permission_classes = (IsAuthenticated,IsAdminUser)
+env = environ.Env()
+environ.Env.read_env()
+
+class APIKeyAPIView(APIView):
     def post(self, request):
-        user = User.objects.get(pk = request.user.pk)
-        ak_obj = APIKey.objects.create(user=user)
-        return Response(created(self, ak_obj.apikey))
+        try:
+            user = User.objects.get(pk=request.user.pk)
+            ak_obj = APIKey.objects.create(user=user)
+            return Response(success(self, ak_obj.apikey))
+        except User.DoesNotExist:
+            return Response(error(self, "Bad request"))
+
+    def get(self, request):
+        try:
+            api_keys = APIKey.objects.all()
+            data = APIKeySerializer(api_keys, many=True).data
+            return Response(success(self, data))
+        except APIKey.DoesNotExist:
+            return Response(error(self, "Bad request"))
+
+    def delete(self, request, pk):
+        try:
+            apk_key = APIKey.objects.get(pk=pk)
+            apk_key.delete()
+            return Response(success(self, str(apk_key.apikey) + "Deleted"))
+        except APIKey.DoesNotExist:
+            return Response(error(self, "Bad request"))
 class ParseAPIView(APIView):
     def post(self, request):
         api_key = request.POST.get('api_key')
