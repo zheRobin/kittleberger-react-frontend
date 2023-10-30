@@ -45,7 +45,7 @@ class APIKeyAPIView(APIView):
         try:
             apk_key = APIKey.objects.get(pk=pk)
             apk_key.delete()
-            return Response(success(self, str(apk_key.apikey) + "Deleted"))
+            return Response(success(self, str(apk_key.apikey) + ": Deleted"))
         except APIKey.DoesNotExist:
             return Response(error(self, "Bad request"))
 class ParseAPIView(APIView):
