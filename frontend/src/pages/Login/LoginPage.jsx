@@ -1,12 +1,156 @@
 import './style/loginStyle.scss'
-import LoginForm from '../../components/Login/LoginForm'
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { InputAdornment } from "@mui/material";
+import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import { useFormik } from 'formik'
+import { authActions } from "../../store"
+
 const LoginPage = () => {
+    const dispatch = useDispatch()
+    const [password, setPassword] = useState('');
+    const [tempPass, setTempPass] = useState('');
+    const navigate = useNavigate();
+    const handlePasswordChange = (event) => {
+        const value = event.target.value;
+        const tempValue = tempPass
+        const lastCharacter = value.substr(value.length - 1);
+        const checkValue = lastCharacter === "*" || lastCharacter === "" ? (tempValue === "" ? "" : tempValue.slice(0, -1)) : tempValue + lastCharacter
+        setTempPass(checkValue)
+        setTempPass((state) => {
+            return state
+        })
+        formik.values.password = checkValue
+        setPassword(value.replace(/./g, '*'));
+    };
+    const handleNavigate = () => {
+        navigate('/forgot');
+    }
+
+
+    const formik = useFormik({
+        initialValues: {
+            username: '',
+            password: '',
+        },
+        onSubmit: (values) => {
+            dispatch(authActions.login({ email: values.username, password: values.password }));
+        },
+    });
+    const authUser = useSelector(state => state.auth.user)
+
+    useEffect(() => {
+        // redirect to home if already logged in
+        if (authUser) navigate('/');
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
         <div className="homepage">
+
             <div className='background'>
-                <LoginForm />
+                <div className="login-form">
+                    <div className="login-form-panel">
+                        <div className="typo-align">
+                            <Typography
+                                variant="h6"
+                                style={{
+                                    fontSize: '14pt',
+                                    color: 'black',
+                                    marginTop: "13px",
+                                    marginBottom: "14px",
+                                    marginLeft: "20px"
+                                }}
+                            >
+                                Login
+                            </Typography>
+                        </div>
+                    </div>
+                    <hr style={{
+                        borderStyle: "solid",
+                        width: "580px", height: "0.5px", color: "rgba(0,0,0,0.25)"
+                    }}></hr>
+                    <div className="login-form-background">
+                        <form onSubmit={formik.handleSubmit}>
+                            <div className="typo-align">
+                                <Typography
+                                    fontFamily="Roboto"
+                                    fontSize={21}
+                                    fontWeight="bold"
+                                    lineHeight="26px"
+                                    marginLeft="20px"
+                                    marginBottom="8px"
+                                    value={password}
+                                    display="inline-block"
+                                    onChange={handlePasswordChange}
+                                >
+                                    Composing Generator
+                                </Typography>
+                            </div>
+                            <div className="input-form-group">
+                                <div className="form-input" key={1}>
+                                    <TextField
+                                        label="Username"
+                                        id="username"
+                                        size="small"
+                                        name='username'
+                                        value={formik.values.username}
+                                        onChange={formik.handleChange}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start" />,
+                                        }}
+                                        sx={{
+                                            width: '100% !important',
+                                            '& .MuiInputLabel-root': {
+                                                color: 'rgba(0, 0, 0, 1)',
+                                            },
+                                        }}
+                                        onBlur={formik.handleBlur}
+                                        error={formik.touched.username && Boolean(formik.errors.username)}
+                                        helperText={formik.touched.username && formik.errors.username}
+                                    />
+                                </div>
+                                <div className="form-input" key={2}>
+                                    <TextField
+                                        label="Password"
+                                        id="outlined-password"
+                                        name='password'
+                                        value={password}
+                                        size="small"
+                                        onChange={(e) => handlePasswordChange(e)}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start" />,
+                                        }}
+                                        sx={{
+                                            width: '100% !important',
+                                            '& .MuiInputLabel-root': {
+                                                color: 'rgba(0, 0, 0, 1)',
+                                            },
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-footer">
+                                <div className="pointer forgot-pass" onClick={handleNavigate}>
+                                    Forgot password
+                                </div>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    size="small"
+                                    sx={{ "&:hover": { backgroundColor: "#8F7300", }, backgroundColor: "#8F7300", textTransform: 'capitalize', padding: '10px 20px 10px 20px' }}
+                                >
+                                    <Typography fontSize={14}>Login</Typography>
+                                </Button>
+                            </div>
+                        </form>
+                    </div >
+                </div >
             </div>
-        </div>
+        </div >
     )
 }
 
