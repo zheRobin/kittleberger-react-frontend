@@ -77,12 +77,13 @@ const LoginPage = () => {
                         <form onSubmit={formik.handleSubmit}>
                             <div className="typo-align">
                                 <Typography
-                                    fontFamily="Roboto"
                                     fontSize={21}
-                                    fontWeight="bold"
+                                    fontFamily="Roboto"
+                                    fontWeight="Bold"
                                     lineHeight="26px"
                                     marginLeft="20px"
                                     marginBottom="8px"
+                                    color="black"
                                     value={password}
                                     display="inline-block"
                                     onChange={handlePasswordChange}

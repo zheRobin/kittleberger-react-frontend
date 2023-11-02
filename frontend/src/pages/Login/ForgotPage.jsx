@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import { useEffect } from "react";
 import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
 import { InputAdornment } from "@mui/material";
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPage = () => {
     const navigate = useNavigate()
@@ -24,13 +24,13 @@ const ForgotPage = () => {
                     <div className="login-form-panel">
                         <div className="typo-align">
                             <Typography
-                                variant="h6"
                                 sx={{
-                                    fontSize: '14pt',
-                                    color: 'black',
-                                    marginTop: "13px",
-                                    marginBottom: "14px",
-                                    marginLeft: "20px"
+                                    fontSize: '14px',
+                                    color: "var(--black, #000)",
+                                    marginTop: "15px",
+                                    marginBottom: "16px",
+                                    marginLeft: "20px",
+                                    lineHeight: "20px"
                                 }}
                             >
                                 Forgot password
@@ -38,16 +38,18 @@ const ForgotPage = () => {
                         </div>
                     </div>
                     <hr style={{
-                        borderStyle: "1px solid",
-                        width: "580px", height: "1px", color: "rgba(0,0,0,0.25)"
-                    }}></hr>
+                        borderStyle: "solid",
+                        width: "580px", color: "rgba(0,0,0,0.25)"
+                    }}>
+                    </hr>
                     <div className="login-form-background">
                         <div className="typo-align">
                             <Typography
                                 fontFamily="Roboto"
                                 fontSize={14}
                                 lineHeight="20px"
-                                marginLeft={2}
+                                marginLeft="20px"
+                                marginRight="20px"
                                 marginBottom={1}
                                 display="inline-block"
                                 textAlign='start'
@@ -60,7 +62,7 @@ const ForgotPage = () => {
                             <div className="form-input" >
                                 <TextField
                                     label="Enter email address"
-                                    id="outlined-username"
+                                    id="outlined-captcha"
                                     size="small"
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start"></InputAdornment>,
@@ -68,6 +70,9 @@ const ForgotPage = () => {
                                     sx={{
                                         width: '540px !important',
                                         '& .MuiInputLabel-root': {
+                                            color: 'rgba(0, 0, 0, 1)',
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
                                             color: 'rgba(0, 0, 0, 1)',
                                         },
                                     }}

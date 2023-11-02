@@ -44,7 +44,10 @@
         margin-left: 20px;
         margin-right: 20px;
         margin-top: 20px;
-
+        
+        .form-input{
+            width: 540px;
+        }
         .form-input-captcha{
             display: flex;
             justify-content: space-between;
