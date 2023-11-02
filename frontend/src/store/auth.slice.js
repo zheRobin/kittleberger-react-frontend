@@ -27,7 +27,7 @@ function createReducers() {
 }
 
 function createExtraActions() {
-  const loginUrl = `${process.env.REACT_APP_LOCAL_API_URL}api/v1/user/login/`;
+  const loginUrl = `${process.env.REACT_APP_API_URL}api/v1/user/login/`;
   return {
     login: login(),
   };
