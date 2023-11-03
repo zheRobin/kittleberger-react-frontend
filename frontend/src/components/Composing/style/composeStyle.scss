@@ -2,5 +2,31 @@
     display: flex;
     flex-direction: row;
     margin-top: 30px;
-    margin-left: 30px;
+    margin-bottom: 30px;
+}
+
+.product-list{
+    display: flex;
+    justify-content: start;
+    gap: 8px;
+
+    input{
+        width: 18px;
+        height: 18px;
+        margin-left: 0px;
+    }
+}
+
+.filter-group{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: solid 1px #FFFFFF40;
+}
+.filter-bottom{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 20px;
 }

@@ -1,14 +1,14 @@
 import "./style/productViewStyle.scss"
 import editPencil from "../../assets/icons/pencil.svg"
-const ProductCard = () => {
+const ProductCard = ({ title, imageInfo }) => {
     return (
         <>
             <div className="product-card">
                 <div className="product-panel">
                     <div className="product-info-group">
                         <div className="product-info">
-                            <div className="product-name">Hero Keyvisual (2 Products)</div>
-                            <div className="product-image-info">1600x640 px | 72 dpi | JPG</div>
+                            <div className="product-name">{title}</div>
+                            <div className="product-image-info">{imageInfo}</div>
                         </div>
                         <div className="product-icon">
                             <img src={editPencil} alt="editIcon"></img>

@@ -2,6 +2,9 @@ import LoginPage from "./Login/LoginPage"
 import ForgotPage from "./Login/ForgotPage"
 import Organism from "./Organism/Organism";
 import PrivateRoute from "../components/Login/PrivateRoute";
+import LayOutDashboard from "../layout/LayOutDashboard";
+import TemplatePanel from "./Organism/TemplatePanel";
+
 
 const pagesData = [
     {
@@ -20,8 +23,14 @@ const pagesData = [
     {
         path: "organism",
         element:
-            <Organism />,
+            <LayOutDashboard><Organism /></ LayOutDashboard>,
         title: "organism"
+    },
+    {
+        path: "template",
+        element:
+            <LayOutDashboard><TemplatePanel /></LayOutDashboard>,
+        title: 'template'
     }
 ]
 

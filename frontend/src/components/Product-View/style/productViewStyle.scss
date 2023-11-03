@@ -1,6 +1,6 @@
 .product-card{
-    width: 335px;
-    height: 340px;
+    min-width: 335px;
+    min-height: 340px;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -55,11 +55,25 @@
 
         
     }
+
+
     .product-image{
         height: 255px;
         margin: 10px 10px 10px 10px;
-        .product-view{
-            
-        }
+       
+    }
+}
+
+.search-bar{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 8px 10px 8px 10px;
+    margin-top: 20px;
+    background-color: white;
+    input{
+        width: 100%;
+        border: none;
+        outline: none;
     }
 }

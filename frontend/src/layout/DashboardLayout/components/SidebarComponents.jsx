@@ -1,8 +1,12 @@
 import Filterbar from "../../../components/Composing/Filterbar"
+import "../style/dashboardStyle.scss"
 
 const SidebarComponents = () => {
     return (
-        <Filterbar />
+        <div className="sidebar-items">
+            <Filterbar />
+        </div>
+
     )
 }
 
