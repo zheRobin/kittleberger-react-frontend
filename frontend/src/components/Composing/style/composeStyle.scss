@@ -1,8 +1,8 @@
 .refresh-part{
     display: flex;
     flex-direction: row;
-    margin-top: 30px;
     margin-bottom: 30px;
+    padding-left: 30px;
 }
 
 .check-group{
@@ -42,6 +42,7 @@
     flex-direction: column;
     gap: 20px;
     padding-bottom: 20px;
+    padding-left: 30px;
     border-bottom: solid 1px #FFFFFF40;
 }
 
@@ -49,6 +50,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding-left: 30px;
     padding-top: 20px;
 }
 

@@ -7,18 +7,57 @@ import logout from "../../../assets/icons/door.svg"
 import { authActions } from "../../../store"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { useRef, useEffect } from "react"
+
+function useOutsideAlerter(ref, handleModal) {
+    useEffect(() => {
+        /**
+         * Alert if clicked on outside of element
+         */
+        function handleClickOutside(event) {
+            if (ref.current && !ref.current.contains(event.target)) {
+                handleModal(false)
+            }
+        }
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [ref]);
+}
+
 
 const ProfileLayout = ({ handleModal }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const boxRef = useRef(null);
     const handlelogout = (e) => {
         dispatch(authActions.logout())
     }
+    const switchRole = useSelector(state => state.info.adminMethod)
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, handleModal);
+    useEffect(() => {
+        window.onclick = (event) => {
+            if (event.target.contains(boxRef.current)
+                && event.target !== boxRef.current) {
+                console.log(boxRef.current)
+                console.log(event.target.contains(boxRef.current))
+                console.log(event.target !== boxRef.current)
+                handleModal(false)
+            } else {
+                console.log(`You clicked Inside the box!`);
+            }
+        }
+    }, []);
 
     return (
         <>
-            <div className="profile-layout">
-                <div className="profile-info">
+            <div className="profile-layout" ref={wrapperRef}>
+                <div className="profile-info" >
                     <div className="user-icon">
                         <div className="user-alias">MM</div>
                     </div>
@@ -52,18 +91,23 @@ const ProfileLayout = ({ handleModal }) => {
                                     <div className="account-description">Passwort ändern</div>
                                 </div>
                             </div>
-                            <div className="account-detail pointer">
-                                <div className="account-detail-info" onClick={() => { navigate("/user/user-manage"); handleModal(false) }}>
-                                    <img src={infoEdit} alt="Password Change"></img>
-                                    <div className="account-description">Benutzer verwalten</div>
-                                </div>
-                            </div>
-                            <div className="account-detail pointer">
-                                <div className="account-detail-info" onClick={() => { navigate("/user/api-token"); handleModal(false) }}>
-                                    <img src={tokenSearch} alt="Password Change"></img>
-                                    <div className="account-description">API-Token</div>
-                                </div>
-                            </div>
+                            {switchRole ? (
+                                <>
+                                    <div className="account-detail pointer">
+                                        <div className="account-detail-info" onClick={() => { navigate("/user/user-manage"); handleModal(false) }}>
+                                            <img src={infoEdit} alt="Password Change"></img>
+                                            <div className="account-description">Benutzer verwalten</div>
+                                        </div>
+                                    </div>
+                                    <div className="account-detail pointer">
+                                        <div className="account-detail-info" onClick={() => { navigate("/user/api-token"); handleModal(false) }}>
+                                            <img src={tokenSearch} alt="Password Change"></img>
+                                            <div className="account-description">API-Token</div>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : null}
+
                             <div className="account-detail pointer" onClick={e => handlelogout(e)}>
                                 <div className="account-detail-info">
                                     <div className="account-setting-img"><img src={logout} alt="Password Change"></img></div>

@@ -108,6 +108,9 @@ const LoginPage = () => {
                                             '& .MuiInputLabel-root': {
                                                 color: 'rgba(0, 0, 0, 1)',
                                             },
+                                            '& .MuiOutlinedInput-root': {
+                                                paddingLeft: '0px'
+                                            }
                                         }}
                                         onBlur={formik.handleBlur}
                                         error={formik.touched.username && Boolean(formik.errors.username)}
@@ -130,6 +133,10 @@ const LoginPage = () => {
                                             '& .MuiInputLabel-root': {
                                                 color: 'rgba(0, 0, 0, 1)',
                                             },
+                                            '& .MuiOutlinedInput-root': {
+                                                paddingLeft: '7px',
+                                                flexWrap: "wrap !important"
+                                            }
                                         }}
                                     />
                                 </div>

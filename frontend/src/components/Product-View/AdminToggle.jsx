@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import { switchRole } from '../../store';
 import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
-
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 30,
@@ -62,11 +62,24 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 export default function AdminToggle() {
+
+    const [toggleValue, setToggleValue] = React.useState(false)
+    console.log("toggleValue:", toggleValue)
+    const dispatch = useDispatch()
+    const handleToggleChange = (e) => {
+        setToggleValue((state) => !state)
+        console.log("toggleValue-store:", !toggleValue)
+        dispatch(switchRole(!toggleValue))
+    }
+    // useEffect(() => {
+    //     console.log("+++++++++")
+    //     dispatch(switchRole(false))
+    // }, [])
     return (
         <FormGroup>
             <Stack direction="row" spacing={1} alignItems="center">
                 <Typography>Admin-Mode</Typography>
-                <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
+                <AntSwitch checked={toggleValue} onClick={(e) => handleToggleChange(e)} inputProps={{ 'aria-label': 'ant design' }} />
             </Stack>
         </FormGroup>
     );

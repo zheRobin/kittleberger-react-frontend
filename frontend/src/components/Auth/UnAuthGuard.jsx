@@ -3,7 +3,6 @@ import React, { useEffect } from "react"
 const UnAuthguard = ({ component }) => {
     useEffect(
         () => {
-            console.log("UnAuthgurd")
         }, [component]
     )
 

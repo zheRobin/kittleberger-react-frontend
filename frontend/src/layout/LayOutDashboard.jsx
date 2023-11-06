@@ -8,6 +8,7 @@ import "./DashboardLayout/style/dashboardStyle.scss"
 const LayOutDashboard = ({ children }) => {
     return (
         <>
+            <div className='gradient-bar'></div>
             <div className='dashboard'>
                 <SidebarLayout>
                     <SidebarComponents />

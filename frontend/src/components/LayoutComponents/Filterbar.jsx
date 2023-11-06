@@ -1,8 +1,8 @@
 import refreshIcon from "../../assets/icons/rotate.svg"
 import { Typography } from "@mui/material";
-import "./style/composeStyle.scss"
+import "../Composing/style/composeStyle.scss"
 import plusButton from "../../assets/icons/add-2.svg"
-import CheckboxGroup from "./CheckboxGroup"
+import CheckboxGroup from "../Composing/CheckboxGroup"
 
 export const ProductNumberFilter = () => {
 

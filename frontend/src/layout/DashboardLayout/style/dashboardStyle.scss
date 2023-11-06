@@ -1,4 +1,11 @@
 
+.gradient-bar{
+    width: 100%;
+    height: 10px;
+    background-image: url("../../../assets/images/Rectangle.png");
+
+}
+
 .dashboard{
     display: flex; 
     flex-direction: row;
@@ -27,8 +34,8 @@
             .sidebar-items{
                 position: absolute;                
                 top: 110px;
-                right: 30px;
-                left: 30px;
+                right: 0px;
+                left: 0px;
                 bottom: 180px;
                 padding-bottom: 20px;
                 overflow-y: scroll;
@@ -76,7 +83,7 @@
         position: absolute;
         width: 501px;
         height: 312px;
-        z-index: 1000;
+        z-index: 100;
         top: 75px;
         right: 30px;
         background: white;

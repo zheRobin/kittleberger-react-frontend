@@ -7,6 +7,7 @@ function createInitialState() {
   return {
     // initialize state from local storage to enable user to stay logged in
     user: JSON.parse(localStorage.getItem('user')),
+    token: JSON.parse(localStorage.getItem('token')),
     error: null,
   };
 }
@@ -27,7 +28,7 @@ function createReducers() {
 }
 
 function createExtraActions() {
-  const loginUrl = `${process.env.REACT_APP_API_URL}api/v1/user/login/`;
+  const loginUrl = `${process.env.REACT_APP_LOCAL_API_URL}api/v1/user/login/`;
   return {
     login: login(),
   };
@@ -37,7 +38,8 @@ function createExtraActions() {
       `${name}/login`,
       async ({ email, password }) =>{
         const response = await fetchWrapper.post(`${loginUrl}`, { email, password })
-        return response.user
+        console.log("authUser:", response.data.user)
+        return response.data
       }
     );
   }
@@ -54,8 +56,10 @@ function createExtraReducers() {
     [fulfilled]: (state, action) => {
       const user = action.payload;
       // store user details and jwt token in local storage to keep user logged in between page refreshes
-      localStorage.setItem('user', JSON.stringify(user));
-      state.user = user;
+      localStorage.setItem('user', JSON.stringify(user.user));
+      localStorage.setItem('token', JSON.stringify(user.access_token));
+      state.user = user.user;
+      state.token = user.access_token;
       // // get return url from location state or default to home page
       // const { from } = history.location.state || { from: { pathname: '/' } };
       // history.navigate(from);

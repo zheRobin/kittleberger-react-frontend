@@ -1,20 +1,26 @@
-import { Route, Routes } from "react-router-dom";
-import HeaderLayoutCompo1 from "./HeaderLayoutCompo1";
-import HeaderLayoutCompo2 from "./HeaderLayoutCompo2";
-import logo from "../../../assets/icons/user.svg"
-import ProfileIcon from "../../../components/Composing/ProfileIcon";
+
+import ProfileIcon from "../../../components/LayoutComponents/ProfileIcon";
 import ProfileLayout from "./ProfileLayoutModal";
 import { useState } from "react";
 import { Typography } from "@mui/material";
-import AdminToggle from "../../../components/Product-View/AdminToggle";
 import { useNavigate } from "react-router-dom";
 import "../style/dashboardStyle.scss"
+import { useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { switchRole } from "../../../store";
 
 
 const HeaderComponents = () => {
     const [accountModalShow, setAccountModal] = useState(false)
+    const dispatch = useDispatch()
+    const location = useLocation()
     const navigate = useNavigate()
-
+    const user = useSelector(state => state.auth.user)
+    useEffect(() => {
+        console.log(user.is_staff)
+        user.is_staff === true ? dispatch(switchRole(true)) : dispatch(switchRole(false))
+    }, [])
     return (
         <>
             <div className="header-top-layout">
@@ -23,7 +29,7 @@ const HeaderComponents = () => {
                     <Typography fontSize="20px" fontWeight="400" lineHeight="26px" sx={{ display: 'inline' }}>Composing Generator</Typography>
                 </div>
                 <div className="profile-info-reference">
-                    <AdminToggle />
+                    {/* {location.pathname === "/product" && user.is_superuser === true ? <AdminToggle /> : null} */}
                     <ProfileIcon setModalView={setAccountModal} modalView={accountModalShow} />
                     {accountModalShow === true ? <ProfileLayout handleModal={setAccountModal} /> : null}
                 </div>
