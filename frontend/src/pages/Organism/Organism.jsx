@@ -4,10 +4,12 @@ import Tab from '@mui/material/Tab';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './style/organismStyle.scss'
 import ProductCard from "../../components/Product-View/ProductCard";
-import { Typography, createTheme } from '@mui/material';
+import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
 import ProductSearch from '../../components/Product-View/ProductSearch';
 import { useNavigate } from 'react-router-dom';
+
+
 const theme = createTheme({
     components: {
         // Name of the component
@@ -43,10 +45,6 @@ const Organism = () => {
         }
     }
 
-    const handleTemplate = (e) => {
-        navigate("/organism/template")
-    }
-
     const productMokeUp = [
         { title: "Hero Keyvisual (2 Products)", imageInfo: "1600x640 px | 72 dpi | JPG" },
         { title: "Hero Keyvisual (2 Products)", imageInfo: "1600x640 px | 72 dpi | JPG" },
@@ -58,11 +56,12 @@ const Organism = () => {
     return (
         <>
             <div className="organism-tabs">
-                <div className='template-button pointer' onClick={(e) => handleTemplate(e)}>
-                    <Typography fontWeight={400} fontSize="14px" lineHeight="20px" color="#8F7300">
-                        Neues Template anlegen
-                    </Typography>
+                <div className='typography-400-regular template-button pointer' style={{ color: "#8F7300" }}
+                    onClick={() => navigate("/product/template")}
+                >
+                    Neues Template anlegen
                 </div>
+
                 <ThemeProvider theme={theme}>
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: '#E0E2E5' }}>

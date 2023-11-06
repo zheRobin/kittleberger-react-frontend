@@ -9,7 +9,7 @@ dist/
 build/
 # Compiled Java class files
 *.class
-
+package-lock.json
 # Compiled Python bytecode
 *.py[cod]
 

@@ -5,6 +5,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
+import "./scssStyles/_global.scss"
+import "./scssStyles/_typography.scss"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

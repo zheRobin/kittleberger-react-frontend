@@ -1,7 +1,8 @@
 import refreshIcon from "../../assets/icons/rotate.svg"
 import { Typography } from "@mui/material";
 import "./style/composeStyle.scss"
-import plusButton from "../../assets/icons/add.svg"
+import plusButton from "../../assets/icons/add-2.svg"
+import CheckboxGroup from "./CheckboxGroup"
 
 export const ProductNumberFilter = () => {
 
@@ -18,9 +19,9 @@ export const ProductNumberFilter = () => {
                     <div className="product-list">
                         <Typography fontSize="14px" lineHeight="20px">Anzahl Produkte</Typography>
                     </div>
-                    <div className="plus-product">
-                        {plusProductMokeUp.map((ele) => {
-                            return (<div className="product-list"><input type="checkbox" /><div>{ele}</div></div>)
+                    <div className="check-group">
+                        {plusProductMokeUp.map((ele, index) => {
+                            return (<CheckboxGroup key={"plusProductMokeUp" + index} title={ele} />)
                         })}
                     </div>
                     <div className="product-list">
@@ -31,9 +32,9 @@ export const ProductNumberFilter = () => {
                     <div className="product-list">
                         <Typography fontSize="14px" lineHeight="20px">Brand</Typography>
                     </div>
-                    <div className="brand-list">
-                        {brandMokeup.map((ele) => {
-                            return (<div className="product-list"><input type="checkbox" /><div>{ele}</div></div>)
+                    <div className="check-group">
+                        {brandMokeup.map((ele, index) => {
+                            return (<CheckboxGroup key={"brandMokeup" + index} title={ele} />)
                         })}
                     </div>
                 </div>
@@ -41,9 +42,9 @@ export const ProductNumberFilter = () => {
                     <div className="product-list">
                         <Typography fontSize="14px" lineHeight="20px">Land</Typography>
                     </div>
-                    <div className="land-list">
-                        {landMokeup.map((ele) => {
-                            return (<div className="product-list"><input type="checkbox" /><div>{ele}</div></div>)
+                    <div className="check-group">
+                        {landMokeup.map((ele, index) => {
+                            return (<CheckboxGroup key={"landMokeup" + index} title={ele} />)
                         })}
                     </div>
                     <div className="product-list">
@@ -54,16 +55,16 @@ export const ProductNumberFilter = () => {
                     <div className="product-list">
                         <Typography fontSize="14px" lineHeight="20px">Brand</Typography>
                     </div>
-                    <div className="Aplikationen-list">
-                        {aplikationenMokeup.map((ele) => {
-                            return (<div className="product-list"><input type="checkbox" /><div>{ele}</div></div>)
+                    <div className="check-group">
+                        {aplikationenMokeup.map((ele, index) => {
+                            return (<CheckboxGroup key={"aplikationenMokeup" + index} title={ele} />)
                         })}
                     </div>
                 </div>
             </div>
             <div className="filter-bottom">
-                {footerMokeup.map((ele) => {
-                    return (<div className="product-list">
+                {footerMokeup.map((ele, index) => {
+                    return (<div className="product-list" key={"footerMokeup" + index}>
                         <img src={plusButton} alt="plusButton" /><Typography fontSize="14px" lineHeight="20px">{ele}</Typography>
                     </div>)
                 })}
@@ -79,7 +80,7 @@ export const ProductNumberFilter = () => {
 const Filterbar = () => {
     return (
         <>
-            <div className="refresh-part">
+            <div className="refresh-part pointer">
                 <img src={refreshIcon} alt="refresh"></img>
                 <Typography fontSize="14px" lineHeight="20px" marginLeft="15px">
                     Filter zurücksetzen

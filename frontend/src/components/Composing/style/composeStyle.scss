@@ -5,9 +5,29 @@
     margin-bottom: 30px;
 }
 
+.check-group{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.checkbox-group{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 8px;
+    height: 20px;
+    &__label{
+        height: 20px;
+        text-align: center;
+    }
+}
+
 .product-list{
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     gap: 8px;
 
     input{
@@ -24,9 +44,47 @@
     padding-bottom: 20px;
     border-bottom: solid 1px #FFFFFF40;
 }
+
 .filter-bottom{
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding-top: 20px;
+}
+
+.image-settings{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    &__common{
+        display: flex;
+        align-items: end;
+
+        *{
+            margin-bottom: 10px;
+        }
+    }
+
+    &__panel{
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+
+        input {
+            width: 30px ;
+            height: 20px;
+            padding: 10px 10px 10px 10px;
+        }
+    }
+
+    .input-groups{
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        
+        div.typography-400-regular{
+            text-align: start;
+        }
+    }
 }

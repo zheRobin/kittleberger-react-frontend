@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const PrivateRoute = ({ children }) => {
     const { user: authUser } = useSelector(x => x.auth);
     if (authUser) {
-        return <Navigate to="/organism" />
+        return <Navigate to="/product" />
     }
 
     return children

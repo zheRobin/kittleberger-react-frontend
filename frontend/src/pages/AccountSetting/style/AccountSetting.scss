@@ -1,0 +1,293 @@
+.create-user{
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: end;
+}
+
+.setting-panel-user{
+    background-color: white;
+    border-radius: 3px, 3px, 0px, 0px;
+    margin: 20px 30px 30px 30px;
+
+    .setting-panel-user__top{
+        border-bottom: solid 1px #00000040;
+        height: 50px;
+        overflow: auto;
+        div.typography-400-regular{
+            margin-top: 14px;
+            margin-bottom: 14px;
+            margin-right: 20px;
+            margin-left: 20px;
+            text-align: start;
+        }
+        
+    }
+
+    &__bottom{
+        padding-top: 30px;
+        padding-left: 20px;
+        padding-bottom: 30px;
+        padding-right: 20px;           
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 15px;
+        box-sizing: border-box;
+
+        .label-input-pair{
+            width: 745px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            .password-warning{
+                display: flex;
+                flex-direction: column;
+
+                .label-group {
+                    div {
+                        margin-top: 30px;
+                        padding: 10px 20px 10px 20px;
+                    }
+                }
+            }
+            div{
+                padding: 10px 0px;
+            }
+            input{
+                width: 450px;
+                padding: 10px 10px;
+                border-radius: 3px;
+                border: solid 1px #00000040;
+            }
+            .label-group{
+                padding: 5px 0px;
+                width: 471px;
+                text-align: start;
+            }
+        }
+
+        .user-group{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            .user-list{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+                &__label{
+                    width: 335px;
+                    text-align: start;
+                }
+
+                &__user{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    width: 100%;
+                }
+            }
+                
+        }
+    }
+}
+
+.modal { /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 200px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #E0E2E5;
+    margin: auto;
+    padding: 20px;
+    width: 60%;
+
+    .modal-box{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        .label{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .box{
+            border-radius: 3px;
+            background-color: white;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            .label-input-pair{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                
+                input{
+                    height: 20px;
+                    padding: 10px;
+                    width: 60%;
+                    border-radius: 3px;
+                }
+            }
+            
+            
+        }
+        .button-group{
+            display: flex;
+            justify-content: end;
+            gap: 10px;
+        }
+    }
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
+
+
+.api-setting{
+    
+    border-radius: 3px, 3px, 0px, 0px;
+    margin: 20px 30px 30px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+    .api-setting__top{
+        background-color: white;
+        border-bottom: solid 1px #00000040;
+        height: 50px;
+        overflow: auto;
+        div.typography-400-regular{
+            margin-top: 14px;
+            margin-bottom: 14px;
+            margin-right: 20px;
+            margin-left: 20px;
+            text-align: start;
+        }
+        
+    }
+
+    &__bottom{
+        background-color: white;
+        padding: 30px 20px;         
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 15px;
+        box-sizing: border-box;
+
+        div:first-child{
+            text-align: start;
+        }
+
+        .label-input-pair{
+            width: 745px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            
+            
+
+            div{
+                padding: 10px 0px;
+            }
+            input{
+                width: 450px;
+                padding: 10px 10px;
+                border-radius: 3px;
+                border: solid 1px #00000040;
+            }
+
+            .password-warning{
+                display: flex;
+                flex-direction: column;
+
+                .label-group {
+                    div {
+                        margin-top: 30px;
+                        padding: 10px 20px 10px 20px;
+                    }
+                }
+            }
+            .label-group{
+                padding: 5px 0px;
+                width: 471px;
+                text-align: start;
+            }
+        }
+
+        .api-token{
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 23px;
+
+            .token-list{
+                display: flex;
+                flex-direction: row;
+                div:first-child{
+                    width: 40%;
+                }
+    
+                div:nth-child(2){
+                    width: 60%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                }
+            }
+            
+            
+        }
+
+        .user-group{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            .user-list{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+                &__label{
+                    width: 335px;
+                    text-align: start;
+                }
+
+                &__user{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    width: 100%;
+                }
+            }
+                
+        }
+    }
+}

@@ -6,9 +6,11 @@ import tokenSearch from "../../../assets/icons/search.svg"
 import logout from "../../../assets/icons/door.svg"
 import { authActions } from "../../../store"
 import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
-const ProfileLayout = () => {
+const ProfileLayout = ({ handleModal }) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const handlelogout = (e) => {
         dispatch(authActions.logout())
     }
@@ -45,19 +47,19 @@ const ProfileLayout = () => {
                         <div className="account-label">Account</div>
                         <div className="account-setting">
                             <div className="account-detail">
-                                <div className="account-detail-info pointer">
+                                <div className="account-detail-info pointer" onClick={() => { navigate("/user/password-change"); handleModal(false) }}>
                                     <img src={passwordSetting} alt="Password Change"></img>
                                     <div className="account-description">Passwort ändern</div>
                                 </div>
                             </div>
                             <div className="account-detail pointer">
-                                <div className="account-detail-info">
+                                <div className="account-detail-info" onClick={() => { navigate("/user/user-manage"); handleModal(false) }}>
                                     <img src={infoEdit} alt="Password Change"></img>
                                     <div className="account-description">Benutzer verwalten</div>
                                 </div>
                             </div>
                             <div className="account-detail pointer">
-                                <div className="account-detail-info">
+                                <div className="account-detail-info" onClick={() => { navigate("/user/api-token"); handleModal(false) }}>
                                     <img src={tokenSearch} alt="Password Change"></img>
                                     <div className="account-description">API-Token</div>
                                 </div>
@@ -69,7 +71,6 @@ const ProfileLayout = () => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
