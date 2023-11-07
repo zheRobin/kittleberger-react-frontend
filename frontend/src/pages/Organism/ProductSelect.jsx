@@ -43,7 +43,7 @@ const ProductSelect = () => {
                 </div>
                 <div className="product-select__r">
                     <div className="image-backgroud">
-                        <img src={require("../../assets/images/sub-back.png")} />
+                        <img src={require("../../assets/images/sub-back.png")} alt="background" />
                     </div>
                 </div>
             </div>

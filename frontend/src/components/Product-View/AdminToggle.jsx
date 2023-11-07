@@ -64,17 +64,11 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 export default function AdminToggle() {
 
     const [toggleValue, setToggleValue] = React.useState(false)
-    console.log("toggleValue:", toggleValue)
     const dispatch = useDispatch()
     const handleToggleChange = (e) => {
         setToggleValue((state) => !state)
-        console.log("toggleValue-store:", !toggleValue)
         dispatch(switchRole(!toggleValue))
     }
-    // useEffect(() => {
-    //     console.log("+++++++++")
-    //     dispatch(switchRole(false))
-    // }, [])
     return (
         <FormGroup>
             <Stack direction="row" spacing={1} alignItems="center">

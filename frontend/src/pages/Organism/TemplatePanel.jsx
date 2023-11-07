@@ -14,7 +14,7 @@ import plus from "../../assets/icons/add.svg"
 
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
-        <div className='template-button--filled' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
+        <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
             <Typography fontWeight={400} fontSize="14px" lineHeight="20px" color={type !== "brown" ? "#8F7300" : "#FFFFFF"} >
                 {content}
             </Typography>
@@ -62,16 +62,22 @@ const TemplatePanel = () => {
                                         <div className="typography-400-regular">Dateityp *</div>
                                         <div className="select-group">
                                             <Select
-                                                labelId="demo-simple-select-standard-label"
-                                                id="demo-simple-select-standard"
+                                                labelId="demo-customized-select-label"
+                                                id="demo-customized-select"
                                                 value={age}
                                                 onChange={handleChange}
-                                                label="Age"
+                                                displayEmpty
                                                 IconComponent={ExpandMoreIcon}
-                                                sx={{ width: "472px", height: "40px", padding: "0px 10px 10px 10px" }}
+                                                sx={{
+                                                    width: "472px", height: "40px", padding: "0px 10px 10px 10px",
+                                                    "& .MuiOutlinedInput-input": {
+                                                        textAlign: "start",
+                                                        marginLeft: "9px"
+                                                    }
+                                                }}
                                             >
                                                 <MenuItem value="">
-                                                    <em>None</em>
+                                                    .jpg
                                                 </MenuItem>
                                                 <MenuItem value={10}>Ten</MenuItem>
                                                 <MenuItem value={20}>Twenty</MenuItem>

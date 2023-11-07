@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 const ReturnPath = () => {
     const navigate = useNavigate()
     const returnHistory = () => {
-        navigate(-1)
+        navigate('/product')
     }
     return (
         <>

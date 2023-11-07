@@ -8,6 +8,8 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
 import ProductSearch from '../../components/Product-View/ProductSearch';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 
 const theme = createTheme({
@@ -31,7 +33,9 @@ const theme = createTheme({
 
 const Organism = () => {
     const navigate = useNavigate()
-    const [value, setValue] = React.useState('1');
+    const [value, setValue] = useState('1');
+    const [data, setData] = useState('');
+    const [loading, setLoading] = useState(false);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -52,7 +56,50 @@ const Organism = () => {
         { title: "Hero Keyvisual (2 Products)", imageInfo: "1600x640 px | 72 dpi | JPG" },
         { title: "Hero Keyvisual (2 Products)", imageInfo: "1600x640 px | 72 dpi | JPG" }
     ]
+    const token = localStorage.getItem('token');
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(`${process.env.REACT_APP_LOCAL_API_URL}api/v1/compose/templates`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': "Bearer " + JSON.parse(token),
+                    },
+                });
+                if (!response.ok || !response.body) {
+                    throw response.statusText;
+                }
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) {
+                        setLoading(false);
+                        break;
+                    }
+                    let decodedChunk = decoder.decode(value);
+                    try {
+                        const trimmedChunk = decodedChunk.trim();
+                        if (trimmedChunk) {
+                            const jsonData = JSON.parse(trimmedChunk);
+                            // setData(prevValue => prevValue + trimmedChunk);
+                        }
+                    } catch (error) {
+                        console.error('Error parsing JSON:', error);
+                    }
+                }
+            } catch (error) {
+                setLoading(false);
+                // Handle other errors
+            }
+        };
+
+        fetchData();
+    }, []);
     return (
         <>
             <div className="organism-tabs">

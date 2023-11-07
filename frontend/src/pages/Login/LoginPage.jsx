@@ -37,7 +37,10 @@ const LoginPage = () => {
             password: '',
         },
         onSubmit: (values) => {
-            dispatch(authActions.login({ email: values.username, password: values.password }));
+            try { dispatch(authActions.login({ email: values.username, password: values.password })) }
+            catch (error) {
+                setPassword("")
+            }
         },
     });
     const authUser = useSelector(state => state.auth.user)

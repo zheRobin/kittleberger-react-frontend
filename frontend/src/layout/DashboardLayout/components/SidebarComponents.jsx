@@ -7,7 +7,6 @@ import SideNav from "../../../components/LayoutComponents/SideNav"
 const SidebarComponents = () => {
     const location = useLocation()
     const path = location.pathname
-    console.log(path)
     const SideBar = () => {
         switch (path) {
             case "/product":

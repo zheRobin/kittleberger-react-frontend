@@ -14,11 +14,9 @@ import { switchRole } from "../../../store";
 const HeaderComponents = () => {
     const [accountModalShow, setAccountModal] = useState(false)
     const dispatch = useDispatch()
-    const location = useLocation()
     const navigate = useNavigate()
     const user = useSelector(state => state.auth.user)
     useEffect(() => {
-        console.log(user.is_staff)
         user.is_staff === true ? dispatch(switchRole(true)) : dispatch(switchRole(false))
     }, [])
     return (

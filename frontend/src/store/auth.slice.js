@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchWrapper } from '../_utils/fetch-wrapper';
-import { useNavigate } from 'react-router-dom';
 
+export 
 // implementation
 function createInitialState() {
   return {
     // initialize state from local storage to enable user to stay logged in
     user: JSON.parse(localStorage.getItem('user')),
     token: JSON.parse(localStorage.getItem('token')),
+    role: null,
     error: null,
   };
 }
@@ -20,6 +21,7 @@ function createReducers() {
   const logout = (state) => {
     state.user = null;
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     goURL()
   }
   return {
@@ -38,7 +40,6 @@ function createExtraActions() {
       `${name}/login`,
       async ({ email, password }) =>{
         const response = await fetchWrapper.post(`${loginUrl}`, { email, password })
-        console.log("authUser:", response.data.user)
         return response.data
       }
     );
@@ -58,6 +59,7 @@ function createExtraReducers() {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('user', JSON.stringify(user.user));
       localStorage.setItem('token', JSON.stringify(user.access_token));
+      state.role = user.is_superuser ? "super" : (user.is_staff? "admin": "customer")
       state.user = user.user;
       state.token = user.access_token;
       // // get return url from location state or default to home page

@@ -8,7 +8,7 @@ import { authActions } from "../../../store"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 
 function useOutsideAlerter(ref, handleModal) {
     useEffect(() => {
@@ -44,16 +44,11 @@ const ProfileLayout = ({ handleModal }) => {
         window.onclick = (event) => {
             if (event.target.contains(boxRef.current)
                 && event.target !== boxRef.current) {
-                console.log(boxRef.current)
-                console.log(event.target.contains(boxRef.current))
-                console.log(event.target !== boxRef.current)
                 handleModal(false)
-            } else {
-                console.log(`You clicked Inside the box!`);
             }
         }
     }, []);
-
+    const [language, setLanguage] = useState(1)
     return (
         <>
             <div className="profile-layout" ref={wrapperRef}>
@@ -76,11 +71,24 @@ const ProfileLayout = ({ handleModal }) => {
                 <div className="profile-detail">
                     <div className="set-language">
                         <div className="language-label">System language</div>
-                        <div className="language-active">
+                        <div
+                            className={language === 1 ? "language-active pointer" : "language-inactive pointer"}
+                            onClick={(e) => {
+                                setLanguage(1);
+                            }}
+                        >
                             <div>English</div>
-                            <div><img src={checkIcon}></img></div>
+                            {language === 1 ? <div><img src={checkIcon} alt="checkIcon" /></div> : null}
                         </div>
-                        <div className="language-inactive">German</div>
+                        <div
+                            className={language === 2 ? "language-active pointer" : "language-inactive pointer"}
+                            onClick={(e) => {
+                                setLanguage(2);
+                            }}
+                        >
+                            <div>German</div>
+                            {language === 2 ? <div><img src={checkIcon} alt="checkIcon" /></div> : null}
+                        </div>
                     </div>
                     <div className="user-account">
                         <div className="account-label">Account</div>

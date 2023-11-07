@@ -122,7 +122,12 @@
             border-radius: 3px, 3px, 0px, 0px;
             margin: 0px 30px 0px 20px;
             &__bottom{
-
+                overflow-x: scroll;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+                &::-webkit-scrollbar{
+                    display: none;
+                }
                 padding: 30px 20px 0px 20px;
                 .input-group{
                     display: flex;
