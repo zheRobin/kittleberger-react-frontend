@@ -73,8 +73,8 @@ const Organism = () => {
                     throw response.statusText;
                 }
                 const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-
+                const decoder = new TextDecoder("utf-8");
+                let buffer = "";
                 while (true) {
                     const { value, done } = await reader.read();
                     if (done) {
@@ -83,11 +83,19 @@ const Organism = () => {
                     }
                     let decodedChunk = decoder.decode(value);
                     try {
-                        const trimmedChunk = decodedChunk.trim();
-                        if (trimmedChunk) {
-                            const jsonData = JSON.parse(trimmedChunk);
-                            // setData(prevValue => prevValue + trimmedChunk);
+                        // const trimmedChunk = decodedChunk.trim();
+                        buffer += decodedChunk
+                        if (decodedChunk.length !== 65536) {
+                            let toParse = "[" + buffer.trim().replace(/}(?={)/g, "},") + "]"
+                            const result = JSON.parse(toParse)
+                            console.log(result)
                         }
+
+                        // const jsonData = JSON.parse(trimmedChunk);
+
+                        // setData(prevValue => prevValue + trimmedChunk);
+                        console.log(data)
+
                     } catch (error) {
                         console.error('Error parsing JSON:', error);
                     }
