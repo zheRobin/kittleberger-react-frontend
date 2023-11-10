@@ -35,6 +35,7 @@
                     letter-spacing: 0em;
                     text-align: left;
                     color: #00000080;
+                    
 
                 }
             }
@@ -60,7 +61,24 @@
     .product-image{
         height: 255px;
         margin: 10px 10px 10px 10px;
-       
+        display: flex;
+        align-items: center;
+        background-image: url("../../../assets/images/grid-Image.png");
+        position: relative;
+        img:first-child {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+        }
+        img:last-child{
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 }
 

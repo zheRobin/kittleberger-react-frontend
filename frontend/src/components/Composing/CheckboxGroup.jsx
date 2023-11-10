@@ -1,15 +1,64 @@
 import Checkbox from '@mui/material/Checkbox';
 import "./style/composeStyle.scss"
 
-const CheckboxGroup = ({ title, fillColor = "white", textColor = "white" }) => {
+const CheckboxGroup = (props) => {
+
+    const handleFilter = (type, id, status) => {
+        switch (type) {
+            case "number":
+                let articleNumber = [...props.filters.article_number];
+                if (status) {
+                    // Add the id to the array if status is true
+                    articleNumber.push(id);
+                } else {
+                    // Remove the id from the array if status is false
+                    articleNumber = articleNumber.filter((num) => num !== id);
+                }
+                props.setFilters({
+                    ...props.filters,
+                    article_number: articleNumber
+                });
+                break;
+            case "brand":
+                let brand = [...props.filters.brand];
+                if (status) {
+                    // Add the id to the array if status is true
+                    brand.push(id);
+                } else {
+                    // Remove the id from the array if status is false
+                    brand = brand.filter((num) => num !== id);
+                }
+                props.setFilters({
+                    ...props.filters,
+                    brand: brand
+                });
+                break;
+            case "app":
+                let application = [...props.filters.application];
+                if (status) {
+                    // Add the id to the array if status is true
+                    application.push(id);
+                } else {
+                    // Remove the id from the array if status is false
+                    application = application.filter((num) => num !== id);
+                }
+                props.setFilters({
+                    ...props.filters,
+                    application: application
+                });
+                break;
+            default:
+                props.setFilters({});
+        }
+    };
+
     return (
 
         <>
             <div className='checkbox-group'>
-                <Checkbox style={{ color: fillColor, borderColor: 'white', padding: 0, margin: 0 }} />
-                <div className='typography-400-regular checkbox-group__label' style={{ color: textColor }}>{title}</div>
+                <Checkbox onChange={(e) => handleFilter(props.type, props.element.id, e.target.checked)} value={props.value} name={props.name} style={{ color: props.fillColor ? props.fillColor : "white", borderColor: 'white', padding: 0, margin: 0 }} />
+                <div className='typography-400-regular checkbox-group__label' style={{ color: props.textColor ? props.textColor : "white" }}>{props.title}</div>
             </div >
-
         </>
 
     )

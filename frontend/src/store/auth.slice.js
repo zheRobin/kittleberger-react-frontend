@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchWrapper } from '../_utils/fetch-wrapper';
-
-export 
 // implementation
 function createInitialState() {
   return {
@@ -10,6 +8,32 @@ function createInitialState() {
     token: JSON.parse(localStorage.getItem('token')),
     role: null,
     error: null,
+    templateTypes:{
+      brands: [
+          {
+              "id": 1,
+              "name": "Brand 1",
+              "index": "4de8ab64-efac-4b7f-8f6d-94c4f68c9689"
+          },
+          {
+              "id": 2,
+              "name": "Brand 2",
+              "index": "6018ca35-bc00-4daf-b61b-b8fd4c3c68fc"
+          }
+      ],
+      applications: [
+          {
+              "id": 1,
+              "name": "Application 1",
+              "index": "e6943fdd-e8b7-4598-88e2-8f6ad10a69d8"
+          },
+          {
+              "id": 2,
+              "name": "Application 2",
+              "index": "3c22dc5d-48d2-4806-a9d9-5f6f784fb200"
+          }
+      ]
+  }
   };
 }
 
@@ -56,15 +80,14 @@ function createExtraReducers() {
     },
     [fulfilled]: (state, action) => {
       const user = action.payload;
+      
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('user', JSON.stringify(user.user));
       localStorage.setItem('token', JSON.stringify(user.access_token));
       state.role = user.is_superuser ? "super" : (user.is_staff? "admin": "customer")
       state.user = user.user;
       state.token = user.access_token;
-      // // get return url from location state or default to home page
-      // const { from } = history.location.state || { from: { pathname: '/' } };
-      // history.navigate(from);
+      state.templateTypes = user.page_data
     },
     [rejected]: (state, action) => {
       state.error = action.error;

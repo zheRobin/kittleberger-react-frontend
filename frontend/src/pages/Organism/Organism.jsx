@@ -8,9 +8,13 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
 import ProductSearch from '../../components/Product-View/ProductSearch';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { ToastContainer, toast } from 'react-toastify';
+import { appendTemplate, selectPage, setLoadingStatus, initTemplate } from '../../store';
+import { infiniteTemplate } from '../../_services/Template';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import 'react-toastify/dist/ReactToastify.css';
 
 const theme = createTheme({
     components: {
@@ -21,7 +25,6 @@ const theme = createTheme({
                 root: {
                     // Some CSS
                     padding: '0px',
-                    marginRight: "30px"
                 },
             },
         },
@@ -33,11 +36,48 @@ const theme = createTheme({
 
 const Organism = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const [value, setValue] = useState('1');
-    const [data, setData] = useState('');
+    // const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const handleChange = (event, newValue) => {
         setValue(newValue);
+    };
+    const token = useSelector(state => state.auth.token)
+    const templates = useSelector(state => state.templates.templateData)
+    const loadingStatus = useSelector(state => state.templates.loadingStatus)
+    let page = useSelector(state => state.templates.page)
+    let filters = useSelector(state => state.templates.filterData)
+
+    useEffect(() => {
+        infiniteTemplate(token, 1, filters, (success) => {
+            if (success.data.next == null) {
+                dispatch(setLoadingStatus(false))
+            }
+            if (success.status === 200) {
+                dispatch(selectPage(page + 1))
+                dispatch(initTemplate(success.data.results.templates))
+            }
+        })
+    }, [filters]);
+
+    const fetchMoreData = () => {
+        infiniteTemplate(token, page, filters, (success) => {
+            if (success.status === 200) {
+                if (success.data.next == null) {
+                    dispatch(setLoadingStatus(false))
+                }
+                if (loadingStatus === true) {
+                    setTimeout(() => {
+                        dispatch(selectPage(page + 1))
+                        dispatch(appendTemplate(success.data.results.templates))
+                    }, 1000);
+                }
+            }
+            if (success.data.code === 400 && success.data.status === "failed") {
+                toast.error("Something Went Wrong")
+            }
+        })
     };
 
     const styles = {
@@ -49,65 +89,6 @@ const Organism = () => {
         }
     }
 
-    const productMokeUp = [
-        { title: "Hero Keyvisual (2 Products)", imageInfo: "1600x640 px | 72 dpi | JPG" },
-        { title: "Hero Keyvisual (2 Products)", imageInfo: "1600x640 px | 72 dpi | JPG" },
-        { title: "Hero Keyvisual (2 Products)", imageInfo: "1600x640 px | 72 dpi | JPG" },
-        { title: "Hero Keyvisual (2 Products)", imageInfo: "1600x640 px | 72 dpi | JPG" },
-        { title: "Hero Keyvisual (2 Products)", imageInfo: "1600x640 px | 72 dpi | JPG" }
-    ]
-    const token = localStorage.getItem('token');
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch(`${process.env.REACT_APP_LOCAL_API_URL}api/v1/compose/templates`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': "Bearer " + JSON.parse(token),
-                    },
-                });
-                if (!response.ok || !response.body) {
-                    throw response.statusText;
-                }
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder("utf-8");
-                let buffer = "";
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) {
-                        setLoading(false);
-                        break;
-                    }
-                    let decodedChunk = decoder.decode(value);
-                    try {
-                        // const trimmedChunk = decodedChunk.trim();
-                        buffer += decodedChunk
-                        if (decodedChunk.length !== 65536) {
-                            let toParse = "[" + buffer.trim().replace(/}(?={)/g, "},") + "]"
-                            const result = JSON.parse(toParse)
-                            console.log(result)
-                        }
-
-                        // const jsonData = JSON.parse(trimmedChunk);
-
-                        // setData(prevValue => prevValue + trimmedChunk);
-                        console.log(data)
-
-                    } catch (error) {
-                        console.error('Error parsing JSON:', error);
-                    }
-                }
-            } catch (error) {
-                setLoading(false);
-                // Handle other errors
-            }
-        };
-
-        fetchData();
-    }, []);
     return (
         <>
             <div className="organism-tabs">
@@ -138,28 +119,70 @@ const Organism = () => {
 
                         <TabPanel value="1"
                         >
-                            <div className='product-container'>
-                                {productMokeUp.map((productEle, key) => {
-                                    return (
-                                        < ProductCard key={key} title={productEle.title} imageInfo={productEle.imageInfo} />
-                                    )
-                                }
-                                )}
+                            <div className='template-tab-1'>
+                                <div id="scrollableDiv" className='product-container'>
+                                    <InfiniteScroll
+                                        dataLength={templates.length}
+                                        next={fetchMoreData}
+                                        hasMore={true}
+                                        loader={loadingStatus === true ? <div className="loading">Loading&#8230;</div> : null}
+                                        style={{
+                                            display: "flex",
+                                            flexWrap: "wrap",
+                                            gap: "20px"
+                                        }}
+                                        endMessage={
+                                            <p style={{ textAlign: 'center' }}>
+                                                <b>Yay! You have seen it all</b>
+                                            </p>
+                                        }
+                                        scrollableTarget="scrollableDiv"
+                                    >
+                                        {templates.map((templateEle, key) => {
+                                            return (
+                                                < ProductCard key={key} cardInfo={templateEle} />
+                                            )
+                                        }
+                                        )}
+                                    </InfiniteScroll>
+                                </div>
                             </div>
                         </TabPanel>
 
                         <TabPanel value="2">
                             <ProductSearch />
-                            <div className='product-container'>
-                                {productMokeUp.map((productEle, key) => {
-                                    return (
-                                        < ProductCard key={key} title={productEle.title} imageInfo={productEle.imageInfo} />
-                                    )
-                                }
-                                )}
-                            </div>
+                            <h1>No Products</h1>
+                            {/* <div className='template-tab-1'>
+                                <div id="scrollableDiv" className='product-container'>
+                                    <InfiniteScroll
+                                        dataLength={templates.length}
+                                        next={fetchMoreData}
+                                        hasMore={false}
+                                        loader={<h4>Loading...</h4>}
+                                        style={{
+                                            display: "flex",
+                                            flexWrap: "wrap",
+                                            gap: "20px"
+                                        }}
+                                        endMessage={
+                                            <div style={{ textAlign: 'center' }}>
+                                                <b>Yay! You have seen it all</b>
+                                            </div>
+                                        }
+                                        scrollableTarget="scrollableDiv"
+                                    >
+                                        {templates.map((templateEle, key) => {
+                                            return (
+                                                < ProductCard key={key} cardInfo={templateEle} />
+                                            )
+                                        }
+                                        )}
+                                    </InfiniteScroll>
+                                </div>
+                            </div> */}
                         </TabPanel>
                     </TabContext>
+                    <ToastContainer />
                 </ThemeProvider>
             </div >
         </>

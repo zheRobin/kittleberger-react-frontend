@@ -56,12 +56,19 @@
 
 .image-settings{
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    &__left-section {
+        padding-top: 25px;
+    }
+    &__right-section {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
     &__common{
         display: flex;
-        align-items: end;
+        align-items: flex-end;
 
         *{
             margin-bottom: 10px;
@@ -74,9 +81,9 @@
         gap: 10px;
 
         input {
-            width: 30px ;
-            height: 20px;
-            padding: 10px 10px 10px 10px;
+            width: 60px ;
+            height: 40px;
+            padding: 0px !important;
         }
     }
 

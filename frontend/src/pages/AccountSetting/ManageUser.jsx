@@ -34,6 +34,7 @@ const ManageUser = () => {
   const [editMode, setEditMode] = useState(false);
   const [userInfo, setUserinfo] = useState({});
   const [loading, setloading] = useState(false);
+
   const token = useSelector(state => state.auth.token)
   useEffect(() => {
     userList(token, (success) => {

@@ -46,7 +46,7 @@ const ApiToken = () => {
     const token = useSelector(state => state.auth.token)
 
     const schema = Yup.object({
-        name: Yup.string().required("Name field is required")
+        name: Yup.string().required("Name field is required"),
     })
 
 
