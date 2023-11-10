@@ -38,8 +38,6 @@ const Organism = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [value, setValue] = useState('1');
-    // const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(false);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

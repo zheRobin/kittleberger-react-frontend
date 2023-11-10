@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./style/organismStyle.scss"
 import "../../components/Composing/style/composeStyle.scss"
 import ImageTemplate from "../../components/Composing/ImageTempate"
+import { useRef, useLayoutEffect, useEffect } from 'react';
 
 // let validationSchema = Yup.object().shape({
 //     name: Yup.string()
@@ -117,10 +118,16 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers }) => (
         </div>
     </div>
 );
+
 export default function TemplatePanel() {
     const [backView, setBackView] = useState(false);
     const [preView, setPreView] = useState(false);
     const [images, setImages] = useState([]);
+    const [tempImages, setTempImages] = useState({ width: 2, height: 1 });
+    const [width, setWidth] = useState(600);
+    const [height, setHeight] = useState(600);
+    const elementRef = useRef(null);
+    let backgroundWidth = (tempImages.height / tempImages.width * width) * 100 / height
     const [previewImages, setPreviewImages] = useState([]);
     const maxNumber = 69;
     const token = useSelector(state => state.auth.token)
@@ -137,6 +144,22 @@ export default function TemplatePanel() {
             },
         },
     });
+    console.log(width)
+    console.log(height)
+    useLayoutEffect(() => {
+        const handleResize = () => {
+            setWidth(elementRef.current.offsetWidth);
+            setHeight(elementRef.current.offsetHeight);
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        }
+    }, []);
+
+
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -384,8 +407,8 @@ export default function TemplatePanel() {
                                         </div>
                                         <div className="product-setting-panel__bottom">
                                             <div className="image-setting-panel">
-                                                <div className="left-b-image">
-                                                    <div className="image-backgroud">
+                                                <div className="left-b-image" ref={elementRef} >
+                                                    <div className="image-backgroud" style={{ height: `${backgroundWidth}%` }}>
                                                         <div className="image-compare">
                                                             {values.article_placements.map((value, index) => (
                                                                 <ImageTemplate
@@ -398,6 +421,7 @@ export default function TemplatePanel() {
                                                                     z_index={value.z_index}
                                                                     bg_width={values.resolution_width}
                                                                     bg_height={values.resolution_height}
+                                                                    setTempImages={setTempImages}
                                                                 />
                                                             ))}
                                                         </div>

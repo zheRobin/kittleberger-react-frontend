@@ -15,7 +15,7 @@ if (token) {
 
 export const getTemplateListbyFilter = (token,success,templateArgs={}) => {
     setAuthToken(token)
-    axios.post(`${process.env.REACT_APP_LOCAL_API_URL}/api/v1/compose/templates/filter/`,{
+    axios.post(`${process.env.REACT_APP_API_URL}/api/v1/compose/templates/filter/`,{
         templateArgs
     })
     .then((response) => {
@@ -30,7 +30,7 @@ export const infiniteTemplate = (token,page,dependencies,success) => {
     setAuthToken(token)
     const limit = 3
     const offset = (page - 1) * limit
-    axios.post(`${process.env.REACT_APP_LOCAL_API_URL}/api/v1/compose/templates/filter?limit=${limit}&offset=${offset}`, {
+    axios.post(`${process.env.REACT_APP_API_URL}/api/v1/compose/templates/filter?limit=${limit}&offset=${offset}`, {
         dependencies
     })
     .then(res => {
@@ -44,7 +44,7 @@ export const infiniteTemplate = (token,page,dependencies,success) => {
 export const createTemplate = (formData,token,success) => {
     const language = 'en';
     setAuthToken(token)
-    axios.post(`${process.env.REACT_APP_LOCAL_API_URL}/api/v1/compose/templates/`,
+    axios.post(`${process.env.REACT_APP_API_URL}/api/v1/compose/templates/`,
         formData,{
             headers: {
             'Content-Type': 'multipart/form-data',
@@ -66,7 +66,7 @@ export const createTemplate = (formData,token,success) => {
 
 
 async function getTemplatesbyFilter(token, filterArgs = {} ) {
-    const response = await fetch(`${process.env.REACT_APP_LOCAL_API_URL}api/v1/compose/templates/filter/`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}api/v1/compose/templates/filter/`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
