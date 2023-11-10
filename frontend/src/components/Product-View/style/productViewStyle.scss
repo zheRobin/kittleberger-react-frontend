@@ -95,3 +95,26 @@
         outline: none;
     }
 }
+
+
+.overlay{
+    
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: 30px;
+    
+    &__product{
+        padding: 6px 10px 6px 15px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        border-radius: 14px;
+        gap: 10px;
+        background-color: #8F7300;
+        margin-right: 10px;
+    }
+
+}

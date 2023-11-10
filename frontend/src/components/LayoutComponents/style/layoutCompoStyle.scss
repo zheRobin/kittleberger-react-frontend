@@ -16,13 +16,15 @@
         background-color: #FFFFFF40;
         box-sizing: border-box;
         width: 100%;
-        padding: 15px 30px;
+        padding: 15px 0px 15px 30px;
+
+        
     }
 
     &--inactive{
         background-color: transparent;
         box-sizing: border-box;
         width: 100%;
-        padding: 15px 30px;
+        padding: 15px 0px 15px 30px;
     }
 }

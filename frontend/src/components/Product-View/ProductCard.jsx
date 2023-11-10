@@ -22,7 +22,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit" }) => {
                         </div>
                     </div>
                 </div>
-                <div className="product-image pointer" onClick={() => navigate(`/product/product-select/${cardInfo?.id}`)}>
+                <div className="product-image pointer" onClick={() => navigate(`/product/product-select`)}>
                     {/* <img src={cardInfo?.bg_image_cdn_url} alt="images"> */}
                     <img src={cardInfo?.preview_image_cdn_url} alt="preview"></img>
                     {/* </img> */}

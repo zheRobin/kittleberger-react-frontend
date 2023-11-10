@@ -109,7 +109,7 @@
     width: 100%;
     top: 0px;
     bottom: 0px;
-    overflow-y: scroll;
+    overflow: auto;
     
     .infinite-scroll-component{
         height: auto;
@@ -118,8 +118,8 @@
         flex-wrap: wrap;
         margin-bottom: 40px;
         gap: 20px;
-        min-height: 100vh;
         align-content: flex-start;
+        // min-height: 100vh;
     }
 }
 

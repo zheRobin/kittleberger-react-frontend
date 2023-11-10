@@ -14,9 +14,10 @@ const Authguard = ({ component }) => {
         }
     };
     const decodedJwt = parseJwt(token);
+    console.log(!authUser || decodedJwt.exp * 1000 < Date.now())
     useEffect(
         () => {
-            if (!authUser && decodedJwt.exp * 1000 < Date.now()) {
+            if (!authUser || decodedJwt.exp * 1000 < Date.now()) {
                 navigate('/')
             }
         }, []

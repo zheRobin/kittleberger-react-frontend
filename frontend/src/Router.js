@@ -51,12 +51,6 @@ const AuthRouteGroup = [
         title: 'Product Select'
     },
     {
-        path: "product/product-select/:id",
-        element:
-            <LayOutDashboard><ProductSelect /></LayOutDashboard>,
-        title: 'Product Select'
-    },
-    {
         path: "product/summary",
         element:
             <LayOutDashboard><Summary /></LayOutDashboard>,

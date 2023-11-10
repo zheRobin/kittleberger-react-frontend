@@ -117,39 +117,43 @@ const Organism = () => {
 
                         <TabPanel value="1"
                         >
-                            <div className='template-tab-1'>
-                                <div id="scrollableDiv" className='product-container'>
-                                    <InfiniteScroll
-                                        dataLength={templates.length}
-                                        next={fetchMoreData}
-                                        hasMore={true}
-                                        loader={loadingStatus === true ? <div className="loading">Loading&#8230;</div> : null}
-                                        style={{
-                                            display: "flex",
-                                            flexWrap: "wrap",
-                                            gap: "20px"
-                                        }}
-                                        endMessage={
-                                            <p style={{ textAlign: 'center' }}>
-                                                <b>Yay! You have seen it all</b>
-                                            </p>
-                                        }
-                                        scrollableTarget="scrollableDiv"
-                                    >
-                                        {templates.map((templateEle, key) => {
-                                            return (
-                                                < ProductCard key={key} cardInfo={templateEle} />
-                                            )
-                                        }
-                                        )}
-                                    </InfiniteScroll>
+                            {templates.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Templates</div>) : (
+                                <div className='template-tab-1'>
+                                    <div id="scrollableDiv" className='product-container'>
+                                        <InfiniteScroll
+                                            dataLength={templates.length}
+                                            next={fetchMoreData}
+                                            hasMore={true}
+                                            loader={loadingStatus === true ? <div className="loading">Loading&#8230;</div> : null}
+                                            style={{
+                                                display: "flex",
+                                                flexWrap: "wrap",
+                                                gap: "20px"
+                                            }}
+                                            endMessage={
+                                                <p style={{ textAlign: 'center' }}>
+                                                    <b>Yay! You have seen it all</b>
+                                                </p>
+                                            }
+                                            scrollableTarget="scrollableDiv"
+                                            id='scrollable'
+                                        >
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                        </InfiniteScroll>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
+
                         </TabPanel>
 
                         <TabPanel value="2">
                             <ProductSearch />
-                            <h1>No Products</h1>
+                            <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>
                             {/* <div className='template-tab-1'>
                                 <div id="scrollableDiv" className='product-container'>
                                     <InfiniteScroll

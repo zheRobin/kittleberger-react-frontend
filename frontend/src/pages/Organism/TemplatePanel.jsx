@@ -16,7 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./style/organismStyle.scss"
 import "../../components/Composing/style/composeStyle.scss"
 import ImageTemplate from "../../components/Composing/ImageTempate"
-import { useRef, useLayoutEffect, useEffect } from 'react';
+import { useRef, useLayoutEffect } from 'react';
 
 // let validationSchema = Yup.object().shape({
 //     name: Yup.string()
@@ -82,11 +82,11 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers }) => (
                         <div className="input-groups">
                             <div>
                                 <div className="typography-400-regular">top</div>
-                                <div className="input-group__bottom"><Field as={TextField} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
+                                <div className="input-group__bottom"><Field as={TextField} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
                             </div>
                             <div>
                                 <div className="typography-400-regular">left</div>
-                                <div className="input-group__bottom"><Field as={TextField} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
+                                <div className="input-group__bottom"><Field as={TextField} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
                             </div>
                             <div>
                                 <div className="typography-400-regular">width</div>
@@ -144,8 +144,6 @@ export default function TemplatePanel() {
             },
         },
     });
-    console.log(width)
-    console.log(height)
     useLayoutEffect(() => {
         const handleResize = () => {
             setWidth(elementRef.current.offsetWidth);
