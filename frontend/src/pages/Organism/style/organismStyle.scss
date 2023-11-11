@@ -96,6 +96,7 @@
     position: relative;
     height: 100%;
     margin: 0px 30px 0px 0px;
+    background-color: #FFFFFF40;
 }
 
 
@@ -170,6 +171,8 @@
             flex-direction: column;
             gap: 20px;
             justify-content: space-between;
+            white-space:nowrap;
+            text-overflow: clip;
         }
         &__bottom{
             display: flex;
@@ -318,11 +321,11 @@
         background-color: #BFBFBF;
         padding: 30px;
         overflow-y: scroll;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            &::-webkit-scrollbar{
-                display: none;
-            }
+            // -ms-overflow-style: none;
+            // scrollbar-width: none;
+            // &::-webkit-scrollbar{
+            //     display: none;
+            // }
         .product-search{
             width: 100%;
             height: 40px;
@@ -352,10 +355,17 @@
                     flex-direction: row;
                     align-items: center;
                     justify-content: space-between;
+                    gap: 20px;
                     .label-info{
                         display: flex;
                         flex-direction: column;
                         text-align: start;
+                        justify-content: space-around;
+                        &__top{
+                            max-width: 150px;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                        }
                     }
                     .add--filled{
                         background-color: #8F7300;

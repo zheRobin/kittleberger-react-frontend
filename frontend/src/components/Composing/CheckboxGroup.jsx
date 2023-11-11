@@ -1,9 +1,23 @@
 import Checkbox from '@mui/material/Checkbox';
 import "./style/composeStyle.scss"
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { setResetStatus } from '../../store';
 
 const CheckboxGroup = (props) => {
+    const dispatch = useDispatch()
+    const [isChecked, setIsChecked] = useState(false);
+    const resetStatus = useSelector(state => state.templates.resetStatus);
 
+    useEffect(() => {
+        console.log("resetStatus", resetStatus)
+        if (resetStatus) {
+            setIsChecked(false);
+        }
+    }, [resetStatus]);
     const handleFilter = (type, id, status) => {
+        setIsChecked(!isChecked)
+        dispatch(setResetStatus(false))
         switch (type) {
             case "number":
                 let articleNumber = [...props.filters.article_number];
@@ -56,7 +70,7 @@ const CheckboxGroup = (props) => {
 
         <>
             <div className='checkbox-group'>
-                <Checkbox onChange={(e) => handleFilter(props.type, props.element.id, e.target.checked)} value={props.value} name={props.name} style={{ color: props.fillColor ? props.fillColor : "white", borderColor: 'white', padding: 0, margin: 0 }} />
+                <Checkbox onChange={(e) => handleFilter(props.type, props.element.id, e.target.checked)} checked={isChecked} value={props.value} name={props.name} style={{ color: props.fillColor ? props.fillColor : "white", borderColor: 'white', padding: 0, margin: 0 }} />
                 <div className='typography-400-regular checkbox-group__label' style={{ color: props.textColor ? props.textColor : "white" }}>{props.title}</div>
             </div >
         </>
