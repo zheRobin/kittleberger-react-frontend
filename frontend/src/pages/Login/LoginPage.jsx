@@ -12,20 +12,7 @@ import { authActions } from "../../store"
 const LoginPage = () => {
     const dispatch = useDispatch()
     const [password, setPassword] = useState('');
-    const [tempPass, setTempPass] = useState('');
     const navigate = useNavigate();
-    const handlePasswordChange = (event) => {
-        const value = event.target.value;
-        const tempValue = tempPass
-        const lastCharacter = value.substr(value.length - 1);
-        const checkValue = lastCharacter === "*" || lastCharacter === "" ? (tempValue === "" ? "" : tempValue.slice(0, -1)) : tempValue + lastCharacter
-        setTempPass(checkValue)
-        setTempPass((state) => {
-            return state
-        })
-        formik.values.password = checkValue
-        setPassword(value.replace(/./g, '*'));
-    };
     const handleNavigate = () => {
         navigate('/forgot');
     }
@@ -37,7 +24,9 @@ const LoginPage = () => {
             password: '',
         },
         onSubmit: (values) => {
-            try { dispatch(authActions.login({ email: values.username, password: values.password })) }
+            try {
+                dispatch(authActions.login({ email: values.username, password: values.password }))
+            }
             catch (error) {
                 setPassword("")
             }
@@ -89,7 +78,6 @@ const LoginPage = () => {
                                     color="black"
                                     value={password}
                                     display="inline-block"
-                                    onChange={handlePasswordChange}
                                 >
                                     Composing Generator
                                 </Typography>
@@ -125,9 +113,10 @@ const LoginPage = () => {
                                         label="Password"
                                         id="outlined-password"
                                         name='password'
-                                        value={password}
+                                        type='password'
+                                        value={formik.values.password}
                                         size="small"
-                                        onChange={(e) => handlePasswordChange(e)}
+                                        onChange={formik.handleChange}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start" />,
                                         }}

@@ -17,11 +17,15 @@ const ImageTemplate = ({
         setArticle({ position_x, position_y, width, height, z_index });
     }, [position_x, position_y, width, height, z_index])
     useEffect(() => {
-        const scale = 600 / (bg_width > bg_height ? bg_width : bg_height);
-        const img_width = scale * (article.width >= bg_width ? bg_width : article.width);
-        const img_height = scale * (article.height >= bg_height ? bg_height : article.height);
-        const left = scale * article.position_x;
-        const top = scale * article.position_y;
+        let scale = 0;
+        if (Number(bg_width) !== 0 || Number(bg_height) !== 0) {
+            scale = 600 / (Number(bg_width) > Number(bg_height) ? Number(bg_width) : Number(bg_height));
+        }
+        const img_width = (Number(article.width) > Number(bg_width) ? scale * Number(bg_width) : scale * Number(article.width));
+        const img_height = (Number(article.height) > Number(bg_height) ? scale * Number(bg_height) : scale * Number(article.height));
+        const left = scale * Number(article.position_x);
+        const top = scale * Number(article.position_y);
+        console.log(top, img_height, bg_height);
         setStyle({
             position: "absolute",
             boxSizing: "border-box",

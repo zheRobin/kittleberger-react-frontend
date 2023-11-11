@@ -37,22 +37,36 @@
     }
 }
 
-.filter-group{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding-bottom: 20px;
-    padding-left: 30px;
-    border-bottom: solid 1px #FFFFFF40;
+.filter-box{
+
+    max-height: 500px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+
+    .filter-group{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: 20px;
+        padding-left: 30px;
+        border-bottom: solid 1px #FFFFFF40;
+        
+    }
+    
+    .filter-bottom{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-left: 30px;
+        padding-top: 20px;
+    }
 }
 
-.filter-bottom{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding-left: 30px;
-    padding-top: 20px;
-}
+
 
 .image-settings{
     display: flex;

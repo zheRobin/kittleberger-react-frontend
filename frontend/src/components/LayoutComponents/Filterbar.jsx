@@ -41,49 +41,52 @@ export const ProductNumberFilter = (resetValue) => {
 
     return (
         <>
-            <div className="filter-group">
-                <div className="by-number">
-                    <div className="product-list">
-                        <Typography fontSize="14px" lineHeight="20px">Anzahl Produkte</Typography>
+            <div className="filter-box">
+                <div className="filter-group">
+                    <div className="by-number">
+                        <div className="product-list">
+                            <Typography fontSize="14px" lineHeight="20px">Anzahl Produkte</Typography>
+                        </div>
+                        <div className="check-group">
+                            {plusProductMokeUp.map((ele, index) => {
+                                return (<CheckboxGroup key={"plusProductMokeUp" + index} type={"number"} element={ele} title={ele.name} setFilters={setFilters} filters={filters} />)
+                            })}
+                        </div>
+                        <div className="product-list">
+                            <img src={plusButton} alt="plusButton" /><Typography fontSize="14px" lineHeight="20px">Mehr anzeigen</Typography>
+                        </div>
                     </div>
-                    <div className="check-group">
-                        {plusProductMokeUp.map((ele, index) => {
-                            return (<CheckboxGroup key={"plusProductMokeUp" + index} type={"number"} element={ele} title={ele.name} setFilters={setFilters} filters={filters} />)
-                        })}
+                    <div className="by-brand">
+                        <div className="product-list">
+                            <Typography fontSize="14px" lineHeight="20px">Brand</Typography>
+                        </div>
+                        <div className="check-group">
+                            {templateTypes.brands.map((ele, index) => {
+                                return (<CheckboxGroup key={"brandMokeup" + index} type={"brand"} element={ele} title={ele.name} setFilters={setFilters} filters={filters} />)
+                            })}
+                        </div>
                     </div>
-                    <div className="product-list">
-                        <img src={plusButton} alt="plusButton" /><Typography fontSize="14px" lineHeight="20px">Mehr anzeigen</Typography>
+                    <div className="by-Aplikationen">
+                        <div className="product-list">
+                            <Typography fontSize="14px" lineHeight="20px">Aplikationen</Typography>
+                        </div>
+                        <div className="check-group">
+                            {templateTypes.applications.map((ele, index) => {
+                                return (<CheckboxGroup key={"aplikationenMokeup" + index} type={"app"} element={ele} title={ele.name} setFilters={setFilters} filters={filters} />)
+                            })}
+                        </div>
                     </div>
                 </div>
-                <div className="by-brand">
-                    <div className="product-list">
-                        <Typography fontSize="14px" lineHeight="20px">Brand</Typography>
-                    </div>
-                    <div className="check-group">
-                        {templateTypes.brands.map((ele, index) => {
-                            return (<CheckboxGroup key={"brandMokeup" + index} type={"brand"} element={ele} title={ele.name} setFilters={setFilters} filters={filters} />)
-                        })}
-                    </div>
-                </div>
-                <div className="by-Aplikationen">
-                    <div className="product-list">
-                        <Typography fontSize="14px" lineHeight="20px">Aplikationen</Typography>
-                    </div>
-                    <div className="check-group">
-                        {templateTypes.applications.map((ele, index) => {
-                            return (<CheckboxGroup key={"aplikationenMokeup" + index} type={"app"} element={ele} title={ele.name} setFilters={setFilters} filters={filters} />)
-                        })}
-                    </div>
-                </div>
-            </div>
-            <div className="filter-bottom">
-                {footerMokeup.map((ele, index) => {
-                    return (<div className="product-list" key={"footerMokeup" + index}>
-                        <img src={plusButton} alt="plusButton" /><Typography fontSize="14px" lineHeight="20px">{ele}</Typography>
-                    </div>)
-                })}
+                <div className="filter-bottom">
+                    {footerMokeup.map((ele, index) => {
+                        return (<div className="product-list" key={"footerMokeup" + index}>
+                            <img src={plusButton} alt="plusButton" /><Typography fontSize="14px" lineHeight="20px">{ele}</Typography>
+                        </div>)
+                    })}
 
+                </div>
             </div>
+
 
         </>
     )

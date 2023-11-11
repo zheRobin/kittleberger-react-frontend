@@ -127,7 +127,7 @@ export default function TemplatePanel() {
     const [width, setWidth] = useState(600);
     const [height, setHeight] = useState(600);
     const elementRef = useRef(null);
-    let backgroundWidth = (tempImages.height / tempImages.width * width) * 100 / height
+    let backgroundHeight = (tempImages.height / tempImages.width * width) * 100 / height
     const [previewImages, setPreviewImages] = useState([]);
     const maxNumber = 69;
     const token = useSelector(state => state.auth.token)
@@ -242,10 +242,10 @@ export default function TemplatePanel() {
                                                         >   <MenuItem value="" disabled>
                                                                 <em>select the value</em>
                                                             </MenuItem>
-                                                            <MenuItem value=".jpg">.jpg</MenuItem>
-                                                            <MenuItem value=".png">.png</MenuItem>
-                                                            <MenuItem value=".tiff">.tiff</MenuItem>
-                                                            <MenuItem value=".ist">.ist</MenuItem>
+                                                            <MenuItem value="JPEG">.jpg</MenuItem>
+                                                            <MenuItem value="PNG">.png</MenuItem>
+                                                            <MenuItem value="TIFF">.tiff</MenuItem>
+                                                            <MenuItem value="IST">.ist</MenuItem>
                                                         </Field>
                                                         <div className="typography-400-regular select-subtitle">
                                                             .jpg und .png sind in 72 dpi; .tiff ist in 300 dpi
@@ -406,7 +406,7 @@ export default function TemplatePanel() {
                                         <div className="product-setting-panel__bottom">
                                             <div className="image-setting-panel">
                                                 <div className="left-b-image" ref={elementRef} >
-                                                    <div className="image-backgroud" style={{ height: `${backgroundWidth}%` }}>
+                                                    <div className="image-backgroud" style={{ height: `${backgroundHeight}%` }}>
                                                         <div className="image-compare">
                                                             {values.article_placements.map((value, index) => (
                                                                 <ImageTemplate

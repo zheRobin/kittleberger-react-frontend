@@ -80,7 +80,7 @@ function createExtraReducers() {
     },
     [fulfilled]: (state, action) => {
       const user = action.payload;
-      
+      console.log(user)
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('user', JSON.stringify(user.user));
       localStorage.setItem('token', JSON.stringify(user.access_token));
