@@ -118,24 +118,30 @@
     &__setting{
         position: relative;
         &__panel{
-            position: absolute;
-            top: 15px;
-            z-index: 999;
-            width: 352px;
-            height: 282px;
-            background-color: white;
+            
         }
     }
 }
 
 .overlay__setting__panel {
     color: black;
+    position: absolute;
+    top: -16px;
+    left: 45px;
+    z-index: 999;
+    width: 352px;
+    background-color: white;
     .panel-top {
+        position: relative;
         display: flex;
         flex-direction: column;
         border-bottom: 1px solid #D9D9D9;
         padding: 15px;
         gap: 10px;
+        .vector{
+        position: absolute;
+        left: -13px;
+        }
         &__title {
             font-family: Roboto;
             font-weight: 700;
@@ -222,7 +228,13 @@
             line-height: 20px;
         }
         &__drop {
-            
+            .arrow-Setting{
+                display: grid;
+                grid-template-columns: [first] 33% [line2] 33% [line3] 33% [end]; 
+                grid-template-rows: [first] 33% [line2] 33% [line3] 33% [end]; 
+                width: 130px;
+                height: 130px
+            }
         }
     }
 }

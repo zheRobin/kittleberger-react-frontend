@@ -28,59 +28,93 @@ export const ProductList = ({ productItem, flag, setPosNum, posNum, possiblePos 
 
 const ProductSelect = () => {
 
-    const selectedTemplate = useSelector(state => state.products.selectedTemplate)
-    console.log(selectedTemplate)
-    let productPosNumbers = selectedTemplate?.article_placements?.length
-    const token = useSelector(state => state.auth.token)
-    const [productList, setProductList] = useState([])
-    const [page, setPage] = useState(1)
-    const [posNum, setPosNum] = useState(0)
-    console.log(page)
-    async function getProductsbyFilter(pages) {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}api/v1/core/filter?page=${pages}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': "Bearer " + token,
-            },
-        });
-        const reader = response.body.getReader();
-        let buffer = "";
+    const selectedTemplate = useSelector(state => state.products.selectedTemplate);
+    const productPosNumbers = selectedTemplate?.article_placements?.length;
+    const token = useSelector(state => state.auth.token);
+    const [productList, setProductList] = useState([]);
+    const [page, setPage] = useState(1);
+    const [posNum, setPosNum] = useState(0);
+    const [searchString, setSearchString] = useState("");
 
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-                // Process the last chunk of data if any
-                if (buffer.length > 0) {
-                    const lastChunk = buffer.trim();
-                    console.log(lastChunk);
-                    // Process the last chunk of data as needed
+    const parseSearch = (input) => {
+        const regex1 = /\b(\d+)\b/;
+        const regex2 = /\b([a-zA-Z]+)\b/;
+        const productArray = input.match(regex1);
+        const countryArray = input.match(regex2);
+        const countryName = countryArray ? countryArray[0] : "";
+        const productNumber = productArray ? productArray[0] : "";
+        const queryString = (countryName === "" && productNumber === "") ? "" : `&country=${countryName}&product=${productNumber}`;
+        return queryString;
+    };
+
+    const handleSearch = async (e) => {
+        if (e.key === "Enter") {
+            setProductList([]);
+            setPage(1);
+            const additionalQuery = parseSearch(searchString);
+            try {
+                await getProductsbyFilter(page, additionalQuery);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+                // Handle the error appropriately
+            }
+        }
+    };
+
+    async function getProductsbyFilter(pages, additionalQuery = "") {
+        const filterString = additionalQuery ? `${process.env.REACT_APP_API_URL}api/v1/core/filter?page=${pages}${additionalQuery}` : `${process.env.REACT_APP_API_URL}api/v1/core/filter?page=${pages}`;
+        try {
+            const response = await fetch(filterString, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': "Bearer " + token,
+                },
+            });
+            const reader = response.body.getReader();
+            let buffer = "";
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) {
+                    // Process the last chunk of data if any
+                    if (buffer.length > 0) {
+                        const lastChunk = buffer.trim();
+                        console.log(lastChunk);
+                        // Process the last chunk of data as needed
+                    }
+                    return;
                 }
-                return;
+                const decoder = new TextDecoder("utf-8");
+                const chunk = decoder.decode(value, { stream: true });
+                buffer += chunk;
+                // Split the buffer by \n\n to separate the streams
+                while (buffer.includes("\n\n")) {
+                    const newlineIndex = buffer.indexOf("\n\n");
+                    const stream = buffer.slice(0, newlineIndex);
+                    buffer = buffer.slice(newlineIndex + 2);
+                    const parsedData = JSON.parse(stream);
+                    setProductList((prevProductList) => {
+                        const newList = prevProductList.length === 0 ? parsedData : [...prevProductList, ...parsedData];
+                        return newList;
+                    });
+                    // Process each stream individually
+                }
             }
-
-            const decoder = new TextDecoder("utf-8");
-            const chunk = decoder.decode(value, { stream: true });
-            buffer += chunk;
-
-            // Split the buffer by \n\n to separate the streams
-            while (buffer.includes("\n\n")) {
-                const newlineIndex = buffer.indexOf("\n\n");
-                const stream = buffer.slice(0, newlineIndex);
-                buffer = buffer.slice(newlineIndex + 2);
-
-                const parsedData = JSON.parse(stream);
-                setProductList((prevProductList) => {
-                    const newList = prevProductList.length === 0 ? parsedData : [...prevProductList, ...parsedData];
-                    return newList;
-                });
-                // Process each stream individually
-            }
+        } catch (error) {
+            console.error("Error fetching products:", error);
+            throw error; // Re-throw the error to handle it outside
         }
     }
 
     useEffect(() => {
-        getProductsbyFilter(page);
+        const additionalQuery = parseSearch(searchString);
+        console.log(additionalQuery);
+        try {
+            getProductsbyFilter(page, additionalQuery);
+        } catch (error) {
+            console.error("Error fetching products:", error);
+            // Handle the error appropriately
+        }
     }, [page]);
 
     return (
@@ -88,7 +122,7 @@ const ProductSelect = () => {
             <div className="product-select">
                 <div className="product-select__l">
                     <div className="product-search">
-                        <input placeholder="Produkte durchsuchen" />
+                        <input placeholder="Produkte durchsuchen" onChange={(e) => { setSearchString(e.target.value) }} onKeyDown={handleSearch} />
                     </div>
                     <div className="product-add">
                         {productList?.map((productItem, index) => {

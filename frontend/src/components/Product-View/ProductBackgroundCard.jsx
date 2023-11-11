@@ -23,7 +23,6 @@ const ProductBackgroundCard = () => {
                     </div>
                 </div>
             ) : null}
-
         </>
     )
 }
