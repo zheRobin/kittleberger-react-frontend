@@ -24,7 +24,11 @@ const ProductCard = ({ cardInfo, cardtype = "edit" }) => {
                         </div>
                     </div>
                 </div>
-                <div className="product-image pointer" onClick={(e) => { dispatch(findTemplates(cardInfo)); navigate(`/product/product-select`) }}>
+                <div className="product-image pointer" onClick={(e) => {
+                    localStorage.setItem('templateInfo', JSON.stringify(cardInfo));
+                    dispatch(findTemplates(cardInfo));
+                    navigate(`/product/product-select`)
+                }}>
                     {/* <img src={cardInfo?.bg_image_cdn_url} alt="images"> */}
                     <img src={cardInfo?.preview_image_cdn_url} alt="preview"></img>
                     {/* </img> */}

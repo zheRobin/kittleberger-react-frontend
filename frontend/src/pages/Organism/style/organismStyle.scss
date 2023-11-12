@@ -318,7 +318,7 @@
     height: 100%;
     &__l{
         width: 354px;
-        background-color: #BFBFBF;
+        background-color: #565656;
         padding: 30px;
         overflow-y: scroll;
             // -ms-overflow-style: none;
@@ -386,10 +386,17 @@
             background-image: url("../../../assets/images/grid-Image.png");
             display: flex;
             align-items: center;
-            img{
+            .saved-images{
                 width: 100%;
                 padding-top: auto;
                 padding-bottom: auto;
+                position: relative;
+                img{
+                    width: 100%;
+                }
+                .product-image{
+                    position: absolute;
+                }
             }
         }
     }

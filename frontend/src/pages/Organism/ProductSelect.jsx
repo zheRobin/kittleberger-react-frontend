@@ -1,13 +1,95 @@
 import "./style/organismStyle.scss"
 import plus from "../../assets/icons/add-2.svg"
 import { useSelector } from "react-redux"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { appendProducts } from "../../store"
 import { useDispatch } from "react-redux"
+
+function calcPosition(type = 'top-left', posX, posY, templateWidth, templateHeight, scaleInfo) {
+    switch (type) {
+        case "top-left":
+            return [posX, posY];
+        case "top-center":
+            return [(posX + templateWidth * (1 - scaleInfo) / 2), posY];
+        case "top-right":
+            return [(posX + templateWidth * (1 - scaleInfo)), posY];
+        case "middle-left":
+            return [posX, (posY + templateHeight * (1 - scaleInfo) / 2)];
+        case "middle-center":
+            return [(posX + templateWidth * (1 - scaleInfo) / 2), (posY + templateHeight * (1 - scaleInfo) / 2)];
+        case "middle-right":
+            return [(posX + templateWidth * (1 - scaleInfo)), (posY + templateHeight * (1 - scaleInfo) / 2)];
+        case "bottom-left":
+            return [posX, (posY + templateHeight * (1 - scaleInfo))];
+        case "bottom-center":
+            return [(posX + templateWidth * (1 - scaleInfo) / 2), (posY + templateHeight * (1 - scaleInfo))];
+        case "bottom-right":
+            return [(posX + templateWidth * (1 - scaleInfo)), (posY + templateHeight * (1 - scaleInfo))];
+    }
+}
+
+export const ProductView = () => {
+    const selectedTemplate = useSelector(state => state.products.selectedTemplate);
+    const selectedProducts = useSelector(state => state.products.selectedProducts);
+    const imgRef = useRef(null);
+    const [scaleInfo, setScaleInfo] = useState(1)
+    console.log("selectedTemplate:", selectedTemplate)
+    useEffect(() => {
+        if (imgRef.current) {
+            const currentWidth = imgRef.current.offsetWidth;
+            const currntHeight = imgRef.current.offsetHeight;
+            const img = new Image();
+            img.src = "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png";
+            const resolution_height = selectedTemplate.resolution_height
+            const resolution_width = selectedTemplate.resolution_width
+
+            img.onload = function () {
+                // const originalWidth = img.naturalWidth;
+                // const originalHeight = img.naturalHeight;
+                let scaleY = currntHeight / resolution_height
+                let scaleX = currentWidth / resolution_width
+                setScaleInfo(scaleX > scaleY ? scaleY : scaleX)
+            };
+        }
+    }, [selectedProducts]);
+    return (
+        <div className="image-backgroud">
+            <div className="saved-images">
+                <img ref={imgRef} src={"https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/bg.jpg"} alt="background" />
+                {
+                    selectedProducts?.map((product, index) => {
+
+                        let positionStyle = selectedTemplate?.article_placements
+                        let sliderScale = product?.sliderScale === undefined ? 0.5 : product?.sliderScale
+                        let transImg = product?.transImg
+                        console.log("originx", positionStyle[index]?.position_x)
+                        console.log("originy", positionStyle[index]?.position_y)
+
+                        let position = calcPosition(product?.align, positionStyle[index]?.position_x, positionStyle[index]?.position_y, positionStyle[index]?.width, positionStyle[index]?.height, scaleInfo)
+                        let positionX = position && position[0]
+                        let positionY = position && position[1]
+                        console.log("currentx", positionStyle[index]?.position_x)
+                        console.log("currenty", positionStyle[index]?.position_y)
+                        if (positionStyle !== undefined) {
+                            return (
+                                <div key={index} className="product-image" style={{ top: `${positionY * scaleInfo}px`, left: `${positionX * scaleInfo}px` }}>
+                                    <img src={transImg === undefined || transImg === "" ? "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png" : transImg}
+                                        style={{ width: `${positionStyle[index]?.width * scaleInfo * sliderScale}px`, height: `${positionStyle[index]?.height * scaleInfo * sliderScale}px` }} alt="temp" />
+                                </div>
+                            )
+                        }
+                    })
+                }
+            </div>
+        </div>
+    );
+}
+
 
 export const ProductList = ({ productItem, flag, setPosNum, posNum, possiblePos }) => {
     const dispatch = useDispatch()
     const productCount = useSelector(state => state.products.selectedProducts)
+
     return (
         <div className="product-list-panel">
             <img src={require("../../assets/images/product-image.png")} alt="product" />
@@ -16,11 +98,11 @@ export const ProductList = ({ productItem, flag, setPosNum, posNum, possiblePos 
                     <div className="label-info__top typography-700-regular">{productItem.name}</div>
                     <div className="label-info__bottom typography-400-regular">{productItem.article_number}</div>
                 </div>
-                <div className="add--filled pointer" onClick={(e) => { dispatch(appendProducts(productItem)) }} style={1 >= productCount.length ? {} : { display: "none" }}>
+                <div className="add--filled pointer" onClick={(e) => { dispatch(appendProducts(productItem)) }} style={(possiblePos - 1) >= productCount.length ? {} : { display: "none" }}>
                     <img src={plus} alt="plus" />
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
 
@@ -29,7 +111,7 @@ export const ProductList = ({ productItem, flag, setPosNum, posNum, possiblePos 
 const ProductSelect = () => {
 
     const selectedTemplate = useSelector(state => state.products.selectedTemplate);
-    const productPosNumbers = selectedTemplate?.article_placements?.length;
+    const productPosNumbers = selectedTemplate.article_placements ? selectedTemplate?.article_placements?.length : 1;
     const token = useSelector(state => state.auth.token);
     const [productList, setProductList] = useState([]);
     const [page, setPage] = useState(1);
@@ -80,7 +162,6 @@ const ProductSelect = () => {
                     if (buffer.length > 0) {
                         const lastChunk = buffer.trim();
                         console.log(lastChunk);
-                        // Process the last chunk of data as needed
                     }
                     return;
                 }
@@ -108,7 +189,6 @@ const ProductSelect = () => {
 
     useEffect(() => {
         const additionalQuery = parseSearch(searchString);
-        console.log(additionalQuery);
         try {
             getProductsbyFilter(page, additionalQuery);
         } catch (error) {
@@ -133,9 +213,7 @@ const ProductSelect = () => {
                     <div className="typography-400-bold pointer" onClick={(e) => setPage(page + 1)} style={{ textAlign: "end", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>Load More</div>
                 </div>
                 <div className="product-select__r">
-                    <div className="image-backgroud">
-                        <img src={require("../../assets/images/sub-back.png")} alt="background" />
-                    </div>
+                    <ProductView />
                 </div>
             </div>
         </>

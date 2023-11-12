@@ -3,13 +3,17 @@ import ListIcon from "../../assets/icons/drag&drop.svg"
 import CrossIcon from "../../assets/icons/cross-white.svg"
 import SettingIcon from "../../assets/icons/controal-4.svg"
 import VectorIcon from "../../assets/icons/vector.svg"
-import { removeProducts } from "../../store"
+import { removeProducts, setProductAligns } from "../../store"
 import { FormControlLabel } from '@mui/material';
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { setProductTransImg, setSliderScale } from "../../store"
 import "./style/productViewStyle.scss"
 import { Checkbox } from "@mui/material"
 import { Slider } from "@mui/material"
 import { useState, useEffect, useRef } from "react"
+import { imageComposing } from "../../_services/Product"
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 import ArrowTLIcon from "../../assets/icons/arrowTL.svg"
 import ArrowTCIcon from "../../assets/icons/arrowTC.svg"
 import ArrowTRIcon from "../../assets/icons/arrowTR.svg"
@@ -20,12 +24,13 @@ import ArrowBLIcon from "../../assets/icons/arrowBL.svg"
 import ArrowBCIcon from "../../assets/icons/arrowBC.svg"
 import ArrowBRIcon from "../../assets/icons/arrowBR.svg"
 
-
 const OverlayGroup = ({ productInfo }) => {
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
-    const [location, setlocation] = useState(null)
+    const [sliderValue, setSliderValue] = useState(50)
     const wrapperRef = useRef(null);
+    const [loading, setLoading] = useState(false)
+    const token = useSelector(state => state.auth.token)
     useEffect(() => {
         function handleOutsideClick(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -39,90 +44,144 @@ const OverlayGroup = ({ productInfo }) => {
             document.removeEventListener("touchstart", handleOutsideClick);
         };
     }, [showModal, setShowModal]);
-    return (
-        <div className="overlay">
-            <div className="overlay__list">
-                <img src={ListIcon} alt="ListIcon"></img>
-            </div>
-            <div className="overlay__product">
-                <div className="typography-400-regular" style={{ color: "white", overflow: "hidden", lineHeight: "16px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{productInfo.name}</div>
-                <div>
-                    <img src={CrossIcon} alt="CrossIcon" onClick={(e) => { dispatch(removeProducts(productInfo)) }}></img>
-                </div>
-            </div>
-            <div className="overlay__setting">
-                <div><img src={SettingIcon} alt="SettingIcon" onClick={(e) => setShowModal(true)}></img></div>
-                {showModal ? (
-                    <div className="overlay__setting__panel" ref={wrapperRef}>
-                        <div className="panel-top">
-                            <div className="vector">
-                                <img src={VectorIcon} alt="VectorIcon"></img>
-                            </div>
-                            <div className="panel-top__title">
-                                Condens 9800i W skalieren
-                            </div>
-                            <div className="panel-top__drag">
-                                <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
-                                <div className="percent">
-                                    <input max={100} type="number" className="percent-amount" />
-                                    <div className="percent-mark"><p>%</p></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="panel-center">
-                            <div className="panel-center__title">
-                                Produkt freistellen
-                            </div>
-                            <div className="panel-center__check-box">
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            name="transparent"
-                                        />
-                                    }
-                                    label="Transparent" />
-                            </div>
-                        </div>
-                        <div className="panel-bottom">
-                            <div className="panel-bottom__title">
-                                product asuis
-                            </div>
-                            <div className="panel-bottom__drop">
-                                <div className="arrow-Setting">
-                                    <div>
-                                        <img src={ArrowTLIcon} alt="arrow" />
-                                    </div>
-                                    <div>
-                                        <img src={ArrowTCIcon} alt="arrow" />
-                                    </div>
-                                    <div>
-                                        <img src={ArrowTRIcon} alt="arrow" />
-                                    </div>
-                                    <div>
-                                        <img src={ArrowCLIcon} alt="arrow" />
-                                    </div>
-                                    <div>
-                                        <img src={ArrowCCIcon} alt="arrow" />
-                                    </div>
-                                    <div>
-                                        <img src={ArrowCRIcon} alt="arrow" />
-                                    </div>
-                                    <div>
-                                        <img src={ArrowBLIcon} alt="arrow" />
-                                    </div>
-                                    <div>
-                                        <img src={ArrowBCIcon} alt="arrow" />
-                                    </div>
-                                    <div>
-                                        <img src={ArrowBRIcon} alt="arrow" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>) : null}
 
-            </div>
-        </div>
+    const handleComposing = (checkStatus) => {
+        if (checkStatus) {
+            setLoading(true)
+            imageComposing(token, productInfo, (success) => {
+                if (success.status === 200 && success.data.status === "success") {
+                    // console.log(productInfo)
+                    // console.log(success.data.data.TRANS_IMG)
+                    const trans_img = success.data.data.TRANS_IMG
+                    dispatch(setProductTransImg({ ...productInfo, transImg: trans_img }))
+                    toast.success("Successfully Changed")
+                }
+                else {
+                    toast.error("Something went wrong")
+                }
+                setLoading(false)
+            })
+        }
+        else {
+            const trans_img = ""
+            dispatch(setProductTransImg({ ...productInfo, transImg: trans_img }))
+        }
+    }
+
+    const handleSetAlign = (align) => {
+        dispatch(setProductAligns({ ...productInfo, align }))
+    }
+
+    useEffect(() => {
+        const delay = 1000;
+
+        const timeoutId = setTimeout(() => {
+            updateSliderValue();
+        }, delay);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [sliderValue]);
+
+
+    const updateSliderValue = () => {
+        console.log('Delayed function called');
+        dispatch(setSliderScale({ ...productInfo, sliderScale: sliderValue / 100 }))
+    };
+
+    return (
+        <>
+            {loading ? <div className="loading"></div> : (
+                <div className="overlay">
+                    <div className="overlay__list">
+                        <img src={ListIcon} alt="ListIcon"></img>
+                    </div>
+                    <div className="overlay__product">
+                        <div className="typography-400-regular" style={{ color: "white", overflow: "hidden", lineHeight: "16px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{productInfo.name}</div>
+                        <div>
+                            <img src={CrossIcon} alt="CrossIcon" onClick={(e) => { dispatch(removeProducts(productInfo)) }}></img>
+                        </div>
+                    </div>
+                    <div className="overlay__setting">
+                        <div><img src={SettingIcon} alt="SettingIcon" onClick={(e) => setShowModal(true)}></img></div>
+                        {showModal ? (
+                            <div className="overlay__setting__panel" ref={wrapperRef}>
+                                <div className="panel-top">
+                                    <div className="vector">
+                                        <img src={VectorIcon} alt="VectorIcon"></img>
+                                    </div>
+                                    <div className="panel-top__title">
+                                        Condens 9800i W skalieren
+                                    </div>
+                                    <div className="panel-top__drag">
+                                        <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" track={false} onChange={(e) => { setSliderValue(e.target.value) }} />
+                                        <div className="percent">
+                                            <input max={100} type="number" className="percent-amount" value={sliderValue} readOnly />
+                                            <div className="percent-mark"><p>%</p></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="panel-center">
+                                    <div className="panel-center__title">
+                                        Produkt freistellen
+                                    </div>
+                                    <div className="panel-center__check-box">
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    name="transparent"
+                                                    onClick={(e) => handleComposing(e.target.checked)}
+                                                />
+                                            }
+                                            label="Transparent" />
+                                    </div>
+                                </div>
+                                <div className="panel-bottom">
+                                    <div className="panel-bottom__title">
+                                        product asuis
+                                    </div>
+                                    <div className="panel-bottom__drop">
+                                        <div className="arrow-Setting">
+                                            <div onClick={(e) => handleSetAlign("top-left")}>
+                                                <img src={ArrowTLIcon} alt="arrow" />
+                                            </div>
+                                            <div onClick={(e) => handleSetAlign("top-center")}>
+                                                <img src={ArrowTCIcon} alt="arrow" />
+                                            </div>
+                                            <div onClick={(e) => handleSetAlign("top-right")}>
+                                                <img src={ArrowTRIcon} alt="arrow" />
+                                            </div>
+                                            <div onClick={(e) => handleSetAlign("middle-left")}>
+                                                <img src={ArrowCLIcon} alt="arrow" />
+                                            </div>
+                                            <div onClick={(e) => handleSetAlign("middle-center")}>
+                                                <img src={ArrowCCIcon} alt="arrow" />
+                                            </div >
+                                            <div onClick={(e) => handleSetAlign("middle-right")}>
+                                                <img src={ArrowCRIcon} alt="arrow" />
+                                            </div>
+                                            <div onClick={(e) => handleSetAlign("bottom-left")}>
+                                                <img src={ArrowBLIcon} alt="arrow" />
+                                            </div>
+                                            <div onClick={(e) => handleSetAlign("bottom-center")}>
+                                                <img src={ArrowBCIcon} alt="arrow" />
+                                            </div>
+                                            <div onClick={(e) => handleSetAlign("bottom-right")}>
+                                                <img src={ArrowBRIcon} alt="arrow" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>) : null}
+
+                    </div>
+                    <ToastContainer />
+                </div>
+            )}
+
+        </>
+
     )
 }
 

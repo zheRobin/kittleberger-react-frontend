@@ -5,10 +5,10 @@ import cross from "../../assets/icons/cross.svg"
 import { tokenList } from "../../_services/ApiToken"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { ToastContainer, toast } from "react-toastify"
 import { useFormik } from 'formik';
 import { createToken } from "../../_services/ApiToken"
 import { deleteToken } from "../../_services/ApiToken"
+import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
 

@@ -96,7 +96,7 @@ const Filterbar = () => {
     const dispatch = useDispatch()
     return (
         <>
-            <div className="refresh-part pointer" onClick={(e) => { dispatch(setResetStatus(true)); console.log("+++++++++") }}>
+            <div className="refresh-part pointer" onClick={(e) => { dispatch(setResetStatus(true)); }}>
                 <img src={refreshIcon} alt="refresh"></img>
                 <Typography fontSize="14px" lineHeight="20px" marginLeft="15px">
                     Filter zurücksetzen

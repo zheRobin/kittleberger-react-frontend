@@ -10,7 +10,6 @@ const CheckboxGroup = (props) => {
     const resetStatus = useSelector(state => state.templates.resetStatus);
 
     useEffect(() => {
-        console.log("resetStatus", resetStatus)
         if (resetStatus) {
             setIsChecked(false);
         }

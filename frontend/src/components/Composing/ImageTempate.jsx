@@ -25,7 +25,6 @@ const ImageTemplate = ({
         const img_height = (Number(article.height) > Number(bg_height) ? scale * Number(bg_height) : scale * Number(article.height));
         const left = scale * Number(article.position_x);
         const top = scale * Number(article.position_y);
-        console.log(top, img_height, bg_height);
         setStyle({
             position: "absolute",
             boxSizing: "border-box",
@@ -36,7 +35,6 @@ const ImageTemplate = ({
             left: `${left}px`,
             zIndex: article.z_index,
         });
-        console.log(top)
         setTempImages && setTempImages({ width: bg_width, height: bg_height });
 
     }, [bg_height, bg_width, article, setTempImages]);

@@ -21,7 +21,7 @@ const SideNav = () => {
                 <div className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSelect() }}>Produkte auswählen</div>
                 {selectedProducts?.map((productItem, index) => {
                     return (
-                        <div className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} ><OverlayGroup productInfo={productItem} /></div>
+                        <div key={index} className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} ><OverlayGroup productInfo={productItem} /></div>
                     )
                 })}
 
