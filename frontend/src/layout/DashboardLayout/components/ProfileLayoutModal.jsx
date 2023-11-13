@@ -10,6 +10,13 @@ import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useRef, useEffect, useState } from "react"
 
+function getInitials(string) {
+    const words = string.split(" ");
+    const initials = words.map((word) => word[0].toUpperCase());
+    return initials.join("");
+}
+
+
 function useOutsideAlerter(ref, handleModal) {
     useEffect(() => {
         /**
@@ -38,6 +45,10 @@ const ProfileLayout = ({ handleModal }) => {
         dispatch(authActions.logout())
     }
     const switchRole = useSelector(state => state.info.adminMethod)
+    const user = useSelector(state => state.auth.user)
+    console.log(user)
+    const userType = user.is_superuser ? "super" : (user.is_staff ? "admin" : "customer")
+    const capitalizedUserType = userType.charAt(0).toUpperCase() + userType.slice(1);
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, handleModal);
     useEffect(() => {
@@ -54,17 +65,17 @@ const ProfileLayout = ({ handleModal }) => {
             <div className="profile-layout" ref={wrapperRef}>
                 <div className="profile-info" >
                     <div className="user-icon">
-                        <div className="user-alias">MM</div>
+                        <div className="user-alias">{getInitials(user.username)}</div>
                     </div>
                     <div className="user-account">
                         <div className="user-label">
-                            Administrator
+                            {capitalizedUserType}
                         </div>
                         <div className="user-name">
-                            Max Mustermann
+                            {user.username}
                         </div>
                         <div className="user-email">
-                            max.mustermann@kettelberger.de
+                            {user.email}
                         </div>
                     </div>
                 </div>
