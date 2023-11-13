@@ -2,29 +2,121 @@ import "../Organism/style/organismStyle.scss"
 import { TemplateButton } from "./TemplatePanel"
 import copy from "../../assets/icons/copy.svg"
 import { Typography } from "@mui/material"
-
+import { ProductView } from "./ProductSelect"
+import { useSelector } from "react-redux"
+import React, { useState } from "react"
+import { getOnlineInfo } from "../../_services/Product"
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 const Summary = () => {
+    const selectedTemplate = useSelector(state => state.products.selectedTemplate)
+    const selectedProducts = useSelector(state => state.products.selectedProducts)
+    const [deploymentName, setdeploymentName] = useState({
+        value: '',
+        copied: false,
+    })
+    function handleDownload() {
+        const imageUrl = deploymentName.value;
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = 'image.png';
+        link.click();
+    }
+    const token = useSelector(state => state.auth.token)
+    const composeName = `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} | ${selectedProducts?.map((product, index) => { return product.name })}`
+    const submitArticleInfo = {
+        articles: [...selectedProducts.map((product, index) => {
+            return {
+                name: product.name,
+                number: product.article_number,
+                cdn_url: "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png",
+                transparent_cdn_url: product?.transImg === undefined ? "" : product?.transImg,
+                scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
+                alignment: product?.align === undefined ? "top-left" : product?.align,
+                height: selectedTemplate?.article_placements[index].height,
+                width: selectedTemplate?.article_placements[index].width,
+                z_index: selectedTemplate?.article_placements[index].z_index,
+                prod_left: product?.position ? product?.position[0] : selectedTemplate?.article_placements[index].position_x,
+                prod_top: product?.position ? product?.position[1] : selectedTemplate?.article_placements[index].position_y
+            };
+        })]
+    }
+    const submitInfo = {
+        name: composeName,
+        template_id: selectedTemplate.id,
+        ...submitArticleInfo
+    }
+    const saveInfo = () => {
+        getOnlineInfo(token, submitInfo, (success) => {
+            if (success.data.code === 201) {
+                setdeploymentName({ ...deploymentName, value: success.data.data })
+                toast.success("Successfully Sumitted")
+            }
+            if (success.data.status === "failed") {
+                toast.error("Something Went Wrong")
+            }
+        })
+    }
+    let date_created = new Date(selectedTemplate.created);
+    let formattedDate_created = `am ${date_created.toLocaleDateString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    })} um ${date_created.toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit"
+    })} Uhr`;
+    let date_modified = new Date(selectedTemplate.modified);
+    let formattedDate_modified = `am ${date_modified.toLocaleDateString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    })} um ${date_modified.toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit"
+    })} Uhr`;
+
     return (
         <>
             <div className="summary">
                 <div className="summary-l">
-                    <img src={require("../../assets/images/sub-back.png")} alt="top-images" style={{ width: "100%" }} />
-                    <div className="typography-700-bold">Hero Keyvisual</div>
+                    <div>
+                        <ProductView />
+                    </div>
+                    <div className="typography-700-bold">{selectedTemplate.name}</div>
                     <div className="typography-400-regular">
                         Land: Deutschland, Österreich<br></br>
-                        Marke: BUDERUS<br></br>
-                        Applikation: Website<br></br>
+                        Marke: {selectedTemplate.brand.map((brand, index) => (
+                            <React.Fragment key={index}>
+                                {index > 0 && ", "}
+                                <span>{brand.name}</span>
+                            </React.Fragment>
+                        ))}<br></br>
+                        Applikation: {selectedTemplate.application.map((application, index) => (
+                            <React.Fragment key={index}>
+                                {index > 0 && ", "}
+                                <span>{application.name}</span>
+                            </React.Fragment>
+                        ))}<br></br>
                         <br></br>
                         Technische Daten:<br></br>
-                        1200 x 480 px (72 dpi)<br></br>
-                        Dateiformat: JPG (RGB)<br></br>
+                        {selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px (72 dpi)<br></br>
+                        Dateiformat: {selectedTemplate.file_type} (RGB)<br></br>
                         <br></br>
                         Enthaltene Produkte:<br></br>
-                        Condens 9800i W (7738101018)<br></br>
-                        Condens 5300i WM (7738101018)<br></br>
+                        {selectedProducts.map((product, index) => (
+                            <React.Fragment key={index}>
+                                <div>
+                                    <span>{product.name}</span>
+                                    <span>({product.article_number})</span>
+                                </div>
+
+                            </React.Fragment>
+                        ))}<br></br>
                         <br></br>
-                        Erstellt von Benutzer X am 29.10.2023 um 14:34 Uhr<br></br>
-                        Zuletzt bearbeitet von Benutzer Y am 30.10.2023 um 11:02 Uhr<br></br>
+                        Erstellt von Benutzer X {formattedDate_created}<br></br>
+                        Zuletzt bearbeitet von Benutzer Y {formattedDate_modified}<br></br>
                     </div>
                 </div>
                 <div className="summary-r">
@@ -36,19 +128,23 @@ const Summary = () => {
 
                     <div className="composing-name">
                         <div className="typography-700-regular">Composing Name</div>
-                        <input value="Hero Keyvisual | BUDERUS | Condens X324, Heizung TZ5213 | 8723q4" />
-                        <div><TemplateButton content={"Speichern"} /></div>
+                        <input value={composeName} readOnly />
+                        <div onClick={(e) => saveInfo()}><TemplateButton content={"Speichern"} /></div>
                     </div>
 
                     <div className="deployment">
                         <div className="typography-700-regular">Bereitstellung</div>
-                        <div className="url-group"><Typography fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px">https://cg.bosch-homecomfort.com/8723q4</Typography>
-                            <img src={copy} alt=" copy" />
+                        <div className="url-group"><Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="280px">{deploymentName.value}</Typography>
+                            <CopyToClipboard text={deploymentName.value}
+                                onCopy={() => setdeploymentName({ ...deploymentName, copied: true })}>
+                                <img className="pointer" src={copy} alt=" copy" />
+                            </CopyToClipboard>
                         </div>
-                        <div className="download-button"><TemplateButton content={"Download Bilddatei"} type="transparent" /></div>
+                        <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={"Download Bilddatei"} type="transparent" /></div>
                         <div className="download-button"><TemplateButton content={"Download Metadaten"} type="transparent" /></div>
                     </div>
                 </div>
+                <ToastContainer />
             </div>
         </>
     )

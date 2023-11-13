@@ -27,10 +27,11 @@ import ArrowBRIcon from "../../assets/icons/arrowBR.svg"
 const OverlayGroup = ({ productInfo }) => {
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
-    const [sliderValue, setSliderValue] = useState(50)
+    const [sliderValue, setSliderValue] = useState(100)
     const wrapperRef = useRef(null);
     const [loading, setLoading] = useState(false)
     const token = useSelector(state => state.auth.token)
+    const [checked, setChecked] = useState(false)
     useEffect(() => {
         function handleOutsideClick(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -46,12 +47,12 @@ const OverlayGroup = ({ productInfo }) => {
     }, [showModal, setShowModal]);
 
     const handleComposing = (checkStatus) => {
+        setChecked(!checked)
         if (checkStatus) {
             setLoading(true)
             imageComposing(token, productInfo, (success) => {
+                console.log(productInfo)
                 if (success.status === 200 && success.data.status === "success") {
-                    // console.log(productInfo)
-                    // console.log(success.data.data.TRANS_IMG)
                     const trans_img = success.data.data.TRANS_IMG
                     dispatch(setProductTransImg({ ...productInfo, transImg: trans_img }))
                     toast.success("Successfully Changed")
@@ -112,12 +113,27 @@ const OverlayGroup = ({ productInfo }) => {
                                         <img src={VectorIcon} alt="VectorIcon"></img>
                                     </div>
                                     <div className="panel-top__title">
-                                        Condens 9800i W skalieren
+                                        {productInfo.name}
                                     </div>
                                     <div className="panel-top__drag">
-                                        <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" track={false} onChange={(e) => { setSliderValue(e.target.value) }} />
+                                        <Slider defaultValue={100} aria-label="Default" valueLabelDisplay="auto" track={false} onChange={(e) => { setSliderValue(e.target.value) }}
+                                            sx={{
+                                                "& .MuiSlider-thumb": {
+                                                    color: "#8F7300"
+                                                },
+                                                "& .MuiSlider-track": {
+                                                    color: "#8F7300"
+                                                },
+                                                "& .MuiSlider-root": {
+                                                    color: "#000000"
+                                                },
+                                                "& .MuiSlider-rail": {
+                                                    color: "black"
+                                                }
+                                            }}
+                                        />
                                         <div className="percent">
-                                            <input max={100} type="number" className="percent-amount" value={sliderValue} readOnly />
+                                            <input defaultValue={100} max={100} type="number" className="percent-amount" value={sliderValue} readOnly />
                                             <div className="percent-mark"><p>%</p></div>
                                         </div>
                                     </div>
@@ -132,6 +148,7 @@ const OverlayGroup = ({ productInfo }) => {
                                                 <Checkbox
                                                     name="transparent"
                                                     onClick={(e) => handleComposing(e.target.checked)}
+                                                    checked={checked}
                                                 />
                                             }
                                             label="Transparent" />

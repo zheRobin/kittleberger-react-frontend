@@ -1,9 +1,12 @@
 import React, { useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { authActions } from "../../store"
+
 
 const Authguard = ({ component }) => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const authUser = useSelector(state => state.auth.user)
     const token = useSelector(state => state.auth.token)
     const parseJwt = (token) => {
@@ -17,6 +20,7 @@ const Authguard = ({ component }) => {
     useEffect(
         () => {
             if (!authUser || decodedJwt.exp * 1000 < Date.now()) {
+                dispatch(authActions.logout())
                 navigate('/')
             }
         }, []

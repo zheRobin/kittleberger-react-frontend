@@ -31,7 +31,7 @@ export const infiniteTemplate = (token,page,dependencies,success) => {
     const limit = 15
     const offset = (page - 1) * limit
     axios.post(`${process.env.REACT_APP_API_URL}/api/v1/compose/templates/filter?limit=${limit}&offset=${offset}`, {
-        dependencies
+        ...dependencies
     })
     .then(res => {
         success(res)
@@ -52,6 +52,25 @@ export const createTemplate = (formData,token,success) => {
             params: {
                 language: language,
             },
+        }
+    )
+    .then((response) => {
+        success(response)
+    })
+    .catch( (error) => {
+        console.log(error)
+    }
+    )
+}
+
+export const updateTemplate = (formData,token,id,success) => {
+    const language = 'en';
+    setAuthToken(token)
+    axios.put(`${process.env.REACT_APP_API_URL}/api/v1/compose/templates/${id}/`,
+        formData,{
+            headers: {
+            'Content-Type': 'multipart/form-data',
+            }
         }
     )
     .then((response) => {

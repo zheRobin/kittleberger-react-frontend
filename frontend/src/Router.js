@@ -12,6 +12,7 @@ import ProductSelect from "./pages/Organism/ProductSelect";
 import Summary from "./pages/Organism/Summary";
 import Authguard from "./components/Auth/Authguard.jsx";
 import UnAuthguard from "./components/Auth/UnAuthGuard.jsx";
+import TemplateEditPanel from "./pages/Organism/TemplateEditPanel.jsx";
 
 const AuthRouteGroup = [
     {
@@ -25,6 +26,12 @@ const AuthRouteGroup = [
         element:
             <LayOutDashboard><TemplatePanel /></LayOutDashboard>,
         title: 'product/template'
+    },
+    {
+        path: "product/edittemplate",
+        element:
+            <LayOutDashboard><TemplateEditPanel /></LayOutDashboard>,
+        title: 'product/Edit-template'
     },
     {
         path: "user/password-change",

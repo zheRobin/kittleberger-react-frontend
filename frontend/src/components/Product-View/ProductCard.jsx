@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { findTemplates } from "../../store"
 
-const ProductCard = ({ cardInfo, cardtype = "edit" }) => {
+const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const navigate = useNavigate();
     const switchRole = useSelector(state => state.info.adminMethod)
     const dispatch = useDispatch()
@@ -17,21 +17,22 @@ const ProductCard = ({ cardInfo, cardtype = "edit" }) => {
                     <div className="product-info-group">
                         <div className="product-info">
                             <div className="product-name">{cardInfo?.name}</div>
-                            <div className="product-image-info">{cardInfo?.resolution_width + '\u00D7' + cardInfo?.resolution_height + 'px | ' + cardInfo?.resolution_dpi + " | " + cardInfo?.file_type}</div>
+                            <div className="product-image-info">
+                                {type === 1 ? cardInfo?.resolution_width + '\u00D7' + cardInfo?.resolution_height + 'px | ' + cardInfo?.resolution_dpi + " | " + cardInfo?.file_type : cardInfo?.template?.resolution_width + '\u00D7' + cardInfo?.template?.resolution_height + 'px | ' + cardInfo?.template?.resolution_dpi + " | " + cardInfo?.template?.file_type}</div>
                         </div>
-                        <div className="product-icon pointer" onClick={() => { navigate("/product/template") }}>
+                        <div className="product-icon pointer" onClick={() => { if (type === 1) { navigate("/product/edittemplate", { state: cardInfo }) } }}>
                             {switchRole ? <img src={cardtype === "edit" ? editPencil : cancel} style={cardtype !== "edit" ? { backgroundColor: "white", border: "none" } : { borderColor: "#FFFFFF" }} alt="editIcon"></img> : null}
                         </div>
                     </div>
                 </div>
                 <div className="product-image pointer" onClick={(e) => {
-                    localStorage.setItem('templateInfo', JSON.stringify(cardInfo));
-                    dispatch(findTemplates(cardInfo));
-                    navigate(`/product/product-select`)
+                    if (type === 1) {
+                        localStorage.setItem('templateInfo', JSON.stringify(cardInfo));
+                        dispatch(findTemplates(cardInfo));
+                        navigate(`/product/product-select`)
+                    }
                 }}>
-                    {/* <img src={cardInfo?.bg_image_cdn_url} alt="images"> */}
-                    <img src={cardInfo?.preview_image_cdn_url} alt="preview"></img>
-                    {/* </img> */}
+                    <img src={type === 1 ? cardInfo?.preview_image_cdn_url : cardInfo?.cdn_url} alt="preview"></img>
                 </div>
             </div>
         </>

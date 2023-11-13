@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
-import { appendTemplate, selectPage, setLoadingStatus, initTemplate } from '../../store';
+import { appendTemplate, selectPage, setLoadingStatus, initTemplate, initProductsOnTemplates, appendProductsOnTemplate } from '../../store';
 import { infiniteTemplate } from '../../_services/Template';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,15 +38,16 @@ const Organism = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [value, setValue] = useState('1');
+    const [count, setCount] = useState(0)
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
     const token = useSelector(state => state.auth.token)
     const templates = useSelector(state => state.templates.templateData)
+    const products = useSelector(state => state.templates.productsOnTemplates)
     const loadingStatus = useSelector(state => state.templates.loadingStatus)
     let page = useSelector(state => state.templates.page)
     let filters = useSelector(state => state.templates.filterData)
-
     useEffect(() => {
         infiniteTemplate(token, 1, filters, (success) => {
             if (success.data.next == null) {
@@ -55,6 +56,8 @@ const Organism = () => {
             if (success.status === 200) {
                 dispatch(selectPage(page + 1))
                 dispatch(initTemplate(success.data.results.templates))
+                dispatch(initProductsOnTemplates(success.data.results.products))
+                setCount(success.data.count)
             }
         })
     }, [filters]);
@@ -69,6 +72,7 @@ const Organism = () => {
                     setTimeout(() => {
                         dispatch(selectPage(page + 1))
                         dispatch(appendTemplate(success.data.results.templates))
+                        dispatch(appendProductsOnTemplate(success.data.results.products))
                     }, 1000);
                 }
             }
@@ -110,8 +114,8 @@ const Organism = () => {
                                     },
                                 }}
                             >
-                                <Tab label="213 templates" value="1" style={styles.tab} />
-                                <Tab label="23 erstellte Composings" value="2" style={styles.tab} />
+                                <Tab label={count + " templates"} value="1" style={styles.tab} />
+                                <Tab label={products.length + " erstellte Composings"} value="2" style={styles.tab} />
                             </TabList>
                         </Box>
 
@@ -148,40 +152,22 @@ const Organism = () => {
                                     </div>
                                 </div>
                             )}
-
                         </TabPanel>
 
                         <TabPanel value="2">
                             <ProductSearch />
-                            <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>
-                            {/* <div className='template-tab-1'>
-                                <div id="scrollableDiv" className='product-container'>
-                                    <InfiniteScroll
-                                        dataLength={templates.length}
-                                        next={fetchMoreData}
-                                        hasMore={false}
-                                        loader={<h4>Loading...</h4>}
-                                        style={{
-                                            display: "flex",
-                                            flexWrap: "wrap",
-                                            gap: "20px"
-                                        }}
-                                        endMessage={
-                                            <div style={{ textAlign: 'center' }}>
-                                                <b>Yay! You have seen it all</b>
-                                            </div>
-                                        }
-                                        scrollableTarget="scrollableDiv"
-                                    >
-                                        {templates.map((templateEle, key) => {
+                            {products.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
+                                <div className='template-tab-1'>
+                                    <div id="scrollableDiv" className='product-container'>
+                                        {products.map((productEle, key) => {
                                             return (
-                                                < ProductCard key={key} cardInfo={templateEle} />
+                                                < ProductCard key={key} cardInfo={productEle} type={2} />
                                             )
                                         }
                                         )}
-                                    </InfiniteScroll>
+                                    </div>
                                 </div>
-                            </div> */}
+                            )}
                         </TabPanel>
                     </TabContext>
                     <ToastContainer />

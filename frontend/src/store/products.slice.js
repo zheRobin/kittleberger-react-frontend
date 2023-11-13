@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current  } from "@reduxjs/toolkit";
+import { calcPosition } from "../_services/Product";
 
 export const productsSlice = createSlice({
     name: 'products',
@@ -18,11 +19,28 @@ export const productsSlice = createSlice({
         },
         setProductAligns:(state,action) =>{
             const article_number= action.payload.article_number;
+            const selectedTemplate = current(state.selectedTemplate)
+            state.selectedProducts = state.selectedProducts.map((product,index) => {
+                if (product.article_number === article_number) {
+                    let sliderScale = product?.sliderScale ?? 1;
+                    let position = calcPosition(action.payload.align, selectedTemplate.article_placements[index]?.position_x, selectedTemplate.article_placements[index]?.position_y, selectedTemplate.article_placements[index]?.width, selectedTemplate.article_placements[index]?.height, sliderScale)
+                    return {
+                        ...product,
+                        align: action.payload.align,
+                        position
+                    };
+                }
+                
+                return product;
+            });
+        },
+        setUpdatedPosition:(state,action) =>{
+            const article_number= action.payload.article_number;
             state.selectedProducts = state.selectedProducts.map((product) => {
                 if (product.article_number === article_number) {
                     return {
                         ...product,
-                        align: action.payload.align
+                        updatedPosition: action.payload.updatedPosition
                     };
                 }
                 return product;
@@ -56,6 +74,6 @@ export const productsSlice = createSlice({
 })
 
 
-export const {appendProducts, findTemplates, removeProducts, setProductAligns, setProductTransImg, setSliderScale} = productsSlice.actions
+export const {appendProducts, findTemplates, removeProducts, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
 export const productsReducer = productsSlice.reducer
 export default productsSlice.reducer

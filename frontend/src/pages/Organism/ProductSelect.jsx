@@ -4,36 +4,16 @@ import { useSelector } from "react-redux"
 import { useEffect, useState, useRef } from "react"
 import { appendProducts } from "../../store"
 import { useDispatch } from "react-redux"
+import { setUpdatedPosition } from "../../store"
 
-function calcPosition(type = 'top-left', posX, posY, templateWidth, templateHeight, scaleInfo) {
-    switch (type) {
-        case "top-left":
-            return [posX, posY];
-        case "top-center":
-            return [(posX + templateWidth * (1 - scaleInfo) / 2), posY];
-        case "top-right":
-            return [(posX + templateWidth * (1 - scaleInfo)), posY];
-        case "middle-left":
-            return [posX, (posY + templateHeight * (1 - scaleInfo) / 2)];
-        case "middle-center":
-            return [(posX + templateWidth * (1 - scaleInfo) / 2), (posY + templateHeight * (1 - scaleInfo) / 2)];
-        case "middle-right":
-            return [(posX + templateWidth * (1 - scaleInfo)), (posY + templateHeight * (1 - scaleInfo) / 2)];
-        case "bottom-left":
-            return [posX, (posY + templateHeight * (1 - scaleInfo))];
-        case "bottom-center":
-            return [(posX + templateWidth * (1 - scaleInfo) / 2), (posY + templateHeight * (1 - scaleInfo))];
-        case "bottom-right":
-            return [(posX + templateWidth * (1 - scaleInfo)), (posY + templateHeight * (1 - scaleInfo))];
-    }
-}
 
-export const ProductView = () => {
+
+export const ProductView = ({ width = 100, height = 100 }) => {
+    const dispatch = useDispatch()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate);
     const selectedProducts = useSelector(state => state.products.selectedProducts);
     const imgRef = useRef(null);
     const [scaleInfo, setScaleInfo] = useState(1)
-    console.log("selectedTemplate:", selectedTemplate)
     useEffect(() => {
         if (imgRef.current) {
             const currentWidth = imgRef.current.offsetWidth;
@@ -53,23 +33,18 @@ export const ProductView = () => {
         }
     }, [selectedProducts]);
     return (
-        <div className="image-backgroud">
+        <div className="image-backgroud" style={{ width: `${width}%`, height: `${height}%` }}>
             <div className="saved-images">
                 <img ref={imgRef} src={"https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/bg.jpg"} alt="background" />
                 {
                     selectedProducts?.map((product, index) => {
 
                         let positionStyle = selectedTemplate?.article_placements
-                        let sliderScale = product?.sliderScale === undefined ? 0.5 : product?.sliderScale
+                        let sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale
                         let transImg = product?.transImg
-                        console.log("originx", positionStyle[index]?.position_x)
-                        console.log("originy", positionStyle[index]?.position_y)
-
-                        let position = calcPosition(product?.align, positionStyle[index]?.position_x, positionStyle[index]?.position_y, positionStyle[index]?.width, positionStyle[index]?.height, scaleInfo)
-                        let positionX = position && position[0]
-                        let positionY = position && position[1]
-                        console.log("currentx", positionStyle[index]?.position_x)
-                        console.log("currenty", positionStyle[index]?.position_y)
+                        let positionX = product?.position === undefined ? positionStyle[index]?.position_x : product?.position[0]
+                        let positionY = product?.position === undefined ? positionStyle[index]?.position_y : product?.position[1]
+                        // dispatch(setUpdatedPosition({ ...product, updatedPosition: position }))
                         if (positionStyle !== undefined) {
                             return (
                                 <div key={index} className="product-image" style={{ top: `${positionY * scaleInfo}px`, left: `${positionX * scaleInfo}px` }}>

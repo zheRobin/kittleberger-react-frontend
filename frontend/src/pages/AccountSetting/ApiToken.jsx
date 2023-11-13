@@ -137,7 +137,7 @@ const ApiToken = () => {
                             <div className="label-input-pair">
                                 <div className="typography-400-regular">Name *</div>
                                 <div className="password-warning">
-                                    <input name="api_key_name" onChange={formik.handleChange} value={formik.values.name}></input>
+                                    <input name="name" onChange={formik.handleChange} value={formik.values.name} />
                                     {formik.touched.name && formik.errors.name ? (
                                         <p className="validation">{formik.errors.name}</p>
                                     ) : null}

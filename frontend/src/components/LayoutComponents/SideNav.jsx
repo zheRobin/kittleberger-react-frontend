@@ -2,6 +2,7 @@ import "./style/layoutCompoStyle.scss"
 import { useLocation } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import OverlayGroup from "../Product-View/OverlayGroup"
+import OverlaySide from "../Product-View/OverlaySide"
 import { useSelector } from "react-redux"
 
 const SideNav = () => {
@@ -21,7 +22,7 @@ const SideNav = () => {
                 <div className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSelect() }}>Produkte auswählen</div>
                 {selectedProducts?.map((productItem, index) => {
                     return (
-                        <div key={index} className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} ><OverlayGroup productInfo={productItem} /></div>
+                        <div key={index} className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} >{path === "/product/product-select" ? (<OverlayGroup productInfo={productItem} />) : <OverlaySide productInfo={productItem} />}</div>
                     )
                 })}
 
