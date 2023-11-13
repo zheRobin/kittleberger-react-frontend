@@ -15,9 +15,9 @@ const SidebarLayout = ({ children }) => {
                 {children}
             </div>
             <div className="sidebar-footer">
-                <Typography textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">Datenschutz</Typography>
-                <Typography textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">Impressum</Typography>
-                <Typography textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">Rechtliche Hinweise</Typography>
+                <Typography className="pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">Datenschutz</Typography>
+                <Typography className="pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">Impressum</Typography>
+                <Typography className="pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">Rechtliche Hinweise</Typography>
             </div>
         </div>
     )

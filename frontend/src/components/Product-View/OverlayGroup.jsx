@@ -51,7 +51,6 @@ const OverlayGroup = ({ productInfo }) => {
         if (checkStatus) {
             setLoading(true)
             imageComposing(token, productInfo, (success) => {
-                console.log(productInfo)
                 if (success.status === 200 && success.data.status === "success") {
                     const trans_img = success.data.data.TRANS_IMG
                     dispatch(setProductTransImg({ ...productInfo, transImg: trans_img }))
@@ -87,7 +86,6 @@ const OverlayGroup = ({ productInfo }) => {
 
 
     const updateSliderValue = () => {
-        console.log('Delayed function called');
         dispatch(setSliderScale({ ...productInfo, sliderScale: sliderValue / 100 }))
     };
 

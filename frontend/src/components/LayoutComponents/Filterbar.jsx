@@ -33,7 +33,6 @@ export const ProductNumberFilter = (resetValue) => {
 
 
     const clearStoreData = () => {
-        console.log('Delayed function called');
         dispatch(selectPage(1))
         dispatch(setLoadingStatus(true))
         dispatch(setFilterData(filters))

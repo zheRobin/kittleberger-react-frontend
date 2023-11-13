@@ -92,7 +92,6 @@ function createExtraReducers() {
       state.user = user.user;
       state.token = user.access_token;
       state.templateTypes = user.page_data
-      console.log(user.page_data)
     },
     [rejected]: (state, action) => {
       state.error = action.error;

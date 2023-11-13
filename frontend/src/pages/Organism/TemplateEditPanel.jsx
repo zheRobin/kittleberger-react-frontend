@@ -131,7 +131,6 @@ export default function TemplateEditPanel() {
     const elementRef = useRef(null);
     let backgroundHeight = (tempImages.height / tempImages.width * width) * 100 / height
     const [previewImages, setPreviewImages] = useState([]);
-    console.log(previewImages)
     const maxNumber = 69;
     const token = useSelector(state => state.auth.token)
     const templateTypes = useSelector(state => state.auth.templateTypes)
