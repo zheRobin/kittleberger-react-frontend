@@ -18,26 +18,6 @@
     }
 }
 
-.image-backgroud{
-    width: 100%;
-    height: 100%;
-    background-image: url("../../../assets/images/grid-Image.png");
-    display: flex;
-    align-items: center;
-    .saved-images{
-        width: 100%;
-        padding-top: auto;
-        padding-bottom: auto;
-        position: relative;
-        img{
-            width: 100%;
-        }
-        .product-image{
-            position: absolute;
-        }
-    }
-}
-
 .product-card{
     width: 335px;
     height: 340px;

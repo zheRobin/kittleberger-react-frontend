@@ -13,7 +13,7 @@ import PlusIcon from "../../assets/icons/add.svg"
 import DeleteIcon from "../../assets/icons/cross.svg"
 import DragIcon from "../../assets/icons/drag&drop.svg"
 import 'react-toastify/dist/ReactToastify.css';
-import "./style/organismStyle.scss"
+import "./style/templatePanelStyle.scss"
 import "../../components/Composing/style/composeStyle.scss"
 import ImageTemplate from "../../components/Composing/ImageTempate"
 import { useRef, useLayoutEffect } from 'react';
@@ -128,6 +128,7 @@ export default function TemplatePanel() {
     const [height, setHeight] = useState(600);
     const elementRef = useRef(null);
     let backgroundHeight = (tempImages.height / tempImages.width * width) * 100 / height
+    console.log(backgroundHeight)
     const [previewImages, setPreviewImages] = useState([]);
     const maxNumber = 69;
     const token = useSelector(state => state.auth.token)
@@ -406,7 +407,7 @@ export default function TemplatePanel() {
                                         <div className="product-setting-panel__bottom">
                                             <div className="image-setting-panel">
                                                 <div className="left-b-image" ref={elementRef} >
-                                                    <div className="image-backgroud" style={{ height: `${backgroundHeight}%` }}>
+                                                    <div className="image-backgroud select-part" style={{ height: `${backgroundHeight}%` }}>
                                                         <div className="image-compare">
                                                             {values.article_placements.map((value, index) => (
                                                                 <ImageTemplate
