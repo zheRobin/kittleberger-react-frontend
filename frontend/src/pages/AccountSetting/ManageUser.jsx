@@ -34,7 +34,6 @@ const ManageUser = () => {
   const [editMode, setEditMode] = useState(false);
   const [userInfo, setUserinfo] = useState({});
   const [loading, setloading] = useState(false);
-
   const token = useSelector(state => state.auth.token)
   useEffect(() => {
     userList(token, (success) => {
@@ -46,7 +45,6 @@ const ManageUser = () => {
       }
     })
   }, [])
-
   useEffect(() => {
     userList(token, (success) => {
       if (success.data.code === 200 && success.data.status === "success") {
@@ -60,7 +58,7 @@ const ManageUser = () => {
 
   return (
     <>
-      <div className="create-user pointer" onClick={() => { setModalView(true); setEditMode(false) }}><TemplateButton content={"Neuen Benutzer anlegen"} /></div>
+      <div className="create-user " ><div className="pointer" onClick={() => { setModalView(true); setEditMode(false) }}><TemplateButton content={"Neuen Benutzer anlegen"} /></div></div>
       <div className="setting-panel-user">
         <div className="setting-panel-user__top">
           <div className="typography-400-regular">Passwort ändern</div>
@@ -90,18 +88,19 @@ const ManageUser = () => {
               setModalView(false)
               setloading(true)
               editMode ? (userEdit(userInfo.id, values, token, (success) => {
-                if (success.data.code === 200 && success.data.status === "success") {
+                if (success.data.code === 200 || success.data.status === "success") {
                   toast.success("User Updated Successfully", "success")
                   setloading(false)
                 }
-                if (success.data.code === 400 && success.data.status === "failed") {
+                if (success.data.code === 400 || success.data.status === "failed") {
                   toast.error("Something Went Wrong")
                 }
               })) : (userCreate(values, token, (success) => {
-                if (success.data.code === 200 && success.data.status === "success") {
+                if (success.data.code === 201 || success.data.status === "success") {
                   toast.success("User Created Successfully", "success")
+                  setloading(false)
                 }
-                if (success.data.code === 400 && success.data.status === "failed") {
+                if (success.data.code === 400 || success.data.status === "failed") {
                   toast.error("Something Went Wrong")
                 }
               }))

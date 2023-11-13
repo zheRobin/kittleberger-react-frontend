@@ -12,7 +12,7 @@ import { useRef, useEffect, useState } from "react"
 
 function getInitials(string) {
     const words = string.split(" ");
-    const initials = words.map((word) => word[0].toUpperCase());
+    const initials = words?.map((word) => word[0]?.toUpperCase());
     return initials.join("");
 }
 
