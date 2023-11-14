@@ -157,8 +157,8 @@ const Organism = () => {
                         <TabPanel value="2">
                             <ProductSearch />
                             {products.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
-                                <div className='template-tab-1'>
-                                    <div id="scrollableDiv" className='product-container'>
+                                <div className='template-tab-2'>
+                                    <div id="scrollableDiv" className='multi-product-container'>
                                         {products.map((productEle, key) => {
                                             return (
                                                 < ProductCard key={key} cardInfo={productEle} type={2} />
