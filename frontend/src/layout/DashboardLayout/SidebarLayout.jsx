@@ -1,5 +1,6 @@
 import "./style/dashboardStyle.scss"
 import { Typography } from "@mui/material"
+import AlertDialog from '../../components/Dialog/NormalDialog'
 
 const SidebarLayout = ({ children }) => {
     return (
@@ -15,9 +16,9 @@ const SidebarLayout = ({ children }) => {
                 {children}
             </div>
             <div className="sidebar-footer">
-                <Typography className="pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">Datenschutz</Typography>
-                <Typography className="pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">Impressum</Typography>
-                <Typography className="pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">Rechtliche Hinweise</Typography>
+                <AlertDialog text="Datenschutz" />
+                <AlertDialog text="Impressum" />
+                <AlertDialog text="Rechtliche Hinweise" />
             </div>
         </div>
     )
