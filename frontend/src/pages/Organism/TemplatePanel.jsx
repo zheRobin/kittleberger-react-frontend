@@ -51,20 +51,22 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
             <div className="label-check-pair__label">
                 <div className="typography-400-regular">{label}</div>
             </div>
-            <div className="label-check-pair__checkbox-group">
-                {values.map((value, index) => (
+            <div className='label__right'>
+                <div className="label-check-pair__checkbox-group">
+                    {values.map((value, index) => (
 
-                    < div key={index} className='checkbox-group' >
+                        < div key={index} className='checkbox-group' >
 
-                        <Checkbox defaultChecked={false} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={() => {
-                            var newData = [...field.value];
-                            newData[index].value = !newData[index].value;
-                            setFieldValue(props.name, newData);
-                        }} {...props} />
+                            <Checkbox defaultChecked={false} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={() => {
+                                var newData = [...field.value];
+                                newData[index].value = !newData[index].value;
+                                setFieldValue(props.name, newData);
+                            }} {...props} />
 
-                        <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>{value.name}</div>
-                    </div>
-                ))}
+                            <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>{value.name}</div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div >
     )
@@ -202,7 +204,7 @@ export default function TemplatePanel() {
                     }}
                 >
                     {({ values, setFieldValue, handleSubmit }) => (
-                        <Form>
+                        <Form className='template-form'>
                             <div className='template-panel'>
                                 <div
                                     className="top-template-button"
@@ -219,62 +221,81 @@ export default function TemplatePanel() {
                                         <div className="product-setting-panel__bottom">
                                             <div className="input-group">
                                                 <div className="label-input-pair">
-                                                    <div className="typography-400-regular">Name*</div>
-                                                    <div>
+                                                    <div className="label__left">
+                                                        <p className="typography-400-regular">Name*</p>
+                                                    </div>
+                                                    <div className='label__right'>
                                                         <Field as={TextField} name='name' />
                                                     </div>
                                                 </div>
                                                 <div className="label-select-pair">
-                                                    <div className="typography-400-regular">Dateityp*</div>
-                                                    <div className="select-group">
-                                                        <Field as={Select}
-                                                            labelId="demo-customized-select-label"
-                                                            id="demo-customized-select"
-                                                            name="type"
-                                                            displayEmpty
-                                                            IconComponent={ExpandMoreIcon}
-                                                            sx={{
-                                                                width: "472px", height: "40px", padding: "0px 10px 10px 10px",
-                                                                "& .MuiOutlinedInput-input": {
-                                                                    textAlign: "start",
-                                                                    marginLeft: "9px"
-                                                                }
-                                                            }}
-                                                        >   <MenuItem value="" disabled>
-                                                                <em>select the value</em>
-                                                            </MenuItem>
-                                                            <MenuItem value="JPEG">.jpg</MenuItem>
-                                                            <MenuItem value="PNG">.png</MenuItem>
-                                                            <MenuItem value="TIFF">.tiff</MenuItem>
-                                                            <MenuItem value="IST">.ist</MenuItem>
-                                                        </Field>
-                                                        <div className="typography-400-regular select-subtitle">
-                                                            .jpg und .png sind in 72 dpi; .tiff ist in 300 dpi
+                                                    <div className="label__left">
+                                                        <p className="typography-400-regular">Dateityp*</p>
+                                                    </div>
+                                                    <div className="label__right">
+                                                        <div className="select-group">
+                                                            <Field as={Select}
+                                                                labelId="demo-customized-select-label"
+                                                                id="demo-customized-select"
+                                                                name="type"
+                                                                displayEmpty
+                                                                IconComponent={ExpandMoreIcon}
+                                                                sx={{
+                                                                    width: "472px", height: "40px", padding: "0px 10px 10px 10px",
+                                                                    "& .MuiOutlinedInput-input": {
+                                                                        textAlign: "start",
+                                                                        marginLeft: "9px"
+                                                                    }
+                                                                }}
+                                                            >   <MenuItem value="" disabled>
+                                                                    <em>select the value</em>
+                                                                </MenuItem>
+                                                                <MenuItem value="JPEG">.jpg</MenuItem>
+                                                                <MenuItem value="PNG">.png</MenuItem>
+                                                                <MenuItem value="TIFF">.tiff</MenuItem>
+                                                                <MenuItem value="IST">.ist</MenuItem>
+                                                            </Field>
+                                                            <p className="typography-400-regular select-subtitle">
+                                                                .jpg und .png sind in 72 dpi; .tiff ist in 300 dpi
+                                                            </p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="label-input-pair">
-                                                    <div className="typography-400-regular">Width*</div>
-                                                    <div>
-                                                        <Field as={TextField} name="resolution_width" />
+                                                    <div className="label__left">
+                                                        <div className="typography-400-regular">Width*</div>
+                                                    </div>
+                                                    <div className="label__right">
+                                                            <Field as={TextField} name="resolution_width" />
                                                     </div>
                                                 </div>
                                                 <div className="label-input-pair">
-                                                    <div className="typography-400-regular">Height*</div>
-                                                    <div>
+                                                    <div className="label__left">
+                                                        <div className="typography-400-regular">Height*</div>
+                                                    </div>
+                                                    <div className="label__right">
                                                         <Field as={TextField} name="resolution_height" />
                                                     </div>
                                                 </div>
                                                 <div className="check-group">
                                                     <div className="label-check-pair">
                                                         <div className="label-check-pair__label">
-                                                            <div className="typography-400-regular">Schatten</div></div>
-                                                        <Field as={Checkbox} defaultChecked={values.is_shadow} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} name="is_shadow" />
+                                                            <div className="typography-400-regular">Schatten</div>
+                                                        </div>
+                                                        <div className='label__right'>
+                                                            <div className='label-check-pair__checkbox'>
+                                                                <Field as={Checkbox} defaultChecked={values.is_shadow} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} name="is_shadow"/>
+                                                                <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>Produktschatten aktivieren</div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div className="check-group">
-                                                    <CheckboxGroupComponent label="Marke *" values={values.brands} name="brands" /></div>
-                                                <div className="check-group"><CheckboxGroupComponent label="Anwendung *" values={values.applications} name="applications" /></div>
+                                                    <CheckboxGroupComponent label="Marke *" values={values.brands} name="brands" />
+                                                </div>
+                                                <div className="check-group">
+                                                        <CheckboxGroupComponent label="Anwendung *" values={values.applications} name="applications" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

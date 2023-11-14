@@ -115,6 +115,7 @@
 .product-container {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 17px;
     margin-top: 20px;
     position: absolute;
@@ -122,15 +123,16 @@
     top: 0px;
     bottom: 0px;
     overflow: auto;
+    overflow-x: hidden;
 
     .infinite-scroll-component {
-        height: auto;
-        overflow: auto;
-        display: flex;
-        flex-wrap: wrap;
-        margin-bottom: 40px;
-        gap: 20px;
-        align-content: flex-start;
+        margin-top: 20px;
+        width: 100%;
+        display: grid;
+        justify-content: center;
+        grid-template-columns: 335px 335px 335px;
+        gap: 15px;
+        height: calc(100vh - 180px);
         // min-height: 100vh;
     }
 }
@@ -154,15 +156,15 @@
     border-radius: 3px;
 }
 
-.image-setting-panel {
+.image-setting-panel { 
     margin-bottom: 20px;
     display: flex;
     flex-direction: row;
     gap: 20px;
 
     .left-b-image {
-        width: 600px;
-        height: 600px;
+        width: 493px;
+        aspect-ratio: 1 / 1;
         background-image: url("../../../assets/images/grid-Image.png");
         display: flex;
         flex-direction: column;
@@ -230,13 +232,20 @@
     margin-bottom: 20px;
 }
 
+.template-form {
+    width: 100%;
+    max-width: 1045px;
+    margin: 0px 30px 0px 30px;
+}
+
 .template-panel {
     position: relative;
+    width: 100%;
 
     .top-template-button {
         position: absolute;
         top: 20px;
-        right: 30px;
+        right: 0px;
     }
 
     .panel-group {
@@ -251,7 +260,6 @@
         .product-setting-panel {
             background-color: white;
             border-radius: 3px, 3px, 0px, 0px;
-            margin: 0px 30px 0px 20px;
 
             &__bottom {
                 overflow-x: scroll;
@@ -271,62 +279,105 @@
                     gap: 15px;
 
                     .label-input-pair {
-                        width: 745px;
+                        width: 100%;
                         display: flex;
                         flex-direction: row;
                         justify-content: space-between;
 
-                        input {
-                            width: 450px;
-                            padding: 10px 10px;
-                            border-radius: 3px;
+                        .label__left {
+                            width: 110px;
+                            display: flex;
+                        }
+
+                        .label__right {
+                            width: 100%;
+                            display: flex;
+                            justify-content: center;
+                            & > div {
+                                max-width: 450px;
+                                width: 100%;
+                                display: flex;
+                                justify-content: center;
+                                input {
+                                    padding: 10px;
+                                }
+                            }
                         }
 
                     }
 
                     .label-check-pair {
-                        display: inline-block;
+                        width: 100%;
                         display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
 
                         &__label {
-                            width: 270px;
+                            width: 110px;
                             text-align: start;
                         }
 
-                        &__checkbox-group {
+                        .label__right {
+                            width: 100%;
                             display: flex;
-                            flex-direction: column;
-                            gap: 8px;
+                            justify-content: center;
+
+                            .label-check-pair__checkbox{
+                                display: flex;
+                                align-items: center;
+                                width: 100%;
+                                max-width: 450px;                            
+                                gap: 10px;
+                            }
+
+                            .label-check-pair__checkbox-group {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 8px;
+                                width: 100%;
+                                max-width: 450px;
+                            }
                         }
                     }
 
                     .label-select-pair {
-                        height: 70px !important;
+                        height: 100%;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
 
-                        div {
-                            padding: 10px 0px;
+                        .label__left {
+                            width: 110px;
+                            display: flex;
+                        }
+
+                        .label__right {
+                            width: 100%;
+                            display: flex;
+                            justify-content: center;
                         }
 
                         div.select-group {
-                            width: 472px;
+                            width: 452px;
                             padding: 0px 0px;
                             margin-bottom: 30px;
                             position: relative;
                             display: flex;
                             flex-direction: column;
 
+                            & > div {
+                                width: 100%;
+                                padding: 0px;
+                            }
+
                             .select-subtitle {
                                 position: absolute;
                                 top: 45px;
-                                left: 10px;
+                                left: 0px;
+                                margin: 0px;
                             }
                         }
 
-                        width: 745px;
-                        height: 40px;
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: space-between;
                     }
                 }
             }
@@ -542,10 +593,23 @@
     .multi-product-container {
         grid-template-columns: 335px 335px;
     }
+    .infinite-scroll-component {
+        grid-template-columns: 335px 335px !important;
+    }
+    .image-setting-panel{
+        flex-direction: column;
+        align-items: start;
+    }
+    .left-b-image {
+        width: 100% !important;
+    }
 }
 
 @media (max-width: 1112px) {
     .multi-product-container {
         grid-template-columns: 335px;
+    }
+    .infinite-scroll-component {
+        grid-template-columns: 335px !important;
     }
 }

@@ -129,11 +129,7 @@ const Organism = () => {
                                             next={fetchMoreData}
                                             hasMore={true}
                                             loader={loadingStatus === true ? <div className="loading">Loading&#8230;</div> : null}
-                                            style={{
-                                                display: "flex",
-                                                flexWrap: "wrap",
-                                                gap: "20px"
-                                            }}
+                                            className='infinite-scroll-component'
                                             endMessage={
                                                 <p style={{ textAlign: 'center' }}>
                                                     <b>Yay! You have seen it all</b>
@@ -142,6 +138,72 @@ const Organism = () => {
                                             scrollableTarget="scrollableDiv"
                                             id='scrollable'
                                         >
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
+                                            {templates.map((templateEle, key) => {
+                                                return (
+                                                    < ProductCard key={key} cardInfo={templateEle} />
+                                                )
+                                            }
+                                            )}
                                             {templates.map((templateEle, key) => {
                                                 return (
                                                     < ProductCard key={key} cardInfo={templateEle} />
