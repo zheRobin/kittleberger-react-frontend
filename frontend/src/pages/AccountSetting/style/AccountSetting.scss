@@ -1,17 +1,26 @@
+.user-manage-form{
+    width: 100%;
+    max-width: 1045px;
+    margin: 30px 30px 0px 30px;
+    display: flex;
+    flex-direction: column;
+}
+
 .create-user{
-    margin-left: 30px;
-    margin-right: 30px;
-    margin-top: 20px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: flex-end;
 }
 
-
+.setting-form{
+    width: 100%;
+    max-width: 1045px;
+    margin: 30px 30px 0px 30px;
+}
 
 .setting-panel-user{
     background-color: white;
     border-radius: 3px, 3px, 0px, 0px;
-    margin: 20px 30px 30px 30px;
 
     .setting-panel-user__top{
         border-bottom: solid 1px #00000040;
@@ -39,7 +48,7 @@
         box-sizing: border-box;
 
         .label-input-pair{
-            width: 745px;
+            max-width: 745px;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -59,7 +68,8 @@
                 padding: 10px 0px;
             }
             input{
-                width: 450px;
+                width: 100%;
+                max-width: 450px;
                 padding: 10px 10px;
                 border-radius: 3px;
                 border: solid 1px #00000040;
@@ -218,7 +228,7 @@
         }
 
         .label-input-pair{
-            width: 745px;
+            max-width: 745px;
             display: flex;
             flex-direction: row;
             justify-content: space-between;

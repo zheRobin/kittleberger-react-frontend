@@ -126,7 +126,7 @@ const ApiToken = () => {
 
     return (
         <>
-            <form onSubmit={formik.handleSubmit} >
+            <form onSubmit={formik.handleSubmit} className="setting-form">
                 <div className="api-setting">
                     <div>
                         <div className="api-setting__top">

@@ -57,8 +57,8 @@ const ManageUser = () => {
   }, [loading])
 
   return (
-    <>
-      <div className="create-user " ><div className="pointer" onClick={() => { setModalView(true); setEditMode(false) }}><TemplateButton content={"Neuen Benutzer anlegen"} /></div></div>
+    <div className="user-manage-form">
+      <div className="create-user" ><div className="pointer" onClick={() => { setModalView(true); setEditMode(false) }}><TemplateButton content={"Neuen Benutzer anlegen"} /></div></div>
       <div className="setting-panel-user">
         <div className="setting-panel-user__top">
           <div className="typography-400-regular">Passwort ändern</div>
@@ -161,7 +161,7 @@ const ManageUser = () => {
 
       </div >
       <ToastContainer />
-    </>
+    </div>
   )
 }
 

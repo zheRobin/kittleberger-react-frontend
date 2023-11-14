@@ -57,7 +57,7 @@ const PasswordChange = () => {
 
 
     return (
-        <form onSubmit={formik.handleSubmit} >
+        <form onSubmit={formik.handleSubmit} className="setting-form">
             <div className="setting-panel-user">
                 <div className="setting-panel-user__top">
                     <div className="typography-400-regular">Passwort ändern</div>
@@ -65,12 +65,10 @@ const PasswordChange = () => {
                 <div className="setting-panel-user__bottom">
                     <div className="label-input-pair">
                         <div className="typography-400-regular">Altes Passwort *</div>
-                        <div>
                             <input type="password" value={formik.values.oldpass} onChange={(e) => setInputValue('oldpass', e.target.value)}></input>
                             {formik.touched.oldpass && formik.errors.oldpass ? (
                                 <p className="validation">{formik.errors.oldpass}</p>
                             ) : null}
-                        </div>
                     </div>
                     <div className="label-input-pair">
                         <div className="typography-400-regular">Neues Passwort *</div>
