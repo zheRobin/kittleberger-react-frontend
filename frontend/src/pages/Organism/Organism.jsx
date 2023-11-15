@@ -94,7 +94,7 @@ const Organism = () => {
     return (
         <>
             <div className="organism-tabs">
-                <div className='typography-400-regular template-button pointer' style={{ color: "#8F7300" }}
+                <div className='typography-400-regular template-button pointer'
                     onClick={() => navigate("/product/template")}
                 >
                     Neues Template anlegen
@@ -138,72 +138,6 @@ const Organism = () => {
                                             scrollableTarget="scrollableDiv"
                                             id='scrollable'
                                         >
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
                                             {templates.map((templateEle, key) => {
                                                 return (
                                                     < ProductCard key={key} cardInfo={templateEle} />

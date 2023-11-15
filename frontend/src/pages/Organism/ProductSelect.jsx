@@ -2,73 +2,103 @@ import "./style/organismStyle.scss"
 import plus from "../../assets/icons/add-2.svg"
 import { useSelector } from "react-redux"
 import { useEffect, useState, useRef } from "react"
-import { appendProducts } from "../../store"
+import { appendProducts, setComposedProduct } from "../../store"
 import { useDispatch } from "react-redux"
-import { setUpdatedPosition } from "../../store"
-
+import { getProductsbyFilter } from "../../_services/Product"
+import { Suspense } from "react"
+import 'react-photo-view/dist/react-photo-view.css';
+import { PhotoSlider } from 'react-photo-view';
+import { composeByInfo } from "../../_services/Product"
 
 
 export const ProductView = ({ width = 100, height = 100 }) => {
     const dispatch = useDispatch()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate);
     const selectedProducts = useSelector(state => state.products.selectedProducts);
+    const token = useSelector(state => state.auth.token)
     const imgRef = useRef(null);
-    const [scaleInfo, setScaleInfo] = useState(1)
+    const [loading, setLoading] = useState(false)
+    const [composeImage, setComposeImage] = useState('https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/bg.jpg')
+
     useEffect(() => {
         if (imgRef.current) {
-            const currentWidth = imgRef.current.offsetWidth;
-            const currntHeight = imgRef.current.offsetHeight;
+            setLoading(true);
             const img = new Image();
-            img.src = "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png";
-            const resolution_height = selectedTemplate.resolution_height
-            const resolution_width = selectedTemplate.resolution_width
+            const imgSrc = "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png";
+            const resolution_height = selectedTemplate.resolution_height;
+            const resolution_width = selectedTemplate.resolution_width;
 
-            img.onload = function () {
-                // const originalWidth = img.naturalWidth;
-                // const originalHeight = img.naturalHeight;
-                let scaleY = currntHeight / resolution_height
-                let scaleX = currentWidth / resolution_width
-                setScaleInfo(scaleX > scaleY ? scaleY : scaleX)
+            // setScaleInfo(scaleInfo => {
+            //     console.log("Updated scaleInfo:", scaleX > scaleY ? scaleY : scaleX);
+            //     return scaleX > scaleY ? scaleY : scaleX;
+            // });
+            img.onerror = function () {
+                console.error("Error loading image:", imgSrc);
+                setLoading(false);
             };
+
+            img.src = imgSrc;
+
+            const article = selectedProducts?.map((product, index) => {
+                const positionStyle = selectedTemplate?.article_placements;
+                const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
+                const transImg = product?.transImg === true ? true : false;
+                const positionX = product?.position === undefined ? positionStyle[index]?.position_x : product?.position[0];
+                const positionY = product?.position === undefined ? positionStyle[index]?.position_y : product?.position[1];
+
+                if (positionStyle !== undefined) {
+                    return {
+                        article_link: "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png",
+                        is_transparent: transImg,
+                        top: positionY,
+                        left: positionX,
+                        width: positionStyle[index]?.width * sliderScale,
+                        height: positionStyle[index]?.height * sliderScale,
+                    };
+                }
+            });
+
+            const composingInfo = {
+                template_id: selectedTemplate.id,
+                articles: article.filter(Boolean),
+            };
+
+            console.log("composingInfo:", composingInfo);
+
+            composeByInfo(token, composingInfo, (success) => {
+                setComposeImage(success.data.data);
+                dispatch(setComposedProduct(success.data.data))
+                setLoading(false);
+            });
+
         }
     }, [selectedProducts]);
     return (
-        <div className="image-backgroud" style={{ width: `${width}%`, height: `${height}%` }}>
-            <div className="saved-images">
-                <img ref={imgRef} src={"https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/bg.jpg"} alt="background" />
-                {
-                    selectedProducts?.map((product, index) => {
+        <div className="image-backgroud">
+            {loading ? (
+                <Loading />
+            ) : (
+                <div className="saved-images" style={{ width: "100%", height: "800px" }}>
+                    <img ref={imgRef} src={composeImage} alt="background" style={{ height: '100%', width: "100%", objectFit: 'contain' }} />
+                </div>
+            )}
 
-                        let positionStyle = selectedTemplate?.article_placements
-                        let sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale
-                        let transImg = product?.transImg
-                        let positionX = product?.position === undefined ? positionStyle[index]?.position_x : product?.position[0]
-                        let positionY = product?.position === undefined ? positionStyle[index]?.position_y : product?.position[1]
-                        // dispatch(setUpdatedPosition({ ...product, updatedPosition: position }))
-                        if (positionStyle !== undefined) {
-                            return (
-                                <div key={index} className="product-image" style={{ top: `${positionY * scaleInfo}px`, left: `${positionX * scaleInfo}px` }}>
-                                    <img src={transImg === undefined || transImg === "" ? "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png" : transImg}
-                                        style={{ width: `${positionStyle[index]?.width * scaleInfo * sliderScale}px`, height: `${positionStyle[index]?.height * scaleInfo * sliderScale}px` }} alt="temp" />
-                                </div>
-                            )
-                        }
-                    })
-                }
-            </div>
+
         </div>
     );
 }
 
 
-export const ProductList = ({ productItem, flag, setPosNum, posNum, possiblePos }) => {
+export const ProductList = ({ productItem, flag, setPosNum, posNum, possiblePos, setPreview, setVisible }) => {
     const dispatch = useDispatch()
     const productCount = useSelector(state => state.products.selectedProducts)
 
     return (
         <div className="product-list-panel">
-            <img src={require("../../assets/images/product-image.png")} alt="product" />
-            <div className="product-info">
+            <div className="pointer" onClick={() => { setPreview(["https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png"]); setVisible(true) }}>
+                <img src={require("../../assets/images/product-image.png")} alt="product" />
+            </div>
+            <div className="product-info" >
                 <div className="label-info">
                     <div className="label-info__top typography-700-regular">{productItem.name}</div>
                     <div className="label-info__bottom typography-400-regular">{productItem.article_number}</div>
@@ -81,7 +111,24 @@ export const ProductList = ({ productItem, flag, setPosNum, posNum, possiblePos 
     )
 }
 
-
+export const Loading = () => {
+    return (
+        <div className="cover-spin">
+            <svg width="150" height="150" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" overflow="visible" fill="#8F7300" stroke="none">
+                <defs>
+                    <circle id="loader" r="4" cx="50" cy="50" transform="translate(0 -30)" />
+                </defs>
+                <g className="loader" transform="rotate(51 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(103 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(154 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(206 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(257 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(309 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(360 50 50)"><use xlinkHref="#loader" /></g>
+            </svg>
+        </div>
+    )
+}
 
 const ProductSelect = () => {
 
@@ -90,9 +137,15 @@ const ProductSelect = () => {
     const token = useSelector(state => state.auth.token);
     const [productList, setProductList] = useState([]);
     const [page, setPage] = useState(1);
+    const [loading, setloading] = useState(true)
+    const [images, setImages] = useState([]);
     const [posNum, setPosNum] = useState(0);
     const [searchString, setSearchString] = useState("");
-
+    const [pageInfo, setPageInfo] = useState(
+        {}
+    )
+    const [visible, setVisible] = useState(false);
+    const [index, setIndex] = useState(0);
     const parseSearch = (input) => {
         const regex1 = /\b(\d+)\b/;
         const regex2 = /\b([a-zA-Z]+)\b/;
@@ -108,9 +161,9 @@ const ProductSelect = () => {
         if (e.key === "Enter") {
             setProductList([]);
             setPage(1);
-            const additionalQuery = parseSearch(searchString);
+            const productInfo = searchString;
             try {
-                await getProductsbyFilter(page, additionalQuery);
+                await getProductInfo(page, productInfo);
             } catch (error) {
                 console.error("Error fetching products:", error);
                 // Handle the error appropriately
@@ -118,54 +171,31 @@ const ProductSelect = () => {
         }
     };
 
-    async function getProductsbyFilter(pages, additionalQuery = "") {
-        const filterString = additionalQuery ? `${process.env.REACT_APP_API_URL}api/v1/core/filter?page=${pages}${additionalQuery}` : `${process.env.REACT_APP_API_URL}api/v1/core/filter?page=${pages}`;
-        try {
-            const response = await fetch(filterString, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': "Bearer " + token,
-                },
-            });
-            const reader = response.body.getReader();
-            let buffer = "";
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) {
-                    // Process the last chunk of data if any
-                    if (buffer.length > 0) {
-                        const lastChunk = buffer.trim();
-                        console.log(lastChunk);
-                    }
-                    return;
-                }
-                const decoder = new TextDecoder("utf-8");
-                const chunk = decoder.decode(value, { stream: true });
-                buffer += chunk;
-                // Split the buffer by \n\n to separate the streams
-                while (buffer.includes("\n\n")) {
-                    const newlineIndex = buffer.indexOf("\n\n");
-                    const stream = buffer.slice(0, newlineIndex);
-                    buffer = buffer.slice(newlineIndex + 2);
-                    const parsedData = JSON.parse(stream);
-                    setProductList((prevProductList) => {
-                        const newList = prevProductList.length === 0 ? parsedData : [...prevProductList, ...parsedData];
-                        return newList;
-                    });
-                    // Process each stream individually
-                }
+    function getProductInfo(page, productInfo = "", country = "germany") {
+        setloading(true)
+        getProductsbyFilter(token, { page, productInfo, country }, (success) => {
+            if (success.data.code === 200 && success.data.status === "success") {
+                setProductList((prevProductList) => {
+                    const newList = prevProductList.length === 0 ? success.data.data.products : [...prevProductList, ...success.data.data.products];
+                    return newList;
+                });
+                setPageInfo({
+                    currentPage: success.data.data.current_page,
+                    count: success.data.data.count
+                })
+                setloading(false)
             }
-        } catch (error) {
-            console.error("Error fetching products:", error);
-            throw error; // Re-throw the error to handle it outside
-        }
+            else {
+                console.log(success)
+            }
+
+        })
     }
 
     useEffect(() => {
         const additionalQuery = parseSearch(searchString);
         try {
-            getProductsbyFilter(page, additionalQuery);
+            getProductInfo(page)
         } catch (error) {
             console.error("Error fetching products:", error);
             // Handle the error appropriately
@@ -174,25 +204,40 @@ const ProductSelect = () => {
 
     return (
         <>
-            <div className="product-select">
-                <div className="product-select__l">
-                    <div className="product-search">
-                        <input placeholder="Produkte durchsuchen" onChange={(e) => { setSearchString(e.target.value) }} onKeyDown={handleSearch} />
+            <Suspense fallback={<Loading />}>
+                <div className="product-select">
+                    <div className="product-select__l">
+                        <div className="product-search">
+                            <input placeholder="Produkte durchsuchen" onChange={(e) => { setSearchString(e.target.value) }} onKeyDown={handleSearch} />
+                        </div>
+                        <div className="product-add">
+                            {productList?.map((productItem, index) => {
+                                return <ProductList key={index} productItem={productItem} setPosNum={setPosNum} posNum={posNum} possiblePos={productPosNumbers} setPreview={setImages} setVisible={setVisible} />
+                            }
+                            )}
+                        </div>
+                        {30 === pageInfo?.count ? (<div className="typography-400-bold pointer" onClick={(e) => setPage(page + 1)} style={{ textAlign: "end", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>Load More</div>) : null}
                     </div>
-                    <div className="product-add">
-                        {productList?.map((productItem, index) => {
-                            return <ProductList key={index} productItem={productItem} setPosNum={setPosNum} posNum={posNum} possiblePos={productPosNumbers} />
-                        }
-                        )}
+                    <PhotoSlider
+                        images={images.map((item) => ({ src: item, key: item }))}
+                        visible={visible}
+                        speed={() => 150}
+                        maskOpacity={0.5}
+                        onClose={() => setVisible(false)}
+                        index={index}
+                        onIndexChange={setIndex}
+                    />
+
+                    <div className="product-select__r">
+                        <ProductView />
                     </div>
-                    <div className="typography-400-bold pointer" onClick={(e) => setPage(page + 1)} style={{ textAlign: "end", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>Load More</div>
                 </div>
-                <div className="product-select__r">
-                    <ProductView />
-                </div>
-            </div>
+            </Suspense>
         </>
     )
 }
+
+
+
 
 export default ProductSelect

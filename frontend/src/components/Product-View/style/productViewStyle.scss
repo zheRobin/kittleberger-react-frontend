@@ -53,6 +53,12 @@
                     padding: 9px 9px 9px 9px;
                     background-color: #8F7300;
                     border: 1px solid #E0E2E5;
+                    &:hover{
+                        background-color: #B39100;
+                    }
+                    &:active{
+                        background-color: #8F7300;
+                    }
                 }
             }
         }

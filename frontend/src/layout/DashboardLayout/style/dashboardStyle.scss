@@ -225,17 +225,18 @@
                 .account-setting{
                     display: flex;
                     flex-direction: column;
-                    gap: 10px;
-                    margin: 10px 15px 10px 15px;
+                    margin: 10px 0px 10px 0px;
 
                     .account-detail{
-                        
-
+                        padding: 5px 15px 5px 15px;
+                        &:hover{
+                            background-color: #00000040;
+                        }
                         .account-detail-info{
                             display: flex;
                             flex-direction: row;
-                            
                             height: 24px;
+                            
 
                             .account-setting-img{
                                 width: 24px;

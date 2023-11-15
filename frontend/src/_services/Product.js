@@ -1,25 +1,28 @@
 import { setAuthToken } from "./Template";
 import axios from "axios";
 
-export async function getProductsbyFilter(token, filterArgs = {} ) {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}api/v1/compose/templates/filter/`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': "Bearer " + token,
-        },
-    });
-    const reader = response.body.getReader();
-    while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-            // Do something with last chunk of data then exit reader
-            return;
-        }
-        const decoder = new TextDecoder("utf-8");
-        let decodedChunk = decoder.decode(value);
-        const parseData = JSON.parse(decodedChunk)
-    }
+export async function getProductsbyFilter(token, filterArgs = {},success ) {
+    
+    setAuthToken(token)
+    axios.get(`${process.env.REACT_APP_API_URL}api/v1/core/filter?page=${filterArgs.page}&product=${filterArgs.productInfo}&country=${filterArgs.country}`)
+        .then(res => {
+            success(res)
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        })
+}
+
+export async function composeByInfo(token, composeInfo,success ) {
+    
+    setAuthToken(token)
+    axios.post(`${process.env.REACT_APP_API_URL}api/v1/core/compose/`,composeInfo)
+        .then(res => {
+            success(res)
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        })
 }
 
 export async function imageComposing(token, productInfo, success) {

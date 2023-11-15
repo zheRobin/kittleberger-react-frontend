@@ -16,7 +16,7 @@ export const ProductNumberFilter = (resetValue) => {
         application: [],
         brand: []
     })
-    const footerMokeup = ['Weitere Filterattribute 1', 'Weitere Filterattribute 2', 'Weitere Filterattribute 3']
+    const landMokeup = ['Deutschland', 'Österreich', 'Belgien', 'Schweiz', 'Frankreich']
     const templateTypes = useSelector(state => state.auth.templateTypes)
     const dispatch = useDispatch()
     useEffect(() => {
@@ -65,6 +65,19 @@ export const ProductNumberFilter = (resetValue) => {
                             })}
                         </div>
                     </div>
+                    <div className="by-land">
+                        <div className="product-list">
+                            <Typography fontSize="14px" lineHeight="20px">Land</Typography>
+                        </div>
+                        <div className="check-group">
+                            {landMokeup.map((ele, index) => {
+                                return (<CheckboxGroup key={"landMokeup" + index} title={ele} />)
+                            })}
+                        </div>
+                        <div className="product-list">
+                            <img src={plusButton} alt="plusButton" /><Typography fontSize="14px" lineHeight="20px">Mehr anzeigen</Typography>
+                        </div>
+                    </div>
                     <div className="by-Aplikationen">
                         <div className="product-list">
                             <Typography fontSize="14px" lineHeight="20px">Aplikationen</Typography>
@@ -75,14 +88,6 @@ export const ProductNumberFilter = (resetValue) => {
                             })}
                         </div>
                     </div>
-                </div>
-                <div className="filter-bottom">
-                    {footerMokeup.map((ele, index) => {
-                        return (<div className="product-list" key={"footerMokeup" + index}>
-                            <img src={plusButton} alt="plusButton" /><Typography fontSize="14px" lineHeight="20px">{ele}</Typography>
-                        </div>)
-                    })}
-
                 </div>
             </div>
 

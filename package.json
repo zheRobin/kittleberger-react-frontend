@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-images-viewer": "^1.7.1",
+    "react-photo-view": "^1.2.3"
+  }
+}

@@ -1,3 +1,4 @@
+
 .organism-tabs {
     margin-top: 30px;
     margin-left: 30px;
@@ -13,7 +14,16 @@
         right: 0px;
         padding: 10px 20px 10px 20px;
         border: solid 1px #8F7300;
+        color: #8F7300;
         z-index: 2;
+        &:hover{
+            color: #B39100;
+            border: solid 1px #B39100;
+        }
+        &:active{
+            border: solid 1px #8F7300;
+            color: #8F7300;
+        }
     }
 
     .MuiTabPanel-root {
@@ -154,6 +164,12 @@
     background-color: #8F7300;
     padding: 10px 20px 10px 20px;
     border-radius: 3px;
+    &:hover{
+        background-color: #B39100;
+    }
+    &:active{
+        background-color: #8F7300;
+    }
 }
 
 .image-setting-panel { 
@@ -476,27 +492,22 @@
 
     &__r {
         width: 65%;
-        margin: 30px;
-
-        .image-backgroud {
-            width: 100%;
-            height: 100%;
+        margin:auto;
+        
+        .image-backgroud{
+            
+            
             background-image: url("../../../assets/images/grid-Image.png");
+           
             display: flex;
             align-items: center;
-
-            .saved-images {
+            .saved-images{
+                max-height: calc(100vh - 90px);
+                height: 100%;
                 width: 100%;
-                padding-top: auto;
-                padding-bottom: auto;
-                position: relative;
-
-                img {
-                    width: 100%;
-                }
-
-                .product-image {
-                    position: absolute;
+                margin: auto;
+                img{
+                    object-fit: contain;
                 }
             }
         }
@@ -513,8 +524,13 @@
     &-l {
         text-align: start;
         width: 100%;
-
-        div:nth-child(2) {
+        .summary-compose-image{
+            width: 100%;
+            img{
+                object-fit: contain;
+            }
+        }
+        div:nth-child(2){
             margin-top: 30px;
         }
 

@@ -130,7 +130,7 @@ export default function TemplatePanel() {
     const [height, setHeight] = useState(600);
     const elementRef = useRef(null);
     let backgroundHeight = (tempImages.height / tempImages.width * width) * 100 / height
-    console.log(backgroundHeight)
+
     const [previewImages, setPreviewImages] = useState([]);
     const maxNumber = 69;
     const token = useSelector(state => state.auth.token)

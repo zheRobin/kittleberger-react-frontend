@@ -5,10 +5,12 @@ export const productsSlice = createSlice({
     name: 'products',
     initialState:{
         selectedProducts: [],
-        selectedTemplate: JSON.parse(localStorage.getItem('templateInfo'))
+        selectedTemplate: JSON.parse(localStorage.getItem('templateInfo')),
+        composedProduct:'https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/bg.jpg'
     },
     reducers:{
         appendProducts: (state, action) => {
+            console.log(action.payload)
             state.selectedProducts = state.selectedProducts.length === 0 ? [action.payload] : [...state.selectedProducts, action.payload];
           },
         removeProducts:(state,action) =>{
@@ -16,6 +18,9 @@ export const productsSlice = createSlice({
         },
         findTemplates:(state, action) => {
             state.selectedTemplate = action.payload
+        },
+        setComposedProduct:(state, action) => {
+            state.composedProduct = action.payload
         },
         setProductAligns:(state,action) =>{
             const article_number= action.payload.article_number;
@@ -74,6 +79,6 @@ export const productsSlice = createSlice({
 })
 
 
-export const {appendProducts, findTemplates, removeProducts, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
+export const {appendProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
 export const productsReducer = productsSlice.reducer
 export default productsSlice.reducer

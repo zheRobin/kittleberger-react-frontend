@@ -24,7 +24,7 @@ import ArrowBLIcon from "../../assets/icons/arrowBL.svg"
 import ArrowBCIcon from "../../assets/icons/arrowBC.svg"
 import ArrowBRIcon from "../../assets/icons/arrowBR.svg"
 
-const OverlayGroup = ({ productInfo }) => {
+const OverlayGroup = ({ productInfo, index }) => {
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
     const [sliderValue, setSliderValue] = useState(100)
@@ -46,25 +46,20 @@ const OverlayGroup = ({ productInfo }) => {
         };
     }, [showModal, setShowModal]);
 
+    useEffect(
+        () => {
+            const sliderSetValue = productInfo?.sliderScale
+            setSliderValue(sliderSetValue !== undefined ? sliderSetValue * 100 : 100)
+        }, []
+    )
     const handleComposing = (checkStatus) => {
         setChecked(!checked)
         if (checkStatus) {
-            setLoading(true)
-            imageComposing(token, productInfo, (success) => {
-                if (success.status === 200 && success.data.status === "success") {
-                    const trans_img = success.data.data.TRANS_IMG
-                    dispatch(setProductTransImg({ ...productInfo, transImg: trans_img }))
-                    toast.success("Successfully Changed")
-                }
-                else {
-                    toast.error("Something went wrong")
-                }
-                setLoading(false)
-            })
+            dispatch(setProductTransImg({ ...productInfo, transImg: checkStatus }))
         }
         else {
             const trans_img = ""
-            dispatch(setProductTransImg({ ...productInfo, transImg: trans_img }))
+            dispatch(setProductTransImg({ ...productInfo, transImg: checkStatus }))
         }
     }
 
@@ -114,7 +109,7 @@ const OverlayGroup = ({ productInfo }) => {
                                         {productInfo.name}
                                     </div>
                                     <div className="panel-top__drag">
-                                        <Slider defaultValue={100} aria-label="Default" valueLabelDisplay="auto" track={false} onChange={(e) => { setSliderValue(e.target.value) }}
+                                        <Slider defaultValue={sliderValue} aria-label="Default" valueLabelDisplay="auto" track={false} onChange={(e) => { setSliderValue(e.target.value) }}
                                             sx={{
                                                 "& .MuiSlider-thumb": {
                                                     color: "#8F7300"
@@ -131,7 +126,7 @@ const OverlayGroup = ({ productInfo }) => {
                                             }}
                                         />
                                         <div className="percent">
-                                            <input defaultValue={100} max={100} type="number" className="percent-amount" value={sliderValue} readOnly />
+                                            <input max={100} type="number" className="percent-amount" value={sliderValue} readOnly />
                                             <div className="percent-mark"><p>%</p></div>
                                         </div>
                                     </div>

@@ -2,7 +2,6 @@ import "../Organism/style/organismStyle.scss"
 import { TemplateButton } from "./TemplatePanel"
 import copy from "../../assets/icons/copy.svg"
 import { Typography } from "@mui/material"
-import { ProductView } from "./ProductSelect"
 import { useSelector } from "react-redux"
 import React, { useState } from "react"
 import { getOnlineInfo } from "../../_services/Product"
@@ -12,6 +11,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 const Summary = () => {
     const selectedTemplate = useSelector(state => state.products.selectedTemplate)
     const selectedProducts = useSelector(state => state.products.selectedProducts)
+    const composedProduct = useSelector(state => state.products.composedProduct)
+    console.log("composedProduct:", composedProduct)
     const [deploymentName, setdeploymentName] = useState({
         value: '',
         copied: false,
@@ -81,8 +82,8 @@ const Summary = () => {
         <>
             <div className="summary">
                 <div className="summary-l">
-                    <div>
-                        <ProductView />
+                    <div className="summary-compose-image">
+                        <img src={composedProduct} alt="composedProduct" />
                     </div>
                     <div className="typography-700-bold">{selectedTemplate.name}</div>
                     <div className="typography-400-regular">

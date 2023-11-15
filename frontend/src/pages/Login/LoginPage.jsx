@@ -8,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import { authActions } from "../../store"
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const LoginPage = () => {
     const dispatch = useDispatch()
@@ -25,7 +28,10 @@ const LoginPage = () => {
         },
         onSubmit: (values) => {
             try {
-                dispatch(authActions.login({ email: values.username, password: values.password }))
+                dispatch(authActions.login({ email: values.username, password: values.password })).then((response) => {
+                    response?.error?.message === 'Unauthorized' && toast.error("Invalid username or password", { theme: "colored", hideProgressBar: "true", autoClose: 1000 })
+                })
+
             }
             catch (error) {
                 setPassword("")
@@ -150,6 +156,7 @@ const LoginPage = () => {
                     </div >
                 </div >
             </div>
+            <ToastContainer />
         </div >
     )
 }
