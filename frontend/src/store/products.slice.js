@@ -10,11 +10,16 @@ export const productsSlice = createSlice({
     },
     reducers:{
         appendProducts: (state, action) => {
-            console.log(action.payload)
-            state.selectedProducts = state.selectedProducts.length === 0 ? [action.payload] : [...state.selectedProducts, action.payload];
+            const productsLength = state.selectedProducts.length
+            state.selectedProducts = productsLength === 0 ? 
+            [{...action.payload,posIndex:state.selectedTemplate.article_placements[0].pos_index}] : 
+            [...state.selectedProducts, {...action.payload,posIndex:state.selectedTemplate.article_placements[productsLength].pos_index}];
           },
         removeProducts:(state,action) =>{
             state.selectedProducts = state.selectedProducts.filter((product) => product.article_number !== action.payload.article_number)
+        },
+        updateProducts:(state,action) =>{
+            state.selectedProducts = action.payload
         },
         findTemplates:(state, action) => {
             state.selectedTemplate = action.payload
@@ -79,6 +84,6 @@ export const productsSlice = createSlice({
 })
 
 
-export const {appendProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
+export const {appendProducts, updateProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
 export const productsReducer = productsSlice.reducer
 export default productsSlice.reducer

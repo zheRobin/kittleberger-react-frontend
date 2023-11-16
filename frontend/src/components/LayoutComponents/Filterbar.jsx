@@ -2,25 +2,29 @@ import refreshIcon from "../../assets/icons/rotate.svg"
 import { Typography } from "@mui/material";
 import "../Composing/style/composeStyle.scss"
 import plusButton from "../../assets/icons/add-2.svg"
+import miusButton from "../../assets/icons/minus.svg"
 import CheckboxGroup from "../Composing/CheckboxGroup"
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { selectPage, setLoadingStatus, setFilterData, setResetStatus } from "../../store";
+import { useTranslation } from "react-i18next";
 
 export const ProductNumberFilter = (resetValue) => {
-
-    const plusProductMokeUp = [{ id: "1", name: 1 }, { id: "2", name: 2 }, { id: "3", name: 3 }, { id: "4", name: 4 }, { id: "5", name: 5 }]
+    const { t } = useTranslation()
+    const plusProductMokeUp = [{ id: "1", name: 1 }, { id: "2", name: 2 }, { id: "3", name: 3 }, { id: "4", name: 4 }, { id: "5", name: 5 }
+        , { id: "6", name: 6 }, { id: "7", name: 7 }, { id: "8", name: 8 }, { id: "9", name: 9 }, { id: "10", name: 10 }]
     const [filters, setFilters] = useState({
         article_number: [],
         application: [],
         brand: []
     })
+    const [showNumList, setShowNumList] = useState(false)
     const landMokeup = ['Deutschland', 'Österreich', 'Belgien', 'Schweiz', 'Frankreich']
     const templateTypes = useSelector(state => state.auth.templateTypes)
     const dispatch = useDispatch()
     useEffect(() => {
-        const delay = 1000;
+        const delay = 200;
 
         const timeoutId = setTimeout(() => {
             clearStoreData();
@@ -44,66 +48,126 @@ export const ProductNumberFilter = (resetValue) => {
                 <div className="filter-group">
                     <div className="by-number">
                         <div className="product-list">
-                            <Typography fontSize="14px" lineHeight="20px">Anzahl Produkte</Typography>
+                            <Typography fontSize="14px" lineHeight="20px">{t('Anzahl Produkte')}</Typography>
                         </div>
                         <div className="check-group">
-                            {plusProductMokeUp.map((ele, index) => {
-                                return (<CheckboxGroup key={"plusProductMokeUp" + index} type={"number"} element={ele} title={ele.name} setFilters={setFilters} filters={filters} />)
-                            })}
+                            {showNumList ? (
+                                plusProductMokeUp.map((ele, index) => {
+                                    return (
+                                        <CheckboxGroup
+                                            key={"plusProductMokeUp" + index}
+                                            type={"number"}
+                                            element={ele}
+                                            title={t(ele.name)}
+                                            setFilters={setFilters}
+                                            filters={filters}
+                                        />
+                                    );
+                                })
+                            ) : (
+                                plusProductMokeUp.slice(0, 5).map((ele, index) => {
+                                    return (
+                                        <CheckboxGroup
+                                            key={"plusProductMokeUp" + index}
+                                            type={"number"}
+                                            element={ele}
+                                            title={t(ele.name)}
+                                            setFilters={setFilters}
+                                            filters={filters}
+                                        />
+                                    );
+                                })
+                            )}
+
                         </div>
-                        <div className="product-list">
-                            <img src={plusButton} alt="plusButton" /><Typography fontSize="14px" lineHeight="20px">Mehr anzeigen</Typography>
+                        <div className="product-list pointer" onClick={(e) => setShowNumList(!showNumList)}>
+                            {showNumList ? (
+                                <>
+                                    <img src={miusButton} alt="plusButton" />
+                                    <Typography fontSize="14px" lineHeight="20px">{t('Weniger anzeigen')}</Typography>
+                                </>
+                            ) : (
+                                <>
+                                    <img src={plusButton} alt="plusButton" />
+                                    <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
+                                </>
+
+                            )}
+
                         </div>
                     </div>
                     <div className="by-brand">
                         <div className="product-list">
-                            <Typography fontSize="14px" lineHeight="20px">Brand</Typography>
+                            <Typography fontSize="14px" lineHeight="20px">{t('Brand')}</Typography>
                         </div>
                         <div className="check-group">
                             {templateTypes.brands.map((ele, index) => {
-                                return (<CheckboxGroup key={"brandMokeup" + index} type={"brand"} element={ele} title={ele.name} setFilters={setFilters} filters={filters} />)
+                                return (
+                                    <CheckboxGroup
+                                        key={"brandMokeup" + index}
+                                        type={"brand"}
+                                        element={ele}
+                                        title={t(ele.name)}
+                                        setFilters={setFilters}
+                                        filters={filters}
+                                    />
+                                );
                             })}
                         </div>
                     </div>
                     <div className="by-land">
                         <div className="product-list">
-                            <Typography fontSize="14px" lineHeight="20px">Land</Typography>
+                            <Typography fontSize="14px" lineHeight="20px">{t('Land')}</Typography>
                         </div>
                         <div className="check-group">
                             {landMokeup.map((ele, index) => {
-                                return (<CheckboxGroup key={"landMokeup" + index} title={ele} />)
+                                return (
+                                    <CheckboxGroup
+                                        key={"landMokeup" + index}
+                                        title={t(ele)}
+                                    />
+                                );
                             })}
                         </div>
                         <div className="product-list">
-                            <img src={plusButton} alt="plusButton" /><Typography fontSize="14px" lineHeight="20px">Mehr anzeigen</Typography>
+                            <img src={plusButton} alt="plusButton" />
+                            <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
                         </div>
                     </div>
                     <div className="by-Aplikationen">
                         <div className="product-list">
-                            <Typography fontSize="14px" lineHeight="20px">Aplikationen</Typography>
+                            <Typography fontSize="14px" lineHeight="20px">{t('Aplikationen')}</Typography>
                         </div>
                         <div className="check-group">
                             {templateTypes.applications.map((ele, index) => {
-                                return (<CheckboxGroup key={"aplikationenMokeup" + index} type={"app"} element={ele} title={ele.name} setFilters={setFilters} filters={filters} />)
+                                return (
+                                    <CheckboxGroup
+                                        key={"aplikationenMokeup" + index}
+                                        type={"app"}
+                                        element={ele}
+                                        title={t(ele.name)}
+                                        setFilters={setFilters}
+                                        filters={filters}
+                                    />
+                                );
                             })}
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </>
     )
 }
 
 const Filterbar = () => {
     const dispatch = useDispatch()
+    const { t } = useTranslation()
     return (
         <>
             <div className="refresh-part pointer" onClick={(e) => { dispatch(setResetStatus(true)); }}>
                 <img src={refreshIcon} alt="refresh"></img>
                 <Typography fontSize="14px" lineHeight="20px" marginLeft="15px">
-                    Filter zurücksetzen
+                    {t("Filter zurücksetzen")}
                 </Typography>
             </div>
             <ProductNumberFilter />

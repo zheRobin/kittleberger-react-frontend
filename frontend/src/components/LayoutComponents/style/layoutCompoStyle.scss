@@ -9,6 +9,17 @@
     }
 }
 
+.drag{
+    cursor: move;
+    &:active {
+        cursor: move;
+        cursor: -webkit-grabbing;
+        cursor: -moz-grabbing;
+      }
+    &:hover{
+    }
+}
+
 .nav-items{
     
     text-align: start;
@@ -17,6 +28,7 @@
         box-sizing: border-box;
         width: 100%;
         padding: 15px 30px 15px 30px;
+        cursor: move;
     }
 
     &--inactive{

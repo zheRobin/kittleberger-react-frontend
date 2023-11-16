@@ -11,7 +11,7 @@ import { PhotoSlider } from 'react-photo-view';
 import { composeByInfo } from "../../_services/Product"
 
 
-export const ProductView = ({ width = 100, height = 100 }) => {
+export const ProductView = () => {
     const dispatch = useDispatch()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate);
     const selectedProducts = useSelector(state => state.products.selectedProducts);
@@ -25,13 +25,6 @@ export const ProductView = ({ width = 100, height = 100 }) => {
             setLoading(true);
             const img = new Image();
             const imgSrc = "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png";
-            const resolution_height = selectedTemplate.resolution_height;
-            const resolution_width = selectedTemplate.resolution_width;
-
-            // setScaleInfo(scaleInfo => {
-            //     console.log("Updated scaleInfo:", scaleX > scaleY ? scaleY : scaleX);
-            //     return scaleX > scaleY ? scaleY : scaleX;
-            // });
             img.onerror = function () {
                 console.error("Error loading image:", imgSrc);
                 setLoading(false);
@@ -41,10 +34,11 @@ export const ProductView = ({ width = 100, height = 100 }) => {
 
             const article = selectedProducts?.map((product, index) => {
                 const positionStyle = selectedTemplate?.article_placements;
+                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index === product?.posIndex)
                 const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
                 const transImg = product?.transImg === true ? true : false;
-                const positionX = product?.position === undefined ? positionStyle[index]?.position_x : product?.position[0];
-                const positionY = product?.position === undefined ? positionStyle[index]?.position_y : product?.position[1];
+                const positionX = product?.position === undefined ? selectedStyle[0]?.position_x : product?.position[0];
+                const positionY = product?.position === undefined ? selectedStyle[0]?.position_y : product?.position[1];
 
                 if (positionStyle !== undefined) {
                     return {
@@ -52,8 +46,8 @@ export const ProductView = ({ width = 100, height = 100 }) => {
                         is_transparent: transImg,
                         top: positionY,
                         left: positionX,
-                        width: positionStyle[index]?.width * sliderScale,
-                        height: positionStyle[index]?.height * sliderScale,
+                        width: selectedStyle[0]?.width * sliderScale,
+                        height: selectedStyle[0]?.height * sliderScale,
                     };
                 }
             });
@@ -62,8 +56,6 @@ export const ProductView = ({ width = 100, height = 100 }) => {
                 template_id: selectedTemplate.id,
                 articles: article.filter(Boolean),
             };
-
-            console.log("composingInfo:", composingInfo);
 
             composeByInfo(token, composingInfo, (success) => {
                 setComposeImage(success.data.data);
@@ -89,7 +81,7 @@ export const ProductView = ({ width = 100, height = 100 }) => {
 }
 
 
-export const ProductList = ({ productItem, flag, setPosNum, posNum, possiblePos, setPreview, setVisible }) => {
+export const ProductList = ({ productItem, possiblePos, setPreview, setVisible }) => {
     const dispatch = useDispatch()
     const productCount = useSelector(state => state.products.selectedProducts)
 
@@ -186,7 +178,6 @@ const ProductSelect = () => {
                 setloading(false)
             }
             else {
-                console.log(success)
             }
 
         })
@@ -221,7 +212,7 @@ const ProductSelect = () => {
                     <PhotoSlider
                         images={images.map((item) => ({ src: item, key: item }))}
                         visible={visible}
-                        speed={() => 150}
+                        speed={() => 120}
                         maskOpacity={0.5}
                         onClose={() => setVisible(false)}
                         index={index}

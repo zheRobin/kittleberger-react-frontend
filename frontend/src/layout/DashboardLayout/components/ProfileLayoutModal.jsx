@@ -9,7 +9,8 @@ import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useRef, useEffect, useState } from "react"
-
+import { useTranslation } from "react-i18next"
+import { setSelectedLanguage } from "../../../store"
 function getInitials(string) {
     const words = string.split(" ");
     const initials = words?.map((word) => word[0]?.toUpperCase());
@@ -44,7 +45,9 @@ const ProfileLayout = ({ handleModal }) => {
     const handlelogout = (e) => {
         dispatch(authActions.logout())
     }
+    const { i18n } = useTranslation();
     const switchRole = useSelector(state => state.info.adminMethod)
+    const selectedLanguage = useSelector(state => state.info.language)
     const user = useSelector(state => state.auth.user)
     const userType = user.is_superuser ? "super" : (user.is_staff ? "admin" : "customer")
     const capitalizedUserType = userType.charAt(0).toUpperCase() + userType.slice(1);
@@ -59,6 +62,10 @@ const ProfileLayout = ({ handleModal }) => {
         }
     }, []);
     const [language, setLanguage] = useState(1)
+    const handleLanguageChange = (lang) => {
+        const newLang = lang;
+        i18n.changeLanguage(newLang);
+    };
     return (
         <>
             <div className="profile-layout" ref={wrapperRef}>
@@ -82,22 +89,24 @@ const ProfileLayout = ({ handleModal }) => {
                     <div className="set-language">
                         <div className="language-label">System language</div>
                         <div
-                            className={language === 1 ? "language-active pointer" : "language-inactive pointer"}
+                            className={selectedLanguage === 'en' ? "language-active pointer" : "language-inactive pointer"}
                             onClick={(e) => {
-                                setLanguage(1);
+                                dispatch(setSelectedLanguage('en'))
+                                handleLanguageChange('en')
                             }}
                         >
                             <div>English</div>
-                            {language === 1 ? <div><img src={checkIcon} alt="checkIcon" /></div> : null}
+                            {selectedLanguage === 'en' ? <div><img src={checkIcon} alt="checkIcon" /></div> : null}
                         </div>
                         <div
-                            className={language === 2 ? "language-active pointer" : "language-inactive pointer"}
+                            className={selectedLanguage === 'de' ? "language-active pointer" : "language-inactive pointer"}
                             onClick={(e) => {
-                                setLanguage(2);
+                                dispatch(setSelectedLanguage('de'))
+                                handleLanguageChange('de')
                             }}
                         >
                             <div>German</div>
-                            {language === 2 ? <div><img src={checkIcon} alt="checkIcon" /></div> : null}
+                            {selectedLanguage === 'de' ? <div><img src={checkIcon} alt="checkIcon" /></div> : null}
                         </div>
                     </div>
                     <div className="user-account">

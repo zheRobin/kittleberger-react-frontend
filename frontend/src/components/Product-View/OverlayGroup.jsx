@@ -88,7 +88,7 @@ const OverlayGroup = ({ productInfo, index }) => {
         <>
             {loading ? <div className="loading"></div> : (
                 <div className="overlay">
-                    <div className="overlay__list">
+                    <div className="overlay__list drag pulse-grow">
                         <img src={ListIcon} alt="ListIcon"></img>
                     </div>
                     <div className="overlay__product">

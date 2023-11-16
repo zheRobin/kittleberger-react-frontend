@@ -15,6 +15,8 @@ import { appendTemplate, selectPage, setLoadingStatus, initTemplate, initProduct
 import { infiniteTemplate } from '../../_services/Template';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
+
 
 const theme = createTheme({
     components: {
@@ -35,6 +37,7 @@ const theme = createTheme({
 
 
 const Organism = () => {
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [value, setValue] = useState('1');
@@ -97,7 +100,7 @@ const Organism = () => {
                 <div className='typography-400-regular template-button pointer'
                     onClick={() => navigate("/product/template")}
                 >
-                    Neues Template anlegen
+                    {t("Neues Template anlegen")}
                 </div>
 
                 <ThemeProvider theme={theme}>
