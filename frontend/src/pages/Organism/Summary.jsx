@@ -88,46 +88,47 @@ const Summary = () => {
         <>
             {loading ? <Loading /> : (
                 <div className="summary">
-                    <div className="summary-l">
-                        <div className="summary-compose-image">
+                    <div className="summary__image">
+                        <div className="summary__image__content">
                             <img src={composedProduct} alt="composedProduct" />
                         </div>
-                        <div className="typography-700-bold">{selectedTemplate.name}</div>
-                        <div className="typography-400-regular">
-                            Land: Deutschland, Österreich<br></br>
-                            Marke: {selectedTemplate.brand.map((brand, index) => (
-                                <React.Fragment key={index}>
-                                    {index > 0 && ", "}
-                                    <span>{brand.name}</span>
-                                </React.Fragment>
-                            ))}<br></br>
-                            Applikation: {selectedTemplate.application.map((application, index) => (
-                                <React.Fragment key={index}>
-                                    {index > 0 && ", "}
-                                    <span>{application.name}</span>
-                                </React.Fragment>
-                            ))}<br></br>
-                            <br></br>
-                            Technische Daten:<br></br>
-                            {selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px (72 dpi)<br></br>
-                            Dateiformat: {selectedTemplate.file_type} (RGB)<br></br>
-                            <br></br>
-                            Enthaltene Produkte:<br></br>
-                            {selectedProducts.map((product, index) => (
-                                <React.Fragment key={index}>
-                                    <div>
-                                        <span>{product.name}</span>
-                                        <span>({product.article_number})</span>
-                                    </div>
-
-                                </React.Fragment>
-                            ))}<br></br>
-                            <br></br>
-                            Erstellt von Benutzer X {formattedDate_created}<br></br>
-                            Zuletzt bearbeitet von Benutzer Y {formattedDate_modified}<br></br>
+                        <div className="summary__image__desc">
+                            <div className="typography-700-bold">{selectedTemplate.name}</div>
+                            <div className="typography-400-regular desc__text">
+                                <p>Land: Deutschland, Österreich</p>
+                                <p>Marke: {selectedTemplate.brand.map((brand, index) => (
+                                    <React.Fragment key={index}>
+                                        {index > 0 && ", "}
+                                        <span>{brand.name}</span>
+                                    </React.Fragment>
+                                ))}</p>
+                                <br></br>
+                                <p>Applikation: {selectedTemplate.application.map((application, index) => (
+                                    <React.Fragment key={index}>
+                                        {index > 0 && ", "}
+                                        <span>{application.name}</span>
+                                    </React.Fragment>
+                                ))}</p>
+                                <p>Technische Daten:</p>
+                                <p>{selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px (72 dpi)</p>
+                                <p>Dateiformat: {selectedTemplate.file_type} (RGB)</p>
+                                <br></br>
+                                <p>Enthaltene Produkte:</p>
+                                <p>{selectedProducts.map((product, index) => (
+                                    <React.Fragment key={index}>
+                                        <div>
+                                            <span>{product.name}</span>
+                                            <span>({product.article_number})</span>
+                                        </div>
+                                    </React.Fragment>
+                                ))}</p>
+                                <br></br>
+                                <p>Erstellt von Benutzer X {formattedDate_created}</p>
+                                <p>Zuletzt bearbeitet von Benutzer Y {formattedDate_modified}</p>
+                            </div>
                         </div>
                     </div>
-                    <div className="summary-r">
+                    <div className="summary__detail">
                         <div className="typography-400-regular">
                             Zum Veröffentlichen dieses Composings, bitte einen Namen vergeben und speichern.
                             <p></p>

@@ -1,4 +1,3 @@
-
 .organism-tabs {
     margin-top: 30px;
     margin-left: 30px;
@@ -16,11 +15,13 @@
         border: solid 1px #8F7300;
         color: #8F7300;
         z-index: 2;
-        &:hover{
+
+        &:hover {
             color: #B39100;
             border: solid 1px #B39100;
         }
-        &:active{
+
+        &:active {
             border: solid 1px #8F7300;
             color: #8F7300;
         }
@@ -164,15 +165,17 @@
     background-color: #8F7300;
     padding: 10px 20px 10px 20px;
     border-radius: 3px;
-    &:hover{
+
+    &:hover {
         background-color: #B39100;
     }
-    &:active{
+
+    &:active {
         background-color: #8F7300;
     }
 }
 
-.image-setting-panel { 
+.image-setting-panel {
     margin-bottom: 20px;
     display: flex;
     flex-direction: row;
@@ -309,11 +312,13 @@
                             width: 100%;
                             display: flex;
                             justify-content: center;
-                            & > div {
+
+                            &>div {
                                 max-width: 450px;
                                 width: 100%;
                                 display: flex;
                                 justify-content: center;
+
                                 input {
                                     padding: 10px;
                                 }
@@ -338,11 +343,11 @@
                             display: flex;
                             justify-content: center;
 
-                            .label-check-pair__checkbox{
+                            .label-check-pair__checkbox {
                                 display: flex;
                                 align-items: center;
                                 width: 100%;
-                                max-width: 450px;                            
+                                max-width: 450px;
                                 gap: 10px;
                             }
 
@@ -381,7 +386,7 @@
                             display: flex;
                             flex-direction: column;
 
-                            & > div {
+                            &>div {
                                 width: 100%;
                                 padding: 0px;
                             }
@@ -492,21 +497,23 @@
 
     &__r {
         width: 65%;
-        margin:auto;
-        
-        .image-backgroud{
-            
-            
+        margin: auto;
+
+        .image-backgroud {
+
+
             background-image: url("../../../assets/images/grid-Image.png");
-           
+
             display: flex;
             align-items: center;
-            .saved-images{
+
+            .saved-images {
                 max-height: calc(100vh - 90px);
                 height: 100%;
                 width: 100%;
                 margin: auto;
-                img{
+
+                img {
                     object-fit: contain;
                 }
             }
@@ -515,36 +522,147 @@
 }
 
 
+// .summary {
+//     display: flex;
+//     flex-direction: row;
+//     gap: 20px;
+//     padding: 30px;
+
+//     &-l {
+//         text-align: start;
+//         width: 100%;
+//         .summary-compose-image{
+//             width: 100%;
+//             img{
+//                 object-fit: contain;
+//             }
+//         }
+//         div:nth-child(2){
+//             margin-top: 30px;
+//         }
+
+//         div:last-child {
+//             margin-top: 10px;
+//         }
+//     }
+
+//     &-r {
+//         width: 45%;
+//         display: flex;
+//         flex-direction: column;
+//         gap: 40px;
+//         margin-top: 10px;
+
+//         div:first-child {
+//             text-align: start;
+//         }
+
+//         .composing-name {
+
+//             display: flex;
+//             flex-direction: column;
+//             gap: 10px;
+
+//             div:first-child {
+//                 text-align: start;
+//             }
+
+//             div:last-child {
+//                 width: 100%;
+//                 box-sizing: border-box;
+//                 text-align: center;
+//             }
+
+//             input {
+//                 padding: 10px;
+//                 width: 100%;
+//                 box-sizing: border-box;
+//                 border-radius: 3px;
+//             }
+//         }
+
+//         .deployment {
+//             display: flex;
+//             flex-direction: column;
+//             gap: 10px;
+
+//             div:first-child {
+//                 text-align: start;
+//             }
+
+//             .url-group {
+//                 background-color: white;
+//                 padding: 10px;
+//                 display: flex;
+//                 flex-direction: row;
+//                 justify-content: space-between;
+//             }
+
+//             .download-button {
+
+//                 div {
+//                     width: 100%;
+//                     box-sizing: border-box;
+//                     text-align: center;
+//                 }
+
+
+//             }
+//         }
+//     }
+// }
+
 .summary {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: 33% 33% 34%;
+    align-items: start;
     padding: 30px;
 
-    &-l {
-        text-align: start;
-        width: 100%;
-        .summary-compose-image{
-            width: 100%;
-            img{
-                object-fit: contain;
-            }
-        }
-        div:nth-child(2){
-            margin-top: 30px;
+    &__image {
+        grid-column: 1 / span 2;
+        grid-row: 1;
+        height: fit-content;
+
+        &__content {
+
         }
 
-        div:last-child {
-            margin-top: 10px;
+        &__desc {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            & > div {
+                margin-top: 30px;
+            }
+
+            .desc__text {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-top: 10px;
+
+                p{
+                    color: var(--black, #000);
+                    /* 14pt/Regular */
+                    font-family: Roboto;
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 20px; 
+                    padding: 0px !important;
+                    margin: 0px !important;
+                }
+            }
+        }
+        img {
+            width: 100%;
         }
     }
 
-    &-r {
-        width: 45%;
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-        margin-top: 10px;
+    &__detail {
+        grid-column: 3;
+        grid-row: 1;
+        padding-left: 20px;
 
         div:first-child {
             text-align: start;
@@ -555,6 +673,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-top: 40px;
 
             div:first-child {
                 text-align: start;
@@ -578,6 +697,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-top: 40px;
 
             div:first-child {
                 text-align: start;
@@ -598,8 +718,6 @@
                     box-sizing: border-box;
                     text-align: center;
                 }
-
-
             }
         }
     }
@@ -609,13 +727,16 @@
     .multi-product-container {
         grid-template-columns: 335px 335px;
     }
+
     .infinite-scroll-component {
         grid-template-columns: 335px 335px !important;
     }
-    .image-setting-panel{
+
+    .image-setting-panel {
         flex-direction: column;
         align-items: start;
     }
+
     .left-b-image {
         width: 100% !important;
     }
@@ -625,6 +746,7 @@
     .multi-product-container {
         grid-template-columns: 335px;
     }
+
     .infinite-scroll-component {
         grid-template-columns: 335px !important;
     }
