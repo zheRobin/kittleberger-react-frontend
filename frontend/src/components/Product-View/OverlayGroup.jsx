@@ -23,6 +23,15 @@ import ArrowCRIcon from "../../assets/icons/arrowCR.svg"
 import ArrowBLIcon from "../../assets/icons/arrowBL.svg"
 import ArrowBCIcon from "../../assets/icons/arrowBC.svg"
 import ArrowBRIcon from "../../assets/icons/arrowBR.svg"
+import ArrowTLActiveIcon from "../../assets/icons/arrowTL-active.svg"
+import ArrowTCActiveIcon from "../../assets/icons/arrowTC-active.svg"
+import ArrowTRActiveIcon from "../../assets/icons/arrowTR-active.svg"
+import ArrowCLActiveIcon from "../../assets/icons/arrowCL-active.svg"
+import ArrowCCActiveIcon from "../../assets/icons/arrowCC-active.svg"
+import ArrowCRActiveIcon from "../../assets/icons/arrowCR-active.svg"
+import ArrowBLActiveIcon from "../../assets/icons/arrowBL-active.svg"
+import ArrowBCActiveIcon from "../../assets/icons/arrowBC-active.svg"
+import ArrowBRActiveIcon from "../../assets/icons/arrowBR-active.svg"
 
 const OverlayGroup = ({ productInfo, index }) => {
     const dispatch = useDispatch()
@@ -32,6 +41,8 @@ const OverlayGroup = ({ productInfo, index }) => {
     const [loading, setLoading] = useState(false)
     const token = useSelector(state => state.auth.token)
     const [checked, setChecked] = useState(false)
+    const align = productInfo?.align === undefined ? "middle-center" : productInfo?.align
+    console.log("Align:", align)
     useEffect(() => {
         function handleOutsideClick(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -154,31 +165,31 @@ const OverlayGroup = ({ productInfo, index }) => {
                                     <div className="panel-bottom__drop">
                                         <div className="arrow-Setting">
                                             <div onClick={(e) => handleSetAlign("top-left")}>
-                                                <img src={ArrowTLIcon} alt="arrow" />
+                                                <img src={align === "top-left" ? ArrowTLActiveIcon : ArrowTLIcon} alt="arrow" />
                                             </div>
                                             <div onClick={(e) => handleSetAlign("top-center")}>
-                                                <img src={ArrowTCIcon} alt="arrow" />
+                                                <img src={align === "top-center" ? ArrowTCActiveIcon : ArrowTCIcon} alt="arrow" />
                                             </div>
                                             <div onClick={(e) => handleSetAlign("top-right")}>
-                                                <img src={ArrowTRIcon} alt="arrow" />
+                                                <img src={align === "top-right" ? ArrowTRActiveIcon : ArrowTRIcon} alt="arrow" />
                                             </div>
                                             <div onClick={(e) => handleSetAlign("middle-left")}>
-                                                <img src={ArrowCLIcon} alt="arrow" />
+                                                <img src={align === "middle-left" ? ArrowCLActiveIcon : ArrowCLIcon} alt="arrow" />
                                             </div>
                                             <div onClick={(e) => handleSetAlign("middle-center")}>
-                                                <img src={ArrowCCIcon} alt="arrow" />
+                                                <img src={align === "middle-center" ? ArrowCCActiveIcon : ArrowCCIcon} alt="arrow" />
                                             </div >
                                             <div onClick={(e) => handleSetAlign("middle-right")}>
-                                                <img src={ArrowCRIcon} alt="arrow" />
+                                                <img src={align === "middle-right" ? ArrowCRActiveIcon : ArrowCRIcon} alt="arrow" />
                                             </div>
                                             <div onClick={(e) => handleSetAlign("bottom-left")}>
-                                                <img src={ArrowBLIcon} alt="arrow" />
+                                                <img src={align === "bottom-left" ? ArrowBLActiveIcon : ArrowBLIcon} alt="arrow" />
                                             </div>
                                             <div onClick={(e) => handleSetAlign("bottom-center")}>
-                                                <img src={ArrowBCIcon} alt="arrow" />
+                                                <img src={align === "bottom-center" ? ArrowBCActiveIcon : ArrowBCIcon} alt="arrow" />
                                             </div>
                                             <div onClick={(e) => handleSetAlign("bottom-right")}>
-                                                <img src={ArrowBRIcon} alt="arrow" />
+                                                <img src={align === "bottom-right" ? ArrowBRActiveIcon : ArrowBRIcon} alt="arrow" />
                                             </div>
                                         </div>
                                     </div>
