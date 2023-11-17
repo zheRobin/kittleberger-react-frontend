@@ -157,7 +157,7 @@ const OverlayGroup = ({ productInfo, index }) => {
                                 </div>
                                 <div className="panel-bottom">
                                     <div className="panel-bottom__title">
-                                        product asuis
+                                        Ausrichtung
                                     </div>
                                     <div className="panel-bottom__drop">
                                         <div className="arrow-Setting">

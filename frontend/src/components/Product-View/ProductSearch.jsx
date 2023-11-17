@@ -50,13 +50,11 @@ export default function ProductSearch({ filterData, setFilterData }) {
       product.articles.some((article) => article.number === selectedValue.value)
     )
   );
-  console.log(filteredProducts)
 
   function getProductInfo(page, productInfo = "", country = "germany") {
     getProductsbyFilter(token, { page, productInfo, country }, (success) => {
       if (success.data.code === 200 && success.data.status === "success") {
         setProductList((prevProductList) => {
-          console.log("productlist:", success.data.data)
           const newList = success.data.data.products.map((product) => ({
             label: `${product.name}(${product.article_number})`,
             value: product.article_number

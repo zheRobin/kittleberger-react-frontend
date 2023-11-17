@@ -50,7 +50,6 @@ const Organism = () => {
     const token = useSelector(state => state.auth.token)
     const templates = useSelector(state => state.templates.templateData)
     const products = useSelector(state => state.templates.productsOnTemplates)
-    console.log("filterData:", filterData)
     const loadingStatus = useSelector(state => state.templates.loadingStatus)
     let page = useSelector(state => state.templates.page)
     let filters = useSelector(state => state.templates.filterData)
