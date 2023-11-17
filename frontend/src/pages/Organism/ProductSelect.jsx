@@ -198,12 +198,10 @@ const ProductSelect = () => {
     }
 
     useEffect(() => {
-        const additionalQuery = parseSearch(searchString);
         try {
             getProductInfo(page)
         } catch (error) {
             console.error("Error fetching products:", error);
-            // Handle the error appropriately
         }
     }, [page]);
 

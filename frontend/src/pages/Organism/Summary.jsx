@@ -3,7 +3,7 @@ import { TemplateButton } from "./TemplatePanel"
 import copy from "../../assets/icons/copy.svg"
 import { Typography } from "@mui/material"
 import { useSelector } from "react-redux"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { getOnlineInfo } from "../../_services/Product"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,14 +14,16 @@ const Summary = () => {
     const selectedTemplate = useSelector(state => state.products.selectedTemplate)
     const selectedProducts = useSelector(state => state.products.selectedProducts)
     const composedProduct = useSelector(state => state.products.composedProduct)
-    console.log(selectedTemplate)
-    console.log(selectedProducts)
-    console.log(composedProduct)
     const [loading, setLoading] = useState(false)
     const [deploymentName, setdeploymentName] = useState({
         value: '',
         copied: false,
     })
+    useEffect(
+        () => {
+            setdeploymentName({ value: composedProduct, copied: false })
+        }, [composedProduct]
+    )
     function handleDownload() {
         const imageUrl = deploymentName.value;
         const link = document.createElement('a');
@@ -55,7 +57,6 @@ const Summary = () => {
 
     const saveInfo = () => {
         setLoading(true)
-        console.log(submitInfo)
         getOnlineInfo(token, submitInfo, (success) => {
             if (success.data.code === 201) {
                 setdeploymentName({ ...deploymentName, value: success.data.data })

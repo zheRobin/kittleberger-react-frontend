@@ -17,7 +17,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         <div className="product-info">
                             <div className="product-name">{cardInfo?.name}</div>
                             <div className="product-image-info">
-                                {type === 1 ? cardInfo?.resolution_width + '\u00D7' + cardInfo?.resolution_height + 'px | ' + cardInfo?.resolution_dpi + " | " + cardInfo?.file_type : cardInfo?.template?.resolution_width + '\u00D7' + cardInfo?.template?.resolution_height + 'px | ' + cardInfo?.template?.resolution_dpi + " | " + cardInfo?.template?.file_type}</div>
+                                {type === 1 ? cardInfo?.resolution_width + '\u00D7' + cardInfo?.resolution_height + 'px | ' + cardInfo?.resolution_dpi + "dpi | " + cardInfo?.file_type : cardInfo?.template?.resolution_width + '\u00D7' + cardInfo?.template?.resolution_height + 'px | ' + cardInfo?.template?.resolution_dpi + " | " + cardInfo?.template?.file_type}</div>
                         </div>
                         <div className="product-icon pointer" onClick={() => { if (type === 1) { navigate("/product/edittemplate", { state: cardInfo }) } else { navigate("/product/edittemplate", { state: cardInfo.template }) } }}>
                             {switchRole ? <img src={cardtype === "edit" ? editPencil : cancel} style={cardtype !== "edit" ? { backgroundColor: "white", border: "none" } : { borderColor: "#FFFFFF" }} alt="editIcon"></img> : null}
@@ -31,11 +31,15 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         navigate(`/product/product-select`)
                     }
                     if (type === 2) {
-                        console.log(cardInfo.template)
+
                         localStorage.setItem('templateInfo', JSON.stringify(cardInfo.template));
                         dispatch(setComposedProduct(cardInfo.cdn_url))
                         dispatch(findTemplates(cardInfo.template));
-                        dispatch(setProductLists(cardInfo.articles));
+                        const updatedArticles = cardInfo.articles.map((article) => {
+                            const { number, ...rest } = article;
+                            return { article_number: number, ...rest };
+                        });
+                        dispatch(setProductLists(updatedArticles));
                         navigate(`/product/summary`)
                     }
                 }}>
