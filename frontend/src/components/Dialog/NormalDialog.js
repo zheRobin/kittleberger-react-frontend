@@ -22,7 +22,7 @@ export default function AlertDialog({text}) {
 
   return (
     <React.Fragment>
-      <Typography onClick={handleClickOpen} className="pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">
+      <Typography onClick={handleClickOpen} className="side-footer pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">
          { text }
       </Typography>
       <Dialog

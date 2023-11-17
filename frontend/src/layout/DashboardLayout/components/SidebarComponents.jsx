@@ -23,7 +23,6 @@ const SidebarComponents = () => {
         <div className="sidebar-items">
             <SideBar />
         </div>
-
     )
 }
 

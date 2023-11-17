@@ -72,7 +72,7 @@ const Summary = () => {
             }
             if (success.data.status === "failed") {
                 setLoading(false)
-                toast.error("Failed To Submit", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                toast.error("Sorry but failed To Submit", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
         })
     }
