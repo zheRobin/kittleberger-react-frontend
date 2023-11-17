@@ -29,8 +29,7 @@ export async function imageComposing(token, productInfo, success) {
     setAuthToken(token)
     axios.post(`${process.env.REACT_APP_API_URL}api/v1/core/remove-background/`, {
         document_id: productInfo.document_id,
-        // image_url: productInfo?.cdn_urls[0]
-        image_url: "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/1.png"
+        image_url: productInfo?.cdn_urls[0]
     })
         .then(res => {
             success(res)

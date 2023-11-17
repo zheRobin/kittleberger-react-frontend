@@ -38,7 +38,7 @@ const Summary = () => {
             return {
                 name: product.name,
                 number: product.article_number,
-                cdn_url: "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png",
+                cdn_url: product.cdn_urls[0],
                 pos_index: product?.pos_index,
                 scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
                 alignment: product?.align === undefined ? "top-left" : product?.align,

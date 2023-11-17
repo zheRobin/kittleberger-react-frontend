@@ -18,19 +18,19 @@ export const ProductView = () => {
     const token = useSelector(state => state.auth.token)
     const imgRef = useRef(null);
     const [loading, setLoading] = useState(false)
-    const [composeImage, setComposeImage] = useState('https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/bg.jpg')
+    const [composeImage, setComposeImage] = useState('')
 
     useEffect(() => {
         if (imgRef.current) {
             setLoading(true);
-            const img = new Image();
-            const imgSrc = "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png";
-            img.onerror = function () {
-                console.error("Error loading image:", imgSrc);
-                setLoading(false);
-            };
+            // const img = new Image();
+            // const imgSrc = "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png";
+            // img.onerror = function () {
+            //     console.error("Error loading image:", imgSrc);
+            //     setLoading(false);
+            // };
 
-            img.src = imgSrc;
+            // img.src = imgSrc;
 
             const article = selectedProducts?.map((product) => {
                 const positionStyle = selectedTemplate?.article_placements;
@@ -39,9 +39,10 @@ export const ProductView = () => {
                 const transImg = product?.transImg === true ? true : false;
                 const positionX = product?.position === undefined ? selectedStyle[0]?.position_x : product?.position[0];
                 const positionY = product?.position === undefined ? selectedStyle[0]?.position_y : product?.position[1];
+                console.log("product:", product)
                 if (positionStyle !== undefined) {
                     return {
-                        article_link: "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png",
+                        article_link: product?.cdn_urls[0],
                         is_transparent: transImg,
                         top: positionY,
                         left: positionX,
@@ -85,7 +86,7 @@ export const ProductList = ({ productItem, possiblePos, setPreview, setVisible }
 
     return (
         <div className="product-list-panel">
-            <div className="pointer" onClick={() => { setPreview(["https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png"]); setVisible(true) }}>
+            <div className="pointer" onClick={() => { setPreview([productItem?.cdn_urls[0]]); setVisible(true) }}>
                 <img src={require("../../assets/images/product-image.png")} alt="product" />
             </div>
             <div className="product-info" >

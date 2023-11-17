@@ -7,7 +7,7 @@ export const productsSlice = createSlice({
         selectedProducts: [],
         selectedTemplate: JSON.parse(localStorage.getItem('templateInfo')),
         selectedCountry:[],
-        composedProduct:'https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/bg.jpg'
+        composedProduct:''
     },
     reducers:{
         emptyStore:(state, action) => {
