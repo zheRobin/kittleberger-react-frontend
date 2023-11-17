@@ -4,7 +4,7 @@
     "Filter zurücksetzen":"Reset Filter",
     "Anzahl Produkte":"Number of products",
     "Mehr anzeigen": "Show More",
-    "Deutschland":"Deutschland",
+    "Deutschland":"Germany",
     "Österreich":"Austria",
     "Belgien":"Belgium",
     "Schweiz":"Switzerland",
@@ -14,5 +14,12 @@
     "Datenschutz":"Data Protection",
     "Impressum":"Imprint",
     "Rechtliche Hinweise":"Legal Notice",
-    "Weniger anzeigen":"Show less"    
+    "Weniger anzeigen":"Show less",
+    "Passwort ändern":"Change password",
+    "Benutzer verwalten":"Manage users",
+    "API-Token":"API-Token",
+    "Abmelden":"Log out",
+    "Konto":"Account",
+    "Systemsprache":"System language"
+
 }

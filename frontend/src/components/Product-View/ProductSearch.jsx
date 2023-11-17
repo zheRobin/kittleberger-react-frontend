@@ -27,22 +27,22 @@ export default function ProductSearch() {
       multiple
       id="combo-box-demo"
       options={top100Films}
-      hiddenLabel="true"
+      hiddenlabel="true"
       sx={{
         // border: "1px solid blue",
         "& .MuiOutlinedInput-root": {
-            // border: "1px solid yellow",
-            borderRadius: "0",
-            padding: "0"
+          // border: "1px solid yellow",
+          borderRadius: "0",
+          padding: "0"
         },
         "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-            border: "1px solid #eee"
+          border: "1px solid #eee"
         },
         "& .MuiButtonBase-root": {
-            backgroundColor: "#8F7300",
-            color: "white",
+          backgroundColor: "#8F7300",
+          color: "white",
         }
-        }}
+      }}
       className="search-bar"
       renderInput={(params) => (
         <TextField

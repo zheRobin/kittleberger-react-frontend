@@ -1,10 +1,14 @@
 import "./style/layoutCompoStyle.scss"
 import returnIcon from "../../assets/icons/arw-node-l.svg"
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { emptyStore } from "../../store"
 
 const ReturnPath = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const returnHistory = () => {
+        dispatch(emptyStore())
         navigate('/product')
     }
     return (

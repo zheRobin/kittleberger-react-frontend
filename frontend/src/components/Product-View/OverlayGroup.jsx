@@ -11,7 +11,6 @@ import "./style/productViewStyle.scss"
 import { Checkbox } from "@mui/material"
 import { Slider } from "@mui/material"
 import { useState, useEffect, useRef } from "react"
-import { imageComposing } from "../../_services/Product"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import ArrowTLIcon from "../../assets/icons/arrowTL.svg"
@@ -42,7 +41,6 @@ const OverlayGroup = ({ productInfo, index }) => {
     const token = useSelector(state => state.auth.token)
     const [checked, setChecked] = useState(false)
     const align = productInfo?.align === undefined ? "middle-center" : productInfo?.align
-    console.log("Align:", align)
     useEffect(() => {
         function handleOutsideClick(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {

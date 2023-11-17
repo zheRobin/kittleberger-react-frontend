@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, Field, FieldArray, useField, useFormikContext } from 'formik';
+import { Formik, Form, Field, FieldArray, useField, useFormikContext, ErrorMessage } from 'formik';
 // import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import { createTheme } from "@mui/material/styles";
@@ -8,31 +8,16 @@ import ImageUploading from 'react-images-uploading';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from 'react';
 import { useSelector } from "react-redux";
-import { updateTemplate } from "../../_services/Template";
 import PlusIcon from "../../assets/icons/add.svg"
 import DeleteIcon from "../../assets/icons/cross.svg"
 import DragIcon from "../../assets/icons/drag&drop.svg"
 import 'react-toastify/dist/ReactToastify.css';
-import "./style/organismStyle.scss"
 import "../../components/Composing/style/composeStyle.scss"
 import ImageTemplate from "../../components/Composing/ImageTempate"
 import { useRef, useLayoutEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-// let validationSchema = Yup.object().shape({
-//     name: Yup.string()
-//         .required('Required'),
-//     preview_image: Yup.mixed()
-//         .required('Required'),
-//     background_image: Yup.mixed()
-//         .required('Required'),
-//     brands: Yup.array(),
-//     applications: Yup.array(),
-//     article_placements: Yup.array(),
-//     is_shadow: Yup.bool(),
-//     resolution_width: Yup.string(),
-//     resolution_height: Yup.string(),
-//     type: Yup.string()
-// })
+import * as Yup from 'yup'
+import { useLocation, useNavigate } from 'react-router-dom';
+import { updateTemplate } from '../../_services/Template';
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
         <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -42,6 +27,7 @@ export const TemplateButton = ({ content, type = "brown" }) => {
         </div >
     )
 }
+
 export const CheckboxGroupComponent = ({ label, values, ...props }) => {
     const { setFieldValue } = useFormikContext();
     const [field] = useField(props);
@@ -51,7 +37,7 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
             <div className="label-check-pair__label">
                 <div className="typography-400-regular">{label}</div>
             </div>
-            <div className='label__right'>
+            <div className='label__right' >
                 <div className="label-check-pair__checkbox-group">
                     {values.map((value, index) => (
 
@@ -120,18 +106,41 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers }) => (
         </div>
     </div>
 );
+export const Loading = () => {
+    return (
+        <div className="cover-spin">
+            <svg width="150" height="150" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" overflow="visible" fill="#8F7300" stroke="none">
+                <defs>
+                    <circle id="loader" r="4" cx="50" cy="50" transform="translate(0 -30)" />
+                </defs>
+                <g className="loader" transform="rotate(51 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(103 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(154 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(206 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(257 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(309 50 50)"><use xlinkHref="#loader" /></g>
+                <g className="loader" transform="rotate(360 50 50)"><use xlinkHref="#loader" /></g>
+            </svg>
+        </div>
+    )
+}
 
-export default function TemplateEditPanel() {
-    const { state } = useLocation();
+
+
+const TemplatePanel = () => {
+    const navigate = useNavigate()
+    const { state } = useLocation()
     const productInfo = state ? state : {}
     const [backView, setBackView] = useState(productInfo?.bg_image_cdn_url ? true : false);
     const [preView, setPreView] = useState(productInfo?.preview_image_cdn_url ? true : false);
-    const [images, setImages] = useState([]);
-    const [tempImages, setTempImages] = useState({ width: 2, height: 1 });
-    const [width, setWidth] = useState(600);
-    const [height, setHeight] = useState(600);
+    const [images, setImages] = useState([{ data_url: "" }]);
+    const [tempImages, setTempImages] = useState({ width: 1, height: 1 });
+    const [width, setWidth] = useState(500);
+    const [height, setHeight] = useState(500);
+    const [loading, setLoading] = useState(false);
     const elementRef = useRef(null);
     let backgroundHeight = (tempImages.height / tempImages.width * width) * 100 / height
+    let backgroundWidth = (tempImages.width / tempImages.height * height) * 100 / width
     const [previewImages, setPreviewImages] = useState([]);
     const maxNumber = 69;
     const token = useSelector(state => state.auth.token)
@@ -150,8 +159,8 @@ export default function TemplateEditPanel() {
     });
     useLayoutEffect(() => {
         const handleResize = () => {
-            setWidth(elementRef.current.offsetWidth);
-            setHeight(elementRef.current.offsetHeight);
+            setWidth(elementRef?.current?.offsetWidth);
+            setHeight(elementRef?.current?.offsetHeight);
         };
         handleResize();
         window.addEventListener('resize', handleResize);
@@ -161,10 +170,17 @@ export default function TemplateEditPanel() {
         }
     }, []);
 
+    let validationSchema = Yup.object().shape({
+        name: Yup.string()
+            .required('This field is required'),
+        resolution_width: Yup.string().required("This field is required"),
+        resolution_height: Yup.string().required("This field is required")
+    })
 
     return (
         <>
             <ThemeProvider theme={theme}>
+
                 <Formik
                     initialValues={{
                         preview_image: productInfo?.preview_image_cdn_url,
@@ -178,10 +194,12 @@ export default function TemplateEditPanel() {
                         resolution_height: productInfo?.resolution_height,
                         type: productInfo?.file_type,
                     }}
+                    validationSchema={validationSchema}
                     onSubmit={values => {
                         let formData = new FormData();
-                        formData.append("preview_image", values.preview_image.file);
-                        formData.append("background_image", values.background_image.file);
+                        setLoading(true)
+                        formData.append("preview_image", values?.preview_image?.file);
+                        formData.append("background_image", values?.background_image?.file);
                         formData.append("brands", values.brands
                             .filter(brand => brand.value)
                             .map(brand => brand.id));
@@ -195,23 +213,26 @@ export default function TemplateEditPanel() {
                         formData.append("resolution_height", values.resolution_height);
                         formData.append("type", values.type);
                         updateTemplate(formData, token, productInfo?.id, (success) => {
-                            if (success.data.code === 201 && success.data.status === "success") {
-                                toast.success("Successfully Created")
+                            if (success.data.code === 201 || success.data.status === "success") {
+                                setLoading(false)
+                                toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                navigate("/product")
                             }
-                            if (success.data.code === 400 && success.data.status === "failed") {
-                                toast.error("Something Went Wrong")
+                            if (success.data.code === 400 || success.data.status === "failed") {
+                                setLoading(false)
+                                toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1000 })
                             }
                         })
                     }}
                 >
                     {({ values, setFieldValue, handleSubmit }) => (
-                        <Form className='template-form'>
+
+                        < Form className='template-form'>
                             <div className='template-panel'>
                                 <div
                                     className="top-template-button"
                                     onClick={handleSubmit}
                                 >
-
                                     <TemplateButton content={"Template speichern"} />
                                 </div>
                                 <div className="panel-group">
@@ -221,16 +242,20 @@ export default function TemplateEditPanel() {
                                         </div>
                                         <div className="product-setting-panel__bottom">
                                             <div className="input-group">
-                                            <div className="label-input-pair">
+                                                <div className="label-input-pair">
                                                     <div className="label__left">
                                                         <p className="typography-400-regular">Name*</p>
                                                     </div>
-                                                    <div className='label__right'>
+                                                    <div className='label__right' style={{ flexDirection: "column", alignItems: "center" }}>
                                                         <Field as={TextField} name='name' />
+                                                        <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                                                            <ErrorMessage name="name" component="p" className="validation" />
+                                                        </div>
                                                     </div>
+
                                                 </div>
                                                 <div className="label-select-pair">
-                                                <div className="label__left">
+                                                    <div className="label__left">
                                                         <p className="typography-400-regular">Dateityp*</p>
                                                     </div>
                                                     <div className="label__right">
@@ -254,11 +279,11 @@ export default function TemplateEditPanel() {
                                                                 <MenuItem value="JPEG">.jpg</MenuItem>
                                                                 <MenuItem value="PNG">.png</MenuItem>
                                                                 <MenuItem value="TIFF">.tiff</MenuItem>
-                                                                <MenuItem value="IST">.ist</MenuItem>
                                                             </Field>
                                                             <p className="typography-400-regular select-subtitle">
                                                                 .jpg und .png sind in 72 dpi; .tiff ist in 300 dpi
                                                             </p>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -266,16 +291,22 @@ export default function TemplateEditPanel() {
                                                     <div className="label__left">
                                                         <div className="typography-400-regular">Width*</div>
                                                     </div>
-                                                    <div className="label__right">
-                                                            <Field as={TextField} name="resolution_width" />
+                                                    <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
+                                                        <Field as={TextField} name="resolution_width" />
+                                                        <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                                                            <ErrorMessage name="resolution_width" component="p" className="validation" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className="label-input-pair">
+                                                <div className="label-input-pair" >
                                                     <div className="label__left">
                                                         <div className="typography-400-regular">Height*</div>
                                                     </div>
-                                                    <div className="label__right">
+                                                    <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
                                                         <Field as={TextField} name="resolution_height" />
+                                                        <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                                                            <ErrorMessage name="resolution_height" component="p" className="validation" />
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div className="check-group">
@@ -285,15 +316,24 @@ export default function TemplateEditPanel() {
                                                         </div>
                                                         <div className='label__right'>
                                                             <div className='label-check-pair__checkbox'>
-                                                                <Field as={Checkbox} defaultChecked={values.is_shadow} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} name="is_shadow"/>
-                                                                <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>Produktschatten aktivieren</div>
+                                                                <Field
+                                                                    as={Checkbox}
+                                                                    checked={values.is_shadow}
+                                                                    onChange={(e) => setFieldValue('is_shadow', e.target.checked)}
+                                                                    style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }}
+                                                                    name="is_shadow"
+                                                                />                                                                    <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>Produktschatten aktivieren</div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="check-group">
-                                                    <CheckboxGroupComponent label="Marke *" values={values.brands} name="brands" /></div>
-                                                <div className="check-group"><CheckboxGroupComponent label="Anwendung *" values={values.applications} name="applications" /></div>
+                                                    <CheckboxGroupComponent label="Marke *" values={values.brands} name="brands" />
+
+                                                </div>
+                                                <div className="check-group">
+                                                    <CheckboxGroupComponent label="Anwendung *" values={values.applications} name="applications" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -324,6 +364,7 @@ export default function TemplateEditPanel() {
                                                     <div className="upload__image-wrapper">
                                                         <div className="image-position__left" onClick={() => { onImageUpload(); setBackView(true) }}>
                                                             <TemplateButton content={"Einen anderen Hintergrund hinzufügen"} />
+                                                            <ErrorMessage name="background_image" component="p" className="validation" />
                                                         </div>
                                                         <div className="image-position__left">
                                                             {backView ? (
@@ -425,57 +466,60 @@ export default function TemplateEditPanel() {
                                             </ImageUploading>
                                         </div>
                                     </div>
-                                    <div className="product-setting-panel image-setting">
-                                        <div className="image-setting-panel">
-
-
-                                        </div>
-                                        <div className="product-setting-panel__top">
-                                            <div className="typography-400-regular top-typo">Platzhalterbild</div>
-                                        </div>
-                                        <div className="product-setting-panel__bottom">
+                                    {loading ? <Loading /> : (
+                                        <div className="product-setting-panel image-setting">
                                             <div className="image-setting-panel">
-                                                <div className="left-b-image" ref={elementRef} >
-                                                    <div className="image-backgroud" style={{ height: `${backgroundHeight}%` }}>
-                                                        <div className="image-compare">
-                                                            {values.article_placements.map((value, index) => (
-                                                                <ImageTemplate
-                                                                    key={index}
-                                                                    title={`Image ${index + 1}`}
-                                                                    width={value.width}
-                                                                    height={value.height}
-                                                                    position_x={value.position_x}
-                                                                    position_y={value.position_y}
-                                                                    z_index={value.z_index}
-                                                                    bg_width={values.resolution_width}
-                                                                    bg_height={values.resolution_height}
-                                                                    setTempImages={setTempImages}
-                                                                />
-                                                            ))}
+
+
+                                            </div>
+                                            <div className="product-setting-panel__top">
+                                                <div className="typography-400-regular top-typo">Platzhalterbild</div>
+                                            </div>
+                                            <div className="product-setting-panel__bottom">
+                                                <div className="image-setting-panel">
+                                                    <div className="left-b-image" ref={elementRef} >
+                                                        <div className="image-backgroud select-part" style={{ height: backgroundWidth >= backgroundHeight ? `${backgroundHeight}%` : "100%", width: backgroundWidth >= backgroundHeight ? "100%" : `${backgroundWidth}%`, backgroundImage: `url(${images[0]?.data_url})`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat", }}>
+                                                            <div className="image-compare">
+                                                                {values.resolution_width && values.resolution_height && images.length !== 0 &&
+                                                                    values.article_placements.map((value, index) => (
+                                                                        <ImageTemplate
+                                                                            key={index}
+                                                                            title={`Image ${index + 1}`}
+                                                                            width={value.width}
+                                                                            height={value.height}
+                                                                            position_x={value.position_x}
+                                                                            position_y={value.position_y}
+                                                                            z_index={value.z_index}
+                                                                            bg_width={values.resolution_width}
+                                                                            bg_height={values.resolution_height}
+                                                                            setTempImages={setTempImages}
+                                                                        />
+                                                                    ))}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div className="right-b">
-                                                    <div className="right-b__top">
-                                                        <FieldArray name="article_placements">
-                                                            {(arrayHelpers) => <ArticlePlacementsComponent values={values.article_placements} arrayHelpers={arrayHelpers} />}
-                                                        </FieldArray>
+                                                    <div className="right-b">
+                                                        <div className="right-b__top">
+                                                            <FieldArray name="article_placements">
+                                                                {(arrayHelpers) => <ArticlePlacementsComponent values={values.article_placements} arrayHelpers={arrayHelpers} />}
+                                                            </FieldArray>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    {/* <div className='bottom-template-button' onClick={onSubmit}> */}
-                                    {/* <button type="submit">Submit</button> */}
-                                    {/* <TemplateButton content={"Template speichern"} /> */}
-                                    {/* </div> */}
+                                    )}
                                 </div>
+
                             </div>
                             <ToastContainer />
                         </Form>
                     )}
                 </Formik>
-            </ThemeProvider>
+
+            </ThemeProvider >
         </>
     )
 }
+
+export default TemplatePanel;

@@ -41,7 +41,7 @@ const ManageUser = () => {
         setUserLists(success.data.data)
       }
       if (success.data.code === 400 && success.data.status === "failed") {
-        toast.error("Something Went Wrong")
+        toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
       }
     })
   }, [])
@@ -51,7 +51,7 @@ const ManageUser = () => {
         setUserLists(success.data.data)
       }
       if (success.data.code === 400 && success.data.status === "failed") {
-        toast.error("Something Went Wrong")
+        toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
       }
     })
   }, [loading])
@@ -89,19 +89,19 @@ const ManageUser = () => {
               setloading(true)
               editMode ? (userEdit(userInfo.id, values, token, (success) => {
                 if (success.data.code === 200 || success.data.status === "success") {
-                  toast.success("User Updated Successfully", "success")
+                  toast.success("User Updated Successfully", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                   setloading(false)
                 }
                 if (success.data.code === 400 || success.data.status === "failed") {
-                  toast.error("Something Went Wrong")
+                  toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 }
               })) : (userCreate(values, token, (success) => {
                 if (success.data.code === 201 || success.data.status === "success") {
-                  toast.success("User Created Successfully", "success")
+                  toast.success("User Created Successfully", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                   setloading(false)
                 }
                 if (success.data.code === 400 || success.data.status === "failed") {
-                  toast.error("Something Went Wrong")
+                  toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 }
               }))
             }}

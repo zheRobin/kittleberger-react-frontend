@@ -32,7 +32,7 @@ export const ProductView = () => {
 
             img.src = imgSrc;
 
-            const article = selectedProducts?.map((product, index) => {
+            const article = selectedProducts?.map((product) => {
                 const positionStyle = selectedTemplate?.article_placements;
                 const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index === product?.posIndex)
                 const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
@@ -56,7 +56,6 @@ export const ProductView = () => {
                 template_id: selectedTemplate.id,
                 articles: article.filter(Boolean),
             };
-
             composeByInfo(token, composingInfo, (success) => {
                 setComposeImage(success.data.data);
                 dispatch(setComposedProduct(success.data.data))
@@ -105,7 +104,7 @@ export const ProductList = ({ productItem, possiblePos, setPreview, setVisible }
 
 export const Loading = () => {
     return (
-        <div className="cover-spin">
+        <div className="cover-spin" style={{ margin: "0px 0px 0px 0px" }}>
             <svg width="150" height="150" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" overflow="visible" fill="#8F7300" stroke="none">
                 <defs>
                     <circle id="loader" r="4" cx="50" cy="50" transform="translate(0 -30)" />
@@ -123,7 +122,7 @@ export const Loading = () => {
 }
 
 const ProductSelect = () => {
-
+    const selectedCountryGroup = useSelector(state => state.products.selectedCountry)
     const selectedTemplate = useSelector(state => state.products.selectedTemplate);
     const productPosNumbers = selectedTemplate.article_placements ? selectedTemplate?.article_placements?.length : 1;
     const token = useSelector(state => state.auth.token);
@@ -149,19 +148,35 @@ const ProductSelect = () => {
         return queryString;
     };
 
-    const handleSearch = async (e) => {
-        if (e.key === "Enter") {
-            setProductList([]);
-            setPage(1);
-            const productInfo = searchString;
-            try {
-                await getProductInfo(page, productInfo);
-            } catch (error) {
-                console.error("Error fetching products:", error);
-                // Handle the error appropriately
-            }
+    const clearStoreData = () => {
+        setProductList([]);
+        setPage(1);
+        const productInfo = searchString;
+        try {
+            getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "germany" : selectedCountryGroup[0]);
+        } catch (error) {
+            console.error("Error fetching products:", error);
+            // Handle the error appropriately
         }
     };
+
+    useEffect(() => {
+        const delay = 200;
+
+        const timeoutId = setTimeout(() => {
+            clearStoreData();
+        }, delay);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [searchString]);
+
+    // const handleSearch = async (e) => {
+    //     if (e.key === "Enter") {
+
+    //     }
+    // };
 
     function getProductInfo(page, productInfo = "", country = "germany") {
         setloading(true)
@@ -199,7 +214,7 @@ const ProductSelect = () => {
                 <div className="product-select">
                     <div className="product-select__l">
                         <div className="product-search">
-                            <input placeholder="Produkte durchsuchen" onChange={(e) => { setSearchString(e.target.value) }} onKeyDown={handleSearch} />
+                            <input placeholder="Produkte durchsuchen" onChange={(e) => { setSearchString(e.target.value) }} />
                         </div>
                         <div className="product-add">
                             {productList?.map((productItem, index) => {

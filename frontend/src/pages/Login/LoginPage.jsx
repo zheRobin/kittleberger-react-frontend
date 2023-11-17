@@ -17,7 +17,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const handleNavigate = () => {
-        navigate('/forgot');
+        // navigate('/forgot');
     }
 
 

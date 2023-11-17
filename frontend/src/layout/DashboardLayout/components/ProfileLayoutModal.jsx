@@ -11,6 +11,7 @@ import { useSelector } from "react-redux"
 import { useRef, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { setSelectedLanguage } from "../../../store"
+import { useTransition } from "react"
 function getInitials(string) {
     const words = string.split(" ");
     const initials = words?.map((word) => word[0]?.toUpperCase());
@@ -61,7 +62,7 @@ const ProfileLayout = ({ handleModal }) => {
             }
         }
     }, []);
-    const [language, setLanguage] = useState(1)
+    const { t } = useTranslation()
     const handleLanguageChange = (lang) => {
         const newLang = lang;
         i18n.changeLanguage(newLang);
@@ -69,84 +70,75 @@ const ProfileLayout = ({ handleModal }) => {
     return (
         <>
             <div className="profile-layout" ref={wrapperRef}>
-                <div className="profile-info" >
+                <div className="profile-info">
                     <div className="user-icon">
                         <div className="user-alias">{getInitials(user.username)}</div>
                     </div>
                     <div className="user-account">
-                        <div className="user-label">
-                            {capitalizedUserType}
-                        </div>
-                        <div className="user-name">
-                            {user.username}
-                        </div>
-                        <div className="user-email">
-                            {user.email}
-                        </div>
+                        <div className="user-label">{t(capitalizedUserType)}</div>
+                        <div className="user-name">{t(user.username)}</div>
+                        <div className="user-email">{t(user.email)}</div>
                     </div>
                 </div>
                 <div className="profile-detail">
                     <div className="set-language">
-                        <div className="language-label">System language</div>
+                        <div className="language-label">{t('Systemsprache')}</div>
                         <div
                             className={selectedLanguage === 'en' ? "language-active pointer" : "language-inactive pointer"}
                             onClick={(e) => {
-                                dispatch(setSelectedLanguage('en'))
-                                handleLanguageChange('en')
+                                dispatch(setSelectedLanguage('en'));
+                                handleLanguageChange('en');
                             }}
                         >
-                            <div>English</div>
+                            <div>{t('English')}</div>
                             {selectedLanguage === 'en' ? <div><img src={checkIcon} alt="checkIcon" /></div> : null}
                         </div>
                         <div
                             className={selectedLanguage === 'de' ? "language-active pointer" : "language-inactive pointer"}
                             onClick={(e) => {
-                                dispatch(setSelectedLanguage('de'))
-                                handleLanguageChange('de')
+                                dispatch(setSelectedLanguage('de'));
+                                handleLanguageChange('de');
                             }}
                         >
-                            <div>German</div>
+                            <div>{t('German')}</div>
                             {selectedLanguage === 'de' ? <div><img src={checkIcon} alt="checkIcon" /></div> : null}
                         </div>
                     </div>
                     <div className="user-account">
-                        <div className="account-label">Account</div>
+                        <div className="account-label">{t('Konto')}</div>
                         <div className="account-setting">
                             <div className="account-detail">
                                 <div className="account-detail-info pointer" onClick={() => { navigate("/user/password-change"); handleModal(false) }}>
-                                    <img src={passwordSetting} alt="Password Change"></img>
-                                    <div className="account-description">Passwort ändern</div>
+                                    <img src={passwordSetting} alt={t('Password Change')}></img>
+                                    <div className="account-description">{t('Passwort ändern')}</div>
                                 </div>
                             </div>
                             {switchRole ? (
                                 <>
                                     <div className="account-detail pointer">
                                         <div className="account-detail-info" onClick={() => { navigate("/user/user-manage"); handleModal(false) }}>
-                                            <img src={infoEdit} alt="Password Change"></img>
-                                            <div className="account-description">Benutzer verwalten</div>
+                                            <img src={infoEdit} alt={t('Password Change')}></img>
+                                            <div className="account-description">{t('Benutzer verwalten')}</div>
                                         </div>
                                     </div>
                                     <div className="account-detail pointer">
                                         <div className="account-detail-info" onClick={() => { navigate("/user/api-token"); handleModal(false) }}>
-                                            <img src={tokenSearch} alt="Password Change"></img>
-                                            <div className="account-description">API-Token</div>
+                                            <img src={tokenSearch} alt={t('Password Change')}></img>
+                                            <div className="account-description">{t('API-Token')}</div>
                                         </div>
                                     </div>
                                 </>
                             ) : null}
-
                             <div className="account-detail pointer" onClick={e => handlelogout(e)}>
                                 <div className="account-detail-info">
-                                    <div className="account-setting-img"><img src={logout} alt="Password Change"></img></div>
-                                    <div className="account-description">Abmelden</div>
+                                    <div className="account-setting-img"><img src={logout} alt={t('Password Change')}></img></div>
+                                    <div className="account-description">{t('Abmelden')}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </>
     )
 }

@@ -33,10 +33,10 @@ const PasswordChange = () => {
         onSubmit: () => {
             changePassword(formik.values, token, (success) => {
                 if (success.data.code === 200 && success.data.status === "success") {
-                    toast.success("Successfully Changed");
+                    toast.success("Successfully Changed", { theme: "colored", hideProgressBar: "true", autoClose: 1500 });
                 }
                 else {
-                    toast.error("Something went wrong");
+                    toast.error("Something went wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 });
                 }
             });
         },
@@ -65,10 +65,10 @@ const PasswordChange = () => {
                 <div className="setting-panel-user__bottom">
                     <div className="label-input-pair">
                         <div className="typography-400-regular">Altes Passwort *</div>
-                            <input type="password" value={formik.values.oldpass} onChange={(e) => setInputValue('oldpass', e.target.value)}></input>
-                            {formik.touched.oldpass && formik.errors.oldpass ? (
-                                <p className="validation">{formik.errors.oldpass}</p>
-                            ) : null}
+                        <input type="password" value={formik.values.oldpass} onChange={(e) => setInputValue('oldpass', e.target.value)}></input>
+                        {formik.touched.oldpass && formik.errors.oldpass ? (
+                            <p className="validation">{formik.errors.oldpass}</p>
+                        ) : null}
                     </div>
                     <div className="label-input-pair">
                         <div className="typography-400-regular">Neues Passwort *</div>

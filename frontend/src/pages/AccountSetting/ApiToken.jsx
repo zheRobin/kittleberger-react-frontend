@@ -55,10 +55,10 @@ const ApiToken = () => {
         setLoading(true)
         deleteToken(id, token, (success) => {
             if (success.data.code === 200 && success.data.status === "success") {
-                toast.success("Successfully Deleted")
+                toast.success("Successfully Deleted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
             if (success.data.code === 400 && success.data.status === "failed") {
-                toast.error("Something Went Wrong")
+                toast.error("Failed to Delete", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
             setLoading(false)
         })
@@ -86,10 +86,10 @@ const ApiToken = () => {
                 setLoading(true)
                 createToken(formik.values.name, token, (success) => {
                     if (success.data.code === 200 && success.data.status === "success") {
-                        toast.success("Successfully Created")
+                        toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                     }
                     if (success.data.code === 400 && success.data.status === "failed") {
-                        toast.error("Something Went Wrong")
+                        toast.error("Unfortunately,failed to create", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                     }
                     setLoading(false)
                 })
@@ -102,10 +102,10 @@ const ApiToken = () => {
         () => {
             tokenList(token, (success) => {
                 if (success.data.code === 200 && success.data.status === "success") {
-                    setTokenLists(success.data.data)
+                    setTokenLists(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 }
                 if (success.data.code === 400 && success.data.status === "failed") {
-                    toast.error("Something Went Wrong")
+                    toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 }
             })
         }, []
@@ -118,7 +118,7 @@ const ApiToken = () => {
                     setTokenLists(success.data.data)
                 }
                 if (success.data.code === 400 && success.data.status === "failed") {
-                    toast.error("Something Went Wrong")
+                    toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 }
             })
         }, [loading]

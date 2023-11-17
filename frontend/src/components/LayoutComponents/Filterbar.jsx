@@ -4,6 +4,7 @@ import "../Composing/style/composeStyle.scss"
 import plusButton from "../../assets/icons/add-2.svg"
 import miusButton from "../../assets/icons/minus.svg"
 import CheckboxGroup from "../Composing/CheckboxGroup"
+import { SelectCountry } from "../Composing/CheckboxGroup";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -122,17 +123,17 @@ export const ProductNumberFilter = (resetValue) => {
                         <div className="check-group">
                             {landMokeup.map((ele, index) => {
                                 return (
-                                    <CheckboxGroup
+                                    <SelectCountry
                                         key={"landMokeup" + index}
                                         title={t(ele)}
                                     />
                                 );
                             })}
                         </div>
-                        <div className="product-list">
+                        {/* <div className="product-list">
                             <img src={plusButton} alt="plusButton" />
                             <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="by-Aplikationen">
                         <div className="product-list">

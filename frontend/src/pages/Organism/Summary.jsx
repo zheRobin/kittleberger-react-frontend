@@ -34,21 +34,19 @@ const Summary = () => {
                 name: product.name,
                 number: product.article_number,
                 cdn_url: "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png",
-                transparent_cdn_url: product?.transImg === undefined ? "" : product?.transImg,
                 pos_index: product?.posIndex,
                 scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
                 alignment: product?.align === undefined ? "top-left" : product?.align,
                 height: selectedTemplate?.article_placements[index].height,
                 width: selectedTemplate?.article_placements[index].width,
-                z_index: selectedTemplate?.article_placements[index].z_index,
-                prod_left: product?.position ? product?.position[0] : selectedTemplate?.article_placements[index].position_x,
-                prod_top: product?.position ? product?.position[1] : selectedTemplate?.article_placements[index].position_y
+                z_index: selectedTemplate?.article_placements[index].z_index
             };
         })]
     }
     const submitInfo = {
         name: composeName,
         template_id: selectedTemplate.id,
+        base64_img: composedProduct,
         ...submitArticleInfo
     }
     const saveInfo = () => {
@@ -57,11 +55,11 @@ const Summary = () => {
             if (success.data.code === 201) {
                 setdeploymentName({ ...deploymentName, value: success.data.data })
                 setLoading(false)
-                toast.success("Successfully Sumitted")
+                toast.success("Successfully Submitted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
             if (success.data.status === "failed") {
                 setLoading(false)
-                toast.error("Something Went Wrong")
+                toast.error("Failed To Submit", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
         })
     }
@@ -86,76 +84,76 @@ const Summary = () => {
 
     return (
         <>
-            {loading ? <Loading /> : (
-                <div className="summary">
-                    <div className="summary__image">
-                        <div className="summary__image__content">
-                            <img src={composedProduct} alt="composedProduct" />
-                        </div>
-                        <div className="summary__image__desc">
-                            <div className="typography-700-bold">{selectedTemplate.name}</div>
-                            <div className="typography-400-regular desc__text">
-                                <p>Land: Deutschland, Österreich</p>
-                                <p>Marke: {selectedTemplate.brand.map((brand, index) => (
-                                    <React.Fragment key={index}>
-                                        {index > 0 && ", "}
-                                        <span>{brand.name}</span>
-                                    </React.Fragment>
-                                ))}</p>
-                                <br></br>
-                                <p>Applikation: {selectedTemplate.application.map((application, index) => (
-                                    <React.Fragment key={index}>
-                                        {index > 0 && ", "}
-                                        <span>{application.name}</span>
-                                    </React.Fragment>
-                                ))}</p>
-                                <p>Technische Daten:</p>
-                                <p>{selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px (72 dpi)</p>
-                                <p>Dateiformat: {selectedTemplate.file_type} (RGB)</p>
-                                <br></br>
-                                <p>Enthaltene Produkte:</p>
-                                <p>{selectedProducts.map((product, index) => (
-                                    <React.Fragment key={index}>
-                                        <div>
-                                            <span>{product.name}</span>
-                                            <span>({product.article_number})</span>
-                                        </div>
-                                    </React.Fragment>
-                                ))}</p>
-                                <br></br>
-                                <p>Erstellt von Benutzer X {formattedDate_created}</p>
-                                <p>Zuletzt bearbeitet von Benutzer Y {formattedDate_modified}</p>
-                            </div>
+            {loading ? <Loading /> : (<></>)}
+            <div className="summary">
+                <div className="summary__image">
+                    <div className="summary__image__content">
+                        <img src={composedProduct} alt="composedProduct" />
+                    </div>
+                    <div className="summary__image__desc">
+                        <div className="typography-700-bold">{selectedTemplate.name}</div>
+                        <div className="typography-400-regular desc__text">
+                            <p>Land: Deutschland, Österreich</p>
+                            <p>Marke: {selectedTemplate.brand.map((brand, index) => (
+                                <React.Fragment key={index}>
+                                    {index > 0 && ", "}
+                                    <span>{brand.name}</span>
+                                </React.Fragment>
+                            ))}</p>
+                            <br></br>
+                            <p>Applikation: {selectedTemplate.application.map((application, index) => (
+                                <React.Fragment key={index}>
+                                    {index > 0 && ", "}
+                                    <span>{application.name}</span>
+                                </React.Fragment>
+                            ))}</p>
+                            <p>Technische Daten:</p>
+                            <p>{selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px (72 dpi)</p>
+                            <p>Dateiformat: {selectedTemplate.file_type} (RGB)</p>
+                            <br></br>
+                            <p>Enthaltene Produkte:</p>
+                            <p>{selectedProducts.map((product, index) => (
+                                <React.Fragment key={index}>
+                                    <div>
+                                        <span>{product.name}</span>
+                                        <span>({product.article_number})</span>
+                                    </div>
+                                </React.Fragment>
+                            ))}</p>
+                            <br></br>
+                            <p>Erstellt von Benutzer X {formattedDate_created}</p>
+                            <p>Zuletzt bearbeitet von Benutzer Y {formattedDate_modified}</p>
                         </div>
                     </div>
-                    <div className="summary__detail">
-                        <div className="typography-400-regular">
-                            Zum Veröffentlichen dieses Composings, bitte einen Namen vergeben und speichern.
-                            <p></p>
-                            Bitte beachten Sie, dass jede Änderung an diesem Composing auf bereits geteilte Composing-URLs Einfluss hat.
-                        </div>
-
-                        <div className="composing-name">
-                            <div className="typography-700-regular">Composing Name</div>
-                            <input value={composeName} readOnly />
-                            <div onClick={(e) => saveInfo()}><TemplateButton content={"Speichern"} /></div>
-                        </div>
-
-                        <div className="deployment">
-                            <div className="typography-700-regular">Bereitstellung</div>
-                            <div className="url-group"><Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="280px">{deploymentName.value}</Typography>
-                                <CopyToClipboard text={deploymentName.value}
-                                    onCopy={() => setdeploymentName({ ...deploymentName, copied: true })}>
-                                    <img className="pointer" src={copy} alt=" copy" />
-                                </CopyToClipboard>
-                            </div>
-                            <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={"Download Bilddatei"} type="transparent" /></div>
-                            <div className="download-button"><TemplateButton content={"Download Metadaten"} type="transparent" /></div>
-                        </div>
-                    </div>
-                    <ToastContainer />
                 </div>
-            )}
+                <div className="summary__detail">
+                    <div className="typography-400-regular">
+                        Zum Veröffentlichen dieses Composings, bitte einen Namen vergeben und speichern.
+                        <p></p>
+                        Bitte beachten Sie, dass jede Änderung an diesem Composing auf bereits geteilte Composing-URLs Einfluss hat.
+                    </div>
+
+                    <div className="composing-name">
+                        <div className="typography-700-regular">Composing Name</div>
+                        <input value={composeName} readOnly />
+                        <div onClick={(e) => saveInfo()}><TemplateButton content={"Speichern"} /></div>
+                    </div>
+
+                    <div className="deployment">
+                        <div className="typography-700-regular">Bereitstellung</div>
+                        <div className="url-group"><Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="280px">{deploymentName.value}</Typography>
+                            <CopyToClipboard text={deploymentName.value}
+                                onCopy={() => setdeploymentName({ ...deploymentName, copied: true })}>
+                                <img className="pointer" src={copy} alt=" copy" />
+                            </CopyToClipboard>
+                        </div>
+                        <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={"Download Bilddatei"} type="transparent" /></div>
+                        <div className="download-button"><TemplateButton content={"Download Metadaten"} type="transparent" /></div>
+                    </div>
+                </div>
+                <ToastContainer />
+            </div>
+
         </>
     )
 }

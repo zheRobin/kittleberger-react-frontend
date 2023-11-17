@@ -16,7 +16,7 @@ import { infiniteTemplate } from '../../_services/Template';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
-
+import { Loading } from './ProductSelect';
 
 const theme = createTheme({
     components: {
@@ -45,6 +45,7 @@ const Organism = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+    const [loading, setLoading] = useState(false)
     const token = useSelector(state => state.auth.token)
     const templates = useSelector(state => state.templates.templateData)
     const products = useSelector(state => state.templates.productsOnTemplates)
@@ -53,14 +54,17 @@ const Organism = () => {
     let filters = useSelector(state => state.templates.filterData)
     useEffect(() => {
         infiniteTemplate(token, 1, filters, (success) => {
+            setLoading(true)
             if (success.data.next == null) {
                 dispatch(setLoadingStatus(false))
+                setLoading(false)
             }
             if (success.status === 200) {
                 dispatch(selectPage(page + 1))
                 dispatch(initTemplate(success.data.results.templates))
                 dispatch(initProductsOnTemplates(success.data.results.products))
                 setCount(success.data.count)
+                setLoading(false)
             }
         })
     }, [filters]);
@@ -80,7 +84,7 @@ const Organism = () => {
                 }
             }
             if (success.data.code === 400 && success.data.status === "failed") {
-                toast.error("Something Went Wrong")
+                toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
         })
     };
@@ -125,53 +129,59 @@ const Organism = () => {
                                 <Tab label={products.length + " erstellte Composings"} value="2" style={styles.tab} />
                             </TabList>
                         </Box>
+                        {loading ? <Loading /> : (
+                            <>
+                                <TabPanel value="1"
+                                >
+                                    {templates.length === 0 ? (
+                                        <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Templates</div>) : (
+                                        <div className='template-tab-1'>
+                                            <div id="scrollableDiv" className='product-container'>
+                                                <InfiniteScroll
+                                                    dataLength={templates.length}
+                                                    next={fetchMoreData}
+                                                    hasMore={true}
+                                                    loader={loadingStatus === true ? <div className="loading">Loading&#8230;</div> : null}
+                                                    className='infinite-scroll-component'
+                                                    endMessage={
+                                                        <p style={{ textAlign: 'center' }}>
+                                                            <b>Yay! You have seen it all</b>
+                                                        </p>
+                                                    }
+                                                    style={{ overflowX: "hidden" }}
+                                                    scrollableTarget="scrollableDiv"
+                                                    id='scrollable'
+                                                >
+                                                    {templates.map((templateEle, key) => {
+                                                        return (
+                                                            < ProductCard key={key} cardInfo={templateEle} />
+                                                        )
+                                                    }
+                                                    )}
+                                                </InfiniteScroll>
+                                            </div>
+                                        </div>
+                                    )}
+                                </TabPanel>
 
-                        <TabPanel value="1"
-                        >
-                            {templates.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Templates</div>) : (
-                                <div className='template-tab-1'>
-                                    <div id="scrollableDiv" className='product-container'>
-                                        <InfiniteScroll
-                                            dataLength={templates.length}
-                                            next={fetchMoreData}
-                                            hasMore={true}
-                                            loader={loadingStatus === true ? <div className="loading">Loading&#8230;</div> : null}
-                                            className='infinite-scroll-component'
-                                            endMessage={
-                                                <p style={{ textAlign: 'center' }}>
-                                                    <b>Yay! You have seen it all</b>
-                                                </p>
-                                            }
-                                            scrollableTarget="scrollableDiv"
-                                            id='scrollable'
-                                        >
-                                            {templates.map((templateEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={templateEle} />
-                                                )
-                                            }
-                                            )}
-                                        </InfiniteScroll>
-                                    </div>
-                                </div>
-                            )}
-                        </TabPanel>
+                                <TabPanel value="2">
+                                    <ProductSearch />
+                                    {products.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
+                                        <div className='template-tab-2'>
+                                            <div id="scrollableDiv" className='multi-product-container'>
+                                                {products.map((productEle, key) => {
+                                                    return (
+                                                        < ProductCard key={key} cardInfo={productEle} type={2} />
+                                                    )
+                                                }
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </TabPanel>
+                            </>
+                        )}
 
-                        <TabPanel value="2">
-                            <ProductSearch />
-                            {products.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
-                                <div className='template-tab-2'>
-                                    <div id="scrollableDiv" className='multi-product-container'>
-                                        {products.map((productEle, key) => {
-                                            return (
-                                                < ProductCard key={key} cardInfo={productEle} type={2} />
-                                            )
-                                        }
-                                        )}
-                                    </div>
-                                </div>
-                            )}
-                        </TabPanel>
                     </TabContext>
                     <ToastContainer />
                 </ThemeProvider>

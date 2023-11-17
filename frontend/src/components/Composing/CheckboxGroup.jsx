@@ -3,6 +3,7 @@ import "./style/composeStyle.scss"
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { setResetStatus } from '../../store';
+import { appendCountries, removeCountries } from '../../store';
 
 const CheckboxGroup = (props) => {
     const dispatch = useDispatch()
@@ -76,5 +77,33 @@ const CheckboxGroup = (props) => {
 
     )
 }
+
+export const SelectCountry = (props) => {
+    const dispatch = useDispatch()
+    const [isChecked, setIsChecked] = useState(false);
+    const resetStatus = useSelector(state => state.templates.resetStatus);
+
+    useEffect(() => {
+        if (resetStatus) {
+            setIsChecked(false);
+        }
+    }, [resetStatus]);
+    const handleFilter = (type, id, status) => {
+        setIsChecked(!isChecked)
+        !isChecked ? dispatch(appendCountries(props.title)) : dispatch(removeCountries(props.title))
+    };
+
+    return (
+
+        <>
+            <div className='checkbox-group'>
+                <Checkbox onChange={(e) => handleFilter(props?.type, props.element?.id, e.target?.checked)} checked={isChecked} value={props?.value} name={props?.name} style={{ color: props.fillColor ? props.fillColor : "white", borderColor: 'white', padding: 0, margin: 0 }} />
+                <div className='typography-400-regular checkbox-group__label' style={{ color: props.textColor ? props.textColor : "white" }}>{props.title}</div>
+            </div >
+        </>
+
+    )
+}
+
 
 export default CheckboxGroup

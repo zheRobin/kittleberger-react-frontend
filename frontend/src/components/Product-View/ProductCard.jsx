@@ -9,7 +9,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const navigate = useNavigate();
     const switchRole = useSelector(state => state.info.adminMethod)
     const dispatch = useDispatch()
-
+    console.log(cardInfo)
     return (
         <>
             <div className="product-card">
@@ -20,7 +20,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                             <div className="product-image-info">
                                 {type === 1 ? cardInfo?.resolution_width + '\u00D7' + cardInfo?.resolution_height + 'px | ' + cardInfo?.resolution_dpi + " | " + cardInfo?.file_type : cardInfo?.template?.resolution_width + '\u00D7' + cardInfo?.template?.resolution_height + 'px | ' + cardInfo?.template?.resolution_dpi + " | " + cardInfo?.template?.file_type}</div>
                         </div>
-                        <div className="product-icon pointer" onClick={() => { if (type === 1) { navigate("/product/edittemplate", { state: cardInfo }) } }}>
+                        <div className="product-icon pointer" onClick={() => { if (type === 1) { navigate("/product/edittemplate", { state: cardInfo }) } else { navigate("/product/edittemplate", { state: cardInfo.template }) } }}>
                             {switchRole ? <img src={cardtype === "edit" ? editPencil : cancel} style={cardtype !== "edit" ? { backgroundColor: "white", border: "none" } : { borderColor: "#FFFFFF" }} alt="editIcon"></img> : null}
                         </div>
                     </div>

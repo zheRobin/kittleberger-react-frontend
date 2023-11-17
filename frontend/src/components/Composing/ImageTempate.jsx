@@ -19,10 +19,10 @@ const ImageTemplate = ({
     useEffect(() => {
         let scale = 0;
         if (Number(bg_width) !== 0 || Number(bg_height) !== 0) {
-            scale = 600 / (Number(bg_width) > Number(bg_height) ? Number(bg_width) : Number(bg_height));
+            scale = 500 / (Number(bg_width) >= Number(bg_height) ? Number(bg_width) : Number(bg_height));
         }
-        const img_width = (Number(article.width) > Number(bg_width) ? scale * Number(bg_width) : scale * Number(article.width));
-        const img_height = (Number(article.height) > Number(bg_height) ? scale * Number(bg_height) : scale * Number(article.height));
+        const img_width = ((Number(article.width) + Number(article.position_x)) >= Number(bg_width) ? scale * (Number(bg_width) - Number(article.position_x)) : scale * Number(article.width));
+        const img_height = ((Number(article.height) + Number(article.position_y)) >= Number(bg_height) ? scale * (Number(bg_height) - Number(article.position_y)) : scale * Number(article.height));
         const left = scale * Number(article.position_x);
         const top = scale * Number(article.position_y);
         setStyle({
@@ -41,7 +41,7 @@ const ImageTemplate = ({
 
     return (
         <div style={style}>
-            <div style={{ padding: "4px 10px", backgroundColor: "#9747FF", boxSizing: "border-box" }}>
+            <div style={{ padding: "4px 10px", backgroundColor: "#9747FF", boxSizing: "border-box", display: "inline-block" }}>
                 {title}
             </div>
         </div>
