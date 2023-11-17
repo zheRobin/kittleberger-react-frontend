@@ -516,7 +516,7 @@ const TemplateEditPanel = () => {
                                                     <div className="left-b-image" ref={elementRef} >
                                                         <div className="image-backgroud select-part" style={{ height: backgroundWidth >= backgroundHeight ? `${backgroundHeight}%` : "100%", width: backgroundWidth >= backgroundHeight ? "100%" : `${backgroundWidth}%`, backgroundImage: `url(${images.length === 0 ? productInfo?.bg_image_cdn_url : images[0]?.data_url})`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat", }}>
                                                             <div className="image-compare">
-                                                                {values.resolution_width && values.resolution_height && images.length !== 0 &&
+                                                                {values.resolution_width && values.resolution_height &&
                                                                     values.article_placements.map((value, index) => (
                                                                         <ImageTemplate
                                                                             key={index}
