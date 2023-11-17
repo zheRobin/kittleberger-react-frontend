@@ -26,7 +26,7 @@ const SideNav = () => {
         () => {
             const posIndexGroup = [];
             for (const product of selectedProducts) {
-                posIndexGroup.push(product.posIndex);
+                posIndexGroup.push(product.pos_index);
             }
             setPosIndexGroup(posIndexGroup);
             setItems(selectedProducts)
@@ -57,7 +57,7 @@ const SideNav = () => {
         const updatedItems = items.map((item, index) => {
             return {
                 ...item,
-                posIndex: posIndexGroups[index],
+                pos_index: posIndexGroups[index],
             };
         });
         dispatch(updateProducts(updatedItems));

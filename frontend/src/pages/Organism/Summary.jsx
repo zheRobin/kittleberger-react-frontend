@@ -14,6 +14,9 @@ const Summary = () => {
     const selectedTemplate = useSelector(state => state.products.selectedTemplate)
     const selectedProducts = useSelector(state => state.products.selectedProducts)
     const composedProduct = useSelector(state => state.products.composedProduct)
+    console.log(selectedTemplate)
+    console.log(selectedProducts)
+    console.log(composedProduct)
     const [loading, setLoading] = useState(false)
     const [deploymentName, setdeploymentName] = useState({
         value: '',
@@ -34,7 +37,7 @@ const Summary = () => {
                 name: product.name,
                 number: product.article_number,
                 cdn_url: "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png",
-                pos_index: product?.posIndex,
+                pos_index: product?.pos_index,
                 scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
                 alignment: product?.align === undefined ? "top-left" : product?.align,
                 height: selectedTemplate?.article_placements[index].height,
@@ -49,8 +52,10 @@ const Summary = () => {
         base64_img: composedProduct,
         ...submitArticleInfo
     }
+
     const saveInfo = () => {
         setLoading(true)
+        console.log(submitInfo)
         getOnlineInfo(token, submitInfo, (success) => {
             if (success.data.code === 201) {
                 setdeploymentName({ ...deploymentName, value: success.data.data })

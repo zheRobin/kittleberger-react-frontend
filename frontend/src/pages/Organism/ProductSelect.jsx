@@ -34,12 +34,11 @@ export const ProductView = () => {
 
             const article = selectedProducts?.map((product) => {
                 const positionStyle = selectedTemplate?.article_placements;
-                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index === product?.posIndex)
+                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index === product?.pos_index)
                 const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
                 const transImg = product?.transImg === true ? true : false;
                 const positionX = product?.position === undefined ? selectedStyle[0]?.position_x : product?.position[0];
                 const positionY = product?.position === undefined ? selectedStyle[0]?.position_y : product?.position[1];
-
                 if (positionStyle !== undefined) {
                     return {
                         article_link: "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png",

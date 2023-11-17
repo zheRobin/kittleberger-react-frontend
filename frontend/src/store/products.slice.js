@@ -18,8 +18,8 @@ export const productsSlice = createSlice({
         appendProducts: (state, action) => {
             const productsLength = state.selectedProducts.length
             state.selectedProducts = productsLength === 0 ? 
-            [{...action.payload,posIndex:state.selectedTemplate.article_placements[0].pos_index}] : 
-            [...state.selectedProducts, {...action.payload,posIndex:state.selectedTemplate.article_placements[productsLength].pos_index}];
+            [{...action.payload,pos_index:state.selectedTemplate.article_placements[0].pos_index}] : 
+            [...state.selectedProducts, {...action.payload,pos_index:state.selectedTemplate.article_placements[productsLength].pos_index}];
           },
         removeProducts:(state,action) =>{
             state.selectedProducts = state.selectedProducts.filter((product) => product.article_number !== action.payload.article_number)
@@ -86,6 +86,9 @@ export const productsSlice = createSlice({
                 return product;
             });
         },
+        setProductLists:(state,action) => {
+            state.selectedProducts = action.payload
+        },
         appendCountries: (state, action) => {
             const countriesLength = state.selectedCountry.length
             state.selectedCountry = countriesLength === 0 ? [action.payload] : [...state.selectedCountry, action.payload];
@@ -97,6 +100,6 @@ export const productsSlice = createSlice({
 })
 
 
-export const {emptyStore, appendCountries, removeCountries, appendProducts, updateProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
+export const {emptyStore,setProductLists, appendCountries, removeCountries, appendProducts, updateProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
 export const productsReducer = productsSlice.reducer
 export default productsSlice.reducer

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form, Field, FieldArray, useField, useFormikContext, ErrorMessage } from 'formik';
 // import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
@@ -58,55 +58,91 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
     </div >
   )
 };
-export const ArticlePlacementsComponent = ({ values, arrayHelpers }) => (
-  <div>
-    {values.map((value, index) => (
-      <div className="image-settings" key={index}>
-        <div className="image-settings__left-section">
-          <div className="image-settings__common"><div className="typography-700-regular" style={{ width: "60px" }}>Image {index + 1}</div></div>
-        </div>
-        <div className="image-settings__right-section">
-          <div className="image-settings__common"><img src={DragIcon} alt="DragIcon"></img></div>
-          <div className="image-settings__panel">
-            <div className="input-groups">
-              <div>
-                <div className="typography-400-regular">top</div>
-                <div className="input-group__bottom"><Field as={TextField} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
-              </div>
-              <div>
-                <div className="typography-400-regular">left</div>
-                <div className="input-group__bottom"><Field as={TextField} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
-              </div>
-              <div>
-                <div className="typography-400-regular">width</div>
-                <div className="input-group__bottom"><Field as={TextField} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
-              </div>
-              <div>
-                <div className="typography-400-regular">height</div>
-                <div className="input-group__bottom"><Field as={TextField} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
-              </div>
-              <div>
-                <div className="typography-400-regular">z-index</div>
-                <div className="input-group__bottom"><Field as={TextField} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
-              </div>
-              <div className="image-settings__common pointer" onClick={() => {
-                arrayHelpers.remove(index)
-              }}><img src={DeleteIcon} alt="Delete Article"></img></div>
+export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue }) => {
+  const [articleGroup, setArticleGroup] = useState(values);
+  const [draggedItem, setDraggedItem] = useState({})
+  useEffect(
+    () => {
+      setArticleGroup(values)
+    }, [values]
+  )
+  const onDragStart = (e, index) => {
+    const draggedItems = articleGroup[index];
+    setDraggedItem(draggedItems)
+    setDraggedItem(state => { return state })
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", e.target.parentNode);
+    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
+  };
+
+  function onDragOver(index) {
+    const draggedOverItem = articleGroup[index];
+    if (draggedItem === draggedOverItem) {
+      return;
+    }
+    const updatedDraggedItem = { ...draggedItem, height: draggedOverItem.height, width: draggedOverItem.width };
+    const updatedDraggedOverItem = { ...draggedOverItem, height: draggedItem.height, width: draggedItem.width };
+    let itemGroups = articleGroup.map((item, i) => (i === index ? updatedDraggedOverItem : item));
+    itemGroups = itemGroups.map((item) => (item === draggedItem ? updatedDraggedItem : item));
+    setArticleGroup(itemGroups);
+  }
+  const onDragEnd = () => {
+    setFieldValue("article_placements", articleGroup);
+  };
+
+  return (
+    <>
+      <div>
+        {articleGroup.map((value, index) => (
+          <div className="image-settings" key={index} onDragOver={() => onDragOver(index)} draggable
+            onDragStart={e => onDragStart(e, index)} onDragEnd={e => onDragEnd()}>
+            <div className="image-settings__left-section">
+              <div className="image-settings__common"><div className="typography-700-regular" style={{ width: "60px" }}>Image {index + 1}</div></div>
             </div>
+            <div className="image-settings__right-section">
+              <div className="image-settings__common"><img src={DragIcon} alt="DragIcon"></img></div>
+              <div className="image-settings__panel">
+                <div className="input-groups">
+                  <div>
+                    <div className="typography-400-regular">top</div>
+                    <div className="input-group__bottom"><Field as={TextField} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
+                  </div>
+                  <div>
+                    <div className="typography-400-regular">left</div>
+                    <div className="input-group__bottom"><Field as={TextField} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
+                  </div>
+                  <div>
+                    <div className="typography-400-regular">width</div>
+                    <div className="input-group__bottom"><Field as={TextField} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
+                  </div>
+                  <div>
+                    <div className="typography-400-regular">height</div>
+                    <div className="input-group__bottom"><Field as={TextField} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
+                  </div>
+                  <div>
+                    <div className="typography-400-regular">z-index</div>
+                    <div className="input-group__bottom"><Field as={TextField} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
+                  </div>
+                  <div className="image-settings__common pointer" onClick={() => {
+                    arrayHelpers.remove(index)
+                  }}><img src={DeleteIcon} alt="Delete Article"></img></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        )
+        )}
+        <div className="right-b__bottom">
+          <img src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
+          <div className="typo-700-regular pointer" onClick={() => arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', })}>
+            Ein weiteres Platzhalterbild hinzufügen
           </div>
         </div>
-
       </div>
-    )
-    )}
-    <div className="right-b__bottom">
-      <img src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
-      <div className="typo-700-regular pointer" onClick={() => arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', })}>
-        Ein weiteres Platzhalterbild hinzufügen
-      </div>
-    </div>
-  </div>
-);
+    </>
+  )
+};
 export const Loading = () => {
   return (
     <div className="cover-spin">
@@ -491,7 +527,7 @@ const TemplatePanel = () => {
                           <div className="right-b">
                             <div className="right-b__top">
                               <FieldArray name="article_placements">
-                                {(arrayHelpers) => <ArticlePlacementsComponent values={values.article_placements} arrayHelpers={arrayHelpers} />}
+                                {(arrayHelpers) => <ArticlePlacementsComponent values={values.article_placements} arrayHelpers={arrayHelpers} setFieldValue={setFieldValue} />}
                               </FieldArray>
                             </div>
                           </div>

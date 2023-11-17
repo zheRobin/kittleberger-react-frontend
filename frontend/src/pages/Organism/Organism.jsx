@@ -37,7 +37,7 @@ const theme = createTheme({
 
 
 const Organism = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [value, setValue] = useState('1');

@@ -3,13 +3,12 @@ import editPencil from "../../assets/icons/pencil-white.svg"
 import cancel from "../../assets/icons/cross.svg"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { findTemplates } from "../../store"
+import { findTemplates, setProductLists, setComposedProduct } from "../../store"
 
 const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const navigate = useNavigate();
     const switchRole = useSelector(state => state.info.adminMethod)
     const dispatch = useDispatch()
-    console.log(cardInfo)
     return (
         <>
             <div className="product-card">
@@ -30,6 +29,14 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         localStorage.setItem('templateInfo', JSON.stringify(cardInfo));
                         dispatch(findTemplates(cardInfo));
                         navigate(`/product/product-select`)
+                    }
+                    if (type === 2) {
+                        console.log(cardInfo.template)
+                        localStorage.setItem('templateInfo', JSON.stringify(cardInfo.template));
+                        dispatch(setComposedProduct(cardInfo.cdn_url))
+                        dispatch(findTemplates(cardInfo.template));
+                        dispatch(setProductLists(cardInfo.articles));
+                        navigate(`/product/summary`)
                     }
                 }}>
                     <img src={type === 1 ? cardInfo?.preview_image_cdn_url : cardInfo?.cdn_url} alt="preview"></img>

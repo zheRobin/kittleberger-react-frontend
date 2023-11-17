@@ -2,19 +2,6 @@
 import search from "../../assets/icons/search2.svg"
 import "./style/productViewStyle.scss"
 
-// const ProductSearch = () => {
-//     return (
-//         <div className="search-bar">
-//             <input placeholder="Nach Produkten suchen"></input>
-//             <img src={search} alt="search" />
-//         </div>
-//     )
-// }
-
-
-// export default ProductSearch
-
-
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -22,6 +9,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 
 export default function ProductSearch() {
+
+
   return (
     <Autocomplete
       multiple
