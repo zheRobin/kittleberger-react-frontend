@@ -172,12 +172,6 @@ const ProductSelect = () => {
         };
     }, [searchString]);
 
-    // const handleSearch = async (e) => {
-    //     if (e.key === "Enter") {
-
-    //     }
-    // };
-
     function getProductInfo(page, productInfo = "", country = "germany") {
         setloading(true)
         getProductsbyFilter(token, { page, productInfo, country }, (success) => {

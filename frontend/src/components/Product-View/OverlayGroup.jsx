@@ -38,7 +38,6 @@ const OverlayGroup = ({ productInfo, index }) => {
     const [sliderValue, setSliderValue] = useState(100)
     const wrapperRef = useRef(null);
     const [loading, setLoading] = useState(false)
-    console.log("productInfo", productInfo)
     const [checked, setChecked] = useState(productInfo?.is_transparent !== undefined ? productInfo?.is_transparent : false)
     const align = productInfo?.align === undefined ? "middle-center" : productInfo?.align
     useEffect(() => {

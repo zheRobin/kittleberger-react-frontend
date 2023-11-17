@@ -37,7 +37,6 @@ const Summary = () => {
         link.download = 'image.png';
         link.click();
     }
-    console.log("selectedProducts", selectedProducts)
     const token = useSelector(state => state.auth.token)
     const composeName = `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} | ${selectedProducts?.map((product, index) => { return product.name })}`
     const submitArticleInfo = {

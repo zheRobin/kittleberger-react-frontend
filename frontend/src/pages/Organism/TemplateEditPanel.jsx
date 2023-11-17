@@ -169,9 +169,7 @@ const TemplateEditPanel = () => {
     const productInfo = state ? state : {}
     const [backView, setBackView] = useState(productInfo?.bg_image_cdn_url ? true : false);
     const [preView, setPreView] = useState(productInfo?.preview_image_cdn_url ? true : false);
-    console.log("productInfo:", productInfo)
     const [images, setImages] = useState([]);
-    console.log(images[0])
     const [tempImages, setTempImages] = useState({ width: 1, height: 1 });
     const [width, setWidth] = useState(500);
     const [height, setHeight] = useState(500);

@@ -46,12 +46,19 @@ const Organism = () => {
         setValue(newValue);
     };
     const [loading, setLoading] = useState(false)
+    const [filterData, setFilterData] = useState([])
     const token = useSelector(state => state.auth.token)
     const templates = useSelector(state => state.templates.templateData)
     const products = useSelector(state => state.templates.productsOnTemplates)
+    console.log("filterData:", filterData)
     const loadingStatus = useSelector(state => state.templates.loadingStatus)
     let page = useSelector(state => state.templates.page)
     let filters = useSelector(state => state.templates.filterData)
+    useEffect(
+        () => {
+            setFilterData(products)
+        }, [products]
+    )
     useEffect(() => {
         infiniteTemplate(token, 1, filters, (success) => {
             setLoading(true)
@@ -165,11 +172,11 @@ const Organism = () => {
                                 </TabPanel>
 
                                 <TabPanel value="2">
-                                    <ProductSearch />
+                                    <ProductSearch filterData={products} setFilterData={setFilterData} />
                                     {products.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
                                         <div className='template-tab-2'>
                                             <div id="scrollableDiv" className='multi-product-container'>
-                                                {products.map((productEle, key) => {
+                                                {filterData.map((productEle, key) => {
                                                     return (
                                                         < ProductCard key={key} cardInfo={productEle} type={2} />
                                                     )

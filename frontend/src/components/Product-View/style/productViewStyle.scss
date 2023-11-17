@@ -1,3 +1,13 @@
+.search-multi{
+    &:hover {
+        transform: scale(1.1);
+      }
+      
+    &:active {
+        transform: scale(0.95);
+      }
+}
+
 .product-card{
     width: 335px;
     height: 329px;
