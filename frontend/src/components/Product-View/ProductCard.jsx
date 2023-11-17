@@ -43,7 +43,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         navigate(`/product/summary`)
                     }
                 }}>
-                    <img src={type === 1 ? cardInfo?.preview_image_cdn_url : cardInfo?.cdn_url} alt="preview"></img>
+                    <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? cardInfo?.preview_image_cdn_url : cardInfo?.bg_image_cdn_url) : cardInfo?.cdn_url} alt="preview"></img>
                 </div>
             </div>
         </>

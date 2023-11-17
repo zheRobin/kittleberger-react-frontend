@@ -163,13 +163,15 @@ export const Loading = () => {
 
 
 
-const TemplatePanel = () => {
+const TemplateEditPanel = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
     const productInfo = state ? state : {}
     const [backView, setBackView] = useState(productInfo?.bg_image_cdn_url ? true : false);
     const [preView, setPreView] = useState(productInfo?.preview_image_cdn_url ? true : false);
-    const [images, setImages] = useState([{ data_url: "" }]);
+    console.log("productInfo:", productInfo)
+    const [images, setImages] = useState([]);
+    console.log(images[0])
     const [tempImages, setTempImages] = useState({ width: 1, height: 1 });
     const [width, setWidth] = useState(500);
     const [height, setHeight] = useState(500);
@@ -490,7 +492,7 @@ const TemplatePanel = () => {
                                                                         ))}
                                                                         {previewImages.length === 0 ? (
                                                                             <div className="image-item" style={{ width: "100%", height: "100%" }}>
-                                                                                <img src={productInfo?.preview_image_cdn_url} alt="backimage"
+                                                                                <img src={productInfo?.preview_image_cdn_url} alt="previewimage"
                                                                                     style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                                                                             </div>) : null}
                                                                     </div>
@@ -505,8 +507,6 @@ const TemplatePanel = () => {
                                     {loading ? <Loading /> : (
                                         <div className="product-setting-panel image-setting">
                                             <div className="image-setting-panel">
-
-
                                             </div>
                                             <div className="product-setting-panel__top">
                                                 <div className="typography-400-regular top-typo">Platzhalterbild</div>
@@ -514,7 +514,7 @@ const TemplatePanel = () => {
                                             <div className="product-setting-panel__bottom">
                                                 <div className="image-setting-panel">
                                                     <div className="left-b-image" ref={elementRef} >
-                                                        <div className="image-backgroud select-part" style={{ height: backgroundWidth >= backgroundHeight ? `${backgroundHeight}%` : "100%", width: backgroundWidth >= backgroundHeight ? "100%" : `${backgroundWidth}%`, backgroundImage: `url(${images[0]?.data_url})`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat", }}>
+                                                        <div className="image-backgroud select-part" style={{ height: backgroundWidth >= backgroundHeight ? `${backgroundHeight}%` : "100%", width: backgroundWidth >= backgroundHeight ? "100%" : `${backgroundWidth}%`, backgroundImage: `url(${images.length === 0 ? productInfo?.bg_image_cdn_url : images[0]?.data_url})`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat", }}>
                                                             <div className="image-compare">
                                                                 {values.resolution_width && values.resolution_height && images.length !== 0 &&
                                                                     values.article_placements.map((value, index) => (
@@ -558,4 +558,4 @@ const TemplatePanel = () => {
     )
 }
 
-export default TemplatePanel;
+export default TemplateEditPanel;

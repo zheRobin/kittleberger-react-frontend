@@ -39,7 +39,6 @@ export const ProductView = () => {
                 const transImg = product?.transImg === true ? true : false;
                 const positionX = product?.position === undefined ? selectedStyle[0]?.position_x : product?.position[0];
                 const positionY = product?.position === undefined ? selectedStyle[0]?.position_y : product?.position[1];
-                console.log("product:", product)
                 if (positionStyle !== undefined) {
                     return {
                         article_link: product?.cdn_urls[0],
@@ -48,6 +47,7 @@ export const ProductView = () => {
                         left: positionX,
                         width: selectedStyle[0]?.width * sliderScale,
                         height: selectedStyle[0]?.height * sliderScale,
+                        z_index: selectedStyle[0]?.z_index
                     };
                 }
             });
