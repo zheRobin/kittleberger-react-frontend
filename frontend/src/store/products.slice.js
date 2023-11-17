@@ -68,7 +68,7 @@ export const productsSlice = createSlice({
                 if (product.article_number === article_number) {
                     return {
                         ...product,
-                        transImg: action.payload.transImg
+                        is_transparent: action.payload.is_transparent
                     };
                 }
                 return product;

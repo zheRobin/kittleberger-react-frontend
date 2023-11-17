@@ -36,13 +36,13 @@ export const ProductView = () => {
                 const positionStyle = selectedTemplate?.article_placements;
                 const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index === product?.pos_index)
                 const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
-                const transImg = product?.transImg === true ? true : false;
+                const is_transparent = product?.is_transparent === true ? true : false;
                 const positionX = product?.position === undefined ? selectedStyle[0]?.position_x : product?.position[0];
                 const positionY = product?.position === undefined ? selectedStyle[0]?.position_y : product?.position[1];
                 if (positionStyle !== undefined) {
                     return {
                         article_link: product?.cdn_urls ? product?.cdn_urls[0] : product?.cdn_url,
-                        is_transparent: transImg,
+                        is_transparent: is_transparent,
                         top: positionY,
                         left: positionX,
                         width: selectedStyle[0]?.width * sliderScale,

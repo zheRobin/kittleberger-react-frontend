@@ -21,10 +21,15 @@ const Summary = () => {
     })
     useEffect(
         () => {
-            setdeploymentName({ value: composedProduct, copied: false })
+            if (composedProduct.startsWith("data:")) {
+                // Take action here
+                // Perform your desired action
+            } else {
+                setdeploymentName({ value: composedProduct, copied: false });
+            }
+
         }, [composedProduct]
     )
-    console.log("selectedProducts", selectedProducts)
     function handleDownload() {
         const imageUrl = deploymentName.value;
         const link = document.createElement('a');
@@ -32,6 +37,7 @@ const Summary = () => {
         link.download = 'image.png';
         link.click();
     }
+    console.log("selectedProducts", selectedProducts)
     const token = useSelector(state => state.auth.token)
     const composeName = `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} | ${selectedProducts?.map((product, index) => { return product.name })}`
     const submitArticleInfo = {
@@ -41,6 +47,7 @@ const Summary = () => {
                 number: product.article_number,
                 cdn_url: product.cdn_urls ? product.cdn_urls[0] : product.cdn_url,
                 pos_index: product?.pos_index,
+                is_transparent: product?.is_transparent,
                 scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
                 alignment: product?.align === undefined ? "top-left" : product?.align,
                 height: selectedTemplate?.article_placements[index].height,
