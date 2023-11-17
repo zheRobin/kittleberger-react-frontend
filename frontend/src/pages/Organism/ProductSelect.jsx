@@ -41,7 +41,7 @@ export const ProductView = () => {
                 const positionY = product?.position === undefined ? selectedStyle[0]?.position_y : product?.position[1];
                 if (positionStyle !== undefined) {
                     return {
-                        article_link: product?.cdn_urls[0],
+                        article_link: product?.cdn_urls ? product?.cdn_urls[0] : product?.cdn_url,
                         is_transparent: transImg,
                         top: positionY,
                         left: positionX,
