@@ -24,6 +24,7 @@ const Summary = () => {
             setdeploymentName({ value: composedProduct, copied: false })
         }, [composedProduct]
     )
+    console.log("selectedProducts", selectedProducts)
     function handleDownload() {
         const imageUrl = deploymentName.value;
         const link = document.createElement('a');
@@ -38,7 +39,7 @@ const Summary = () => {
             return {
                 name: product.name,
                 number: product.article_number,
-                cdn_url: product.cdn_urls[0],
+                cdn_url: product.cdn_urls ? product.cdn_urls[0] : product.cdn_url,
                 pos_index: product?.pos_index,
                 scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
                 alignment: product?.align === undefined ? "top-left" : product?.align,
