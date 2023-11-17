@@ -103,7 +103,7 @@ const OverlayGroup = ({ productInfo, index }) => {
                         <img src={ListIcon} alt="ListIcon"></img>
                     </div>
                     <div className="overlay__product">
-                        <div className="typography-400-regular" style={{ color: "white", overflow: "hidden", lineHeight: "16px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{productInfo.name}</div>
+                        <div className="typography-400-regular" style={{ color: "white", overflow: "hidden", lineHeight: "16px", whiteSpace: "nowrap", textOverflow: "ellipsis"}}>{productInfo.name}</div>
                         <div>
                             <img src={CrossIcon} alt="CrossIcon" onClick={(e) => { dispatch(removeProducts(productInfo)) }}></img>
                         </div>
