@@ -1,14 +1,16 @@
 import "./style/dashboardStyle.scss"
 import { Typography } from "@mui/material"
 import AlertDialog from '../../components/Dialog/NormalDialog'
+import { useSelector } from "react-redux"
 
 const SidebarLayout = ({ children }) => {
+    const date = useSelector(state => state.info.updatedDate)
     return (
         <div className="sidebar-container">
             <div className="sidebar-top">
                 <div style={{ marginLeft: "30px", marginTop: "auto", marginBottom: "auto" }}>
                     <Typography variant="paragraph" sx={{ fontSize: "12px", lineHeight: "16px" }}>
-                        Last update: 30.10.2023
+                        Last update: {date}
                     </Typography>
                 </div>
             </div>

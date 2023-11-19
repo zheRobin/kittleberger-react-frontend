@@ -115,14 +115,14 @@ const ProfileLayout = ({ handleModal }) => {
                             </div>
                             {switchRole ? (
                                 <>
-                                    <div className="account-detail pointer">
-                                        <div className="account-detail-info" onClick={() => { navigate("/user/user-manage"); handleModal(false) }}>
+                                    <div className="account-detail pointer" onClick={() => { navigate("/user/user-manage"); handleModal(false) }}>
+                                        <div className="account-detail-info">
                                             <img src={infoEdit} alt={t('Password Change')}></img>
                                             <div className="account-description">{t('Benutzer verwalten')}</div>
                                         </div>
                                     </div>
-                                    <div className="account-detail pointer">
-                                        <div className="account-detail-info" onClick={() => { navigate("/user/api-token"); handleModal(false) }}>
+                                    <div className="account-detail pointer" onClick={() => { navigate("/user/api-token"); handleModal(false) }}>
+                                        <div className="account-detail-info">
                                             <img src={tokenSearch} alt={t('Password Change')}></img>
                                             <div className="account-description">{t('API-Token')}</div>
                                         </div>

@@ -11,7 +11,7 @@ import { getProductsbyFilter } from "../../_services/Product";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
-export default function ProductSearch({ filterData, setFilterData }) {
+export default function ProductSearch({ filterData, usedArticles, setFilterData }) {
   const selectedCountryGroup = useSelector(state => state.products.selectedCountry)
   const token = useSelector(state => state.auth.token);
   const [productList, setProductList] = useState([]);
@@ -23,6 +23,7 @@ export default function ProductSearch({ filterData, setFilterData }) {
     const productInfo = searchString;
     try {
       getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "germany" : selectedCountryGroup[0]);
+      setFilterData(filteredProducts)
     } catch (error) {
       console.error("Error fetching products:", error);
       // Handle the error appropriately
@@ -53,18 +54,21 @@ export default function ProductSearch({ filterData, setFilterData }) {
 
   function getProductInfo(page, productInfo = "", country = "germany") {
     getProductsbyFilter(token, { page, productInfo, country }, (success) => {
-      if (success.data.code === 200 && success.data.status === "success") {
-        setProductList((prevProductList) => {
-          const newList = success.data.data.products.map((product) => ({
-            label: `${product.name}(${product.article_number})`,
-            value: product.article_number
-          }));
-          // setSelectedValues(newList)
-          return newList;
-        });
-      }
-      else {
-      }
+      setProductList((prevProductList) => {
+        const uniqueUsedArticle = usedArticles.reduce((accumulator, current) => {
+          const duplicate = accumulator.find(item => item.number === current.number);
+          if (!duplicate) {
+            accumulator.push(current);
+          }
+          return accumulator;
+        }, []);
+        const newList = uniqueUsedArticle.map((product) => ({
+          label: `${product.name}(${product.number})`,
+          value: product.number
+        }));
+        // setSelectedValues(newList)
+        return newList;
+      });
 
     })
   }
@@ -79,7 +83,6 @@ export default function ProductSearch({ filterData, setFilterData }) {
       value={selectedValues}
       onInputChange={(e) => { setSearchString(e.target.value); }}
       onChange={handleAutocompleteChange}
-      render
       limitTags={3}
       sx={{
         // border: "1px solid blue",
@@ -105,7 +108,7 @@ export default function ProductSearch({ filterData, setFilterData }) {
             ...params.InputProps,
             endAdornment: (
               <InputAdornment position="end">
-                <div className="search-multi pointer" onClick={(e) => setFilterData(filteredProducts)}><img src={search} alt="search" /></div>
+                <div className="search-multi pointer" onClick={(e) => setFilterData(filteredProducts)}><img src={search} alt="search"></img></div>
               </InputAdornment>
             )
           }}

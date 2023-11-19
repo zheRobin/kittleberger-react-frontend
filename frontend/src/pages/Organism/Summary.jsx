@@ -106,33 +106,33 @@ const Summary = () => {
                     <div className="summary__image__desc">
                         <div className="typography-700-bold">{selectedTemplate.name}</div>
                         <div className="typography-400-regular desc__text">
-                            <p>Land: Deutschland, Österreich</p>
-                            <p>Marke: {selectedTemplate.brand.map((brand, index) => (
+                            <div>Land: Deutschland, Österreich</div>
+                            <div>Marke: {selectedTemplate.brand.map((brand, index) => (
                                 <React.Fragment key={index}>
                                     {index > 0 && ", "}
                                     <span>{brand.name}</span>
                                 </React.Fragment>
-                            ))}</p>
+                            ))}</div>
                             <br></br>
-                            <p>Applikation: {selectedTemplate.application.map((application, index) => (
+                            <div>Applikation: {selectedTemplate.application.map((application, index) => (
                                 <React.Fragment key={index}>
                                     {index > 0 && ", "}
                                     <span>{application.name}</span>
                                 </React.Fragment>
-                            ))}</p>
-                            <p>Technische Daten:</p>
-                            <p>{selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px (72 dpi)</p>
-                            <p>Dateiformat: {selectedTemplate.file_type} (RGB)</p>
+                            ))}</div>
+                            <div>Technische Daten:</div>
+                            <div>{selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px (72 dpi)</div>
+                            <div>Dateiformat: {selectedTemplate.file_type} (RGB)</div>
                             <br></br>
-                            <p>Enthaltene Produkte:</p>
-                            <p>{selectedProducts.map((product, index) => (
+                            <div>Enthaltene Produkte:</div>
+                            <div>{selectedProducts.map((product, index) => (
                                 <React.Fragment key={index}>
                                     <div>
                                         <span>{product.name}</span>
                                         <span>({product.article_number})</span>
                                     </div>
                                 </React.Fragment>
-                            ))}</p>
+                            ))}</div>
                             <br></br>
                             <p>Erstellt von Benutzer X {formattedDate_created}</p>
                             <p>Zuletzt bearbeitet von Benutzer Y {formattedDate_modified}</p>

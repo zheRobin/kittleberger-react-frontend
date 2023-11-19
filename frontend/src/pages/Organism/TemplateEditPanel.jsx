@@ -133,7 +133,7 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                 )
                 )}
                 <div className="right-b__bottom">
-                    <img src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
+                    <img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
                     <div className="typo-700-regular pointer" onClick={() => arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', })}>
                         Ein weiteres Platzhalterbild hinzufügen
                     </div>

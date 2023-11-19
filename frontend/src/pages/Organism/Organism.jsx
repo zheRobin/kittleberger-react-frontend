@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
-import { appendTemplate, selectPage, setLoadingStatus, initTemplate, initProductsOnTemplates, appendProductsOnTemplate } from '../../store';
+import { appendTemplate, setUsedArticles, selectPage, setUpdatedDate, setLoadingStatus, initTemplate, initProductsOnTemplates, appendProductsOnTemplate } from '../../store';
 import { infiniteTemplate } from '../../_services/Template';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import 'react-toastify/dist/ReactToastify.css';
@@ -51,8 +51,18 @@ const Organism = () => {
     const templates = useSelector(state => state.templates.templateData)
     const products = useSelector(state => state.templates.productsOnTemplates)
     const loadingStatus = useSelector(state => state.templates.loadingStatus)
+    const usedArticles = useSelector(state => state.products.usedArticles)
     let page = useSelector(state => state.templates.page)
     let filters = useSelector(state => state.templates.filterData)
+    const dateConvert = (originDate) => {
+        const date = new Date(originDate);
+        const formattedDate = date.toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        }).replace(/\//g, ".");
+        return formattedDate
+    }
     useEffect(
         () => {
             setFilterData(products)
@@ -66,6 +76,8 @@ const Organism = () => {
                 setLoading(false)
             }
             if (success.status === 200) {
+                dispatch(setUpdatedDate(dateConvert(success.data.results.document_last_update)))
+                dispatch(setUsedArticles(success.data.results.articles))
                 dispatch(selectPage(page + 1))
                 dispatch(initTemplate(success.data.results.templates))
                 dispatch(initProductsOnTemplates(success.data.results.products))
@@ -171,7 +183,7 @@ const Organism = () => {
                                 </TabPanel>
 
                                 <TabPanel value="2">
-                                    <ProductSearch filterData={products} setFilterData={setFilterData} />
+                                    <ProductSearch usedArticles={usedArticles} filterData={products} setFilterData={setFilterData} />
                                     {products.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
                                         <div className='template-tab-2'>
                                             <div id="scrollableDiv" className='multi-product-container'>

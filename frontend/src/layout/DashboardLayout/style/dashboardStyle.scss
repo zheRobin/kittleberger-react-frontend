@@ -59,12 +59,12 @@
         justify-content: center;
         background-color: #E0E2E5;
         height: calc(100vh - 90px);
-        overflow-y: scroll;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-        &::-webkit-scrollbar{
-            display: none;
-        }
+        // overflow-y: scroll;
+        // -ms-overflow-style: none;
+        // scrollbar-width: none;
+        // &::-webkit-scrollbar{
+        //     display: none;
+        // }
 
     }
 
