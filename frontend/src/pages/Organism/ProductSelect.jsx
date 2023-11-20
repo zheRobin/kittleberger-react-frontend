@@ -78,8 +78,12 @@ export const ProductList = ({ productItem, possiblePos, setPreview, setVisible }
 
     return (
         <div className="product-list-panel">
-            <div className="pointer" onClick={() => { setPreview([productItem?.cdn_urls[0]]); setVisible(true) }}>
-                <img src={productItem?.cdn_urls[0] ? productItem?.cdn_urls[0] : require("../../assets/images/product-image.png")} alt="product" />
+            <div style={{
+                maxWidth: '70px',
+                maxHeight: "70px",
+                marginRight: '5px'
+            }} className="pointer" onClick={() => { setPreview([productItem?.cdn_urls[0]]); setVisible(true) }}>
+                <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src={productItem?.cdn_urls[0] ? productItem?.cdn_urls[0] : require("../../assets/images/product-image.png")} alt="product" />
             </div>
             <div className="product-info" >
                 <div className="label-info">

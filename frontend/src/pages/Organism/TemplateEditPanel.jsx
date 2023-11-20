@@ -19,7 +19,6 @@ import * as Yup from 'yup'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { updateTemplate } from '../../_services/Template';
 import 'react-tiff/dist/index.css'
-
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
         <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -196,6 +195,19 @@ const TemplateEditPanel = () => {
             },
         },
     });
+    // const [imageBitmap, setImageBitmap] = useState(null);
+    // const imageUrl = "https://people.math.sc.edu/Burkardt/data/tif/bali.tif"
+    // const myCanvas = useRef();
+
+    // useEffect(() => {
+    //     const context = myCanvas.current.getContext("2d");
+    //     const image = new Image();
+    //     image.src =
+    //         "https://file-examples.com/wp-content/storage/2017/10/file_example_TIFF_1MB.tiff";
+    //     image.onload = () => {
+    //         context.drawImage(image, 0, 0, 500, 500);
+    //     };
+    // }, []);
 
 
     useLayoutEffect(() => {
@@ -270,6 +282,7 @@ const TemplateEditPanel = () => {
 
                         < Form className='template-form'>
                             <div className='template-panel'>
+                                <canvas src="../../assets/images/bali.tif" />
                                 <div
                                     className="top-template-button"
                                     onClick={handleSubmit}
@@ -430,11 +443,14 @@ const TemplateEditPanel = () => {
                                                                             </div>
                                                                         ))}
                                                                         {images.length === 0 ? (
-                                                                            <div className="image-item" style={{ width: "100%", height: "100%" }}>
-                                                                                <img src={productInfo?.bg_image_cdn_url} alt="backimage"
-                                                                                    style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                                                                            // <canvas ref={myCanvas} width={500} height={500} />
 
-                                                                            </div>) : null}
+                                                                            <div className="image-item" style={{ width: "100%", height: "100%" }}>
+                                                                                <img src={productInfo?.bg_image_cdn_url} alt="backviewimage"
+                                                                                    style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                                                                            </div>
+                                                                        ) : null}
+
                                                                     </div>
                                                                 </div>
                                                             ) : null}

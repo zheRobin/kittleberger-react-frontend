@@ -124,18 +124,21 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
               </InputAdornment>
             )
           }}
-          renderTags={(value, getTagProps) =>
+          rendertags={(value, getTagProps) =>
             value.map((option, index) => (
-              <div key={option} className="tag">
-                {option}
-                <CloseIcon
-                  {...getTagProps({ index })}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // Handle close tag action here
-                  }}
-                />
-              </div>
+              <>
+                <div key={index} className="tag">
+                  {option}
+                  <CloseIcon
+                    {...getTagProps({ index })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Handle close tag action here
+                    }}
+                  />
+                </div>
+              </>
+
             ))
           }
         />
@@ -143,12 +146,3 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
     />
   );
 }
-
-const top100Films = [
-  { label: "The Shawshank Redemption", year: 1994 },
-  { label: "The Godfather", year: 1972 },
-  { label: "The Godfather: Part II", year: 1974 },
-  { label: "The Dark Knight", year: 2008 },
-  { label: "12 Angry Men", year: 1957 },
-
-];

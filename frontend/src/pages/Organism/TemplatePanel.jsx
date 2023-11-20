@@ -18,7 +18,6 @@ import ImageTemplate from "../../components/Composing/ImageTempate"
 import { useRef, useLayoutEffect } from 'react';
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom';
-
 export const TemplateButton = ({ content, type = "brown" }) => {
   return (
     <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -169,6 +168,7 @@ const TemplatePanel = () => {
   const [backView, setBackView] = useState(false);
   const [preView, setPreView] = useState(false);
   const [images, setImages] = useState([{ data_url: "" }]);
+  console.log(images)
   const [tempImages, setTempImages] = useState({ width: 1, height: 1 });
   const [width, setWidth] = useState(500);
   const [height, setHeight] = useState(500);
