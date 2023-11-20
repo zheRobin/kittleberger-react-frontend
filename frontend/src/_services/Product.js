@@ -50,6 +50,16 @@ export async function getOnlineInfo(token, templateInfo, success) {
         })
 }
 
+export async function updateOnlineInfo(token, templateInfo, success) {
+    setAuthToken(token)
+    axios.put(`${process.env.REACT_APP_API_URL}api/v1/compose/product/`, templateInfo)
+        .then(res => {
+            success(res)
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        })
+}
 export function calcPosition(type = 'top-left', posX, posY, templateWidth, templateHeight, sliderScale) {
     switch (type) {
         case "top-left":

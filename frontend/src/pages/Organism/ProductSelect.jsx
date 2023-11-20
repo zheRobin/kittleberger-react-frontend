@@ -23,14 +23,6 @@ export const ProductView = () => {
     useEffect(() => {
         if (imgRef.current) {
             setLoading(true);
-            // const img = new Image();
-            // const imgSrc = "https://jdffrqoludeprmyyavwe.supabase.co/storage/v1/object/public/lenderprism/Image/3.png";
-            // img.onerror = function () {
-            //     console.error("Error loading image:", imgSrc);
-            //     setLoading(false);
-            // };
-
-            // img.src = imgSrc;
 
             const article = selectedProducts?.map((product) => {
                 const positionStyle = selectedTemplate?.article_placements;

@@ -120,14 +120,14 @@
 .template-tab-1 {
     position: relative;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     height: 100%;
 }
 
 .template-tab-2 {
     position: relative;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     height: 100%;
 }
 
@@ -135,7 +135,7 @@
 .product-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: start;
+    justify-content: flex-start;
     gap: 17px;
     margin-top: 20px;
     position: absolute;
@@ -162,8 +162,9 @@
     margin-top: 20px;
     width: 100%;
     display: grid;
-    justify-content: start;
+    justify-content: flex-start;
     grid-template-columns: 335px 335px 335px;
+    grid-template-rows: 37ch auto minmax(390px, 390px);
     gap: 20px;
     height: calc(100vh - 180px);
     overflow: scroll;

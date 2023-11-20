@@ -8,9 +8,13 @@ export const productsSlice = createSlice({
         selectedTemplate: JSON.parse(localStorage.getItem('templateInfo')),
         selectedCountry:[],
         composedProduct:'',
-        usedArticles:[]
+        usedArticles:[],
+        cardInfo:{}
     },
     reducers:{
+        setCardInfo:(state, action) =>{
+            state.cardInfo = action.payload
+        },
         setUsedArticles:(state,action) => {
             state.usedArticles = action.payload
         },
@@ -18,6 +22,8 @@ export const productsSlice = createSlice({
             state.selectedProducts = []
             state.selectedTemplate = []
             state.selectedCountry = []
+            state.cardInfo ={}
+            state.usedArticles =[]
           },
         appendProducts: (state, action) => {
             const productsLength = state.selectedProducts.length
@@ -104,6 +110,6 @@ export const productsSlice = createSlice({
 })
 
 
-export const {setUsedArticles, emptyStore,setProductLists, appendCountries, removeCountries, appendProducts, updateProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
+export const {setUsedArticles,setCardInfo, emptyStore,setProductLists, appendCountries, removeCountries, appendProducts, updateProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
 export const productsReducer = productsSlice.reducer
 export default productsSlice.reducer

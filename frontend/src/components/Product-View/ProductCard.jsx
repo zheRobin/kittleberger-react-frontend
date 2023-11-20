@@ -3,7 +3,7 @@ import editPencil from "../../assets/icons/pencil-white.svg"
 import cancel from "../../assets/icons/cross.svg"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { findTemplates, setProductLists, setComposedProduct } from "../../store"
+import { findTemplates, setProductLists, setComposedProduct, setCardInfo } from "../../store"
 
 const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const navigate = useNavigate();
@@ -32,8 +32,8 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         navigate(`/product/product-select`)
                     }
                     if (type === 2) {
-
                         localStorage.setItem('templateInfo', JSON.stringify(cardInfo.template));
+                        dispatch(setCardInfo(cardInfo))
                         dispatch(setComposedProduct(cardInfo.cdn_url))
                         dispatch(findTemplates(cardInfo.template));
                         const updatedArticles = cardInfo.articles.map((article) => {

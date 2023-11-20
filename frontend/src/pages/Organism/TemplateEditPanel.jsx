@@ -18,6 +18,8 @@ import { useRef, useLayoutEffect, useEffect } from 'react';
 import * as Yup from 'yup'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { updateTemplate } from '../../_services/Template';
+import 'react-tiff/dist/index.css'
+
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
         <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -167,6 +169,7 @@ const TemplateEditPanel = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
     const productInfo = state ? state : {}
+    console.log("productInfo", productInfo)
     const [backView, setBackView] = useState(productInfo?.bg_image_cdn_url ? true : false);
     const [preView, setPreView] = useState(productInfo?.preview_image_cdn_url ? true : false);
     const [images, setImages] = useState([]);
@@ -193,6 +196,8 @@ const TemplateEditPanel = () => {
             },
         },
     });
+
+
     useLayoutEffect(() => {
         const handleResize = () => {
             setWidth(elementRef?.current?.offsetWidth);
@@ -428,6 +433,7 @@ const TemplateEditPanel = () => {
                                                                             <div className="image-item" style={{ width: "100%", height: "100%" }}>
                                                                                 <img src={productInfo?.bg_image_cdn_url} alt="backimage"
                                                                                     style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+
                                                                             </div>) : null}
                                                                     </div>
                                                                 </div>
@@ -482,6 +488,7 @@ const TemplateEditPanel = () => {
                                                                         </div>
                                                                     </div>
                                                                     <div className="product-image pointer">
+
                                                                         {imageList.map((image, index) => (
                                                                             <div key={index} className="image-item" style={{ width: "100%", height: "100%" }}>
                                                                                 <img src={image['data_url']} alt="backimage"

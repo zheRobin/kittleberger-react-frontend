@@ -23,7 +23,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
     const productInfo = searchString;
     try {
       getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "germany" : selectedCountryGroup[0]);
-      setFilterData(filteredProducts)
+
     } catch (error) {
       console.error("Error fetching products:", error);
       // Handle the error appropriately
@@ -43,9 +43,19 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
   }, [searchString]);
 
   const [selectedValues, setSelectedValues] = useState([]);
-  const handleAutocompleteChange = (event, newValue) => {
-    setSelectedValues(newValue);
+  const handleAutocompleteChange = async (event, newValue) => {
+    setSelectedValues((preValue) => { return newValue });
   };
+  useEffect(
+    () => {
+      const filteredProducts = filterData.filter((product) =>
+        selectedValues.every((selectedValue) =>
+          product.articles.some((article) => article.number === selectedValue.value)
+        )
+      );
+      setFilterData((preview_image) => filteredProducts)
+    }, [selectedValues]
+  )
   const filteredProducts = filterData.filter((product) =>
     selectedValues.every((selectedValue) =>
       product.articles.some((article) => article.number === selectedValue.value)
@@ -68,9 +78,11 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
         }));
         // setSelectedValues(newList)
         return newList;
+
       });
 
     })
+    setFilterData(filteredProducts)
   }
 
   return (
