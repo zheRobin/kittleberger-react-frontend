@@ -9,7 +9,6 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const navigate = useNavigate();
     const switchRole = useSelector(state => state.info.adminMethod)
     const dispatch = useDispatch()
-    console.log(cardInfo?.png_result)
     return (
         <>
             <div className="product-card">

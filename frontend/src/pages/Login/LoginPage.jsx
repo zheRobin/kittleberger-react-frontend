@@ -141,7 +141,7 @@ const LoginPage = () => {
                             </div>
                             <div className="form-footer">
                                 <div className="pointer forgot-pass" onClick={handleNavigate}>
-                                    Forgot password
+                                    {/* Forgot password */}
                                 </div>
                                 <Button
                                     type="submit"

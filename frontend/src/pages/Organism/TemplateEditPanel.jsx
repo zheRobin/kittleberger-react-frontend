@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { createTheme } from "@mui/material/styles";
 import { Typography, ThemeProvider, Checkbox, TextField, Select, MenuItem } from "@mui/material"
 import ImageUploading from 'react-images-uploading';
+import { useTranslation } from 'react-i18next';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from 'react';
 import { useSelector } from "react-redux";
@@ -18,6 +19,7 @@ import { useRef, useLayoutEffect, useEffect } from 'react';
 import * as Yup from 'yup'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { updateTemplate } from '../../_services/Template';
+import spinner from "../../assets/icons/tube-spinner.svg"
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
         <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -60,6 +62,7 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
 export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue }) => {
     const [articleGroup, setArticleGroup] = useState(values);
     const [draggedItem, setDraggedItem] = useState({})
+    const { t, i18n } = useTranslation();
     useEffect(
         () => {
             setArticleGroup(values)
@@ -135,7 +138,7 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                 <div className="right-b__bottom">
                     <img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
                     <div className="typo-700-regular pointer" onClick={() => arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', })}>
-                        Ein weiteres Platzhalterbild hinzufügen
+                        {t("Ein weiteres Platzhalterbild hinzufügen")}
                     </div>
                 </div>
             </div>
@@ -164,6 +167,7 @@ export const Loading = () => {
 
 
 const TemplateEditPanel = () => {
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate()
     const { state } = useLocation()
     const productInfo = state ? state : {}
@@ -183,6 +187,8 @@ const TemplateEditPanel = () => {
     const templateTypes = useSelector(state => state.auth.templateTypes)
     const brands = templateTypes.brands.map(brand => ({ ...brand, value: false }));
     const applications = templateTypes.applications.map(app => ({ ...app, value: false }));
+    const [backLoading, setBackLoading] = useState(false)
+    const [previewLoading, setPreviewLoading] = useState(false)
     const theme = createTheme({
         palette: {
             ochre: {
@@ -270,25 +276,25 @@ const TemplateEditPanel = () => {
                 >
                     {({ values, setFieldValue, handleSubmit }) => (
 
-                        < Form className='template-form'>
+                        <Form className='template-form'>
                             <div className='template-panel'>
                                 <canvas src="../../assets/images/bali.tif" />
                                 <div
                                     className="top-template-button"
                                     onClick={handleSubmit}
                                 >
-                                    <TemplateButton content={"Template speichern"} />
+                                    <TemplateButton content={t("Template speichern")} />
                                 </div>
                                 <div className="panel-group">
                                     <div className="product-setting-panel">
                                         <div className="product-setting-panel__top">
-                                            <div className="typography-400-regular top-typo">Allgemein</div>
+                                            <div className="typography-400-regular top-typo">{t("Allgemein")}</div>
                                         </div>
                                         <div className="product-setting-panel__bottom">
                                             <div className="input-group">
                                                 <div className="label-input-pair">
                                                     <div className="label__left">
-                                                        <p className="typography-400-regular">Name*</p>
+                                                        <p className="typography-400-regular">{t("Name")}*</p>
                                                     </div>
                                                     <div className='label__right' style={{ flexDirection: "column", alignItems: "center" }}>
                                                         <Field as={TextField} name='name' />
@@ -296,11 +302,10 @@ const TemplateEditPanel = () => {
                                                             <ErrorMessage name="name" component="p" className="validation" />
                                                         </div>
                                                     </div>
-
                                                 </div>
                                                 <div className="label-select-pair">
                                                     <div className="label__left">
-                                                        <p className="typography-400-regular">Dateityp*</p>
+                                                        <p className="typography-400-regular">{t("Dateityp")}*</p>
                                                     </div>
                                                     <div className="label__right">
                                                         <div className="select-group">
@@ -317,23 +322,23 @@ const TemplateEditPanel = () => {
                                                                         marginLeft: "9px"
                                                                     }
                                                                 }}
-                                                            >   <MenuItem value="" disabled>
-                                                                    <em>select the value</em>
+                                                            >
+                                                                <MenuItem value="" disabled>
+                                                                    <em>{t("select the value")}</em>
                                                                 </MenuItem>
                                                                 <MenuItem value="JPEG">.jpg</MenuItem>
                                                                 <MenuItem value="PNG">.png</MenuItem>
                                                                 <MenuItem value="TIFF">.tiff</MenuItem>
                                                             </Field>
                                                             <p className="typography-400-regular select-subtitle">
-                                                                .jpg und .png sind in 72 dpi; .tiff ist in 300 dpi
+                                                                .jpg {t("und")} .png {t("sind in 72 dpi;")} .tiff {t("ist in 300 dpi")}
                                                             </p>
-
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="label-input-pair">
                                                     <div className="label__left">
-                                                        <div className="typography-400-regular">Width*</div>
+                                                        <div className="typography-400-regular">{t("Width")}*</div>
                                                     </div>
                                                     <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
                                                         <Field as={TextField} name="resolution_width" />
@@ -344,7 +349,7 @@ const TemplateEditPanel = () => {
                                                 </div>
                                                 <div className="label-input-pair" >
                                                     <div className="label__left">
-                                                        <div className="typography-400-regular">Height*</div>
+                                                        <div className="typography-400-regular">{t("Height")}*</div>
                                                     </div>
                                                     <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
                                                         <Field as={TextField} name="resolution_height" />
@@ -356,7 +361,7 @@ const TemplateEditPanel = () => {
                                                 <div className="check-group">
                                                     <div className="label-check-pair">
                                                         <div className="label-check-pair__label">
-                                                            <div className="typography-400-regular">Schatten</div>
+                                                            <div className="typography-400-regular">{t("Schatten")}</div>
                                                         </div>
                                                         <div className='label__right'>
                                                             <div className='label-check-pair__checkbox'>
@@ -366,32 +371,34 @@ const TemplateEditPanel = () => {
                                                                     onChange={(e) => setFieldValue('is_shadow', e.target.checked)}
                                                                     style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }}
                                                                     name="is_shadow"
-                                                                />                                                                    <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>Produktschatten aktivieren</div>
+                                                                />
+                                                                <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>{t("Produktschatten aktivieren")}</div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="check-group">
-                                                    <CheckboxGroupComponent label="Marke *" values={values.brands} name="brands" />
-
+                                                    <CheckboxGroupComponent label={t("Marke *")} values={values.brands} name="brands" />
                                                 </div>
                                                 <div className="check-group">
-                                                    <CheckboxGroupComponent label="Anwendung *" values={values.applications} name="applications" />
+                                                    <CheckboxGroupComponent label={t("Anwendung *")} values={values.applications} name="applications" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="product-setting-panel background-upload-panel">
                                         <div className="product-setting-panel__top">
-                                            <div className="typography-400-regular top-typo">Hintergrund</div>
+                                            <div className="typography-400-regular top-typo">{t("Hintergrund")}</div>
                                         </div>
                                         <div className="product-setting-panel__bottom">
                                             <ImageUploading
                                                 value={images}
                                                 onChange={(imageList) => {
-                                                    if (imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                                                    if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                                                         const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
+                                                        setBackLoading(true)
                                                         const fetchImage = async (para) => {
+
                                                             const response = await fetch(url, {
                                                                 method: "POST",
                                                                 headers: {
@@ -405,6 +412,7 @@ const TemplateEditPanel = () => {
                                                             setImages([{ data_url: data.data }]);
                                                             setFieldValue("background_image", imageList[0])
                                                             // setImgSrc(data.data);data
+                                                            setBackLoading(false)
                                                         }
                                                         fetchImage(imageList[0]['data_url'])
                                                     }
@@ -428,7 +436,7 @@ const TemplateEditPanel = () => {
                                                     // write your building UI
                                                     <div className="upload__image-wrapper">
                                                         <div className="image-position__left" onClick={() => { onImageUpload(); setBackView(true) }}>
-                                                            <TemplateButton content={"Einen anderen Hintergrund hinzufügen"} />
+                                                            <TemplateButton content={t("Einen anderen Hintergrund hinzufügen")} />
                                                             <ErrorMessage name="background_image" component="p" className="validation" />
                                                         </div>
                                                         <div className="image-position__left">
@@ -449,7 +457,7 @@ const TemplateEditPanel = () => {
                                                                         {imageList.map((image, index) => (
                                                                             <div key={index} className="image-item"
                                                                                 style={{ width: "100%", height: "100%" }}>
-                                                                                <img src={image['data_url']} alt="background"
+                                                                                <img src={backLoading ? spinner : image['data_url']} alt="background"
                                                                                     style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                                                                             </div>
                                                                         ))}
@@ -472,15 +480,17 @@ const TemplateEditPanel = () => {
                                     </div>
                                     <div className="product-setting-panel thumbnail-panel">
                                         <div className="product-setting-panel__top">
-                                            <div className="typography-400-regular top-typo">Vorschaubild</div>
+                                            <div className="typography-400-regular top-typo">{t("Vorschaubild")}</div>
                                         </div>
                                         <div className="product-setting-panel__bottom">
                                             <ImageUploading
                                                 value={previewImages}
                                                 onChange={(imageList) => {
-                                                    if (imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                                                    if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                                                         const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
+                                                        setPreviewLoading(true)
                                                         const fetchImage = async (para) => {
+
                                                             const response = await fetch(url, {
                                                                 method: "POST",
                                                                 headers: {
@@ -493,6 +503,7 @@ const TemplateEditPanel = () => {
                                                             const data = await response.json();
                                                             setPreviewImages([{ data_url: data.data }]);
                                                             setFieldValue("preview_image", imageList[0])
+                                                            setPreviewLoading(false)
                                                             // setImgSrc(data.data);data
                                                         }
                                                         fetchImage(imageList[0]['data_url'])
@@ -529,7 +540,7 @@ const TemplateEditPanel = () => {
                                                                                 <div className="product-name"></div>
                                                                                 <div className="product-image-info"></div>
                                                                             </div>
-                                                                            <div className="product-icon pointer" onClick={(e) => { onImageRemoveAll(); setPreView(false) }}>
+                                                                            <div className="product-icon pointer" onClick={(e) => { if (previewImages.length !== 0 && previewImages[0]?.data_url !== undefined) { onImageRemoveAll() } setPreView(false) }}>
                                                                                 <img src={DeleteIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
                                                                             </div>
                                                                         </div>
@@ -538,7 +549,7 @@ const TemplateEditPanel = () => {
 
                                                                         {imageList.map((image, index) => (
                                                                             <div key={index} className="image-item" style={{ width: "100%", height: "100%" }}>
-                                                                                <img src={image['data_url']} alt="backimage"
+                                                                                <img src={previewLoading ? spinner : image['data_url']} alt="backimage"
                                                                                     style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                                                                             </div>
                                                                         ))}

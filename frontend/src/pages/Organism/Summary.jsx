@@ -10,8 +10,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Loading } from "./ProductSelect"
 import { useLocation } from "react-router-dom"
-
+import { useTranslation } from 'react-i18next';
 const Summary = () => {
+    const { t, i18n } = useTranslation();
     const { state } = useLocation()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate)
     const selectedProducts = useSelector(state => state.products.selectedProducts)
@@ -127,15 +128,15 @@ const Summary = () => {
         minute: "2-digit"
     })} Uhr`;
     const metadata = `
-Land: Deutschland, Österreich
-Marke: ${selectedTemplate.brand.map((brand, index) => brand.name).join(", ")}
-Applikation: ${selectedTemplate.application.map((application, index) => application.name).join(", ")}
-Technische Daten: ${selectedTemplate.resolution_width} x ${selectedTemplate.resolution_height} px (72 dpi)
-Dateiformat: ${selectedTemplate.file_type} (RGB)
-Enthaltene Produkte: ${selectedProducts.map((product, index) => `${product.name} (${product.article_number})`).join(", ")}
-Erstellt von Benutzer X ${formattedDate_created}
-Zuletzt bearbeitet von Benutzer Y ${formattedDate_modified}
-`;
+    ${t('Land')}: Deutschland, Österreich
+    ${t('Marke')}: ${selectedTemplate.brand.map((brand, index) => brand.name).join(", ")}
+    ${t('Applikation')}: ${selectedTemplate.application.map((application, index) => application.name).join(", ")}
+    ${t('Technische Daten')}: ${selectedTemplate.resolution_width} x ${selectedTemplate.resolution_height} px (72 dpi)
+    ${t('Dateiformat')}: ${selectedTemplate.file_type} (RGB)
+    ${t('Enthaltene Produkte')}: ${selectedProducts.map((product, index) => `${product.name} (${product.article_number})`).join(", ")}
+    ${t('Erstellt von Benutzer X')} ${formattedDate_created}
+    ${t('Zuletzt bearbeitet von Benutzer Y')} ${formattedDate_modified}
+  `;
     const fileName = "metadata"
     const downloadMetaData = () => {
         const blob = new Blob([metadata], { type: 'text/plain' });
@@ -158,25 +159,25 @@ Zuletzt bearbeitet von Benutzer Y ${formattedDate_modified}
                     <div className="summary__image__desc">
                         <div className="typography-700-bold">{selectedTemplate.name}</div>
                         <div className="typography-400-regular desc__text">
-                            <div>Land: Deutschland, Österreich</div>
-                            <div>Marke: {selectedTemplate.brand.map((brand, index) => (
+                            <div>{t('Land')}: Deutschland, Österreich</div>
+                            <div>{t('Marke')}: {selectedTemplate.brand.map((brand, index) => (
                                 <React.Fragment key={index}>
                                     {index > 0 && ", "}
                                     <span>{brand.name}</span>
                                 </React.Fragment>
                             ))}</div>
                             <br></br>
-                            <div>Applikation: {selectedTemplate.application.map((application, index) => (
+                            <div>{t('Applikation')}: {selectedTemplate.application.map((application, index) => (
                                 <React.Fragment key={index}>
                                     {index > 0 && ", "}
                                     <span>{application.name}</span>
                                 </React.Fragment>
                             ))}</div>
-                            <div>Technische Daten:</div>
+                            <div>{t('Technische Daten')}:</div>
                             <div>{selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px (72 dpi)</div>
-                            <div>Dateiformat: {selectedTemplate.file_type} (RGB)</div>
+                            <div>{t('Dateiformat')}: {selectedTemplate.file_type} (RGB)</div>
                             <br></br>
-                            <div>Enthaltene Produkte:</div>
+                            <div>{t('Enthaltene Produkte')}:</div>
                             <div>{selectedProducts.map((product, index) => (
                                 <React.Fragment key={index}>
                                     <div>
@@ -186,41 +187,40 @@ Zuletzt bearbeitet von Benutzer Y ${formattedDate_modified}
                                 </React.Fragment>
                             ))}</div>
                             <br></br>
-                            <p>Erstellt von Benutzer X {formattedDate_created}</p>
-                            <p>Zuletzt bearbeitet von Benutzer Y {formattedDate_modified}</p>
+                            <p>{t('Erstellt von Benutzer X')} {formattedDate_created}</p>
+                            <p>{t('Zuletzt bearbeitet von Benutzer Y')} {formattedDate_modified}</p>
                         </div>
                     </div>
                 </div>
                 <div className="summary__detail">
                     <div className="typography-400-regular">
-                        Zum Veröffentlichen dieses Composings, bitte einen Namen vergeben und speichern.
+                        {t('Zum Veröffentlichen dieses Composings, bitte einen Namen vergeben und speichern.')}
                         <p></p>
-                        Bitte beachten Sie, dass jede Änderung an diesem Composing auf bereits geteilte Composing-URLs Einfluss hat.
+                        {t('Bitte beachten Sie, dass jede Änderung an diesem Composing auf bereits geteilte Composing-URLs Einfluss hat.')}
                     </div>
-
                     <div className="composing-name">
-                        <div className="typography-700-regular">Composing Name</div>
+                        <div className="typography-700-regular">{t('Composing Name')}</div>
                         <input value={composeName} readOnly />
-                        <div onClick={(e) => saveInfo()}><TemplateButton content={"Speichern"} /></div>
+                        <div onClick={(e) => saveInfo()}><TemplateButton content={t('Speichern')} /></div>
                     </div>
-
                     <div className="deployment">
-                        <div className="typography-700-regular">Bereitstellung</div>
-                        <div className="url-group"><Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="280px">{deploymentName.value}</Typography>
-                            <CopyToClipboard text={deploymentName.value}
-                                onCopy={() => setdeploymentName({ ...deploymentName, copied: true })}>
+                        <div className="typography-700-regular">{t('Bereitstellung')}</div>
+                        <div className="url-group">
+                            <Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="280px">
+                                {deploymentName.value}
+                            </Typography>
+                            <CopyToClipboard text={deploymentName.value} onCopy={() => setdeploymentName({ ...deploymentName, copied: true })}>
                                 <img className="pointer" src={copy} alt=" copy" />
                             </CopyToClipboard>
                         </div>
-                        <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={"Download Bilddatei"} type="transparent" /></div>
-                        <div className="download-button" onClick={() => downloadMetaData()}><TemplateButton content={"Download Metadaten"} type="transparent" /></div>
+                        <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={t('Download Bilddatei')} type="transparent" /></div>
+                        <div className="download-button" onClick={() => downloadMetaData()}><TemplateButton content={t('Download Metadaten')} type="transparent" /></div>
                     </div>
                 </div>
                 <ToastContainer />
             </div>
-
         </>
-    )
-}
+    );
+};
 
-export default Summary
+export default Summary;

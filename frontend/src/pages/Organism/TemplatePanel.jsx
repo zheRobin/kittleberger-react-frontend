@@ -18,6 +18,8 @@ import ImageTemplate from "../../components/Composing/ImageTempate"
 import { useRef, useLayoutEffect } from 'react';
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom';
+import spinner from "../../assets/icons/tube-spinner.svg"
+
 export const TemplateButton = ({ content, type = "brown" }) => {
   return (
     <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -169,6 +171,8 @@ const TemplatePanel = () => {
   const [preView, setPreView] = useState(false);
   const [images, setImages] = useState([{ data_url: "" }]);
   const [tempImages, setTempImages] = useState({ width: 1, height: 1 });
+  const [backLoading, setBackLoading] = useState(false)
+  const [previewLoading, setPreviewLoading] = useState(false)
   const [width, setWidth] = useState(500);
   const [height, setHeight] = useState(500);
   const [loading, setLoading] = useState(false);
@@ -380,9 +384,10 @@ const TemplatePanel = () => {
                       <ImageUploading
                         value={images}
                         onChange={(imageList) => {
-                          if (imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                          if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                             const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
                             const fetchImage = async (para) => {
+                              setBackLoading(true)
                               const response = await fetch(url, {
                                 method: "POST",
                                 headers: {
@@ -395,6 +400,7 @@ const TemplatePanel = () => {
                               const data = await response.json();
                               setImages([{ data_url: data.data }]);
                               setFieldValue("background_image", imageList[0])
+                              setBackLoading(false)
                               // setImgSrc(data.data);data
                             }
                             fetchImage(imageList[0]['data_url'])
@@ -440,7 +446,8 @@ const TemplatePanel = () => {
                                     {imageList.map((image, index) => (
                                       <div key={index} className="image-item"
                                         style={{ width: "100%", height: "100%" }}>
-                                        <img src={image['data_url']} alt="background"
+
+                                        <img src={backLoading ? spinner : imageList[0].data_url} alt="background"
                                           style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                                       </div>
                                     ))}
@@ -462,9 +469,11 @@ const TemplatePanel = () => {
                       <ImageUploading
                         value={previewImages}
                         onChange={(imageList) => {
-                          if (imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                          if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                             const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
+                            setPreviewLoading(true)
                             const fetchImage = async (para) => {
+
                               const response = await fetch(url, {
                                 method: "POST",
                                 headers: {
@@ -478,6 +487,7 @@ const TemplatePanel = () => {
                               setPreviewImages([{ data_url: data.data }]);
                               setFieldValue("preview_image", imageList[0])
                               // setImgSrc(data.data);data
+                              setPreviewLoading(false)
                             }
                             fetchImage(imageList[0]['data_url'])
                           }
@@ -520,7 +530,7 @@ const TemplatePanel = () => {
                                   <div className="product-image pointer">
                                     {imageList.map((image, index) => (
                                       <div key={index} className="image-item" style={{ width: "100%", height: "100%" }}>
-                                        <img src={image['data_url']} alt="backimage"
+                                        <img src={previewLoading ? spinner : image['data_url']} alt="backimage"
                                           style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                                       </div>
                                     ))}
