@@ -18,7 +18,6 @@ import { useRef, useLayoutEffect, useEffect } from 'react';
 import * as Yup from 'yup'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { updateTemplate } from '../../_services/Template';
-import 'react-tiff/dist/index.css'
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
         <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>

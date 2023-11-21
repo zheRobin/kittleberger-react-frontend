@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../style/dashboardStyle.scss"
-import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { switchRole } from "../../../store";

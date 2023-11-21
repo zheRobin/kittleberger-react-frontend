@@ -5,7 +5,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import { getProductsbyFilter } from "../../_services/Product";
 import { useSelector } from "react-redux";
