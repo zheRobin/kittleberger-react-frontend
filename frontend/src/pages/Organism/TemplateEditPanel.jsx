@@ -168,7 +168,6 @@ const TemplateEditPanel = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
     const productInfo = state ? state : {}
-    console.log("productInfo", productInfo)
     const [backView, setBackView] = useState(productInfo?.bg_image_cdn_url ? true : false);
     const [preView, setPreView] = useState(productInfo?.preview_image_cdn_url ? true : false);
     const [images, setImages] = useState([]);
@@ -195,19 +194,6 @@ const TemplateEditPanel = () => {
             },
         },
     });
-    // const [imageBitmap, setImageBitmap] = useState(null);
-    // const imageUrl = "https://people.math.sc.edu/Burkardt/data/tif/bali.tif"
-    // const myCanvas = useRef();
-
-    // useEffect(() => {
-    //     const context = myCanvas.current.getContext("2d");
-    //     const image = new Image();
-    //     image.src =
-    //         "https://file-examples.com/wp-content/storage/2017/10/file_example_TIFF_1MB.tiff";
-    //     image.onload = () => {
-    //         context.drawImage(image, 0, 0, 500, 500);
-    //     };
-    // }, []);
 
 
     useLayoutEffect(() => {
@@ -399,8 +385,29 @@ const TemplateEditPanel = () => {
                                             <ImageUploading
                                                 value={images}
                                                 onChange={(imageList) => {
-                                                    setImages(imageList);
-                                                    setFieldValue("background_image", imageList[0])
+                                                    if (imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                                                        const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
+                                                        const fetchImage = async (para) => {
+                                                            const response = await fetch(url, {
+                                                                method: "POST",
+                                                                headers: {
+                                                                    "Content-Type": "application/json", // Set the content type to application/json
+                                                                },
+                                                                body: JSON.stringify({
+                                                                    tiff_image: para,
+                                                                }),
+                                                            });
+                                                            const data = await response.json();
+                                                            setImages([{ data_url: data.data }]);
+                                                            setFieldValue("background_image", imageList[0])
+                                                            // setImgSrc(data.data);data
+                                                        }
+                                                        fetchImage(imageList[0]['data_url'])
+                                                    }
+                                                    else {
+                                                        setImages(imageList);
+                                                        setFieldValue("background_image", imageList[0])
+                                                    }
                                                 }}
                                                 maxNumber={maxNumber}
                                                 dataURLKey="data_url"
@@ -443,8 +450,6 @@ const TemplateEditPanel = () => {
                                                                             </div>
                                                                         ))}
                                                                         {images.length === 0 ? (
-                                                                            // <canvas ref={myCanvas} width={500} height={500} />
-
                                                                             <div className="image-item" style={{ width: "100%", height: "100%" }}>
                                                                                 <img src={productInfo?.bg_image_cdn_url} alt="backviewimage"
                                                                                     style={{ width: "100%", height: "100%", objectFit: "contain" }} />
@@ -469,8 +474,30 @@ const TemplateEditPanel = () => {
                                             <ImageUploading
                                                 value={previewImages}
                                                 onChange={(imageList) => {
-                                                    setPreviewImages(imageList);
-                                                    setFieldValue("preview_image", imageList[0])
+                                                    if (imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                                                        const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
+                                                        const fetchImage = async (para) => {
+                                                            const response = await fetch(url, {
+                                                                method: "POST",
+                                                                headers: {
+                                                                    "Content-Type": "application/json", // Set the content type to application/json
+                                                                },
+                                                                body: JSON.stringify({
+                                                                    tiff_image: para,
+                                                                }),
+                                                            });
+                                                            const data = await response.json();
+                                                            setPreviewImages([{ data_url: data.data }]);
+                                                            setFieldValue("preview_image", imageList[0])
+                                                            // setImgSrc(data.data);data
+                                                        }
+                                                        fetchImage(imageList[0]['data_url'])
+                                                    }
+                                                    else {
+                                                        setPreviewImages(imageList);
+                                                        setFieldValue("preview_image", imageList[0])
+                                                    }
+
                                                 }}
                                                 maxNumber={maxNumber}
                                                 dataURLKey="data_url"

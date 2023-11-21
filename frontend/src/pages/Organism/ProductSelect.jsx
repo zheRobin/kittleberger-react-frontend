@@ -124,7 +124,6 @@ const ProductSelect = () => {
     const token = useSelector(state => state.auth.token);
     const [productList, setProductList] = useState([]);
     const [page, setPage] = useState(1);
-    const [loading, setloading] = useState(true)
     const [images, setImages] = useState([]);
     const [posNum, setPosNum] = useState(0);
     const [searchString, setSearchString] = useState("");
@@ -133,16 +132,6 @@ const ProductSelect = () => {
     )
     const [visible, setVisible] = useState(false);
     const [index, setIndex] = useState(0);
-    const parseSearch = (input) => {
-        const regex1 = /\b(\d+)\b/;
-        const regex2 = /\b([a-zA-Z]+)\b/;
-        const productArray = input.match(regex1);
-        const countryArray = input.match(regex2);
-        const countryName = countryArray ? countryArray[0] : "";
-        const productNumber = productArray ? productArray[0] : "";
-        const queryString = (countryName === "" && productNumber === "") ? "" : `&country=${countryName}&product=${productNumber}`;
-        return queryString;
-    };
 
     const clearStoreData = () => {
         setProductList([]);
@@ -169,7 +158,6 @@ const ProductSelect = () => {
     }, [searchString]);
 
     function getProductInfo(page, productInfo = "", country = "germany") {
-        setloading(true)
         getProductsbyFilter(token, { page, productInfo, country }, (success) => {
             if (success.data.code === 200 && success.data.status === "success") {
                 setProductList((prevProductList) => {
@@ -180,7 +168,6 @@ const ProductSelect = () => {
                     currentPage: success.data.data.current_page,
                     count: success.data.data.count
                 })
-                setloading(false)
             }
             else {
             }

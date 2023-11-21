@@ -168,7 +168,6 @@ const TemplatePanel = () => {
   const [backView, setBackView] = useState(false);
   const [preView, setPreView] = useState(false);
   const [images, setImages] = useState([{ data_url: "" }]);
-  console.log(images)
   const [tempImages, setTempImages] = useState({ width: 1, height: 1 });
   const [width, setWidth] = useState(500);
   const [height, setHeight] = useState(500);
@@ -381,8 +380,29 @@ const TemplatePanel = () => {
                       <ImageUploading
                         value={images}
                         onChange={(imageList) => {
-                          setImages(imageList);
-                          setFieldValue("background_image", imageList[0])
+                          if (imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                            const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
+                            const fetchImage = async (para) => {
+                              const response = await fetch(url, {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json", // Set the content type to application/json
+                                },
+                                body: JSON.stringify({
+                                  tiff_image: para,
+                                }),
+                              });
+                              const data = await response.json();
+                              setImages([{ data_url: data.data }]);
+                              setFieldValue("background_image", imageList[0])
+                              // setImgSrc(data.data);data
+                            }
+                            fetchImage(imageList[0]['data_url'])
+                          }
+                          else {
+                            setImages(imageList);
+                            setFieldValue("background_image", imageList[0])
+                          }
                         }}
                         maxNumber={maxNumber}
                         dataURLKey="data_url"
@@ -442,8 +462,29 @@ const TemplatePanel = () => {
                       <ImageUploading
                         value={previewImages}
                         onChange={(imageList) => {
-                          setPreviewImages(imageList);
-                          setFieldValue("preview_image", imageList[0])
+                          if (imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                            const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
+                            const fetchImage = async (para) => {
+                              const response = await fetch(url, {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json", // Set the content type to application/json
+                                },
+                                body: JSON.stringify({
+                                  tiff_image: para,
+                                }),
+                              });
+                              const data = await response.json();
+                              setPreviewImages([{ data_url: data.data }]);
+                              setFieldValue("preview_image", imageList[0])
+                              // setImgSrc(data.data);data
+                            }
+                            fetchImage(imageList[0]['data_url'])
+                          }
+                          else {
+                            setPreviewImages(imageList);
+                            setFieldValue("preview_image", imageList[0])
+                          }
                         }}
                         maxNumber={maxNumber}
                         dataURLKey="data_url"
