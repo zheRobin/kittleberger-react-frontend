@@ -106,23 +106,23 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                 <div className="input-groups">
                   <div>
                     <div className="typography-400-regular">top</div>
-                    <div className="input-group__bottom"><Field as={TextField} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
+                    <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
                   </div>
                   <div>
                     <div className="typography-400-regular">left</div>
-                    <div className="input-group__bottom"><Field as={TextField} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
+                    <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
                   </div>
                   <div>
                     <div className="typography-400-regular">width</div>
-                    <div className="input-group__bottom"><Field as={TextField} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
+                    <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
                   </div>
                   <div>
                     <div className="typography-400-regular">height</div>
-                    <div className="input-group__bottom"><Field as={TextField} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
+                    <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
                   </div>
                   <div>
                     <div className="typography-400-regular">z-index</div>
-                    <div className="input-group__bottom"><Field as={TextField} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
+                    <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
                   </div>
                   <div className="image-settings__common pointer" onClick={() => {
                     arrayHelpers.remove(index)

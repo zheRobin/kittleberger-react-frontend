@@ -34,7 +34,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                     if (type === 2) {
                         localStorage.setItem('templateInfo', JSON.stringify(cardInfo.template));
                         dispatch(setCardInfo(cardInfo))
-                        dispatch(setComposedProduct(cardInfo?.cdn_url.split('.').pop() === 'tiff' || "tif" ? cardInfo?.png_result : cardInfo?.cdn_url))
+                        dispatch(setComposedProduct(cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url))
 
                         dispatch(findTemplates(cardInfo.template));
                         const updatedArticles = cardInfo.articles.map((article) => {
@@ -47,7 +47,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         })
                     }
                 }}>
-                    <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? cardInfo?.preview_image_cdn_url : cardInfo?.bg_image_cdn_url) : cardInfo?.png_result} alt="preview"></img>
+                    <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? cardInfo?.preview_image_cdn_url : cardInfo?.bg_image_cdn_url) : (cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url)} alt="preview"></img>
                 </div>
             </div>
         </>
