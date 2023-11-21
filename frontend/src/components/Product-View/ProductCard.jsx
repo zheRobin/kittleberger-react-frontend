@@ -9,6 +9,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const navigate = useNavigate();
     const switchRole = useSelector(state => state.info.adminMethod)
     const dispatch = useDispatch()
+    console.log(cardInfo?.png_result)
     return (
         <>
             <div className="product-card">
@@ -34,17 +35,20 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                     if (type === 2) {
                         localStorage.setItem('templateInfo', JSON.stringify(cardInfo.template));
                         dispatch(setCardInfo(cardInfo))
-                        dispatch(setComposedProduct(cardInfo.cdn_url))
+                        dispatch(setComposedProduct(cardInfo?.cdn_url.split('.').pop() === 'tiff' || "tif" ? cardInfo?.png_result : cardInfo?.cdn_url))
+
                         dispatch(findTemplates(cardInfo.template));
                         const updatedArticles = cardInfo.articles.map((article) => {
                             const { number, ...rest } = article;
                             return { article_number: number, ...rest };
                         });
                         dispatch(setProductLists(updatedArticles));
-                        navigate(`/product/summary`)
+                        navigate(`/product/summary`, {
+                            state: cardInfo?.cdn_url
+                        })
                     }
                 }}>
-                    <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? cardInfo?.preview_image_cdn_url : cardInfo?.bg_image_cdn_url) : cardInfo?.cdn_url} alt="preview"></img>
+                    <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? cardInfo?.preview_image_cdn_url : cardInfo?.bg_image_cdn_url) : cardInfo?.png_result} alt="preview"></img>
                 </div>
             </div>
         </>

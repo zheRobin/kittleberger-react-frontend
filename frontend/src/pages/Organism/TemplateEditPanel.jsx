@@ -193,7 +193,12 @@ const TemplateEditPanel = () => {
             },
         },
     });
-
+    useEffect(
+        () => {
+            setImages([{ data_url: productInfo?.bg_image_cdn_url }]);
+            setPreviewImages([{ data_url: productInfo?.preView_image_cdn_url }]);
+        }, [productInfo?.bg_image_cdn_url, productInfo?.preView_image_cdn_url]
+    )
 
     useLayoutEffect(() => {
         const handleResize = () => {

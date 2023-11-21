@@ -9,8 +9,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { getProductsbyFilter } from "../../_services/Product";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ProductSearch({ filterData, usedArticles, setFilterData }) {
+  const { t } = useTranslation()
   const selectedCountryGroup = useSelector(state => state.products.selectedCountry)
   const token = useSelector(state => state.auth.token);
   const [productList, setProductList] = useState([]);

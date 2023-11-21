@@ -9,7 +9,10 @@ import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Loading } from "./ProductSelect"
+import { useLocation } from "react-router-dom"
+
 const Summary = () => {
+    const { state } = useLocation()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate)
     const selectedProducts = useSelector(state => state.products.selectedProducts)
     const composedProduct = useSelector(state => state.products.composedProduct)
@@ -26,7 +29,7 @@ const Summary = () => {
                 // Perform your desired action
             } else {
 
-                setdeploymentName({ value: composedProduct, copied: false });
+                setdeploymentName({ value: state !== undefined ? state : composedProduct, copied: false });
             }
 
         }, [composedProduct]
