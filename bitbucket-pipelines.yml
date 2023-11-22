@@ -25,7 +25,9 @@ pipelines:
           image: amazon/aws-cli
           deployment: production
           script:
-            - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID\naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/credentials
+            - mkdir -p $HOME/.aws
+            - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID\naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > $HOME/.aws/credentials
+            - cat $HOME/.aws/credentials
             - aws s3 sync build/ s3://coposing-frontend
             - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
             - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
