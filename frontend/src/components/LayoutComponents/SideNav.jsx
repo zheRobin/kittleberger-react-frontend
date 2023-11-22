@@ -50,6 +50,7 @@ const SideNav = () => {
             return;
         }
         let itemGroups = items.filter(item => item !== draggedItem);
+
         itemGroups.splice(index, 0, draggedItem);
         setItems(itemGroups)
     };

@@ -56,9 +56,9 @@ const Summary = () => {
                 is_transparent: product?.is_transparent,
                 scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
                 alignment: product?.align === undefined ? "top-left" : product?.align,
-                height: selectedTemplate?.article_placements[index].height,
-                width: selectedTemplate?.article_placements[index].width,
-                z_index: selectedTemplate?.article_placements[index].z_index
+                height: selectedTemplate?.article_placements[index]?.height,
+                width: selectedTemplate?.article_placements[index]?.width,
+                z_index: selectedTemplate?.article_placements[index]?.z_index
             };
         })]
     }

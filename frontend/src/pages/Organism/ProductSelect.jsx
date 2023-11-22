@@ -9,7 +9,7 @@ import { Suspense } from "react"
 import 'react-photo-view/dist/react-photo-view.css';
 import { PhotoSlider } from 'react-photo-view';
 import { composeByInfo } from "../../_services/Product"
-
+import { calcPosition } from "../../_services/Product"
 
 export const ProductView = () => {
     const dispatch = useDispatch()
@@ -23,14 +23,14 @@ export const ProductView = () => {
     useEffect(() => {
         if (imgRef.current) {
             setLoading(true);
-
             const article = selectedProducts?.map((product) => {
                 const positionStyle = selectedTemplate?.article_placements;
-                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index === product?.pos_index)
+                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index == product?.pos_index)
                 const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
+                const position = calcPosition(product?.alignment === undefined ? 'middle-center' : product?.alignment, selectedStyle[0]?.position_x, selectedStyle[0]?.position_y, selectedStyle[0]?.width, selectedStyle[0]?.height, sliderScale)
                 const is_transparent = product?.is_transparent === true ? true : false;
-                const positionX = product?.position === undefined ? selectedStyle[0]?.position_x : product?.position[0];
-                const positionY = product?.position === undefined ? selectedStyle[0]?.position_y : product?.position[1];
+                const positionX = position ? position[0] : selectedStyle[0].position_x;
+                const positionY = position ? position[1] : selectedStyle[0].position_y;
                 if (positionStyle !== undefined) {
                     return {
                         article_link: product?.cdn_urls ? product?.cdn_urls[0] : product?.cdn_url,

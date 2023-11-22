@@ -45,15 +45,11 @@ export const productsSlice = createSlice({
         },
         setProductAligns:(state,action) =>{
             const article_number= action.payload.article_number;
-            const selectedTemplate = current(state.selectedTemplate)
             state.selectedProducts = state.selectedProducts.map((product,index) => {
                 if (product.article_number === article_number) {
-                    let sliderScale = product?.sliderScale ?? 1;
-                    let position = calcPosition(action.payload.align, selectedTemplate.article_placements[index]?.position_x, selectedTemplate.article_placements[index]?.position_y, selectedTemplate.article_placements[index]?.width, selectedTemplate.article_placements[index]?.height, sliderScale)
                     return {
                         ...product,
-                        align: action.payload.align,
-                        position
+                        align: action.payload.align
                     };
                 }
                 
@@ -86,15 +82,12 @@ export const productsSlice = createSlice({
         },
         setSliderScale:(state,action) =>{
             const article_number= action.payload.article_number;
-            const selectedTemplate = current(state.selectedTemplate)
             state.selectedProducts = state.selectedProducts.map((product,index) => {
-                let position = calcPosition(action.payload?.align, selectedTemplate.article_placements[index]?.position_x, selectedTemplate.article_placements[index]?.position_y, selectedTemplate.article_placements[index]?.width, selectedTemplate.article_placements[index]?.height, action.payload.sliderScale)
 
                 if (product.article_number === article_number) {
                     return {
                         ...product,
                         sliderScale: action.payload.sliderScale,
-                        position
                     };
                 }
                 return product;
