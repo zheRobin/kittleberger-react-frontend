@@ -96,17 +96,17 @@ const OverlayGroup = ({ productInfo, index }) => {
         <>
             {loading ? <div className="loading"></div> : (
                 <div className="overlay">
-                    <div className="overlay__list drag pulse-grow">
+                    <div className="overlay__list drag">
                         <img src={ListIcon} alt="ListIcon"></img>
                     </div>
                     <div className="overlay__product">
-                        <div className="typography-400-regular" style={{ color: "white", overflow: "hidden", lineHeight: "16px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{productInfo.name}</div>
+                        <div className="typography-400-regular" style={{ color: "white", overflow: "hidden", lineHeight: "16px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{`${productInfo.name}(${productInfo.article_number})`}</div>
                         <div>
                             <img src={CrossIcon} alt="CrossIcon" onClick={(e) => { dispatch(removeProducts(productInfo)) }}></img>
                         </div>
                     </div>
                     <div className="overlay__setting">
-                        <div><img src={SettingIcon} alt="SettingIcon" onClick={(e) => setShowModal(true)}></img></div>
+                        <img src={SettingIcon} alt="SettingIcon" onClick={(e) => setShowModal(true)}></img>
                         {showModal ? (
                             <div className="overlay__setting__panel" ref={wrapperRef}>
                                 <div className="panel-top">
@@ -117,7 +117,7 @@ const OverlayGroup = ({ productInfo, index }) => {
                                         {productInfo.name}
                                     </div>
                                     <div className="panel-top__drag">
-                                        <Slider defaultValue={sliderValue} aria-label="Default" valueLabelDisplay="auto" track={false} onChange={(e) => { setSliderValue(e.target.value) }}
+                                        <Slider value={sliderValue} valueLabelDisplay="auto" track={false} onChange={(e) => { setSliderValue(e.target.value) }}
                                             sx={{
                                                 "& .MuiSlider-thumb": {
                                                     color: "#8F7300"

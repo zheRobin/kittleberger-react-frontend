@@ -164,12 +164,11 @@
     display: grid;
     justify-content: flex-start;
     grid-template-columns: 335px 335px 335px;
-    grid-template-rows: 37ch auto minmax(390px, 390px);
+    // grid-template-rows: 37ch auto minmax(390px, 390px);
     gap: 20px;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 268px);
     overflow: scroll;
     overflow-x: hidden;
-    padding-bottom: 40px;
 }
 
 .template-button--filled {
@@ -782,7 +781,7 @@
 @media (max-width: 1460px) {
     .multi-product-container {
         grid-template-columns: 335px 335px;
-        grid-template-rows: 37ch auto minmax(390px, 390px);
+        // grid-template-rows: 37ch auto minmax(390px, 390px);
     }
 
     .infinite-scroll-component {

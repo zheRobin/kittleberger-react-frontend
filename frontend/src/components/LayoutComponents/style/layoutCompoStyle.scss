@@ -38,3 +38,7 @@
         padding: 15px 30px 15px 30px;
     }
 }
+.nav-items--active.pointer.drag-over {
+    /* Your drag over styles */
+    transition: background-color 0.3s ease-in-out;
+  }

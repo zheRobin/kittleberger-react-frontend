@@ -19,7 +19,7 @@ import { useRef, useLayoutEffect } from 'react';
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom';
 import spinner from "../../assets/icons/tube-spinner.svg"
-
+import { useTranslation } from 'react-i18next';
 export const TemplateButton = ({ content, type = "brown" }) => {
   return (
     <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -60,6 +60,7 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
   )
 };
 export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue }) => {
+  const { t } = useTranslation();
   const [articleGroup, setArticleGroup] = useState(values);
   const [draggedItem, setDraggedItem] = useState({})
   useEffect(
@@ -105,23 +106,23 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
               <div className="image-settings__panel">
                 <div className="input-groups">
                   <div>
-                    <div className="typography-400-regular">top</div>
+                    <div className="typography-400-regular">{t("top")}</div>
                     <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
                   </div>
                   <div>
-                    <div className="typography-400-regular">left</div>
+                    <div className="typography-400-regular">{t("left")}</div>
                     <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
                   </div>
                   <div>
-                    <div className="typography-400-regular">width</div>
+                    <div className="typography-400-regular">{t("width")}</div>
                     <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
                   </div>
                   <div>
-                    <div className="typography-400-regular">height</div>
+                    <div className="typography-400-regular">{t("height")}</div>
                     <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
                   </div>
                   <div>
-                    <div className="typography-400-regular">z-index</div>
+                    <div className="typography-400-regular">{t("z-index")}</div>
                     <div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
                   </div>
                   <div className="image-settings__common pointer" onClick={() => {
@@ -137,7 +138,7 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
         <div className="right-b__bottom" onClick={() => arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', })}>
           <img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
           <div className="typo-700-regular pointer" >
-            Ein weiteres Platzhalterbild hinzufügen
+            {t("Ein weiteres Platzhalterbild hinzufügen")}
           </div>
         </div>
       </div>
@@ -167,6 +168,7 @@ export const Loading = () => {
 
 const TemplatePanel = () => {
   const navigate = useNavigate()
+  const { t } = useTranslation();
   const [backView, setBackView] = useState(false);
   const [preView, setPreView] = useState(false);
   const [images, setImages] = useState([{ data_url: "" }]);
@@ -266,24 +268,24 @@ const TemplatePanel = () => {
         >
           {({ values, setFieldValue, handleSubmit }) => (
 
-            < Form className='template-form'>
+            <Form className='template-form'>
               <div className='template-panel'>
                 <div
                   className="top-template-button"
                   onClick={handleSubmit}
                 >
-                  <TemplateButton content={"Template speichern"} />
+                  <TemplateButton content={t("Template speichern")} />
                 </div>
                 <div className="panel-group">
                   <div className="product-setting-panel">
                     <div className="product-setting-panel__top">
-                      <div className="typography-400-regular top-typo">Allgemein</div>
+                      <div className="typography-400-regular top-typo">{t("Allgemein")}</div>
                     </div>
                     <div className="product-setting-panel__bottom">
                       <div className="input-group">
                         <div className="label-input-pair">
                           <div className="label__left">
-                            <p className="typography-400-regular">Name*</p>
+                            <p className="typography-400-regular">{t("Name")}*</p>
                           </div>
                           <div className='label__right' style={{ flexDirection: "column", alignItems: "center" }}>
                             <Field as={TextField} name='name' />
@@ -291,11 +293,10 @@ const TemplatePanel = () => {
                               <ErrorMessage name="name" component="p" className="validation" />
                             </div>
                           </div>
-
                         </div>
                         <div className="label-select-pair">
                           <div className="label__left">
-                            <p className="typography-400-regular">Dateityp*</p>
+                            <p className="typography-400-regular">{t("Dateityp")}*</p>
                           </div>
                           <div className="label__right">
                             <div className="select-group">
@@ -312,23 +313,23 @@ const TemplatePanel = () => {
                                     marginLeft: "9px"
                                   }
                                 }}
-                              >   <MenuItem value="" disabled>
-                                  <em>select the value</em>
+                              >
+                                <MenuItem value="" disabled>
+                                  <em>{t("Dateityp wählen")}</em>
                                 </MenuItem>
                                 <MenuItem value="JPEG">.jpg</MenuItem>
                                 <MenuItem value="PNG">.png</MenuItem>
                                 <MenuItem value="TIFF">.tiff</MenuItem>
                               </Field>
                               <p className="typography-400-regular select-subtitle">
-                                .jpg und .png sind in 72 dpi; .tiff ist in 300 dpi
+                                {t(".jpg und .png sind in 72 dpi; .tiff ist in 300 dpi")}
                               </p>
-
                             </div>
                           </div>
                         </div>
                         <div className="label-input-pair">
                           <div className="label__left">
-                            <div className="typography-400-regular">Width*</div>
+                            <div className="typography-400-regular">{t("breite")}*</div>
                           </div>
                           <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
                             <Field as={TextField} name="resolution_width" />
@@ -339,7 +340,7 @@ const TemplatePanel = () => {
                         </div>
                         <div className="label-input-pair" >
                           <div className="label__left">
-                            <div className="typography-400-regular">Height*</div>
+                            <div className="typography-400-regular">{t("Hähe")}*</div>
                           </div>
                           <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
                             <Field as={TextField} name="resolution_height" />
@@ -351,7 +352,7 @@ const TemplatePanel = () => {
                         <div className="check-group">
                           <div className="label-check-pair">
                             <div className="label-check-pair__label">
-                              <div className="typography-400-regular">Schatten</div>
+                              <div className="typography-400-regular">{t("Schatten")}</div>
                             </div>
                             <div className='label__right'>
                               <div className='label-check-pair__checkbox'>
@@ -361,24 +362,26 @@ const TemplatePanel = () => {
                                   onChange={(e) => setFieldValue('is_shadow', e.target.checked)}
                                   style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }}
                                   name="is_shadow"
-                                />                                                                    <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>Produktschatten aktivieren</div>
+                                />
+                                <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>
+                                  {t("Produktschatten aktivieren")}
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                         <div className="check-group">
-                          <CheckboxGroupComponent label="Marke *" values={values.brands} name="brands" />
-
+                          <CheckboxGroupComponent label={t("Marke *")} values={values.brands} name="brands" />
                         </div>
                         <div className="check-group">
-                          <CheckboxGroupComponent label="Anwendung *" values={values.applications} name="applications" />
+                          <CheckboxGroupComponent label={t("Anwendung *")} values={values.applications} name="applications" />
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="product-setting-panel background-upload-panel">
                     <div className="product-setting-panel__top">
-                      <div className="typography-400-regular top-typo">Hintergrund</div>
+                      <div className="typography-400-regular top-typo">{t("Hintergrund")}</div>
                     </div>
                     <div className="product-setting-panel__bottom">
                       <ImageUploading
@@ -425,7 +428,7 @@ const TemplatePanel = () => {
                           // write your building UI
                           <div className="upload__image-wrapper">
                             <div className="image-position__left" onClick={() => { onImageUpload(); setBackView(true) }}>
-                              <TemplateButton content={"Einen anderen Hintergrund hinzufügen"} />
+                              <TemplateButton content={t("Einen anderen Hintergrund hinzufügen")} />
                               <ErrorMessage name="background_image" component="p" className="validation" />
                             </div>
                             <div className="image-position__left">
@@ -463,7 +466,7 @@ const TemplatePanel = () => {
                   </div>
                   <div className="product-setting-panel thumbnail-panel">
                     <div className="product-setting-panel__top">
-                      <div className="typography-400-regular top-typo">Vorschaubild</div>
+                      <div className="typography-400-regular top-typo">{t("Vorschaubild")}</div>
                     </div>
                     <div className="product-setting-panel__bottom">
                       <ImageUploading
@@ -511,7 +514,7 @@ const TemplatePanel = () => {
                           // write your building UI
                           <div className="upload__image-wrapper">
                             <div className="image-position__left" onClick={() => { onImageUpload(); setPreView(true) }}>
-                              <TemplateButton content={"Einen anderen Hintergrund hinzufügen"} />
+                              <TemplateButton content={t("Einen anderen Hintergrund hinzufügen")} />
                             </div>
                             <div className="image-position__left">
                               {preView ? (
@@ -550,7 +553,7 @@ const TemplatePanel = () => {
 
                       </div>
                       <div className="product-setting-panel__top">
-                        <div className="typography-400-regular top-typo">Platzhalterbild</div>
+                        <div className="typography-400-regular top-typo">{t("Platzhalterbild")}</div>
                       </div>
                       <div className="product-setting-panel__bottom">
                         <div className="image-setting-panel">

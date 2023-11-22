@@ -41,8 +41,10 @@ const SideNav = () => {
         e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
     };
 
-    function onDragOver(index) {
+    function onDragOver(e, index) {
+        e.preventDefault();
         document.querySelector(`.nav-items--active`).classList.add("nav-items--inactive");
+        e.dataTransfer.effectAllowed = "copyMove";
         const draggedOverItem = items[index];
         if (draggedItem === draggedOverItem) {
             return;
@@ -69,7 +71,7 @@ const SideNav = () => {
                 <div className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSelect() }}>Produkte auswählen</div>
                 {items?.map((productItem, index) => {
                     return (
-                        <div key={index} onDragOver={() => onDragOver(index)} draggable
+                        <div key={index} onDragOver={(e) => onDragOver(e, index)} draggable
                             onDragStart={e => onDragStart(e, index)} onDragEnd={e => onDragEnd()} className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer "} >{path === "/product/product-select" ? (<OverlayGroup productInfo={productItem} index={index} />) : <OverlaySide productInfo={productItem} />}</div>
                     )
                 })}

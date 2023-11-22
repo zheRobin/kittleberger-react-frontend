@@ -43,7 +43,6 @@ export const ProductView = () => {
                     };
                 }
             });
-
             const composingInfo = {
                 template_id: selectedTemplate.id,
                 articles: article.filter(Boolean),

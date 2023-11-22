@@ -60,7 +60,7 @@ export async function updateOnlineInfo(token, templateInfo, success) {
             console.error("Error:", error);
         })
 }
-export function calcPosition(type = 'top-left', posX, posY, templateWidth, templateHeight, sliderScale) {
+export function calcPosition(type = 'middle-center', posX, posY, templateWidth, templateHeight, sliderScale) {
     switch (type) {
         case "top-left":
             return [posX, posY];

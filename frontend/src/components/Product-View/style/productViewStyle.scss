@@ -9,7 +9,7 @@
 }
 
 .product-card{
-    width: 335px;
+    width: 320px;
     height: 329px;
     background-color: white;
     display: flex;
@@ -125,7 +125,7 @@
     
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 5px;
     justify-content: space-between;
     width: 100%;
     &__product{
@@ -140,9 +140,14 @@
         width: 100%;
         align-items: center;
     }
-
+    &__list{
+        display: flex;
+        align-items: center;
+    }
     &__setting{
         position: relative;
+        display: flex;
+        align-items: center;
         &__panel{
             
         }

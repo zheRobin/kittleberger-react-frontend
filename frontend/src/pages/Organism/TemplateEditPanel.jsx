@@ -323,7 +323,7 @@ const TemplateEditPanel = () => {
                                                                 }}
                                                             >
                                                                 <MenuItem value="" disabled>
-                                                                    <em>{t("select the value")}</em>
+                                                                    <em>{t("Dateityp wählen")}</em>
                                                                 </MenuItem>
                                                                 <MenuItem value="JPEG">.jpg</MenuItem>
                                                                 <MenuItem value="PNG">.png</MenuItem>
@@ -337,7 +337,7 @@ const TemplateEditPanel = () => {
                                                 </div>
                                                 <div className="label-input-pair">
                                                     <div className="label__left">
-                                                        <div className="typography-400-regular">{t("Width")}*</div>
+                                                        <div className="typography-400-regular">{t("breite")}*</div>
                                                     </div>
                                                     <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
                                                         <Field as={TextField} name="resolution_width" />
@@ -348,7 +348,7 @@ const TemplateEditPanel = () => {
                                                 </div>
                                                 <div className="label-input-pair" >
                                                     <div className="label__left">
-                                                        <div className="typography-400-regular">{t("Height")}*</div>
+                                                        <div className="typography-400-regular">{t("Hähe")}*</div>
                                                     </div>
                                                     <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
                                                         <Field as={TextField} name="resolution_height" />

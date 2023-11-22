@@ -125,7 +125,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
               </InputAdornment>
             )
           }}
-          rendertags={(value, getTagProps) =>
+          rendertags={(value, ...getTagProps) =>
             value.map((option, index) => (
               <>
                 <div key={index} className="tag">
