@@ -20,13 +20,19 @@ export const userCreate = ({name, email, password} ,token,  success) => {
 
 export const userEdit = (id,{name, email, password} ,token ,success) => {
     setAuthToken(token);
-    axios.put(`${process.env.REACT_APP_API_URL}/api/v1/user/manage/`,{
-        id, username:name , email, password
+    axios.put(`${process.env.REACT_APP_API_URL}/api/v1/user/manage/${id}/`,{
+        username:name , email, password
     }).then((response) => {
         success(response)
     }).catch((error) => console.log(error))
 }
 
+export const userDelete = (id,token ,success) => {
+    setAuthToken(token);
+    axios.delete(`${process.env.REACT_APP_API_URL}/api/v1/user/manage/${id}/`).then((response) => {
+        success(response)
+    }).catch((error) => console.log(error))
+}
 
 export const userList = (token, success) => {
     setAuthToken(token);

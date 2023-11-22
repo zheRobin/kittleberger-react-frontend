@@ -33,7 +33,6 @@ export const TemplateButton = ({ content, type = "brown" }) => {
 export const CheckboxGroupComponent = ({ label, values, ...props }) => {
     const { setFieldValue } = useFormikContext();
     const [field] = useField(props);
-
     return (
         <div className="label-check-pair">
             <div className="label-check-pair__label">
@@ -45,8 +44,9 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
 
                         < div key={index} className='checkbox-group' >
 
-                            <Checkbox defaultChecked={false} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={() => {
+                            <Checkbox defaultChecked={value.value === undefined ? true : value.value} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={() => {
                                 var newData = [...field.value];
+                                alert(JSON.stringify(newData))
                                 newData[index].value = !newData[index].value;
                                 setFieldValue(props.name, newData);
                             }} {...props} />
@@ -224,7 +224,6 @@ const TemplateEditPanel = () => {
         resolution_width: Yup.string().required("This field is required"),
         resolution_height: Yup.string().required("This field is required")
     })
-
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -233,8 +232,10 @@ const TemplateEditPanel = () => {
                     initialValues={{
                         preview_image: productInfo?.preview_image_cdn_url,
                         background_image: productInfo?.bg_image_cdn_url,
-                        brands: brands,
-                        applications: applications,
+                        brands: [...productInfo?.brand, ...brands.filter(brand => !productInfo?.brand.some(productBrand => productBrand.name === brand.name))],
+                        // brands: productInfo?.brand,
+                        applications: [...productInfo?.application, ...applications.filter(application => !productInfo?.application.some(productBrand => productBrand.name === application.name))],
+                        // applications: [...productInfo?.application, ...applications.filter(application => !productInfo?.application.some(productBrand => productBrand.name === application.name))],
                         article_placements: productInfo?.article_placements,
                         name: productInfo?.name,
                         is_shadow: productInfo?.is_shadow,

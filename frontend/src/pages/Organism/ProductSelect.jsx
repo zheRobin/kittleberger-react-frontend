@@ -47,7 +47,6 @@ export const ProductView = () => {
                 template_id: selectedTemplate.id,
                 articles: article.filter(Boolean),
             };
-            console.log("composingInfo", composingInfo)
             composeByInfo(token, composingInfo, (success) => {
                 setComposeImage(success.data.data);
                 dispatch(setComposedProduct(success.data.data))

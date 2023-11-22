@@ -23,6 +23,7 @@ const Summary = () => {
         value: '',
         copied: false,
     })
+    const userInfo = useSelector(state => state.auth.user)
     useEffect(
         () => {
             if (composedProduct.startsWith("data:")) {
@@ -131,11 +132,11 @@ const Summary = () => {
     ${t('Land')}: Deutschland, Österreich
     ${t('Marke')}: ${selectedTemplate.brand.map((brand, index) => brand.name).join(", ")}
     ${t('Applikation')}: ${selectedTemplate.application.map((application, index) => application.name).join(", ")}
-    ${t('Technische Daten')}: ${selectedTemplate.resolution_width} x ${selectedTemplate.resolution_height} px (72 dpi)
+    ${t('Technische Daten')}: ${selectedTemplate.resolution_width} x ${selectedTemplate.resolution_height} px (${selectedTemplate.resolution_dpi} dpi)
     ${t('Dateiformat')}: ${selectedTemplate.file_type} (RGB)
     ${t('Enthaltene Produkte')}: ${selectedProducts.map((product, index) => `${product.name} (${product.article_number})`).join(", ")}
-    ${t('Erstellt von Benutzer X')} ${formattedDate_created}
-    ${t('Zuletzt bearbeitet von Benutzer Y')} ${formattedDate_modified}
+    ${t('Erstellt von ')}${userInfo.username} ${formattedDate_created}
+    ${t('Zuletzt bearbeitet von ')}${userInfo.username} ${formattedDate_modified}
   `;
     const fileName = "metadata"
     const downloadMetaData = () => {
@@ -174,7 +175,7 @@ const Summary = () => {
                                 </React.Fragment>
                             ))}</div>
                             <div>{t('Technische Daten')}:</div>
-                            <div>{selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px (72 dpi)</div>
+                            <div>{selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px ({selectedTemplate.resolution_dpi} dpi)</div>
                             <div>{t('Dateiformat')}: {selectedTemplate.file_type} (RGB)</div>
                             <br></br>
                             <div>{t('Enthaltene Produkte')}:</div>
@@ -187,8 +188,8 @@ const Summary = () => {
                                 </React.Fragment>
                             ))}</div>
                             <br></br>
-                            <p>{t('Erstellt von Benutzer X')} {formattedDate_created}</p>
-                            <p>{t('Zuletzt bearbeitet von Benutzer Y')} {formattedDate_modified}</p>
+                            <p>{t('Erstellt von ')}{userInfo.username} {formattedDate_created}</p>
+                            <p>{t('Zuletzt bearbeitet von ')}{userInfo.username} {formattedDate_modified}</p>
                         </div>
                     </div>
                 </div>

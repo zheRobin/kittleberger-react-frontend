@@ -2,24 +2,24 @@ import "./style/AccountSetting.scss"
 import pencil from "../../assets/icons/pencil.svg"
 import { TemplateButton } from "../Organism/TemplatePanel"
 import close from "../../assets/icons/cross-black.svg"
+import cross from "../../assets/icons/cross.svg"
 import { useEffect, useState } from "react"
-import { userCreate, userEdit } from "../../_services/User"
+import { userCreate, userEdit, userDelete, userList } from "../../_services/User"
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { userList } from "../../_services/User"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from "react-redux"
 
-const UserList = ({ name, email, handlemodal, setMode, setUserinfo, userInfo }) => {
-
+const UserList = ({ name, email, handlemodal, setMode, setUserinfo, userInfo, setDeleteModal }) => {
   return (
     <div className="user-list">
       <div className="user-list__label">{name}</div>
       <div className="user-list__user">
         <div className="user-list__user-email">{email}</div>
-        <div className="edit pointer" onClick={() => { handlemodal(true); setMode(true); setUserinfo(userInfo) }}>
-          <img src={pencil} alt="pencil" />
+        <div className="edit pointer" >
+          <img src={pencil} alt="pencil" style={{ marginRight: "15px" }} onClick={() => { handlemodal(true); setMode(true); setUserinfo(userInfo) }} />
+          <img src={cross} alt="cross" onClick={() => { setDeleteModal(true); setUserinfo(userInfo) }} />
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@ const UserList = ({ name, email, handlemodal, setMode, setUserinfo, userInfo }) 
 
 
 const ManageUser = () => {
-
+  const [deleteModal, setDeleteModal] = useState(false)
   const [modalView, setModalView] = useState(false);
   const [userlists, setUserLists] = useState([]);
   const [editMode, setEditMode] = useState(false);
@@ -67,7 +67,7 @@ const ManageUser = () => {
           <div className="user-group">
             {userlists?.map((userli) => {
               return (
-                <UserList key={userli.id} name={userli.username} email={userli.email} handlemodal={setModalView} setMode={setEditMode} userInfo={userli} setUserinfo={setUserinfo} />
+                <UserList key={userli.id} name={userli.username} email={userli.email} handlemodal={setModalView} setDeleteModal={setDeleteModal} setMode={setEditMode} userInfo={userli} setUserinfo={setUserinfo} />
               )
             })}
 
@@ -158,7 +158,42 @@ const ManageUser = () => {
             )}
           </Formik>
         ) : null}
-
+        {
+          deleteModal ? (
+            <form>
+              <div className="modal">
+                <div className="modal-content">
+                  <div className="modal-box">
+                    <div className="label">
+                      <div className="typography-700-bold">Neuen Benutzer anlegen</div>
+                      <img className="pointer" src={close} alt="close" onClick={() => setDeleteModal(false)} />
+                    </div>
+                    <div className="box">
+                      Werden Sie dieses Konto löschen?
+                    </div>
+                    <div className="button-group pointer">
+                      <div onClick={() => setDeleteModal(false)}><TemplateButton content={"Abbrechen"} type={"transparent"} /></div>
+                      <div onClick={() => {
+                        setloading(true)
+                        userDelete(userInfo.id, token, (success) => {
+                          if (success.data.code === 200 || success.data.status === "success") {
+                            toast.success("User deleted successfully", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                            setDeleteModal(false)
+                            setloading(false)
+                          }
+                          if (success.data.code === 400 || success.data.status === "failed") {
+                            toast.error("Failed to delete user", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                            setDeleteModal(false)
+                          }
+                        })
+                      }}><TemplateButton content={"Bestätigen"} /></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          ) : (null)
+        }
       </div >
       <ToastContainer />
     </div>
