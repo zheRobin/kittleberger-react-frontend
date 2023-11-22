@@ -27,7 +27,7 @@ export const ProductView = () => {
                 const positionStyle = selectedTemplate?.article_placements;
                 const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index == product?.pos_index)
                 const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
-                const position = calcPosition(product?.alignment === undefined ? 'middle-center' : product?.alignment, selectedStyle[0]?.position_x, selectedStyle[0]?.position_y, selectedStyle[0]?.width, selectedStyle[0]?.height, sliderScale)
+                const position = calcPosition(product?.align === undefined ? 'middle-center' : product?.align, selectedStyle[0]?.position_x, selectedStyle[0]?.position_y, selectedStyle[0]?.width, selectedStyle[0]?.height, sliderScale)
                 const is_transparent = product?.is_transparent === true ? true : false;
                 const positionX = position ? position[0] : selectedStyle[0].position_x;
                 const positionY = position ? position[1] : selectedStyle[0].position_y;
@@ -47,6 +47,7 @@ export const ProductView = () => {
                 template_id: selectedTemplate.id,
                 articles: article.filter(Boolean),
             };
+            console.log("composingInfo", composingInfo)
             composeByInfo(token, composingInfo, (success) => {
                 setComposeImage(success.data.data);
                 dispatch(setComposedProduct(success.data.data))
