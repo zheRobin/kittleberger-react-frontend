@@ -154,7 +154,10 @@ const Organism = () => {
                                     {templates.length === 0 ? (
                                         <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Templates</div>) : (
                                         <div className='template-tab-1'>
-                                            <div id="scrollableDiv" className='product-container'>
+                                            <div id="scrollableDiv" className='product-container' style={{
+                                                overflow: 'scroll',
+                                                overflowX: 'hidden'
+                                            }}>
                                                 <InfiniteScroll
                                                     dataLength={templates.length}
                                                     next={fetchMoreData}
