@@ -12,11 +12,10 @@ pipelines:
           name: Building the app
           image: node:latest
           script:
-            - cd frontend
             - npm install
             - npm run build
           artifacts:
-            - frontend/build/**
+            - build/**
       - step:
           name: Deploying the app to S3
           deployment: production
