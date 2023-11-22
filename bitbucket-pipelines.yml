@@ -14,21 +14,23 @@ pipelines:
           variables:
             REACT_APP_API_URL: $REACT_APP_API_URL
           script:
-            - apt-get update
-            - apt-get install unzip
-            - curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            - unzip awscliv2.zip
-            - bash ./aws/install
-            - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID\naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/credentials
             - npm install --legacy-peer-deps
             - export CI=false
             - export REACT_APP_API_URL=$REACT_APP_API_URL
             - npm run build
+          artifacts:
+            - build/**
+      - step:
+          name: Deploying the app to S3
+          image: amazon/aws-cli
+          deployment: production
+          script:
+            - echo -e "[default]\naws_access_key_id = $AWS_ACCESS_KEY_ID\naws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/credentials
             - aws s3 sync build/ s3://coposing-frontend
             - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
             - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
             - aws s3api put-public-access-block --bucket coposing-frontend --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
-
+            
   custom: # Pipeline that only runs manually
     production: 
       - step:
