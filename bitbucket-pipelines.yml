@@ -10,9 +10,9 @@ pipelines:
     frontend_dev:
       - step:
           name: Building the app
-          image: node:latest
+          image: node:18
           script:
-            - npm install
+            - npm install --legacy-peer-deps
             - npm run build
           artifacts:
             - build/**
