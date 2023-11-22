@@ -11,9 +11,13 @@ pipelines:
       - step:
           name: Building the app
           image: node:18
+          variables:
+            REACT_APP_API_URL: $REACT_APP_API_URL
           script:
             - npm install --legacy-peer-deps
-            - CI=false & REACT_APP_API_URL=$REACT_APP_API_URL & npm run build
+            - export CI=false
+            - export REACT_APP_API_URL=$REACT_APP_API_URL
+            - npm run build
           artifacts:
             - build/**
       - step:
