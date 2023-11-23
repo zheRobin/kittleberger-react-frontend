@@ -44,10 +44,9 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
 
                         < div key={index} className='checkbox-group' >
 
-                            <Checkbox defaultChecked={value.value === undefined ? true : value.value} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={() => {
+                            <Checkbox defaultChecked={value.value === false ? false : true} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={(e) => {
                                 var newData = [...field.value];
-                                alert(JSON.stringify(newData))
-                                newData[index].value = !newData[index].value;
+                                newData[index].value = e.target.checked;
                                 setFieldValue(props.name, newData);
                             }} {...props} />
 
@@ -107,23 +106,23 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                                 <div className="input-groups">
                                     <div>
                                         <div className="typography-400-regular">top</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_y || '0'} name={`article_placements.${index}.position_y`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">left</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_x || '0'} name={`article_placements.${index}.position_x`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">width</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.width || '0'} name={`article_placements.${index}.width`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">height</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.height || '0'} name={`article_placements.${index}.height`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">z-index</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.z_index || '0'} name={`article_placements.${index}.z_index`} /></div>
                                     </div>
                                     <div className="image-settings__common pointer" onClick={() => {
                                         arrayHelpers.remove(index)
@@ -204,7 +203,6 @@ const TemplateEditPanel = () => {
             setPreviewImages([{ data_url: productInfo?.preView_image_cdn_url }]);
         }, [productInfo?.bg_image_cdn_url, productInfo?.preView_image_cdn_url]
     )
-
     useLayoutEffect(() => {
         const handleResize = () => {
             setWidth(elementRef?.current?.offsetWidth);
@@ -233,9 +231,7 @@ const TemplateEditPanel = () => {
                         preview_image: productInfo?.preview_image_cdn_url,
                         background_image: productInfo?.bg_image_cdn_url,
                         brands: [...productInfo?.brand, ...brands.filter(brand => !productInfo?.brand.some(productBrand => productBrand.name === brand.name))],
-                        // brands: productInfo?.brand,
                         applications: [...productInfo?.application, ...applications.filter(application => !productInfo?.application.some(productBrand => productBrand.name === application.name))],
-                        // applications: [...productInfo?.application, ...applications.filter(application => !productInfo?.application.some(productBrand => productBrand.name === application.name))],
                         article_placements: productInfo?.article_placements,
                         name: productInfo?.name,
                         is_shadow: productInfo?.is_shadow,
@@ -250,17 +246,22 @@ const TemplateEditPanel = () => {
                         formData.append("preview_image", values?.preview_image?.file);
                         formData.append("background_image", values?.background_image?.file);
                         formData.append("brands", values.brands
-                            .filter(brand => brand.value)
-                            .map(brand => brand.id));
-                        formData.append("applications", values.applications
-                            .filter(applications => applications.value)
-                            .map(applications => applications.id));
+                            .filter(brand => brand.value !== false)
+                            .map(brand => brand.id).join(","));
+                        formData.append(
+                            "applications",
+                            values.applications
+                                .filter(application => application.value !== false)
+                                .map(application => application.id)
+                                .join(",")
+                        );
                         formData.append("article_placements", JSON.stringify(values.article_placements));
                         formData.append("name", values.name);
                         formData.append("is_shadow", values.is_shadow);
                         formData.append("resolution_width", values.resolution_width);
                         formData.append("resolution_height", values.resolution_height);
                         formData.append("type", values.type);
+
                         updateTemplate(formData, token, productInfo?.id, (success) => {
                             if (success.data.code === 201 || success.data.status === "success") {
                                 setLoading(false)

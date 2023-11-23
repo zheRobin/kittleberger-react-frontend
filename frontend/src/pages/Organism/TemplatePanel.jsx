@@ -45,9 +45,9 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
 
             < div key={index} className='checkbox-group' >
 
-              <Checkbox defaultChecked={false} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={() => {
+              <Checkbox defaultChecked={false} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={(e) => {
                 var newData = [...field.value];
-                newData[index].value = !newData[index].value;
+                newData[index].value = e.target.checked;
                 setFieldValue(props.name, newData);
               }} {...props} />
 
