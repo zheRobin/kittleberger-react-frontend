@@ -1,6 +1,5 @@
 import React from 'react';
 import { Formik, Form, Field, FieldArray, useField, useFormikContext, ErrorMessage } from 'formik';
-// import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import { createTheme } from "@mui/material/styles";
 import { Typography, ThemeProvider, Checkbox, TextField, Select, MenuItem } from "@mui/material"
@@ -61,7 +60,7 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
 export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue }) => {
     const [articleGroup, setArticleGroup] = useState(values);
     const [draggedItem, setDraggedItem] = useState({})
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     useEffect(
         () => {
             setArticleGroup(values)
@@ -165,7 +164,7 @@ export const Loading = () => {
 
 
 const TemplateEditPanel = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate()
     const { state } = useLocation()
     const productInfo = state ? state : {}
@@ -222,6 +221,19 @@ const TemplateEditPanel = () => {
         resolution_width: Yup.string().required("This field is required"),
         resolution_height: Yup.string().required("This field is required")
     })
+    function dataURLToBlob(dataURL) {
+        const parts = dataURL.split(',');
+        const contentType = parts[0].split(':')[1].split(';')[0];
+        const byteString = atob(parts[1]);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const uint8Array = new Uint8Array(arrayBuffer);
+
+        for (let i = 0; i < byteString.length; i++) {
+            uint8Array[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([arrayBuffer], { type: contentType });
+    }
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -395,6 +407,17 @@ const TemplateEditPanel = () => {
                                             <ImageUploading
                                                 value={images}
                                                 onChange={(imageList) => {
+                                                    if (imageList.length > 0) {
+                                                        const dataUrl = imageList[0]['data_url']
+                                                        const blob = dataURLToBlob(dataUrl);
+                                                        const fileSizeInBytes = blob.size;
+                                                        if (fileSizeInBytes > 3 * Math.pow(10, 6)) {
+                                                            toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+
+                                                            return
+                                                        }
+                                                    }
+
                                                     if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                                                         const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
                                                         setBackLoading(true)
@@ -410,6 +433,13 @@ const TemplateEditPanel = () => {
                                                                 }),
                                                             });
                                                             const data = await response.json();
+                                                            const dataUrl = data.data
+                                                            const blob = dataURLToBlob(dataUrl);
+                                                            const fileSizeInBytes = blob.size;
+                                                            if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
+                                                                toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                                                return
+                                                            }
                                                             setImages([{ data_url: data.data }]);
                                                             setFieldValue("background_image", imageList[0])
                                                             // setImgSrc(data.data);data
@@ -487,6 +517,16 @@ const TemplateEditPanel = () => {
                                             <ImageUploading
                                                 value={previewImages}
                                                 onChange={(imageList) => {
+                                                    if (imageList.length > 0) {
+                                                        const dataUrl = imageList[0]['data_url']
+                                                        const blob = dataURLToBlob(dataUrl);
+                                                        const fileSizeInBytes = blob.size;
+                                                        if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
+                                                            toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                                            return
+                                                        }
+                                                    }
+
                                                     if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                                                         const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
                                                         setPreviewLoading(true)
@@ -502,6 +542,13 @@ const TemplateEditPanel = () => {
                                                                 }),
                                                             });
                                                             const data = await response.json();
+                                                            const dataUrl = data.data
+                                                            const blob = dataURLToBlob(dataUrl);
+                                                            const fileSizeInBytes = blob.size;
+                                                            if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
+                                                                toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                                                return
+                                                            }
                                                             setPreviewImages([{ data_url: data.data }]);
                                                             setFieldValue("preview_image", imageList[0])
                                                             setPreviewLoading(false)

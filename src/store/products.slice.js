@@ -1,5 +1,4 @@
-import { createSlice, current  } from "@reduxjs/toolkit";
-import { calcPosition } from "../_services/Product";
+import { createSlice  } from "@reduxjs/toolkit";
 
 export const productsSlice = createSlice({
     name: 'products',

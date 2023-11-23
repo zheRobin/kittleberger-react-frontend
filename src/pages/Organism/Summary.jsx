@@ -12,7 +12,7 @@ import { Loading } from "./ProductSelect"
 import { useLocation } from "react-router-dom"
 import { useTranslation } from 'react-i18next';
 const Summary = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const { state } = useLocation()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate)
     const selectedProducts = useSelector(state => state.products.selectedProducts)
@@ -24,18 +24,11 @@ const Summary = () => {
         copied: false,
     })
     const userInfo = useSelector(state => state.auth.user)
-    useEffect(
-        () => {
-            if (composedProduct.startsWith("data:")) {
-                // Take action here
-                // Perform your desired action
-            } else {
-
-                setdeploymentName({ value: state !== undefined ? state : composedProduct, copied: false });
-            }
-
-        }, [composedProduct]
-    )
+    useEffect(() => {
+        if (!composedProduct.startsWith("data:")) {
+            setdeploymentName({ value: state ?? composedProduct, copied: false });
+        }
+    }, [composedProduct]);
     function handleDownload() {
         const imageUrl = deploymentName.value;
         const link = document.createElement('a');

@@ -9,31 +9,29 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { getProductsbyFilter } from "../../_services/Product";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 
 export default function ProductSearch({ filterData, usedArticles, setFilterData }) {
-  const { t } = useTranslation()
   const selectedCountryGroup = useSelector(state => state.products.selectedCountry)
   const token = useSelector(state => state.auth.token);
   const [productList, setProductList] = useState([]);
   const [page, setPage] = useState(1);
   const [searchString, setSearchString] = useState("");
-  const clearStoreData = () => {
-    setProductList([]);
-    setPage(1);
-    const productInfo = searchString;
-    try {
-      getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "germany" : selectedCountryGroup[0]);
 
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      // Handle the error appropriately
-    }
-  };
 
   useEffect(() => {
     const delay = 200;
+    const clearStoreData = () => {
+      setProductList([]);
+      setPage(1);
+      const productInfo = searchString;
+      try {
+        getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "germany" : selectedCountryGroup[0]);
 
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        // Handle the error appropriately
+      }
+    };
     const timeoutId = setTimeout(() => {
       clearStoreData();
     }, delay);
