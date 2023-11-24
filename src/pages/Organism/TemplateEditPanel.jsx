@@ -1,6 +1,5 @@
 import React from 'react';
 import { Formik, Form, Field, FieldArray, useField, useFormikContext, ErrorMessage } from 'formik';
-// import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import { createTheme } from "@mui/material/styles";
 import { Typography, ThemeProvider, Checkbox, TextField, Select, MenuItem } from "@mui/material"
@@ -44,10 +43,9 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
 
                         < div key={index} className='checkbox-group' >
 
-                            <Checkbox defaultChecked={value.value === undefined ? true : value.value} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={() => {
+                            <Checkbox defaultChecked={value.value === false ? false : true} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={(e) => {
                                 var newData = [...field.value];
-                                alert(JSON.stringify(newData))
-                                newData[index].value = !newData[index].value;
+                                newData[index].value = e.target.checked;
                                 setFieldValue(props.name, newData);
                             }} {...props} />
 
@@ -62,7 +60,7 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
 export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue }) => {
     const [articleGroup, setArticleGroup] = useState(values);
     const [draggedItem, setDraggedItem] = useState({})
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     useEffect(
         () => {
             setArticleGroup(values)
@@ -107,23 +105,23 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                                 <div className="input-groups">
                                     <div>
                                         <div className="typography-400-regular">top</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_y || '0'} name={`article_placements.${index}.position_y`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">left</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_x || '0'} name={`article_placements.${index}.position_x`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">width</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.width || '0'} name={`article_placements.${index}.width`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">height</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.height || '0'} name={`article_placements.${index}.height`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">z-index</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.z_index || '0'} name={`article_placements.${index}.z_index`} /></div>
                                     </div>
                                     <div className="image-settings__common pointer" onClick={() => {
                                         arrayHelpers.remove(index)
@@ -166,7 +164,7 @@ export const Loading = () => {
 
 
 const TemplateEditPanel = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate()
     const { state } = useLocation()
     const productInfo = state ? state : {}
@@ -204,7 +202,6 @@ const TemplateEditPanel = () => {
             setPreviewImages([{ data_url: productInfo?.preView_image_cdn_url }]);
         }, [productInfo?.bg_image_cdn_url, productInfo?.preView_image_cdn_url]
     )
-
     useLayoutEffect(() => {
         const handleResize = () => {
             setWidth(elementRef?.current?.offsetWidth);
@@ -224,6 +221,19 @@ const TemplateEditPanel = () => {
         resolution_width: Yup.string().required("This field is required"),
         resolution_height: Yup.string().required("This field is required")
     })
+    function dataURLToBlob(dataURL) {
+        const parts = dataURL.split(',');
+        const contentType = parts[0].split(':')[1].split(';')[0];
+        const byteString = atob(parts[1]);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const uint8Array = new Uint8Array(arrayBuffer);
+
+        for (let i = 0; i < byteString.length; i++) {
+            uint8Array[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([arrayBuffer], { type: contentType });
+    }
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -233,9 +243,7 @@ const TemplateEditPanel = () => {
                         preview_image: productInfo?.preview_image_cdn_url,
                         background_image: productInfo?.bg_image_cdn_url,
                         brands: [...productInfo?.brand, ...brands.filter(brand => !productInfo?.brand.some(productBrand => productBrand.name === brand.name))],
-                        // brands: productInfo?.brand,
                         applications: [...productInfo?.application, ...applications.filter(application => !productInfo?.application.some(productBrand => productBrand.name === application.name))],
-                        // applications: [...productInfo?.application, ...applications.filter(application => !productInfo?.application.some(productBrand => productBrand.name === application.name))],
                         article_placements: productInfo?.article_placements,
                         name: productInfo?.name,
                         is_shadow: productInfo?.is_shadow,
@@ -250,17 +258,22 @@ const TemplateEditPanel = () => {
                         formData.append("preview_image", values?.preview_image?.file);
                         formData.append("background_image", values?.background_image?.file);
                         formData.append("brands", values.brands
-                            .filter(brand => brand.value)
-                            .map(brand => brand.id));
-                        formData.append("applications", values.applications
-                            .filter(applications => applications.value)
-                            .map(applications => applications.id));
+                            .filter(brand => brand.value !== false)
+                            .map(brand => brand.id).join(","));
+                        formData.append(
+                            "applications",
+                            values.applications
+                                .filter(application => application.value !== false)
+                                .map(application => application.id)
+                                .join(",")
+                        );
                         formData.append("article_placements", JSON.stringify(values.article_placements));
                         formData.append("name", values.name);
                         formData.append("is_shadow", values.is_shadow);
                         formData.append("resolution_width", values.resolution_width);
                         formData.append("resolution_height", values.resolution_height);
                         formData.append("type", values.type);
+
                         updateTemplate(formData, token, productInfo?.id, (success) => {
                             if (success.data.code === 201 || success.data.status === "success") {
                                 setLoading(false)
@@ -394,6 +407,17 @@ const TemplateEditPanel = () => {
                                             <ImageUploading
                                                 value={images}
                                                 onChange={(imageList) => {
+                                                    if (imageList.length > 0) {
+                                                        const dataUrl = imageList[0]['data_url']
+                                                        const blob = dataURLToBlob(dataUrl);
+                                                        const fileSizeInBytes = blob.size;
+                                                        if (fileSizeInBytes > 3 * Math.pow(10, 6)) {
+                                                            toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+
+                                                            return
+                                                        }
+                                                    }
+
                                                     if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                                                         const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
                                                         setBackLoading(true)
@@ -409,6 +433,13 @@ const TemplateEditPanel = () => {
                                                                 }),
                                                             });
                                                             const data = await response.json();
+                                                            const dataUrl = data.data
+                                                            const blob = dataURLToBlob(dataUrl);
+                                                            const fileSizeInBytes = blob.size;
+                                                            if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
+                                                                toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                                                return
+                                                            }
                                                             setImages([{ data_url: data.data }]);
                                                             setFieldValue("background_image", imageList[0])
                                                             // setImgSrc(data.data);data
@@ -486,6 +517,16 @@ const TemplateEditPanel = () => {
                                             <ImageUploading
                                                 value={previewImages}
                                                 onChange={(imageList) => {
+                                                    if (imageList.length > 0) {
+                                                        const dataUrl = imageList[0]['data_url']
+                                                        const blob = dataURLToBlob(dataUrl);
+                                                        const fileSizeInBytes = blob.size;
+                                                        if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
+                                                            toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                                            return
+                                                        }
+                                                    }
+
                                                     if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                                                         const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
                                                         setPreviewLoading(true)
@@ -501,6 +542,13 @@ const TemplateEditPanel = () => {
                                                                 }),
                                                             });
                                                             const data = await response.json();
+                                                            const dataUrl = data.data
+                                                            const blob = dataURLToBlob(dataUrl);
+                                                            const fileSizeInBytes = blob.size;
+                                                            if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
+                                                                toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                                                return
+                                                            }
                                                             setPreviewImages([{ data_url: data.data }]);
                                                             setFieldValue("preview_image", imageList[0])
                                                             setPreviewLoading(false)
