@@ -25,7 +25,7 @@ const SideNav = () => {
     useEffect(
         () => {
             const posIndexGroup = [];
-            for (const product of selectedProducts) {
+            for (const product of selectedProducts ? selectedProducts : []) {
                 posIndexGroup.push(product.pos_index);
             }
             setPosIndexGroup(posIndexGroup);

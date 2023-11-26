@@ -85,6 +85,7 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
         let itemGroups = articleGroup.map((item, i) => (i === index ? updatedDraggedOverItem : item));
         itemGroups = itemGroups.map((item) => (item === draggedItem ? updatedDraggedItem : item));
         setArticleGroup(itemGroups);
+        setDraggedItem(itemGroups[index])
     }
     const onDragEnd = () => {
         setFieldValue("article_placements", articleGroup);
@@ -105,23 +106,23 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                                 <div className="input-groups">
                                     <div>
                                         <div className="typography-400-regular">top</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_y || '0'} name={`article_placements.${index}.position_y`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ type: "number", style: { textAlign: 'center' } }} as={TextField} value={value.position_y || '0'} name={`article_placements.${index}.position_y`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">left</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.position_x || '0'} name={`article_placements.${index}.position_x`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ type: "number", style: { textAlign: 'center' } }} as={TextField} value={value.position_x || '0'} name={`article_placements.${index}.position_x`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">width</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.width || '0'} name={`article_placements.${index}.width`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ type: "number", style: { textAlign: 'center' } }} as={TextField} value={value.width || '0'} name={`article_placements.${index}.width`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">height</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.height || '0'} name={`article_placements.${index}.height`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ type: "number", style: { textAlign: 'center' } }} as={TextField} value={value.height || '0'} name={`article_placements.${index}.height`} /></div>
                                     </div>
                                     <div>
                                         <div className="typography-400-regular">z-index</div>
-                                        <div className="input-group__bottom"><Field inputProps={{ style: { textAlign: 'center' } }} as={TextField} value={value.z_index || '0'} name={`article_placements.${index}.z_index`} /></div>
+                                        <div className="input-group__bottom"><Field inputProps={{ type: "number", style: { textAlign: 'center' } }} as={TextField} value={value.z_index || '0'} name={`article_placements.${index}.z_index`} /></div>
                                     </div>
                                     <div className="image-settings__common pointer" onClick={() => {
                                         arrayHelpers.remove(index)
@@ -199,8 +200,8 @@ const TemplateEditPanel = () => {
     useEffect(
         () => {
             setImages([{ data_url: productInfo?.bg_image_cdn_url }]);
-            setPreviewImages([{ data_url: productInfo?.preView_image_cdn_url }]);
-        }, [productInfo?.bg_image_cdn_url, productInfo?.preView_image_cdn_url]
+            setPreviewImages([{ data_url: productInfo?.preview_image_cdn_url }]);
+        }, [productInfo?.bg_image_cdn_url, productInfo?.preview_image_cdn_url]
     )
     useLayoutEffect(() => {
         const handleResize = () => {
@@ -282,7 +283,7 @@ const TemplateEditPanel = () => {
                             }
                             if (success.data.code === 400 || success.data.status === "failed") {
                                 setLoading(false)
-                                toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1000 })
+                                toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 2000 })
                             }
                         })
                     }}
@@ -407,6 +408,7 @@ const TemplateEditPanel = () => {
                                             <ImageUploading
                                                 value={images}
                                                 onChange={(imageList) => {
+                                                    setBackView(false)
                                                     if (imageList.length > 0) {
                                                         const dataUrl = imageList[0]['data_url']
                                                         const blob = dataURLToBlob(dataUrl);
@@ -421,6 +423,7 @@ const TemplateEditPanel = () => {
                                                     if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                                                         const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
                                                         setBackLoading(true)
+                                                        setBackView(true)
                                                         const fetchImage = async (para) => {
 
                                                             const response = await fetch(url, {
@@ -442,7 +445,6 @@ const TemplateEditPanel = () => {
                                                             }
                                                             setImages([{ data_url: data.data }]);
                                                             setFieldValue("background_image", imageList[0])
-                                                            // setImgSrc(data.data);data
                                                             setBackLoading(false)
                                                         }
                                                         fetchImage(imageList[0]['data_url'])
@@ -450,6 +452,7 @@ const TemplateEditPanel = () => {
                                                     else {
                                                         setImages(imageList);
                                                         setFieldValue("background_image", imageList[0])
+                                                        setBackView(true)
                                                     }
                                                 }}
                                                 maxNumber={maxNumber}
@@ -466,7 +469,7 @@ const TemplateEditPanel = () => {
                                                 }) => (
                                                     // write your building UI
                                                     <div className="upload__image-wrapper">
-                                                        <div className="image-position__left" onClick={() => { onImageUpload(); setBackView(true) }}>
+                                                        <div className="image-position__left" onClick={() => { onImageUpload(); }}>
                                                             <TemplateButton content={t("Einen anderen Hintergrund hinzufügen")} />
                                                             <ErrorMessage name="background_image" component="p" className="validation" />
                                                         </div>
@@ -517,6 +520,7 @@ const TemplateEditPanel = () => {
                                             <ImageUploading
                                                 value={previewImages}
                                                 onChange={(imageList) => {
+                                                    setPreView(false)
                                                     if (imageList.length > 0) {
                                                         const dataUrl = imageList[0]['data_url']
                                                         const blob = dataURLToBlob(dataUrl);
@@ -530,6 +534,7 @@ const TemplateEditPanel = () => {
                                                     if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
                                                         const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
                                                         setPreviewLoading(true)
+                                                        setPreView(true)
                                                         const fetchImage = async (para) => {
 
                                                             const response = await fetch(url, {
@@ -559,6 +564,7 @@ const TemplateEditPanel = () => {
                                                     else {
                                                         setPreviewImages(imageList);
                                                         setFieldValue("preview_image", imageList[0])
+                                                        setPreView(true)
                                                     }
 
                                                 }}
@@ -576,7 +582,7 @@ const TemplateEditPanel = () => {
                                                 }) => (
                                                     // write your building UI
                                                     <div className="upload__image-wrapper">
-                                                        <div className="image-position__left" onClick={() => { onImageUpload(); setPreView(true) }}>
+                                                        <div className="image-position__left" onClick={() => { onImageUpload(); }}>
                                                             <TemplateButton content={"Einen anderen Hintergrund hinzufügen"} />
                                                         </div>
                                                         <div className="image-position__left">

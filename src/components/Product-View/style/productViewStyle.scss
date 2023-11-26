@@ -1,10 +1,12 @@
 .search-multi{
+    display: flex;
+    align-items: center;
     &:hover {
-        transform: scale(1.1);
+        transform: scale(1);
       }
       
     &:active {
-        transform: scale(0.95);
+        transform: scale(0.9);
       }
 }
 
@@ -105,7 +107,7 @@
     border-radius: 3px;
     border: 1px solid var(--transparent-transparent-b-25, rgba(0, 0, 0, 0.25));
     background: var(--white, #FFF);
-    width: 100% !important;
+    width: calc(100% - 2px) !important;
     margin-top: 20px;
     .MuiInputBase-root{
         padding-right: 18px !important;
@@ -178,6 +180,8 @@
             font-weight: 700;
             size: 14px;
             line-height: 20px;
+            max-width: 270px;
+            line-break: anywhere;
         }
         &__drag {
             display: flex;

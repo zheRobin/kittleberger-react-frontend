@@ -116,6 +116,9 @@ const OverlayGroup = ({ productInfo, index }) => {
                                     <div className="panel-top__title">
                                         {productInfo.name}
                                     </div>
+                                    <div className="panel-top__title" style={{ fontWeight: "400" }}>
+                                        {productInfo.article_number}
+                                    </div>
                                     <div className="panel-top__drag">
                                         <Slider value={sliderValue} valueLabelDisplay="auto" track={false} onChange={(e) => { setSliderValue(e.target.value) }}
                                             sx={{

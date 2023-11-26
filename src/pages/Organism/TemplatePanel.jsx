@@ -12,14 +12,15 @@ import { createTemplate } from "../../_services/Template";
 import PlusIcon from "../../assets/icons/add.svg"
 import DeleteIcon from "../../assets/icons/cross.svg"
 import DragIcon from "../../assets/icons/drag&drop.svg"
-import 'react-toastify/dist/ReactToastify.css';
-import "../../components/Composing/style/composeStyle.scss"
 import ImageTemplate from "../../components/Composing/ImageTempate"
 import { useRef, useLayoutEffect } from 'react';
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom';
 import spinner from "../../assets/icons/tube-spinner.svg"
 import { useTranslation } from 'react-i18next';
+import 'react-toastify/dist/ReactToastify.css';
+import "../../components/Composing/style/composeStyle.scss"
+
 export const TemplateButton = ({ content, type = "brown" }) => {
 	return (
 		<div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -78,15 +79,19 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
 	};
 
 	function onDragOver(index) {
-		const draggedOverItem = articleGroup[index];
-		if (draggedItem === draggedOverItem) {
+		let draggedOverItem = articleGroup[index];
+		let tempDraggedItem = draggedItem
+		if (tempDraggedItem === draggedOverItem) {
 			return;
 		}
-		const updatedDraggedItem = { ...draggedItem, height: draggedOverItem.height, width: draggedOverItem.width };
-		const updatedDraggedOverItem = { ...draggedOverItem, height: draggedItem.height, width: draggedItem.width };
-		let itemGroups = articleGroup.map((item, i) => (i === index ? updatedDraggedOverItem : item));
-		itemGroups = itemGroups.map((item) => (item === draggedItem ? updatedDraggedItem : item));
-		setArticleGroup(itemGroups);
+		else {
+			let updatedDraggedItem = { ...tempDraggedItem, height: draggedOverItem.height, width: draggedOverItem.width };
+			const updatedDraggedOverItem = { ...draggedOverItem, height: tempDraggedItem.height, width: tempDraggedItem.width };
+			let itemGroups = articleGroup.map((item, i) => (i === index ? updatedDraggedOverItem : item));
+			itemGroups = itemGroups.map((item) => (item === draggedItem ? updatedDraggedItem : item));
+			setArticleGroup(itemGroups);
+			setDraggedItem(itemGroups[index])
+		}
 	}
 	const onDragEnd = () => {
 		setFieldValue("article_placements", articleGroup);
@@ -107,23 +112,23 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
 								<div className="input-groups">
 									<div>
 										<div className="typography-400-regular">{t("top")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
 									</div>
 									<div>
 										<div className="typography-400-regular">{t("left")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
 									</div>
 									<div>
 										<div className="typography-400-regular">{t("width")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
 									</div>
 									<div>
 										<div className="typography-400-regular">{t("height")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
 									</div>
 									<div>
 										<div className="typography-400-regular">{t("z-index")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ style: { textAlign: 'center' } }} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
 									</div>
 									<div className="image-settings__common pointer" onClick={() => {
 										arrayHelpers.remove(index)
@@ -212,9 +217,9 @@ const TemplatePanel = () => {
 
 	let validationSchema = Yup.object().shape({
 		name: Yup.string()
-			.required('This field is required'),
-		resolution_width: Yup.string().required("This field is required"),
-		resolution_height: Yup.string().required("This field is required")
+			.required(t('This field is required')),
+		resolution_width: Yup.string().required(t('This field is required')),
+		resolution_height: Yup.string().required(t('This field is required'))
 	})
 	function dataURLToBlob(dataURL) {
 		const parts = dataURL.split(',');
@@ -267,14 +272,14 @@ const TemplatePanel = () => {
 						createTemplate(formData, token, (success) => {
 
 							if (success.data.code === 201 || success.data.status === "success") {
-								setLoading(false)
-								toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-								navigate("/product")
+								setLoading(false);
+								toast.success("Successfully Created", { theme: "colored", hideProgressBar: true, autoClose: 1500 });
+								navigate("/product");
+							} else if (success.data.code === 400 || success.data.status === "failed") {
+								setLoading(false);
+								toast.error(success.data.data, { theme: "colored", hideProgressBar: true, autoClose: 2000 });
 							}
-							if (success.data.code === 400 || success.data.status === "failed") {
-								setLoading(false)
-								toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1000 })
-							}
+
 						})
 					}}
 				>
@@ -344,7 +349,7 @@ const TemplatePanel = () => {
 														<div className="typography-400-regular">{t("breite")}*</div>
 													</div>
 													<div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
-														<Field as={TextField} name="resolution_width" />
+														<Field as={TextField} type="number" name="resolution_width" />
 														<div style={{ display: "flex", justifyContent: "flex-start" }}>
 															<ErrorMessage name="resolution_width" component="p" className="validation" />
 														</div>
@@ -355,7 +360,7 @@ const TemplatePanel = () => {
 														<div className="typography-400-regular">{t("Hähe")}*</div>
 													</div>
 													<div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
-														<Field as={TextField} name="resolution_height" />
+														<Field as={TextField} type="number" name="resolution_height" />
 														<div style={{ display: "flex", justifyContent: "flex-start" }}>
 															<ErrorMessage name="resolution_height" component="p" className="validation" />
 														</div>
@@ -399,6 +404,7 @@ const TemplatePanel = () => {
 											<ImageUploading
 												value={images}
 												onChange={(imageList) => {
+													setBackView(false)
 													if (imageList.length > 0) {
 														const dataUrl = imageList[0]['data_url']
 														const blob = dataURLToBlob(dataUrl);
@@ -414,6 +420,8 @@ const TemplatePanel = () => {
 														const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
 														const fetchImage = async (para) => {
 															setBackLoading(true)
+															setBackView(true)
+
 															const response = await fetch(url, {
 																method: "POST",
 																headers: {
@@ -440,7 +448,9 @@ const TemplatePanel = () => {
 													else {
 														setImages(imageList);
 														setFieldValue("background_image", imageList[0])
+														setBackView(true)
 													}
+
 												}}
 												maxNumber={maxNumber}
 												dataURLKey="data_url"
@@ -456,7 +466,7 @@ const TemplatePanel = () => {
 												}) => (
 													// write your building UI
 													<div className="upload__image-wrapper">
-														<div className="image-position__left" onClick={() => { onImageUpload(); setBackView(true) }}>
+														<div className="image-position__left" onClick={() => { onImageUpload(); }}>
 															<TemplateButton content={t("Einen anderen Hintergrund hinzufügen")} />
 															<ErrorMessage name="background_image" component="p" className="validation" />
 														</div>
@@ -501,6 +511,7 @@ const TemplatePanel = () => {
 											<ImageUploading
 												value={previewImages}
 												onChange={(imageList) => {
+													setPreView(false)
 													if (imageList.length > 0) {
 														const dataUrl = imageList[0]['data_url']
 														const blob = dataURLToBlob(dataUrl);
@@ -515,6 +526,7 @@ const TemplatePanel = () => {
 													if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
 														const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
 														setPreviewLoading(true)
+														setPreView(true)
 														const fetchImage = async (para) => {
 
 															const response = await fetch(url, {
@@ -544,6 +556,7 @@ const TemplatePanel = () => {
 													else {
 														setPreviewImages(imageList);
 														setFieldValue("preview_image", imageList[0])
+														setPreView(true)
 													}
 												}}
 												maxNumber={maxNumber}
@@ -560,7 +573,7 @@ const TemplatePanel = () => {
 												}) => (
 													// write your building UI
 													<div className="upload__image-wrapper">
-														<div className="image-position__left" onClick={() => { onImageUpload(); setPreView(true) }}>
+														<div className="image-position__left" onClick={() => { onImageUpload(); }}>
 															<TemplateButton content={t("Einen anderen Hintergrund hinzufügen")} />
 														</div>
 														<div className="image-position__left">

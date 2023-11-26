@@ -10,6 +10,7 @@ import 'react-photo-view/dist/react-photo-view.css';
 import { PhotoSlider } from 'react-photo-view';
 import { composeByInfo } from "../../_services/Product"
 import { calcPosition } from "../../_services/Product"
+import productSpinner from "../../assets/icons/spinner-3-svgrepo-com.svg"
 
 export const ProductView = () => {
     const dispatch = useDispatch()
@@ -19,11 +20,12 @@ export const ProductView = () => {
     const imgRef = useRef(null);
     const [loading, setLoading] = useState(false)
     const [composeImage, setComposeImage] = useState('')
-
+    console.log("selectedProducts", selectedProducts)
+    console.log("selectedTemplate", selectedTemplate)
     useEffect(() => {
         if (imgRef.current) {
             setLoading(true);
-            const article = selectedProducts?.map((product) => {
+            const article = !selectedProducts ? [] : selectedProducts?.map((product) => {
                 const positionStyle = selectedTemplate?.article_placements;
                 const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index == product?.pos_index)
                 const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
@@ -33,7 +35,7 @@ export const ProductView = () => {
                 const positionY = position ? position[1] : selectedStyle[0].position_y;
                 if (positionStyle !== undefined) {
                     return {
-                        article_link: product?.cdn_urls ? product?.cdn_urls[0] : product?.cdn_url,
+                        render_url: product?.render_url ? product?.render_url : product?.render_url,
                         is_transparent: is_transparent,
                         top: positionY,
                         left: positionX,
@@ -81,15 +83,15 @@ export const ProductList = ({ productItem, possiblePos, setPreview, setVisible }
                 maxWidth: '70px',
                 maxHeight: "70px",
                 marginRight: '5px'
-            }} className="pointer" onClick={() => { setPreview([productItem?.cdn_urls[0]]); setVisible(true) }}>
-                <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src={productItem?.cdn_urls[0] ? productItem?.cdn_urls[0] : require("../../assets/images/product-image.png")} alt="product" />
+            }} className="pointer" onClick={() => { setPreview([productItem?.render_url]); setVisible(true) }}>
+                <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src={productItem?.render_url ? productItem?.render_url : require("../../assets/images/product-image.png")} alt="product" />
             </div>
             <div className="product-info" >
                 <div className="label-info">
                     <div className="label-info__top typography-700-regular">{productItem.name}</div>
                     <div className="label-info__bottom typography-400-regular">{productItem.article_number}</div>
                 </div>
-                <div className="add--filled pointer" onClick={(e) => { dispatch(appendProducts(productItem)) }} style={(possiblePos - 1) >= productCount.length ? {} : { display: "none" }}>
+                <div className="add--filled pointer" onClick={(e) => { dispatch(appendProducts(productItem)) }} style={(possiblePos - 1) >= productCount?.length ? {} : { display: "none" }}>
                     <img src={plus} alt="plus" />
                 </div>
             </div>
@@ -119,7 +121,7 @@ export const Loading = () => {
 const ProductSelect = () => {
     const selectedCountryGroup = useSelector(state => state.products.selectedCountry)
     const selectedTemplate = useSelector(state => state.products.selectedTemplate);
-    const productPosNumbers = selectedTemplate.article_placements ? selectedTemplate?.article_placements?.length : 1;
+    const productPosNumbers = selectedTemplate.article_placements ? selectedTemplate?.article_placements.length : 1;
     const token = useSelector(state => state.auth.token);
     const [productList, setProductList] = useState([]);
     const [page, setPage] = useState(1);
@@ -131,7 +133,7 @@ const ProductSelect = () => {
     )
     const [visible, setVisible] = useState(false);
     const [index, setIndex] = useState(0);
-
+    const [loading, setLoading] = useState(false);
     const clearStoreData = () => {
         setProductList([]);
         setPage(1);
@@ -157,6 +159,7 @@ const ProductSelect = () => {
     }, [searchString]);
 
     function getProductInfo(page, productInfo = "", country = "germany") {
+        setLoading(true)
         getProductsbyFilter(token, { page, productInfo, country }, (success) => {
             if (success.data.code === 200 && success.data.status === "success") {
                 setProductList((prevProductList) => {
@@ -167,6 +170,7 @@ const ProductSelect = () => {
                     currentPage: success.data.data.current_page,
                     count: success.data.data.count
                 })
+                setLoading(false)
             }
             else {
             }
@@ -196,7 +200,7 @@ const ProductSelect = () => {
                             }
                             )}
                         </div>
-                        {30 === pageInfo?.count ? (<div className="typography-400-bold pointer" onClick={(e) => setPage(page + 1)} style={{ textAlign: "end", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>Load More</div>) : null}
+                        {30 === pageInfo?.count ? (loading ? <div className="" style={{ display: "flex", paddingTop: "10px", justifyContent: "center", height: "50px" }}><img src={productSpinner} alt="productSpinner" ></img></div> : <div className="typography-400-bold pointer" onClick={(e) => setPage(page + 1)} style={{ textAlign: "center", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>Load More</div>) : null}
                     </div>
                     <PhotoSlider
                         images={images.map((item) => ({ src: item, key: item }))}

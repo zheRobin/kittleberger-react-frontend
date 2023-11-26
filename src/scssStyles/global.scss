@@ -110,4 +110,20 @@ $gray-tranparent:#FFFFFF40;
       opacity: 0;
 }
   }
+
+  
+  .animation-move {
+    cursor: move;
+    animation: moveAnimation 3.5s infinite;
+  }
+  
+  @keyframes moveAnimation {
+    0%,
+    100% {
+      top: 5px;
+    }
+    50% {
+      top: 0px;
+    }
+  }
   

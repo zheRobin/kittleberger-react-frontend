@@ -11,24 +11,49 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Loading } from "./ProductSelect"
 import { useLocation } from "react-router-dom"
 import { useTranslation } from 'react-i18next';
+import { useRef } from "react"
+
 const Summary = () => {
     const { t } = useTranslation();
     const { state } = useLocation()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate)
     const selectedProducts = useSelector(state => state.products.selectedProducts)
     const composedProduct = useSelector(state => state.products.composedProduct)
+    const [editableName, setEditableName] = useState('')
     const cardInfo = useSelector(state => state.products.cardInfo)
     const [loading, setLoading] = useState(false)
     const [deploymentName, setdeploymentName] = useState({
         value: '',
         copied: false,
     })
+    const useAutosizeTextArea = (
+        textAreaRef,
+        value
+    ) => {
+        useEffect(() => {
+            if (textAreaRef) {
+                // We need to reset the height momentarily to get the correct scrollHeight for the textarea
+                textAreaRef.style.height = "0px";
+                const scrollHeight = textAreaRef.scrollHeight;
+
+                // We then set the height directly, outside of the render loop
+                // Trying to set this with state or a ref will product an incorrect value.
+                textAreaRef.style.height = scrollHeight + "px";
+            }
+        }, [textAreaRef, value]);
+    };
     const userInfo = useSelector(state => state.auth.user)
     useEffect(() => {
         if (!composedProduct.startsWith("data:")) {
             setdeploymentName({ value: state ?? composedProduct, copied: false });
         }
     }, [composedProduct]);
+    const composeName = `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} | ${selectedProducts?.map((product, index) => { return product.name })}`
+    useEffect(
+        () => {
+            setEditableName(composeName)
+        }, [composeName]
+    )
     function handleDownload() {
         const imageUrl = deploymentName.value;
         const link = document.createElement('a');
@@ -37,17 +62,17 @@ const Summary = () => {
         link.click();
     }
     const token = useSelector(state => state.auth.token)
-    const composeName = `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} | ${selectedProducts?.map((product, index) => { return product.name })}`
-
+    console.log("selectedProducts", selectedProducts)
     const submitArticleInfo = {
         articles: [...selectedProducts.map((product, index) => {
             return {
                 id: product.id,
                 name: product.name,
-                number: product.article_number,
-                cdn_url: product.cdn_urls ? product.cdn_urls[0] : product.cdn_url,
+                article_number: product.article_number,
+                mediaobject_id: product.mediaobject_id,
+                render_url: product.render_url ? product.render_url : product.render_url,
                 pos_index: product?.pos_index,
-                is_transparent: product?.is_transparent,
+                is_transparent: product?.is_transparent ? product?.is_transparent : false,
                 scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
                 alignment: product?.align === undefined ? "top-left" : product?.align,
                 height: selectedTemplate?.article_placements[index]?.height,
@@ -57,18 +82,26 @@ const Summary = () => {
         })]
     }
     const submitInfo = {
-        name: composeName,
+        name: editableName,
         template_id: selectedTemplate.id,
         base64_img: composedProduct,
         ...submitArticleInfo
     }
     const updateInfo = {
         id: cardInfo?.id,
-        name: composeName,
+        name: editableName,
         template_id: selectedTemplate.id,
         base64_img: composedProduct,
         ...submitArticleInfo
     }
+    const textAreaRef = useRef(null);
+
+    useAutosizeTextArea(textAreaRef.current, editableName);
+
+    const handleChange = (evt) => {
+        const val = evt.target?.value;
+        setEditableName(val);
+    };
     const saveInfo = () => {
         if (!composedProduct.startsWith("data:")) {
             toast.warning("Please update composing products", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
@@ -104,6 +137,7 @@ const Summary = () => {
 
     }
     let date_created = new Date(selectedTemplate.created);
+    console.log(selectedTemplate)
     let formattedDate_created = `am ${date_created.toLocaleDateString("de-DE", {
         day: "2-digit",
         month: "2-digit",
@@ -172,10 +206,10 @@ const Summary = () => {
                             <div>{t('Dateiformat')}: {selectedTemplate.file_type} (RGB)</div>
                             <br></br>
                             <div>{t('Enthaltene Produkte')}:</div>
-                            <div>{selectedProducts.map((product, index) => (
+                            <div style={{ textAlign: "start" }}>{selectedProducts.map((product, index) => (
                                 <React.Fragment key={index}>
                                     <div>
-                                        <span>{product.name}</span>
+                                        <span>&#8226;{" " + product.name + " "}</span>
                                         <span>({product.article_number})</span>
                                     </div>
                                 </React.Fragment>
@@ -194,13 +228,21 @@ const Summary = () => {
                     </div>
                     <div className="composing-name">
                         <div className="typography-700-regular">{t('Composing Name')}</div>
-                        <input value={composeName} readOnly />
+                        <textarea
+                            id="review-text"
+                            onChange={handleChange}
+                            ref={textAreaRef}
+                            rows={1}
+                            defaultValue={composeName}
+                            value={editableName}
+                            style={{ fontSize: "14px" }}
+                        />
                         <div onClick={(e) => saveInfo()}><TemplateButton content={t('Speichern')} /></div>
                     </div>
-                    <div className="deployment">
+                    {deploymentName.value !== '' ? (<div className="deployment">
                         <div className="typography-700-regular">{t('Bereitstellung')}</div>
                         <div className="url-group">
-                            <Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="280px">
+                            <Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="100%">
                                 {deploymentName.value}
                             </Typography>
                             <CopyToClipboard text={deploymentName.value} onCopy={() => setdeploymentName({ ...deploymentName, copied: true })}>
@@ -209,7 +251,8 @@ const Summary = () => {
                         </div>
                         <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={t('Download Bilddatei')} type="transparent" /></div>
                         <div className="download-button" onClick={() => downloadMetaData()}><TemplateButton content={t('Download Metadaten')} type="transparent" /></div>
-                    </div>
+                    </div>) : null}
+
                 </div>
                 <ToastContainer />
             </div>

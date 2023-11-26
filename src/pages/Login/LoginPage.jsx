@@ -29,7 +29,7 @@ const LoginPage = () => {
         onSubmit: (values) => {
             try {
                 dispatch(authActions.login({ email: values.username, password: values.password })).then((response) => {
-                    response?.error?.message === 'Unauthorized' && toast.error("Invalid username or password", { theme: "colored", hideProgressBar: "true", autoClose: 1000 })
+                    response?.error?.message === 'Unauthorized' && toast.error("Invalid username or password", { theme: "colored", hideProgressBar: "true", autoClose: 2000 })
                 })
 
             }

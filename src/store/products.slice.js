@@ -3,10 +3,10 @@ import { createSlice  } from "@reduxjs/toolkit";
 export const productsSlice = createSlice({
     name: 'products',
     initialState:{
-        selectedProducts: [],
+        selectedProducts: JSON.parse(localStorage.getItem('productsInfo')),
         selectedTemplate: JSON.parse(localStorage.getItem('templateInfo')),
         selectedCountry:[],
-        composedProduct:'',
+        composedProduct:(localStorage.getItem('composeInfo')),
         usedArticles:[],
         cardInfo:{}
     },
@@ -26,21 +26,29 @@ export const productsSlice = createSlice({
           },
         appendProducts: (state, action) => {
             const productsLength = state.selectedProducts.length
+            const originIndexes = Array.from({length: 10}, (_, i) => i + 1)
+            const prevPosIndexes = state.selectedProducts.map((product) => product.pos_index);
+            const oddIndexes = originIndexes.filter((index) => !prevPosIndexes.includes(index));
+            console.log(oddIndexes)
             state.selectedProducts = productsLength === 0 ? 
             [{...action.payload,pos_index:state.selectedTemplate.article_placements[0].pos_index}] : 
-            [...state.selectedProducts, {...action.payload,pos_index:state.selectedTemplate.article_placements[productsLength].pos_index}];
-          },
+            [...state.selectedProducts, {...action.payload,pos_index:state.selectedTemplate.article_placements[oddIndexes[0]-1].pos_index}];
+            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
+        },
         removeProducts:(state,action) =>{
             state.selectedProducts = state.selectedProducts.filter((product) => product.article_number !== action.payload.article_number)
+            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts.filter((product) => product.article_number !== action.payload.article_number)));
         },
         updateProducts:(state,action) =>{
             state.selectedProducts = action.payload
+            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         findTemplates:(state, action) => {
             state.selectedTemplate = action.payload
         },
         setComposedProduct:(state, action) => {
             state.composedProduct = action.payload
+            localStorage.setItem('composeInfo', (state.composedProduct));
         },
         setProductAligns:(state,action) =>{
             const article_number= action.payload.article_number;
@@ -91,9 +99,11 @@ export const productsSlice = createSlice({
                 }
                 return product;
             });
+            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         setProductLists:(state,action) => {
             state.selectedProducts = action.payload
+            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         appendCountries: (state, action) => {
             const countriesLength = state.selectedCountry.length
