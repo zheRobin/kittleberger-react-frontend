@@ -101,7 +101,7 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                             <div className="image-settings__common"><div className="typography-700-regular" style={{ width: "60px" }}>Image {index + 1}</div></div>
                         </div>
                         <div className="image-settings__right-section">
-                            <div className="image-settings__common"><img src={DragIcon} alt="DragIcon"></img></div>
+                            <div className="image-settings__common" style={{ cursor: "move" }}><img src={DragIcon} alt="DragIcon"></img></div>
                             <div className="image-settings__panel">
                                 <div className="input-groups">
                                     <div>
@@ -298,6 +298,7 @@ const TemplateEditPanel = () => {
                                     onClick={handleSubmit}
                                 >
                                     <TemplateButton content={t("Template speichern")} />
+                                    {loading ? <Loading /> : null}
                                 </div>
                                 <div className="panel-group">
                                     <div className="product-setting-panel">
@@ -400,228 +401,234 @@ const TemplateEditPanel = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="product-setting-panel background-upload-panel">
-                                        <div className="product-setting-panel__top">
-                                            <div className="typography-400-regular top-typo">{t("Hintergrund")}</div>
-                                        </div>
-                                        <div className="product-setting-panel__bottom">
-                                            <ImageUploading
-                                                value={images}
-                                                onChange={(imageList) => {
-                                                    setBackView(false)
-                                                    if (imageList.length > 0) {
-                                                        const dataUrl = imageList[0]['data_url']
-                                                        const blob = dataURLToBlob(dataUrl);
-                                                        const fileSizeInBytes = blob.size;
-                                                        if (fileSizeInBytes > 3 * Math.pow(10, 6)) {
-                                                            toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-
-                                                            return
-                                                        }
-                                                    }
-
-                                                    if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
-                                                        const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
-                                                        setBackLoading(true)
-                                                        setBackView(true)
-                                                        const fetchImage = async (para) => {
-
-                                                            const response = await fetch(url, {
-                                                                method: "POST",
-                                                                headers: {
-                                                                    "Content-Type": "application/json", // Set the content type to application/json
-                                                                },
-                                                                body: JSON.stringify({
-                                                                    tiff_image: para,
-                                                                }),
-                                                            });
-                                                            const data = await response.json();
-                                                            const dataUrl = data.data
+                                    {values.resolution_width && values.resolution_height ? (
+                                        <div className="product-setting-panel background-upload-panel">
+                                            <div className="product-setting-panel__top">
+                                                <div className="typography-400-regular top-typo">{t("Hintergrund")}</div>
+                                            </div>
+                                            <div className="product-setting-panel__bottom">
+                                                <ImageUploading
+                                                    value={images}
+                                                    onChange={(imageList) => {
+                                                        setBackView(false)
+                                                        if (imageList.length > 0) {
+                                                            const dataUrl = imageList[0]['data_url']
                                                             const blob = dataURLToBlob(dataUrl);
                                                             const fileSizeInBytes = blob.size;
-                                                            if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
+                                                            if (fileSizeInBytes > 3 * Math.pow(10, 6)) {
                                                                 toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+
                                                                 return
                                                             }
-                                                            setImages([{ data_url: data.data }]);
+                                                        }
+
+                                                        if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                                                            const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
+                                                            setBackLoading(true)
+                                                            setBackView(true)
+                                                            const fetchImage = async (para) => {
+
+                                                                const response = await fetch(url, {
+                                                                    method: "POST",
+                                                                    headers: {
+                                                                        "Content-Type": "application/json", // Set the content type to application/json
+                                                                    },
+                                                                    body: JSON.stringify({
+                                                                        tiff_image: para,
+                                                                    }),
+                                                                });
+                                                                const data = await response.json();
+                                                                const dataUrl = data.data
+                                                                const blob = dataURLToBlob(dataUrl);
+                                                                const fileSizeInBytes = blob.size;
+                                                                if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
+                                                                    toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                                                    return
+                                                                }
+                                                                setImages([{ data_url: data.data }]);
+                                                                setFieldValue("background_image", imageList[0])
+                                                                setBackLoading(false)
+                                                            }
+                                                            fetchImage(imageList[0]['data_url'])
+                                                        }
+                                                        else {
+                                                            setImages(imageList);
                                                             setFieldValue("background_image", imageList[0])
-                                                            setBackLoading(false)
+                                                            setBackView(true)
                                                         }
-                                                        fetchImage(imageList[0]['data_url'])
-                                                    }
-                                                    else {
-                                                        setImages(imageList);
-                                                        setFieldValue("background_image", imageList[0])
-                                                        setBackView(true)
-                                                    }
-                                                }}
-                                                maxNumber={maxNumber}
-                                                dataURLKey="data_url"
-                                            >
-                                                {({
-                                                    imageList,
-                                                    onImageUpload,
-                                                    onImageRemoveAll,
-                                                    onImageUpdate,
-                                                    onImageRemove,
-                                                    isDragging,
-                                                    dragProps,
-                                                }) => (
-                                                    // write your building UI
-                                                    <div className="upload__image-wrapper">
-                                                        <div className="image-position__left" onClick={() => { onImageUpload(); }}>
-                                                            <TemplateButton content={t("Einen anderen Hintergrund hinzufügen")} />
-                                                            <ErrorMessage name="background_image" component="p" className="validation" />
-                                                        </div>
-                                                        <div className="image-position__left">
-                                                            {backView ? (
-                                                                <div className="product-card">
-                                                                    <div className="product-panel">
-                                                                        <div className="product-info-group">
-                                                                            <div className="product-info">
-                                                                                <div className="product-name"></div>
-                                                                                <div className="product-image-info"></div>
-                                                                            </div>
-                                                                            <div className="product-icon pointer" onClick={(e) => { onImageRemoveAll(); setBackView(false) }}>
-                                                                                <img src={DeleteIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
+                                                    }}
+                                                    maxNumber={maxNumber}
+                                                    dataURLKey="data_url"
+                                                >
+                                                    {({
+                                                        imageList,
+                                                        onImageUpload,
+                                                        onImageRemoveAll,
+                                                        onImageUpdate,
+                                                        onImageRemove,
+                                                        isDragging,
+                                                        dragProps,
+                                                    }) => (
+                                                        // write your building UI
+                                                        <div className="upload__image-wrapper">
+                                                            <div className="image-position__left" onClick={() => { onImageUpload(); }}>
+                                                                <TemplateButton content={t("Einen anderen Hintergrund hinzufügen")} />
+                                                                <ErrorMessage name="background_image" component="p" className="validation" />
+                                                            </div>
+                                                            <div className="image-position__left">
+                                                                {backView ? (
+                                                                    <div className="product-card">
+                                                                        <div className="product-panel">
+                                                                            <div className="product-info-group">
+                                                                                <div className="product-info">
+                                                                                    <div className="product-name"></div>
+                                                                                    <div className="product-image-info"></div>
+                                                                                </div>
+                                                                                <div className="product-icon pointer" onClick={(e) => { onImageRemoveAll(); setBackView(false) }}>
+                                                                                    <img src={DeleteIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div className="product-image pointer">
-                                                                        {imageList.map((image, index) => (
-                                                                            <div key={index} className="image-item"
-                                                                                style={{ width: "100%", height: "100%" }}>
-                                                                                <img src={backLoading ? spinner : image['data_url']} alt="background"
-                                                                                    style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                                                                            </div>
-                                                                        ))}
-                                                                        {images.length === 0 ? (
-                                                                            <div className="image-item" style={{ width: "100%", height: "100%" }}>
-                                                                                <img src={productInfo?.bg_image_cdn_url} alt="backviewimage"
-                                                                                    style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                                                                            </div>
-                                                                        ) : null}
+                                                                        <div className="product-image pointer">
+                                                                            {imageList.map((image, index) => (
+                                                                                <div key={index} className="image-item"
+                                                                                    style={{ width: "100%", height: "100%" }}>
+                                                                                    <img src={backLoading ? spinner : image['data_url']} alt="background"
+                                                                                        style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                                                                                </div>
+                                                                            ))}
+                                                                            {images.length === 0 ? (
+                                                                                <div className="image-item" style={{ width: "100%", height: "100%" }}>
+                                                                                    <img src={productInfo?.bg_image_cdn_url} alt="backviewimage"
+                                                                                        style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                                                                                </div>
+                                                                            ) : null}
 
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            ) : null}
+                                                                ) : null}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                )}
-                                            </ImageUploading>
+                                                    )}
+                                                </ImageUploading>
 
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="product-setting-panel thumbnail-panel">
-                                        <div className="product-setting-panel__top">
-                                            <div className="typography-400-regular top-typo">{t("Vorschaubild")}</div>
-                                        </div>
-                                        <div className="product-setting-panel__bottom">
-                                            <ImageUploading
-                                                value={previewImages}
-                                                onChange={(imageList) => {
-                                                    setPreView(false)
-                                                    if (imageList.length > 0) {
-                                                        const dataUrl = imageList[0]['data_url']
-                                                        const blob = dataURLToBlob(dataUrl);
-                                                        const fileSizeInBytes = blob.size;
-                                                        if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
-                                                            toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                                                            return
-                                                        }
-                                                    }
+                                    ) : null}
 
-                                                    if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
-                                                        const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
-                                                        setPreviewLoading(true)
-                                                        setPreView(true)
-                                                        const fetchImage = async (para) => {
-
-                                                            const response = await fetch(url, {
-                                                                method: "POST",
-                                                                headers: {
-                                                                    "Content-Type": "application/json", // Set the content type to application/json
-                                                                },
-                                                                body: JSON.stringify({
-                                                                    tiff_image: para,
-                                                                }),
-                                                            });
-                                                            const data = await response.json();
-                                                            const dataUrl = data.data
+                                    {values.resolution_width && values.resolution_height ? (
+                                        <div className="product-setting-panel thumbnail-panel">
+                                            <div className="product-setting-panel__top">
+                                                <div className="typography-400-regular top-typo">{t("Vorschaubild")}</div>
+                                            </div>
+                                            <div className="product-setting-panel__bottom">
+                                                <ImageUploading
+                                                    value={previewImages}
+                                                    onChange={(imageList) => {
+                                                        setPreView(false)
+                                                        if (imageList.length > 0) {
+                                                            const dataUrl = imageList[0]['data_url']
                                                             const blob = dataURLToBlob(dataUrl);
                                                             const fileSizeInBytes = blob.size;
                                                             if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
                                                                 toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                                                                 return
                                                             }
-                                                            setPreviewImages([{ data_url: data.data }]);
-                                                            setFieldValue("preview_image", imageList[0])
-                                                            setPreviewLoading(false)
-                                                            // setImgSrc(data.data);data
                                                         }
-                                                        fetchImage(imageList[0]['data_url'])
-                                                    }
-                                                    else {
-                                                        setPreviewImages(imageList);
-                                                        setFieldValue("preview_image", imageList[0])
-                                                        setPreView(true)
-                                                    }
 
-                                                }}
-                                                maxNumber={maxNumber}
-                                                dataURLKey="data_url"
-                                            >
-                                                {({
-                                                    imageList,
-                                                    onImageUpload,
-                                                    onImageRemoveAll,
-                                                    onImageUpdate,
-                                                    onImageRemove,
-                                                    isDragging,
-                                                    dragProps,
-                                                }) => (
-                                                    // write your building UI
-                                                    <div className="upload__image-wrapper">
-                                                        <div className="image-position__left" onClick={() => { onImageUpload(); }}>
-                                                            <TemplateButton content={"Einen anderen Hintergrund hinzufügen"} />
-                                                        </div>
-                                                        <div className="image-position__left">
-                                                            {preView ? (
-                                                                <div className="product-card">
-                                                                    <div className="product-panel">
-                                                                        <div className="product-info-group">
-                                                                            <div className="product-info">
-                                                                                <div className="product-name"></div>
-                                                                                <div className="product-image-info"></div>
-                                                                            </div>
-                                                                            <div className="product-icon pointer" onClick={(e) => { if (previewImages.length !== 0 && previewImages[0]?.data_url !== undefined) { onImageRemoveAll() } setPreView(false) }}>
-                                                                                <img src={DeleteIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
+                                                        if (imageList.length > 0 && imageList[0].data_url && imageList[0]['data_url'].split(',')[0] === "data:image/tiff;base64") {
+                                                            const url = `${process.env.REACT_APP_API_URL}api/v1/core/tiff/`;
+                                                            setPreviewLoading(true)
+                                                            setPreView(true)
+                                                            const fetchImage = async (para) => {
+
+                                                                const response = await fetch(url, {
+                                                                    method: "POST",
+                                                                    headers: {
+                                                                        "Content-Type": "application/json", // Set the content type to application/json
+                                                                    },
+                                                                    body: JSON.stringify({
+                                                                        tiff_image: para,
+                                                                    }),
+                                                                });
+                                                                const data = await response.json();
+                                                                const dataUrl = data.data
+                                                                const blob = dataURLToBlob(dataUrl);
+                                                                const fileSizeInBytes = blob.size;
+                                                                if (fileSizeInBytes > 3 * Math.pow(10, 7)) {
+                                                                    toast.error("your file size is greater than 10Mpx", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                                                    return
+                                                                }
+                                                                setPreviewImages([{ data_url: data.data }]);
+                                                                setFieldValue("preview_image", imageList[0])
+                                                                setPreviewLoading(false)
+                                                                // setImgSrc(data.data);data
+                                                            }
+                                                            fetchImage(imageList[0]['data_url'])
+                                                        }
+                                                        else {
+                                                            setPreviewImages(imageList);
+                                                            setFieldValue("preview_image", imageList[0])
+                                                            setPreView(true)
+                                                        }
+
+                                                    }}
+                                                    maxNumber={maxNumber}
+                                                    dataURLKey="data_url"
+                                                >
+                                                    {({
+                                                        imageList,
+                                                        onImageUpload,
+                                                        onImageRemoveAll,
+                                                        onImageUpdate,
+                                                        onImageRemove,
+                                                        isDragging,
+                                                        dragProps,
+                                                    }) => (
+                                                        // write your building UI
+                                                        <div className="upload__image-wrapper">
+                                                            <div className="image-position__left" onClick={() => { onImageUpload(); }}>
+                                                                <TemplateButton content={"Einen anderen Hintergrund hinzufügen"} />
+                                                            </div>
+                                                            <div className="image-position__left">
+                                                                {preView ? (
+                                                                    <div className="product-card">
+                                                                        <div className="product-panel">
+                                                                            <div className="product-info-group">
+                                                                                <div className="product-info">
+                                                                                    <div className="product-name"></div>
+                                                                                    <div className="product-image-info"></div>
+                                                                                </div>
+                                                                                <div className="product-icon pointer" onClick={(e) => { if (previewImages.length !== 0 && previewImages[0]?.data_url !== undefined) { onImageRemoveAll() } setPreView(false) }}>
+                                                                                    <img src={DeleteIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div className="product-image pointer">
+                                                                        <div className="product-image pointer">
 
-                                                                        {imageList.map((image, index) => (
-                                                                            <div key={index} className="image-item" style={{ width: "100%", height: "100%" }}>
-                                                                                <img src={previewLoading ? spinner : image['data_url']} alt="backimage"
-                                                                                    style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                                                                            </div>
-                                                                        ))}
-                                                                        {previewImages.length === 0 ? (
-                                                                            <div className="image-item" style={{ width: "100%", height: "100%" }}>
-                                                                                <img src={productInfo?.preview_image_cdn_url} alt="previewimage"
-                                                                                    style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                                                                            </div>) : null}
+                                                                            {imageList.map((image, index) => (
+                                                                                <div key={index} className="image-item" style={{ width: "100%", height: "100%" }}>
+                                                                                    <img src={previewLoading ? spinner : image['data_url']} alt="backimage"
+                                                                                        style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                                                                                </div>
+                                                                            ))}
+                                                                            {previewImages.length === 0 ? (
+                                                                                <div className="image-item" style={{ width: "100%", height: "100%" }}>
+                                                                                    <img src={productInfo?.preview_image_cdn_url} alt="previewimage"
+                                                                                        style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                                                                                </div>) : null}
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            ) : null}
+                                                                ) : null}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                )}
-                                            </ImageUploading>
+                                                    )}
+                                                </ImageUploading>
+                                            </div>
                                         </div>
-                                    </div>
-                                    {loading ? <Loading /> : (
+                                    ) : null}
+
+                                    {values.resolution_width && values.resolution_height && backView ? (
                                         <div className="product-setting-panel image-setting">
                                             <div className="image-setting-panel">
                                             </div>
@@ -661,9 +668,17 @@ const TemplateEditPanel = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    )}
-                                </div>
+                                    ) : null}
+                                    {values.resolution_width && values.resolution_height && backView ? (
+                                        <div
+                                            className="bottom-template-button"
+                                            onClick={handleSubmit}
+                                        >
+                                            <TemplateButton content={"Template speichern"} />
+                                        </div>
+                                    ) : null}
 
+                                </div>
                             </div>
                             <ToastContainer />
                         </Form>

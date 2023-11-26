@@ -246,14 +246,12 @@
 
 .image-setting {
     position: relative;
-    margin-bottom: 80px;
-
-
+    margin-bottom: 10px;
 }
 
 .bottom-template-button {
     position: absolute;
-    right: 30px;
+    right: 0px;
     bottom: 20px;
 }
 
@@ -285,6 +283,8 @@
         right: 0px;
     }
 
+    
+
     .panel-group {
         position: absolute;
         top: 80px;
@@ -292,7 +292,7 @@
         flex-direction: column;
         gap: 20px;
         width: 100%;
-        padding-bottom: 75px;
+        padding-bottom: 80px;
 
         .product-setting-panel {
             background-color: white;
@@ -422,7 +422,7 @@
             }
         }
 
-
+        
     }
 }
 
