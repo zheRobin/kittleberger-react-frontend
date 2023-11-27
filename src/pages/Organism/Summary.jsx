@@ -62,7 +62,6 @@ const Summary = () => {
         link.click();
     }
     const token = useSelector(state => state.auth.token)
-    console.log("selectedProducts", selectedProducts)
     const submitArticleInfo = {
         articles: [...selectedProducts.map((product, index) => {
             return {
@@ -137,7 +136,6 @@ const Summary = () => {
 
     }
     let date_created = new Date(selectedTemplate.created);
-    console.log(selectedTemplate)
     let formattedDate_created = `am ${date_created.toLocaleDateString("de-DE", {
         day: "2-digit",
         month: "2-digit",

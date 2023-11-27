@@ -8,37 +8,7 @@ function createInitialState() {
     token: JSON.parse(localStorage.getItem('token')),
     role: null,
     error: null,
-    templateTypes:{
-      brands: [
-          {
-              "id": 2,
-              "name": "Bosch",
-              "index": "6018ca35-bc00-4daf-b61b-b8fd4c3c68fc"
-          },
-          {
-              "id": 1,
-              "name": "Buderus",
-              "index": "4de8ab64-efac-4b7f-8f6d-94c4f68c9689"
-          }
-      ],
-      applications: [
-          {
-              "id": 1,
-              "name": "Website",
-              "index": "e6943fdd-e8b7-4598-88e2-8f6ad10a69d8"
-          },
-          {
-              "id": 2,
-              "name": "eShop",
-              "index": "3c22dc5d-48d2-4806-a9d9-5f6f784fb200"
-          },
-          {
-              "id": 3,
-              "name": "Print",
-              "index": "b9d030a9-be9d-4f08-b0b8-b93740ad8203"
-          }
-      ]
-  }
+    templateTypes:JSON.parse(localStorage.getItem('templateTypes'))
   };
 }
 
@@ -51,6 +21,9 @@ function createReducers() {
     state.user = null;
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('templateTypes')
+    localStorage.removeItem('composeInfo')
+    localStorage.removeItem('templateInfo')
     goURL()
   }
   return {
@@ -92,6 +65,7 @@ function createExtraReducers() {
       state.user = user.user;
       state.token = user.access_token;
       state.templateTypes = user.page_data
+      localStorage.setItem('templateTypes',JSON.stringify(user.page_data))
     },
     [rejected]: (state, action) => {
       state.error = action.error;

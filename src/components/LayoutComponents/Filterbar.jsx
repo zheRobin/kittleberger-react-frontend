@@ -12,6 +12,7 @@ import { selectPage, setLoadingStatus, setFilterData, setResetStatus } from "../
 import { useTranslation } from "react-i18next";
 
 export const ProductNumberFilter = (resetValue) => {
+    const dispatch = useDispatch()
     const { t } = useTranslation()
     const plusProductMokeUp = [{ id: "1", name: 1 }, { id: "2", name: 2 }, { id: "3", name: 3 }, { id: "4", name: 4 }, { id: "5", name: 5 }
         , { id: "6", name: 6 }, { id: "7", name: 7 }, { id: "8", name: 8 }, { id: "9", name: 9 }, { id: "10", name: 10 }]
@@ -21,9 +22,14 @@ export const ProductNumberFilter = (resetValue) => {
         brand: []
     })
     const [showNumList, setShowNumList] = useState(false)
-    const landMokeup = ['Deutschland', 'Österreich', 'Belgien', 'Schweiz', 'Frankreich']
+    const [showCountryList, setShowCountryList] = useState(false)
+    const [landMokeup, setLandMokeUp] = useState([])
     const templateTypes = useSelector(state => state.auth.templateTypes)
-    const dispatch = useDispatch()
+    useEffect(
+        () => {
+            setLandMokeUp(templateTypes.country_list)
+        }, [templateTypes]
+    )
     useEffect(() => {
         const delay = 200;
 
@@ -115,20 +121,45 @@ export const ProductNumberFilter = (resetValue) => {
                                 );
                             })}
                         </div>
+
                     </div>
                     <div className="by-land">
                         <div className="product-list">
                             <Typography fontSize="14px" lineHeight="20px">{t('Land')}</Typography>
                         </div>
                         <div className="check-group">
-                            {landMokeup.map((ele, index) => {
+                            {showCountryList ? landMokeup?.map((ele, index) => {
                                 return (
                                     <SelectCountry
                                         key={"landMokeup" + index}
-                                        title={t(ele)}
+                                        country={ele}
                                     />
                                 );
-                            })}
+                            }) :
+                                landMokeup?.slice(0, 5).map((ele, index) => {
+                                    return (
+                                        <SelectCountry
+                                            key={"landMokeup" + index}
+                                            country={ele}
+                                        />
+                                    );
+                                })
+                            }
+                        </div>
+                        <div className="product-list pointer" onClick={(e) => setShowCountryList(!showCountryList)}>
+                            {showCountryList ? (
+                                <>
+                                    <img src={miusButton} alt="plusButton" />
+                                    <Typography fontSize="14px" lineHeight="20px">{t('Weniger anzeigen')}</Typography>
+                                </>
+                            ) : (
+                                <>
+                                    <img src={plusButton} alt="plusButton" />
+                                    <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
+                                </>
+
+                            )}
+
                         </div>
                         {/* <div className="product-list">
                             <img src={plusButton} alt="plusButton" />

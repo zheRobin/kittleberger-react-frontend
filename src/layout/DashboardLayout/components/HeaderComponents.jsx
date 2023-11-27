@@ -8,7 +8,7 @@ import "../style/dashboardStyle.scss"
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { switchRole } from "../../../store";
-
+import bosch from "../../../assets/images/Header_bosch.svg"
 
 const HeaderComponents = () => {
     const [accountModalShow, setAccountModal] = useState(false)
@@ -22,7 +22,7 @@ const HeaderComponents = () => {
         <>
             <div className="header-top-layout">
                 <div className="bosch-icon pointer" onClick={() => navigate("/product")}>
-                    <img src={require("../../../assets/images/Header_bosch.png")} alt="bosch"></img>
+                    <img src={bosch} alt="bosch" style={{ height: "55px" }}></img>
                     <Typography fontSize="20px" fontWeight="400" lineHeight="26px" sx={{ display: 'inline' }}>Composing Generator</Typography>
                 </div>
                 <div className="profile-info-reference">

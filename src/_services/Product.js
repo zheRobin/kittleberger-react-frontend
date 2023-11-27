@@ -4,8 +4,8 @@ import axios from "axios";
 export async function getProductsbyFilter(token, filterArgs = {},success ) {
     
     setAuthToken(token)
-    axios.get(`${process.env.REACT_APP_API_URL}api/v1/core/filter?page=${filterArgs.page}&product=${filterArgs.productInfo}`)
-        .then(res => {
+    axios.get(`${process.env.REACT_APP_API_URL}api/v1/core/filter?page=${filterArgs.page}&product=${filterArgs.productInfo}${filterArgs.country?("&country="+encodeURIComponent(filterArgs.country)):""}`)
+    .then(res => {
             success(res)
         })
         .catch(error => {

@@ -29,7 +29,6 @@ export const productsSlice = createSlice({
             const originIndexes = Array.from({length: 10}, (_, i) => i + 1)
             const prevPosIndexes = state.selectedProducts.map((product) => product.pos_index);
             const oddIndexes = originIndexes.filter((index) => !prevPosIndexes.includes(index));
-            console.log(oddIndexes)
             state.selectedProducts = productsLength === 0 ? 
             [{...action.payload,pos_index:state.selectedTemplate.article_placements[0].pos_index}] : 
             [...state.selectedProducts, {...action.payload,pos_index:state.selectedTemplate.article_placements[oddIndexes[0]-1].pos_index}];

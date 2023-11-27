@@ -25,7 +25,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
       setPage(1);
       const productInfo = searchString;
       try {
-        getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "germany" : selectedCountryGroup[0]);
+        getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "" : selectedCountryGroup);
 
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -61,7 +61,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
     )
   );
 
-  function getProductInfo(page, productInfo = "", country = "germany") {
+  function getProductInfo(page, productInfo = "", country = "") {
     getProductsbyFilter(token, { page, productInfo, country }, (success) => {
       setProductList((prevProductList) => {
         const uniqueUsedArticle = usedArticles.reduce((accumulator, current) => {

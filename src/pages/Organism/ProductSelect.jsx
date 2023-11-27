@@ -20,8 +20,6 @@ export const ProductView = () => {
     const imgRef = useRef(null);
     const [loading, setLoading] = useState(false)
     const [composeImage, setComposeImage] = useState('')
-    console.log("selectedProducts", selectedProducts)
-    console.log("selectedTemplate", selectedTemplate)
     useEffect(() => {
         if (imgRef.current) {
             setLoading(true);
@@ -139,7 +137,7 @@ const ProductSelect = () => {
         setPage(1);
         const productInfo = searchString;
         try {
-            getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "germany" : selectedCountryGroup[0]);
+            getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "" : String(selectedCountryGroup.map(selectedCountry => { return selectedCountry })));
         } catch (error) {
             console.error("Error fetching products:", error);
             // Handle the error appropriately
@@ -158,7 +156,7 @@ const ProductSelect = () => {
         };
     }, [searchString]);
 
-    function getProductInfo(page, productInfo = "", country = "germany") {
+    function getProductInfo(page, productInfo = "", country = "") {
         setLoading(true)
         getProductsbyFilter(token, { page, productInfo, country }, (success) => {
             if (success.data.code === 200 && success.data.status === "success") {
