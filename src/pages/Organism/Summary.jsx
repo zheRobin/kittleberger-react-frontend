@@ -100,7 +100,6 @@ const Summary = () => {
         base64_img: composedProduct,
         ...submitArticleInfo
     }
-    console.log(updateInfo)
     const textAreaRef = useRef(null);
 
     useAutosizeTextArea(textAreaRef.current, editableName);

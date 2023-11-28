@@ -20,7 +20,6 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
         }
     }
 
-    console.log("cardInfo:", cardInfo)
     return (
         <>
             <div className="product-card">
@@ -47,7 +46,6 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         localStorage.setItem('templateInfo', JSON.stringify(cardInfo.template));
                         dispatch(setCardInfo(cardInfo))
                         dispatch(setComposedProduct(cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url))
-                        console.log(cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url)
                         dispatch(findTemplates(cardInfo.template));
                         const updatedArticles = cardInfo.articles.map((article) => {
                             const { number, ...rest } = article;
