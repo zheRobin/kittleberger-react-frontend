@@ -50,6 +50,17 @@ export async function getOnlineInfo(token, templateInfo, success) {
         })
 }
 
+export async function refreshCompose(token, templateInfo, success) {
+    setAuthToken(token)
+    axios.post(`${process.env.REACT_APP_API_URL}api/v1/compose/refresh/`, templateInfo)
+        .then(res => {
+            success(res)
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        })
+}
+
 export async function updateOnlineInfo(token, templateInfo, success) {
     setAuthToken(token)
     axios.put(`${process.env.REACT_APP_API_URL}api/v1/compose/product/`, templateInfo)
