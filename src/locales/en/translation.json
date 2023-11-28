@@ -20,6 +20,15 @@
     "API-Token":"API-Token",
     "Abmelden":"Log out",
     "Konto":"Account",
-    "Systemsprache":"System language"
+    "Applikation":"Application",
+    "Technische Daten":"Technical data",
+    "Dateiformat":"File format",
+    "Enthaltene Produkte":"Products included",
+    "Erstellt von ":"Created by ",
+    "Zuletzt bearbeitet von ":"Last edited by ",
+    "am":"at",
+    "um":"around",
+    "Uhr":"",
+    "Marke":"Brand"
 
 }

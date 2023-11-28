@@ -2,7 +2,7 @@ import "./style/organismStyle.scss"
 import plus from "../../assets/icons/add-2.svg"
 import { useSelector } from "react-redux"
 import { useEffect, useState, useRef } from "react"
-import { appendProducts, setComposedProduct } from "../../store"
+import { appendProducts, setComposedProduct, updateProducts } from "../../store"
 import { useDispatch } from "react-redux"
 import { getProductsbyFilter } from "../../_services/Product"
 import { Suspense } from "react"
@@ -10,7 +10,10 @@ import 'react-photo-view/dist/react-photo-view.css';
 import { PhotoSlider } from 'react-photo-view';
 import { composeByInfo } from "../../_services/Product"
 import { calcPosition } from "../../_services/Product"
-import productSpinner from "../../assets/icons/spinner-3-svgrepo-com.svg"
+import productSpinner from "../../assets/icons/tube-spinner.svg"
+import spinner from "../../assets/icons/tube-spinner.svg"
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 export const ProductView = () => {
     const dispatch = useDispatch()
@@ -21,16 +24,24 @@ export const ProductView = () => {
     const [loading, setLoading] = useState(false)
     const [composeImage, setComposeImage] = useState('')
     useEffect(() => {
-        if (imgRef.current) {
+        if (imgRef.current && selectedProducts) {
             setLoading(true);
-            const article = !selectedProducts ? [] : selectedProducts?.map((product) => {
+            const article = selectedProducts.map((product) => {
                 const positionStyle = selectedTemplate?.article_placements;
-                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index == product?.pos_index)
+                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index == product?.pos_index);
                 const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
-                const position = calcPosition(product?.align === undefined ? 'middle-center' : product?.align, selectedStyle[0]?.position_x, selectedStyle[0]?.position_y, selectedStyle[0]?.width, selectedStyle[0]?.height, sliderScale)
+                const position = calcPosition(
+                    product?.align === undefined ? 'middle-center' : product?.align,
+                    selectedStyle[0]?.position_x,
+                    selectedStyle[0]?.position_y,
+                    selectedStyle[0]?.width,
+                    selectedStyle[0]?.height,
+                    sliderScale
+                );
                 const is_transparent = product?.is_transparent === true ? true : false;
                 const positionX = position ? position[0] : selectedStyle[0].position_x;
                 const positionY = position ? position[1] : selectedStyle[0].position_y;
+
                 if (positionStyle !== undefined) {
                     return {
                         render_url: product?.render_url ? product?.render_url : product?.render_url,
@@ -43,16 +54,24 @@ export const ProductView = () => {
                     };
                 }
             });
+
             const composingInfo = {
                 template_id: selectedTemplate.id,
                 articles: article.filter(Boolean),
             };
+
+            const timeoutId = setTimeout(() => {
+                setLoading(false);
+                toast.error("Looks like the server is taking to long to respond", { theme: "colored", hideProgressBar: "true", autoClose: 2500 })
+                dispatch(updateProducts([]))
+            }, 50000);
+
             composeByInfo(token, composingInfo, (success) => {
+                clearTimeout(timeoutId);
                 setComposeImage(success.data.data);
-                dispatch(setComposedProduct(success.data.data))
+                dispatch(setComposedProduct(success.data.data));
                 setLoading(false);
             });
-
         }
     }, [selectedProducts]);
     return (
@@ -74,15 +93,32 @@ export const ProductView = () => {
 export const ProductList = ({ productItem, possiblePos, setPreview, setVisible }) => {
     const dispatch = useDispatch()
     const productCount = useSelector(state => state.products.selectedProducts)
+    const [loading, setLoading] = useState(true);
+    const [tempImage, setTempImage] = useState(false)
+    const counter = useRef(0);
+    const imageLoaded = (event) => {
+        counter.current += 1;
+        if (counter.current >= 1) {
+            setLoading(false);
+        }
+    }
+    const handleImageError = () => {
+        setTempImage(true);
+        setLoading(false);
+    }
 
     return (
         <div className="product-list-panel">
+            <div style={{ display: loading ? "block" : "none" }}>
+                <img src={spinner} alt="preview" style={{ width: "60px" }}></img>
+            </div>
             <div style={{
                 maxWidth: '70px',
                 maxHeight: "70px",
-                marginRight: '5px'
-            }} className="pointer" onClick={() => { setPreview([productItem?.render_url]); setVisible(true) }}>
-                <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src={productItem?.render_url ? productItem?.render_url : require("../../assets/images/product-image.png")} alt="product" />
+                marginRight: '5px',
+                display: loading ? "none" : "block"
+            }} className="pointer" onClick={() => { setPreview([productItem?.render_url]); setVisible(true) }} onLoad={imageLoaded}>
+                <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src={productItem?.render_url ? (!tempImage ? productItem?.render_url : require("../../assets/images/img_error.png")) : require("../../assets/images/product-image.png")} alt="product" onError={handleImageError} onLoad={imageLoaded} />
             </div>
             <div className="product-info" >
                 <div className="label-info">
@@ -213,6 +249,7 @@ const ProductSelect = () => {
                     <div className="product-select__r">
                         <ProductView />
                     </div>
+                    <ToastContainer />
                 </div>
             </Suspense>
         </>

@@ -85,8 +85,8 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
 			return;
 		}
 		else {
-			let updatedDraggedItem = { ...tempDraggedItem, height: draggedOverItem.height, width: draggedOverItem.width };
-			const updatedDraggedOverItem = { ...draggedOverItem, height: tempDraggedItem.height, width: tempDraggedItem.width };
+			let updatedDraggedItem = { ...draggedOverItem };
+			const updatedDraggedOverItem = { ...tempDraggedItem };
 			let itemGroups = articleGroup.map((item, i) => (i === index ? updatedDraggedOverItem : item));
 			itemGroups = itemGroups.map((item) => (item === draggedItem ? updatedDraggedItem : item));
 			setArticleGroup(itemGroups);
@@ -140,11 +140,16 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
 					</div>
 				)
 				)}
-				<div className="right-b__bottom" onClick={() => arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', })}>
-					<img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
-					<div className="typo-700-regular pointer" >
-						{t("Ein weiteres Platzhalterbild hinzufügen")}
-					</div>
+				<div className="right-b__bottom" onClick={() => { values.length < 9 && arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', }) }}>
+					{values.length >= 9 ? null : (
+						<>
+							<img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
+							<div className="typo-700-regular pointer" >
+								{t("Ein weiteres Platzhalterbild hinzufügen")}
+							</div>
+						</>
+					)}
+
 				</div>
 			</div>
 		</>

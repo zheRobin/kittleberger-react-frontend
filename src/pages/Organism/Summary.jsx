@@ -19,6 +19,13 @@ const Summary = () => {
     const selectedTemplate = useSelector(state => state.products.selectedTemplate)
     const selectedProducts = useSelector(state => state.products.selectedProducts)
     const composedProduct = useSelector(state => state.products.composedProduct)
+    const langInfo = useSelector(state => state.info.language)
+    const [langType, setLangType] = useState('')
+    useEffect(
+        () => {
+            setLangType(langInfo)
+        }, [langInfo]
+    )
     const [editableName, setEditableName] = useState('')
     const cardInfo = useSelector(state => state.products.cardInfo)
     const [loading, setLoading] = useState(false)
@@ -45,10 +52,10 @@ const Summary = () => {
     const userInfo = useSelector(state => state.auth.user)
     useEffect(() => {
         if (!composedProduct.startsWith("data:")) {
-            setdeploymentName({ value: state ?? composedProduct, copied: false });
+            setdeploymentName({ value: state.cdn ?? composedProduct, copied: false });
         }
     }, [composedProduct]);
-    const composeName = `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} | ${selectedProducts?.map((product, index) => { return product.name })}`
+    const composeName = state?.name ? state?.name : `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} | ${selectedProducts?.map((product, index) => { return product.name })}`
     useEffect(
         () => {
             setEditableName(composeName)
@@ -93,6 +100,7 @@ const Summary = () => {
         base64_img: composedProduct,
         ...submitArticleInfo
     }
+    console.log(updateInfo)
     const textAreaRef = useRef(null);
 
     useAutosizeTextArea(textAreaRef.current, editableName);
@@ -102,10 +110,6 @@ const Summary = () => {
         setEditableName(val);
     };
     const saveInfo = () => {
-        if (!composedProduct.startsWith("data:")) {
-            toast.warning("Please update composing products", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-            return
-        }
         setLoading(true)
         if (cardInfo?.created_by === undefined) {
             getOnlineInfo(token, submitInfo, (success) => {
@@ -122,8 +126,9 @@ const Summary = () => {
         }
         else {
             updateOnlineInfo(token, updateInfo, (success) => {
-                if (success.data.code === 201 | success.data.status === "success") {
-                    setdeploymentName({ ...deploymentName, value: success.data.data })
+
+                if (success.data.code === 201 || success.data.status === "success") {
+                    setdeploymentName({ ...deploymentName, value: success.data.data.cdn_url })
                     setLoading(false)
                     toast.success("Successfully Updated", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 }
@@ -135,26 +140,26 @@ const Summary = () => {
         }
 
     }
+
     let date_created = new Date(selectedTemplate.created);
-    let formattedDate_created = `am ${date_created.toLocaleDateString("de-DE", {
+    const formattedDate_created = `${t("am")} ${date_created.toLocaleDateString(langType === 'en' ? "en-US" : "de-DE", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric"
-    })} um ${date_created.toLocaleTimeString("de-DE", {
+    })} ${t("um")} ${date_created.toLocaleTimeString(langType === 'en' ? "en-US" : "de-DE", {
         hour: "2-digit",
         minute: "2-digit"
-    })} Uhr`;
+    })} ${t("Uhr")}`;
     let date_modified = new Date(selectedTemplate.modified);
-    let formattedDate_modified = `am ${date_modified.toLocaleDateString("de-DE", {
+    const formattedDate_modified = `${t("am")} ${date_modified.toLocaleDateString(langType === 'en' ? "en-US" : "de-DE", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric"
-    })} um ${date_modified.toLocaleTimeString("de-DE", {
+    })} ${t("um")} ${date_modified.toLocaleTimeString(langType === 'en' ? "en-US" : "de-DE", {
         hour: "2-digit",
         minute: "2-digit"
-    })} Uhr`;
+    })} ${t("Uhr")}`;
     const metadata = `
-    ${t('Land')}: Deutschland, Österreich
     ${t('Marke')}: ${selectedTemplate.brand.map((brand, index) => brand.name).join(", ")}
     ${t('Applikation')}: ${selectedTemplate.application.map((application, index) => application.name).join(", ")}
     ${t('Technische Daten')}: ${selectedTemplate.resolution_width} x ${selectedTemplate.resolution_height} px (${selectedTemplate.resolution_dpi} dpi)
@@ -185,14 +190,13 @@ const Summary = () => {
                     <div className="summary__image__desc">
                         <div className="typography-700-bold">{selectedTemplate.name}</div>
                         <div className="typography-400-regular desc__text">
-                            <div>{t('Land')}: Deutschland, Österreich</div>
                             <div>{t('Marke')}: {selectedTemplate.brand.map((brand, index) => (
                                 <React.Fragment key={index}>
                                     {index > 0 && ", "}
                                     <span>{brand.name}</span>
                                 </React.Fragment>
                             ))}</div>
-                            <br></br>
+                            <div style={{ marginTop: "14px" }}></div>
                             <div>{t('Applikation')}: {selectedTemplate.application.map((application, index) => (
                                 <React.Fragment key={index}>
                                     {index > 0 && ", "}
@@ -202,7 +206,7 @@ const Summary = () => {
                             <div>{t('Technische Daten')}:</div>
                             <div>{selectedTemplate.resolution_width} x {selectedTemplate.resolution_height} px ({selectedTemplate.resolution_dpi} dpi)</div>
                             <div>{t('Dateiformat')}: {selectedTemplate.file_type} (RGB)</div>
-                            <br></br>
+                            <div style={{ marginTop: "14px" }}></div>
                             <div>{t('Enthaltene Produkte')}:</div>
                             <div style={{ textAlign: "start" }}>{selectedProducts.map((product, index) => (
                                 <React.Fragment key={index}>
@@ -212,7 +216,7 @@ const Summary = () => {
                                     </div>
                                 </React.Fragment>
                             ))}</div>
-                            <br></br>
+                            <div style={{ marginTop: "14px" }}></div>
                             <p>{t('Erstellt von ')}{userInfo.username} {formattedDate_created}</p>
                             <p>{t('Zuletzt bearbeitet von ')}{userInfo.username} {formattedDate_modified}</p>
                         </div>

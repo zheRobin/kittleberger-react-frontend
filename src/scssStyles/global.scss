@@ -62,20 +62,13 @@ $gray-tranparent:#FFFFFF40;
      
      background: none;
     }
-     :hover::-webkit-scrollbar {
-       background: #ececec;
-        
-     }
-   
-   
     ::-webkit-scrollbar-thumb {
       background: none;
-     border-radius: 20px;
+      border-radius: 20px;
      }
-    :hover::-webkit-scrollbar-thumb {
-     
+    :hover::-webkit-scrollbar-thumb{
       background: #8F7300 ;
-   }
+     }
   }
   .loader {
     width: 48px;

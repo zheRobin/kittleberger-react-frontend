@@ -77,15 +77,18 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
 
     function onDragOver(index) {
         const draggedOverItem = articleGroup[index];
+        let tempDraggedItem = draggedItem
         if (draggedItem === draggedOverItem) {
             return;
         }
-        const updatedDraggedItem = { ...draggedItem, height: draggedOverItem.height, width: draggedOverItem.width };
-        const updatedDraggedOverItem = { ...draggedOverItem, height: draggedItem.height, width: draggedItem.width };
-        let itemGroups = articleGroup.map((item, i) => (i === index ? updatedDraggedOverItem : item));
-        itemGroups = itemGroups.map((item) => (item === draggedItem ? updatedDraggedItem : item));
-        setArticleGroup(itemGroups);
-        setDraggedItem(itemGroups[index])
+        else {
+            let updatedDraggedItem = { ...draggedOverItem };
+            const updatedDraggedOverItem = { ...tempDraggedItem };
+            let itemGroups = articleGroup.map((item, i) => (i === index ? updatedDraggedOverItem : item));
+            itemGroups = itemGroups.map((item) => (item === draggedItem ? updatedDraggedItem : item));
+            setArticleGroup(itemGroups);
+            setDraggedItem(itemGroups[index])
+        }
     }
     const onDragEnd = () => {
         setFieldValue("article_placements", articleGroup);
@@ -133,11 +136,16 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                     </div>
                 )
                 )}
-                <div className="right-b__bottom" onClick={() => arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', })}>
-                    <img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
-                    <div className="typo-700-regular pointer" >
-                        {t("Ein weiteres Platzhalterbild hinzufügen")}
-                    </div>
+                <div className="right-b__bottom" onClick={() => { values.length < 9 && arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', }) }}>
+                    {values.length >= 9 ? null : (
+                        <>
+                            <img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
+                            <div className="typo-700-regular pointer" >
+                                {t("Ein weiteres Platzhalterbild hinzufügen")}
+                            </div>
+                        </>
+                    )}
+
                 </div>
             </div>
         </>

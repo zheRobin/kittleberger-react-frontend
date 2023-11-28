@@ -65,10 +65,13 @@ const PasswordChange = () => {
                 <div className="setting-panel-user__bottom">
                     <div className="label-input-pair">
                         <div className="typography-400-regular">Altes Passwort *</div>
-                        <input type="password" value={formik.values.oldpass} onChange={(e) => setInputValue('oldpass', e.target.value)}></input>
-                        {formik.touched.oldpass && formik.errors.oldpass ? (
-                            <p className="validation">{formik.errors.oldpass}</p>
-                        ) : null}
+                        <div className="password-warning" style={{ width: "470px" }}>
+                            <input type="password" value={formik.values.oldpass} onChange={(e) => setInputValue('oldpass', e.target.value)}></input>
+                            {formik.touched.oldpass && formik.errors.oldpass ? (
+                                <p className="validation">{formik.errors.oldpass}</p>
+                            ) : null}
+                        </div>
+
                     </div>
                     <div className="label-input-pair">
                         <div className="typography-400-regular">Neues Passwort *</div>

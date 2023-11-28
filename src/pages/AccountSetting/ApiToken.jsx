@@ -48,9 +48,6 @@ const ApiToken = () => {
     const schema = Yup.object({
         name: Yup.string().required("Name field is required"),
     })
-
-
-
     const handleDelete = (id) => {
         setLoading(true)
         deleteToken(id, token, (success) => {
@@ -63,12 +60,12 @@ const ApiToken = () => {
             setLoading(false)
         })
     }
-
     const ApiViewList = (token) => {
         return (
             <div className="token-list">
                 <div className="typography-400-regular">{token?.token?.apikey}</div>
                 <div className="typography-400-regular">
+                    <div className="typography-400-regular">{token?.token?.name}</div>
                     <div className="typography-400-regular">{token?.token?.last_used == null ? (`Not used yet`) : `Last used` + formatDate(token?.token?.last_used)}</div>
                     <img className="pointer" src={cross} alt="cross" onClick={() => handleDelete(token?.token?.id)} />
                 </div>
@@ -89,7 +86,7 @@ const ApiToken = () => {
                         toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                     }
                     if (success.data.code === 400 && success.data.status === "failed") {
-                        toast.error("Unfortunately,failed to create", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                        toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                     }
                     setLoading(false)
                 })

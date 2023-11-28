@@ -4,11 +4,23 @@ import cancel from "../../assets/icons/cross.svg"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { findTemplates, setProductLists, setComposedProduct, setCardInfo } from "../../store"
+import { useState, useRef } from "react"
+import spinner from "../../assets/icons/tube-spinner.svg"
 
 const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const navigate = useNavigate();
     const switchRole = useSelector(state => state.info.adminMethod)
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(true);
+    const counter = useRef(0);
+    const imageLoaded = () => {
+        counter.current += 1;
+        if (counter.current >= 1) {
+            setLoading(false);
+        }
+    }
+
+    console.log("cardInfo:", cardInfo)
     return (
         <>
             <div className="product-card">
@@ -35,7 +47,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         localStorage.setItem('templateInfo', JSON.stringify(cardInfo.template));
                         dispatch(setCardInfo(cardInfo))
                         dispatch(setComposedProduct(cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url))
-
+                        console.log(cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url)
                         dispatch(findTemplates(cardInfo.template));
                         const updatedArticles = cardInfo.articles.map((article) => {
                             const { number, ...rest } = article;
@@ -43,11 +55,16 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         });
                         dispatch(setProductLists(updatedArticles));
                         navigate(`/product/summary`, {
-                            state: cardInfo?.cdn_url
+                            state: { cdn: cardInfo?.cdn_url, name: cardInfo?.name }
                         })
                     }
                 }}>
-                    <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? cardInfo?.preview_image_cdn_url : cardInfo?.bg_image_cdn_url) : (cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url)} alt="preview"></img>
+                    <div style={{ display: loading ? "block" : "none" }}>
+                        <img src={spinner} alt="preview" onLoad={imageLoaded} style={{ width: "150px" }}></img>
+                    </div>
+                    <div style={{ display: loading ? "none" : "block" }}>
+                        <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? cardInfo?.preview_image_cdn_url : cardInfo?.bg_image_cdn_url) : (cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url)} alt="preview" onLoad={imageLoaded}></img>
+                    </div>
                 </div>
             </div>
         </>

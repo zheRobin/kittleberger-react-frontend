@@ -17,6 +17,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
 import { Loading } from './ProductSelect';
+import { emptyStore } from '../../store';
 
 const theme = createTheme({
     components: {
@@ -52,6 +53,7 @@ const Organism = () => {
     const products = useSelector(state => state.templates.productsOnTemplates)
     const loadingStatus = useSelector(state => state.templates.loadingStatus)
     const usedArticles = useSelector(state => state.products.usedArticles)
+    const adminMethod = useSelector(state => state.info.adminMethod)
     let page = useSelector(state => state.templates.page)
     let filters = useSelector(state => state.templates.filterData)
     const dateConvert = (originDate) => {
@@ -62,6 +64,11 @@ const Organism = () => {
         const formattedDate = `${day}.${month}.${year}`;
         return formattedDate;
     }
+    useEffect(
+        () => {
+            dispatch(emptyStore())
+        }, []
+    )
     useEffect(
         () => {
             setFilterData(products)
@@ -118,11 +125,14 @@ const Organism = () => {
     return (
         <>
             <div className="organism-tabs">
-                <div className='typography-400-regular template-button pointer'
-                    onClick={() => navigate("/product/template")}
-                >
-                    {t("Neues Template anlegen")}
-                </div>
+                {
+                    adminMethod ? <div className='typography-400-regular template-button pointer'
+                        onClick={() => navigate("/product/template")}
+                    >
+                        {t("Neues Template anlegen")}
+                    </div> : null
+                }
+
 
                 <ThemeProvider theme={theme}>
                     <TabContext value={value}>
