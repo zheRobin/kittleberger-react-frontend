@@ -1,0 +1,29 @@
+{
+  "ignoreUnresolved": [],
+  "ignoreUnused": [
+    "@fontsource/roboto",
+    "@hookform/resolvers",
+    "@mui/styles",
+    "@testing-library/jest-dom",
+    "@testing-library/react",
+    "@testing-library/user-event",
+    "JSONStream",
+    "buffer",
+    "crypto",
+    "dotenv",
+    "path",
+    "react-scripts",
+    "resolve-url-loader",
+    "sass-loader"
+  ],
+  "ignoreUnimported": [
+    "src/_utils/auth-header.js",
+    "src/components/Composing/ImageSettingGroup.jsx",
+    "src/components/Product-View/AdminToggle.jsx",
+    "src/components/Product-View/ProductBackgroundCard.jsx",
+    "src/createEmotionCache.js",
+    "src/setupTests.js",
+    "src/store/page.slice.js",
+    "src/theme.js"
+  ]
+}

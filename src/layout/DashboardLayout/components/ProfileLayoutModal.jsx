@@ -50,8 +50,6 @@ const ProfileLayout = ({ handleModal }) => {
     const switchRole = useSelector(state => state.info.adminMethod)
     const selectedLanguage = useSelector(state => state.info.language)
     const user = useSelector(state => state.auth.user)
-    console.log("user", user)
-    const _isSuperUser = user.is_superuser ? true : false
     const userType = user.is_superuser ? "super" : (user.is_staff ? "admin" : "customer")
     const capitalizedUserType = userType.charAt(0).toUpperCase() + userType.slice(1);
     const wrapperRef = useRef(null);

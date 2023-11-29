@@ -39,7 +39,6 @@ const TypeList = ({ type, label }) => {
             pk: id,
             value: ""
         }
-        console.log(updateInfo)
         deleteTemplatesTypes(updateInfo, token, (success) => {
             if (success.data.code === 200 && success.data.status === "success") {
                 toast.success("Successfully Deleted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })

@@ -16,7 +16,6 @@ const CheckboxGroup = (props) => {
             setIsChecked(false);
         }
     }, [resetStatus]);
-    console.log(props.title)
     const handleFilter = (type, id, status) => {
         setIsChecked(!isChecked)
         dispatch(setResetStatus(false))
