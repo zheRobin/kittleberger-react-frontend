@@ -43,15 +43,28 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         navigate(`/product/product-select`)
                     }
                     if (type === 2) {
+                        const positionStyle = cardInfo.template?.article_placements;
                         localStorage.setItem('templateInfo', JSON.stringify(cardInfo.template));
+                        localStorage.setItem('cardInfo', JSON.stringify(cardInfo));
                         dispatch(setCardInfo(cardInfo))
                         dispatch(setComposedProduct(cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url))
                         dispatch(findTemplates(cardInfo.template));
+
                         const updatedArticles = cardInfo.articles.map((article) => {
                             const { number, ...rest } = article;
                             return { article_number: number, ...rest };
                         });
-                        dispatch(setProductLists(updatedArticles));
+                        const article = updatedArticles
+                            .map((product) => {
+                                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index === product?.pos_index);
+                                if (selectedStyle.some((article_placement) => article_placement.pos_index === product?.pos_index)) {
+                                    return product;
+                                } else {
+                                    return null;
+                                }
+                            })
+                            .filter((product) => product !== null);
+                        dispatch(setProductLists(article));
                         navigate(`/product/summary`, {
                             state: { cdn: cardInfo?.cdn_url, name: cardInfo?.name }
                         })

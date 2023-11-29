@@ -14,6 +14,7 @@ import productSpinner from "../../assets/icons/tube-spinner.svg"
 import spinner from "../../assets/icons/tube-spinner.svg"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from "react-i18next"
 
 export const ProductView = () => {
     const dispatch = useDispatch()
@@ -28,7 +29,7 @@ export const ProductView = () => {
             setLoading(true);
             const article = selectedProducts.map((product) => {
                 const positionStyle = selectedTemplate?.article_placements;
-                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index == product?.pos_index);
+                const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index === product?.pos_index);
                 const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
                 const position = calcPosition(
                     product?.align === undefined ? 'middle-center' : product?.align,
@@ -168,6 +169,7 @@ const ProductSelect = () => {
     const [visible, setVisible] = useState(false);
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
+    const { t } = useTranslation()
     const clearStoreData = () => {
         setProductList([]);
         setPage(1);
@@ -226,7 +228,7 @@ const ProductSelect = () => {
                 <div className="product-select">
                     <div className="product-select__l">
                         <div className="product-search">
-                            <input placeholder="Produkte durchsuchen" onChange={(e) => { setSearchString(e.target.value) }} />
+                            <input placeholder={t("Produkte durchsuchen")} onChange={(e) => { setSearchString(e.target.value) }} />
                         </div>
                         <div className="product-add">
                             {productList?.map((productItem, index) => {

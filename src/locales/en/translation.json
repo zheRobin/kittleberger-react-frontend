@@ -29,6 +29,21 @@
     "am":"at",
     "um":"around",
     "Uhr":"",
-    "Marke":"Brand"
+    "Marke":"Brand",
+    "Systemsprache":"System language",
+    "Zum Veröffentlichen dieses Composings, bitte einen Namen vergeben und speichern.":"To publish this composing, please give it a name and save it.",
+    "Bitte beachten Sie, dass jede Änderung an diesem Composing auf bereits geteilte Composing-URLs Einfluss hat.":"Please note that any changes to this composing will affect already shared composing URLs.",
+    "Verfassen des Namens":"Composing Name",
+    "Download Bilddatei":"Download Image File",
+    "Download Metadaten":"Download Metadata",
+    "Speichern":"Save",
+    "Aktualisierung":"Refresh",
+    "Bereitstellung":"Deployment",
+    "Als Vorlagenvorschaubild festlegen":"Set As Template Preview Image",
+    "Zurück zur Startseite":"Back to home page",
+    "Letztes Update":"Last Updated",
+    "Produkte auswählen":"Select products",
+    "Zusammenfassung":"Summary",
+    "Produkte durchsuchen":"Browse products"
 
 }

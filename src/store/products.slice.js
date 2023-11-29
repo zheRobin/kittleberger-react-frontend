@@ -1,4 +1,4 @@
-import { createSlice  } from "@reduxjs/toolkit";
+import { createSlice, current  } from "@reduxjs/toolkit";
 
 export const productsSlice = createSlice({
     name: 'products',
@@ -6,9 +6,9 @@ export const productsSlice = createSlice({
         selectedProducts: JSON.parse(localStorage.getItem('productsInfo')),
         selectedTemplate: JSON.parse(localStorage.getItem('templateInfo')),
         selectedCountry:[],
-        composedProduct:(localStorage.getItem('composeInfo')),
+        composedProduct:localStorage.getItem('composeInfo'),
         usedArticles:[],
-        cardInfo:{}
+        cardInfo:JSON.parse(localStorage.getItem('cardInfo'))
     },
     reducers:{
         setCardInfo:(state, action) =>{
@@ -35,8 +35,8 @@ export const productsSlice = createSlice({
             localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         removeProducts:(state,action) =>{
-            state.selectedProducts = state.selectedProducts.filter((product) => product.article_number !== action.payload.article_number)
-            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts.filter((product) => product.article_number !== action.payload.article_number)));
+            state.selectedProducts = state.selectedProducts.filter((product) => product.mediaobject_id !== action.payload.mediaobject_id)
+            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         updateProducts:(state,action) =>{
             state.selectedProducts = action.payload
@@ -50,9 +50,9 @@ export const productsSlice = createSlice({
             localStorage.setItem('composeInfo', (state.composedProduct));
         },
         setProductAligns:(state,action) =>{
-            const article_number= action.payload.article_number;
+            const mediaobject_id= action.payload.mediaobject_id;
             state.selectedProducts = state.selectedProducts.map((product,index) => {
-                if (product.article_number === article_number) {
+                if (product.mediaobject_id === mediaobject_id) {
                     return {
                         ...product,
                         align: action.payload.align
@@ -63,9 +63,9 @@ export const productsSlice = createSlice({
             });
         },
         setUpdatedPosition:(state,action) =>{
-            const article_number= action.payload.article_number;
+            const mediaobject_id= action.payload.mediaobject_id;
             state.selectedProducts = state.selectedProducts.map((product) => {
-                if (product.article_number === article_number) {
+                if (product.mediaobject_id === mediaobject_id) {
                     return {
                         ...product,
                         updatedPosition: action.payload.updatedPosition
@@ -75,9 +75,9 @@ export const productsSlice = createSlice({
             });
         },
         setProductTransImg:(state,action) =>{
-            const article_number= action.payload.article_number;
+            const mediaobject_id= action.payload.mediaobject_id;
             state.selectedProducts = state.selectedProducts.map((product) => {
-                if (product.article_number === article_number) {
+                if (product.mediaobject_id === mediaobject_id) {
                     return {
                         ...product,
                         is_transparent: action.payload.is_transparent
@@ -87,10 +87,10 @@ export const productsSlice = createSlice({
             });
         },
         setSliderScale:(state,action) =>{
-            const article_number= action.payload.article_number;
+            const mediaobject_id= action.payload.mediaobject_id;
             state.selectedProducts = state.selectedProducts.map((product,index) => {
 
-                if (product.article_number === article_number) {
+                if (product.mediaobject_id === mediaobject_id) {
                     return {
                         ...product,
                         sliderScale: action.payload.sliderScale,

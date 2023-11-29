@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
 import { Loading } from './ProductSelect';
 import { emptyStore } from '../../store';
+import { getTemplatesTypes } from '../../_services/Template';
 
 const theme = createTheme({
     components: {
@@ -67,6 +68,9 @@ const Organism = () => {
     useEffect(
         () => {
             dispatch(emptyStore())
+            getTemplatesTypes(token, (success) => {
+                localStorage.setItem('templateTypes', JSON.stringify(success.data.data))
+            })
         }, []
     )
     useEffect(

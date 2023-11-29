@@ -111,6 +111,21 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
         }
       }}
       className="search-bar"
+      renderTags={(value, getTagProps) =>
+        value.map((option, index) => (
+          <div key={index} className="tag">
+            {option.label}
+            <CloseIcon
+              {...getTagProps({ index })}
+              onClick={(e) => {
+                e.stopPropagation();
+                // Handle close tag action here
+              }}
+            />
+          </div>
+
+        ))
+      }
       renderInput={(params) => (
         <TextField
           {...params}
@@ -123,23 +138,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
               </InputAdornment>
             )
           }}
-          rendertags={(value, ...getTagProps) =>
-            value.map((option, index) => (
-              <>
-                <div key={index} className="tag">
-                  {option}
-                  <CloseIcon
-                    {...getTagProps({ index })}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Handle close tag action here
-                    }}
-                  />
-                </div>
-              </>
 
-            ))
-          }
         />
       )}
     />

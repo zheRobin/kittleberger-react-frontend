@@ -6,6 +6,7 @@ import OverlaySide from "../Product-View/OverlaySide"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import { updateProducts } from "../../store"
+import { useTranslation } from "react-i18next"
 
 const SideNav = () => {
     const [items, setItems] = useState([])
@@ -16,6 +17,7 @@ const SideNav = () => {
     const [draggedItem, setDraggedItem] = useState({})
     const dispatch = useDispatch()
     const [posIndexGroup, setPosIndexGroup] = useState([])
+    const { t } = useTranslation()
     const handleSelect = () => {
         navigate('/product/product-select')
     }
@@ -69,7 +71,7 @@ const SideNav = () => {
     return (
         <>
             <div className="nav-items">
-                <div className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSelect() }}>Produkte auswählen</div>
+                <div className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSelect() }}>{t("Produkte auswählen")}</div>
                 {items?.map((productItem, index) => {
                     return (
                         <div key={index} onDragOver={(e) => onDragOver(e, index)} draggable
@@ -77,7 +79,7 @@ const SideNav = () => {
                     )
                 })}
 
-                <div className={path === "/product/summary" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSummary() }}>Zusammenfassung</div>
+                <div className={path === "/product/summary" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSummary() }}>{t("Zusammenfassung")}</div>
             </div>
         </>
     )

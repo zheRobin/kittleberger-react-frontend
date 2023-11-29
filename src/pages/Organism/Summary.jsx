@@ -9,7 +9,7 @@ import { TemplateButton } from "./TemplatePanel"
 import copy from "../../assets/icons/copy.svg"
 import { useSelector } from "react-redux"
 import React, { useEffect, useState } from "react"
-import { getOnlineInfo, updateOnlineInfo, refreshCompose } from "../../_services/Product"
+import { getOnlineInfo, updateOnlineInfo, refreshCompose, replacePreviewImage } from "../../_services/Product"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -58,6 +58,7 @@ const Summary = () => {
         }, [textAreaRef, value]);
     };
     const userInfo = useSelector(state => state.auth.user)
+    const switchRole = useSelector(state => state.info.adminMethod)
     useEffect(() => {
         if (!composedProduct.startsWith("data:")) {
             setdeploymentName({ value: state.cdn ?? composedProduct, copied: false });
@@ -83,9 +84,9 @@ const Summary = () => {
             return {
                 id: product.id,
                 name: product.name,
-                article_number: product.article_number,
-                mediaobject_id: product.mediaobject_id,
-                render_url: product.render_url ? product.render_url : product.render_url,
+                article_number: product?.article_number,
+                mediaobject_id: product?.mediaobject_id,
+                render_url: product?.render_url ? product.render_url : product.render_url,
                 pos_index: product?.pos_index,
                 is_transparent: product?.is_transparent ? product?.is_transparent : false,
                 scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
@@ -128,6 +129,10 @@ const Summary = () => {
         template_id: selectedTemplate.id,
         articles: article.filter(Boolean),
     };
+    const previewImageInfo = {
+        template_id: selectedTemplate.id,
+        preview_img: composedProduct
+    }
     const submitInfo = {
         name: editableName,
         template_id: selectedTemplate.id,
@@ -209,7 +214,6 @@ const Summary = () => {
     };
     const refresh = () => {
         setLoading(true)
-        console.log(composingInfo)
         refreshCompose(token, composingInfo, (success) => {
 
             if (success.data.code === 200 || success.data.status === "success") {
@@ -234,7 +238,7 @@ const Summary = () => {
             }
             if (success.data.status === "failed") {
                 setLoading(false)
-                toast.error("Sorry but failed To Submit", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                toast.error("Sorry but failed to submit", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
         })
     }
@@ -255,6 +259,21 @@ const Summary = () => {
             }
         })
     }
+
+    const updatePreviewImage = () => {
+        setLoading(true)
+        replacePreviewImage(token, previewImageInfo, (success) => {
+            if (success.data.code === 200) {
+                setLoading(false)
+                toast.success("Successfully Updated Preview", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+            }
+            if (success.data.status === "failed") {
+                setLoading(false)
+                toast.error("Sorry but failed To Update", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+            }
+        })
+    }
+
     const saveInfo = () => {
         setLoading(true)
         if (cardInfo?.created_by === undefined) {
@@ -336,7 +355,7 @@ const Summary = () => {
                         {t('Bitte beachten Sie, dass jede Änderung an diesem Composing auf bereits geteilte Composing-URLs Einfluss hat.')}
                     </div>
                     <div className="composing-name">
-                        <div className="typography-700-regular">{t('Composing Name')}</div>
+                        <div className="typography-700-regular">{t('Verfassen des Namens')}</div>
                         <textarea
                             id="review-text"
                             onChange={handleChange}
@@ -347,7 +366,8 @@ const Summary = () => {
                             style={{ fontSize: "14px" }}
                         />
                         <div onClick={(e) => saveInfo()}><TemplateButton content={t('Speichern')} /></div>
-                        {cardInfo?.created_by !== undefined && <div onClick={(e) => refresh()}><TemplateButton content={t('Aktualisierung')} /></div>}
+                        {switchRole ? (<div onClick={(e) => updatePreviewImage()}><TemplateButton content={t('Als Vorlagenvorschaubild festlegen')} /></div>) : null}
+                        {cardInfo?.created_by !== undefined ? <div onClick={(e) => refresh()}><TemplateButton content={t('Aktualisierung')} /></div> : null}
                     </div>
                     {deploymentName.value !== '' ? (<div className="deployment">
                         <div className="typography-700-regular">{t('Bereitstellung')}</div>

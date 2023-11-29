@@ -26,6 +26,19 @@ export const getTemplateListbyFilter = (token,success,templateArgs={}) => {
     }
     )
 }
+
+export const getTemplatesTypes = (token,success) => {
+    setAuthToken(token)
+    axios.get(`${process.env.REACT_APP_API_URL}api/v1/compose/pagedata/`)
+    .then((response) => {
+        success(response)
+    })
+    .catch( (error) => {
+        console.log(error)
+    }
+    )
+}
+
 export const infiniteTemplate = (token,page,dependencies,success) => {
     setAuthToken(token)
     const limit = 15

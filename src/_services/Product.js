@@ -50,6 +50,18 @@ export async function getOnlineInfo(token, templateInfo, success) {
         })
 }
 
+export async function replacePreviewImage(token, previwInfo, success) {
+    setAuthToken(token)
+    axios.post(`${process.env.REACT_APP_API_URL}api/v1/compose/setpreview/`, previwInfo)
+        .then(res => {
+            success(res)
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        })
+}
+
+
 export async function refreshCompose(token, templateInfo, success) {
     setAuthToken(token)
     axios.post(`${process.env.REACT_APP_API_URL}api/v1/compose/refresh/`, templateInfo)
