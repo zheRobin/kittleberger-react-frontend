@@ -53,7 +53,8 @@ export const createTemplatesTypes = (templateInfo,token,success) => {
 
 export const deleteTemplatesTypes = (templateInfo,token,success) => {
     setAuthToken(token)
-    axios.delete(`${process.env.REACT_APP_API_URL}api/v1/compose/pagedata/`,templateInfo)
+    console.log(templateInfo)
+    axios.delete(`${process.env.REACT_APP_API_URL}api/v1/compose/pagedata/`,{data:templateInfo})
     .then((response) => {
         success(response)
     })

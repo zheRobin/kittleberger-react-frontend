@@ -36,11 +36,11 @@ const TypeList = ({ type, label }) => {
         setLoading(true)
         const updateInfo = {
             host: label,
-            pk: id,
-            value: ""
+            pk: id
         }
         deleteTemplatesTypes(updateInfo, token, (success) => {
             if (success.data.code === 200 && success.data.status === "success") {
+                dispatch(authActions.setTemplateTypes(success.data.data))
                 toast.success("Successfully Deleted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
             if (success.data.code === 400 && success.data.status === "failed") {
@@ -56,9 +56,10 @@ const TypeList = ({ type, label }) => {
             pk: id,
             value: newName
         }
-
+        setModalView(false)
         editTemplatesTypes(updateInfo, token, (success) => {
             if (success.data.code === 200 && success.data.status === "success") {
+                dispatch(authActions.setTemplateTypes(success.data.data))
                 toast.success("Successfully Edited", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
             if (success.data.code === 400 && success.data.status === "failed") {
@@ -89,6 +90,7 @@ const TypeList = ({ type, label }) => {
                 setLoading(true)
                 createTemplatesTypes({ host: label, value: formik.values.name }, token, (success) => {
                     if (success.data.code === 200 && success.data.status === "success") {
+                        dispatch(authActions.setTemplateTypes(success.data.data))
                         toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                     }
                     if (success.data.code === 400 && success.data.status === "failed") {
