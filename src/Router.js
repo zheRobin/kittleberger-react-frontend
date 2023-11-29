@@ -13,7 +13,7 @@ import Summary from "./pages/Organism/Summary";
 import Authguard from "./components/Auth/Authguard.jsx";
 import UnAuthguard from "./components/Auth/UnAuthGuard.jsx";
 import TemplateEditPanel from "./pages/Organism/TemplateEditPanel.jsx";
-
+import Setting from "./pages/AccountSetting/Setting.jsx";
 const AuthRouteGroup = [
     {
         path: "product",
@@ -49,6 +49,12 @@ const AuthRouteGroup = [
         path: "user/api-token",
         element:
             <LayOutDashboard><ApiToken /></LayOutDashboard>,
+        title: 'ApiToken'
+    },
+    {
+        path: "user/setting",
+        element:
+            <LayOutDashboard><Setting /></LayOutDashboard>,
         title: 'ApiToken'
     },
     {

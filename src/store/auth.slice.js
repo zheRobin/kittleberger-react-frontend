@@ -26,8 +26,12 @@ function createReducers() {
     localStorage.removeItem('templateInfo')
     goURL()
   }
+  const setTemplateTypes = (state,action) => {
+    state.templateTypes = action.payload
+  }
   return {
     logout,
+    setTemplateTypes
   };
 }
 
@@ -61,7 +65,7 @@ function createExtraReducers() {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('user', JSON.stringify(user.user));
       localStorage.setItem('token', JSON.stringify(user.access_token));
-      state.role = user.is_superuser ? "super" : (user.is_staff? "admin": "customer")
+      state.role = user.user.is_superuser ? "super" : (user.user.is_staff? "admin": "customer")
       state.user = user.user;
       state.token = user.access_token;
       state.templateTypes = user.page_data

@@ -9,6 +9,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { getProductsbyFilter } from "../../_services/Product";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ProductSearch({ filterData, usedArticles, setFilterData }) {
   const selectedCountryGroup = useSelector(state => state.products.selectedCountry)
@@ -16,7 +17,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
   const [productList, setProductList] = useState([]);
   const [page, setPage] = useState(1);
   const [searchString, setSearchString] = useState("");
-
+  const { t } = useTranslation()
 
   useEffect(() => {
     const delay = 200;
@@ -111,25 +112,10 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
         }
       }}
       className="search-bar"
-      renderTags={(value, getTagProps) =>
-        value.map((option, index) => (
-          <div key={index} className="tag">
-            {option.label}
-            <CloseIcon
-              {...getTagProps({ index })}
-              onClick={(e) => {
-                e.stopPropagation();
-                // Handle close tag action here
-              }}
-            />
-          </div>
-
-        ))
-      }
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder="Nach Produkten suchen"
+          placeholder={t("Nach Produkten suchen")}
           InputProps={{
             ...params.InputProps,
             endAdornment: (

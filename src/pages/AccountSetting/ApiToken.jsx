@@ -11,6 +11,7 @@ import { deleteToken } from "../../_services/ApiToken"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
+import { useTranslation } from "react-i18next"
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -44,7 +45,7 @@ const ApiToken = () => {
     const [tokenLists, setTokenLists] = useState([]);
     const [loading, setLoading] = useState(false);
     const token = useSelector(state => state.auth.token)
-
+    const { t } = useTranslation()
     const schema = Yup.object({
         name: Yup.string().required("Name field is required"),
     })
@@ -127,28 +128,28 @@ const ApiToken = () => {
                 <div className="api-setting">
                     <div>
                         <div className="api-setting__top">
-                            <div className="typography-400-regular">API-Token erstellen</div>
+                            <div className="typography-400-regular">{t("API-Token erstellen")}</div>
                         </div>
                         <div className="api-setting__bottom">
-                            <div className="typography-400-regular">API-Tokens ermöglichen es Drittanbieterdiensten, sich in Ihrem Namen mit unserer Anwendung zu authentifizieren.</div>
+                            <div className="typography-400-regular">{t("API-Tokens ermöglichen es Drittanbieterdiensten, sich in Ihrem Namen mit unserer Anwendung zu authentifizieren.")}</div>
                             <div className="label-input-pair">
-                                <div className="typography-400-regular">Name *</div>
+                                <div className="typography-400-regular">{t("Name *")}</div>
                                 <div className="password-warning">
                                     <input name="name" onChange={formik.handleChange} value={formik.values.name} />
                                     {formik.touched.name && formik.errors.name ? (
-                                        <p className="validation">{formik.errors.name}</p>
+                                        <p className="validation">{t(formik.errors.name)}</p>
                                     ) : null}
-                                    <div className="label-group" onClick={formik.handleSubmit}><TemplateButton content={"Speichern"} /></div>
+                                    <div className="label-group" onClick={formik.handleSubmit}><TemplateButton content={t("Speichern")} /></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div>
                         <div className="api-setting__top">
-                            <div className="typography-400-regular">API-Token verwalten</div>
+                            <div className="typography-400-regular">{t("API-Token verwalten")}</div>
                         </div>
                         <div className="api-setting__bottom">
-                            <div className="typography-400-regular">Sie können alle vorhandenen Tokens löschen, wenn sie nicht mehr benötigt werden.</div>
+                            <div className="typography-400-regular">{t("Sie können alle vorhandenen Tokens löschen, wenn sie nicht mehr benötigt werden.")}</div>
                             <div className="api-token">
                                 {tokenLists.map(
                                     (tokenlist) => {

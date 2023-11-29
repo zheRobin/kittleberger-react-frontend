@@ -39,6 +39,44 @@ export const getTemplatesTypes = (token,success) => {
     )
 }
 
+export const createTemplatesTypes = (templateInfo,token,success) => {
+    setAuthToken(token)
+    axios.post(`${process.env.REACT_APP_API_URL}api/v1/compose/pagedata/`,templateInfo)
+    .then((response) => {
+        success(response)
+    })
+    .catch( (error) => {
+        console.log(error)
+    }
+    )
+}
+
+export const deleteTemplatesTypes = (templateInfo,token,success) => {
+    setAuthToken(token)
+    axios.delete(`${process.env.REACT_APP_API_URL}api/v1/compose/pagedata/`,templateInfo)
+    .then((response) => {
+        success(response)
+    })
+    .catch( (error) => {
+        console.log(error)
+    }
+    )
+}
+
+export const editTemplatesTypes = (templateInfo,token,success) => {
+    setAuthToken(token)
+    axios.put(`${process.env.REACT_APP_API_URL}api/v1/compose/pagedata/`,templateInfo)
+    .then((response) => {
+        success(response)
+    })
+    .catch( (error) => {
+        console.log(error)
+    }
+    )
+}
+
+
+
 export const infiniteTemplate = (token,page,dependencies,success) => {
     setAuthToken(token)
     const limit = 15

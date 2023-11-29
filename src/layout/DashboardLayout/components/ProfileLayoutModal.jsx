@@ -11,7 +11,7 @@ import { useSelector } from "react-redux"
 import { useRef, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { setSelectedLanguage } from "../../../store"
-import { useTransition } from "react"
+import gear from "../../../assets/icons/settings-gear.svg"
 function getInitials(string) {
     const words = string.split(" ");
     const initials = words?.map((word) => word[0]?.toUpperCase());
@@ -50,6 +50,8 @@ const ProfileLayout = ({ handleModal }) => {
     const switchRole = useSelector(state => state.info.adminMethod)
     const selectedLanguage = useSelector(state => state.info.language)
     const user = useSelector(state => state.auth.user)
+    console.log("user", user)
+    const _isSuperUser = user.is_superuser ? true : false
     const userType = user.is_superuser ? "super" : (user.is_staff ? "admin" : "customer")
     const capitalizedUserType = userType.charAt(0).toUpperCase() + userType.slice(1);
     const wrapperRef = useRef(null);
@@ -123,8 +125,14 @@ const ProfileLayout = ({ handleModal }) => {
                                     </div>
                                     <div className="account-detail pointer" onClick={() => { navigate("/user/api-token"); handleModal(false) }}>
                                         <div className="account-detail-info">
-                                            <img src={tokenSearch} alt={t('Password Change')}></img>
+                                            <img src={tokenSearch} alt={t('Token')}></img>
                                             <div className="account-description">{t('API-Token')}</div>
+                                        </div>
+                                    </div>
+                                    <div className="account-detail pointer" onClick={() => { navigate("/user/setting"); handleModal(false) }}>
+                                        <div className="account-detail-info">
+                                            <img src={gear} alt={t('Setting')}></img>
+                                            <div className="account-description">{t('Einstellung')}</div>
                                         </div>
                                     </div>
                                 </>

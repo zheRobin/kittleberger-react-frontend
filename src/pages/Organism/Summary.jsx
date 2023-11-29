@@ -361,7 +361,6 @@ const Summary = () => {
                             onChange={handleChange}
                             ref={textAreaRef}
                             rows={1}
-                            defaultValue={composeName}
                             value={editableName}
                             style={{ fontSize: "14px" }}
                         />

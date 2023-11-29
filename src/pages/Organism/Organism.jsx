@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
-import { appendTemplate, setUsedArticles, selectPage, setUpdatedDate, setLoadingStatus, initTemplate, initProductsOnTemplates, appendProductsOnTemplate } from '../../store';
+import { appendTemplate, setUsedArticles, selectPage, setUpdatedDate, setLoadingStatus, initTemplate, initProductsOnTemplates, appendProductsOnTemplate, authActions } from '../../store';
 import { infiniteTemplate } from '../../_services/Template';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import 'react-toastify/dist/ReactToastify.css';
@@ -70,6 +70,7 @@ const Organism = () => {
             dispatch(emptyStore())
             getTemplatesTypes(token, (success) => {
                 localStorage.setItem('templateTypes', JSON.stringify(success.data.data))
+                dispatch(authActions.setTemplateTypes(success.data.data))
             })
         }, []
     )
@@ -156,8 +157,8 @@ const Organism = () => {
                                     },
                                 }}
                             >
-                                <Tab label={count + " templates"} value="1" style={styles.tab} />
-                                <Tab label={products.length + " erstellte Composings"} value="2" style={styles.tab} />
+                                <Tab label={count + t(" Vorlagen")} value="1" style={styles.tab} />
+                                <Tab label={products.length + t(" erstellte Kompositionen")} value="2" style={styles.tab} />
                             </TabList>
                         </Box>
                         {loading ? <Loading /> : (

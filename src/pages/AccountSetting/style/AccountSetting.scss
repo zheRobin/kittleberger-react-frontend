@@ -200,7 +200,10 @@
     cursor: pointer;
   }
 
-
+.setting{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 
 
 .api-setting{
@@ -296,7 +299,21 @@
                 }
             }
             
-            
+            .setting-list{
+                display: flex;
+                flex-direction: row;
+                div:first-child{
+                    width: 40%;
+                }
+    
+                div:nth-child(2){
+                    width: 60%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    gap: 20px;
+                }
+            }
         }
 
         .user-group{

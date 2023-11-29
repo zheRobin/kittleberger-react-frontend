@@ -7,9 +7,11 @@ import { changePassword } from "../../_services/User";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const PasswordChange = () => {
     const token = useSelector(state => state.auth.token)
+    const { t } = useTranslation()
     const schema = yup.object().shape({
         oldpass: yup.string().required("This field is required"),
         newpass: yup.string()
@@ -60,31 +62,31 @@ const PasswordChange = () => {
         <form onSubmit={formik.handleSubmit} className="setting-form">
             <div className="setting-panel-user">
                 <div className="setting-panel-user__top">
-                    <div className="typography-400-regular">Passwort ändern</div>
+                    <div className="typography-400-regular">{t("Passwort ändern")}</div>
                 </div>
                 <div className="setting-panel-user__bottom">
                     <div className="label-input-pair">
-                        <div className="typography-400-regular">Altes Passwort *</div>
+                        <div className="typography-400-regular">{t("Altes Passwort *")}</div>
                         <div className="password-warning" style={{ width: "470px" }}>
                             <input type="password" value={formik.values.oldpass} onChange={(e) => setInputValue('oldpass', e.target.value)}></input>
                             {formik.touched.oldpass && formik.errors.oldpass ? (
-                                <p className="validation">{formik.errors.oldpass}</p>
+                                <p className="validation">{t(formik.errors.oldpass)}</p>
                             ) : null}
                         </div>
 
                     </div>
                     <div className="label-input-pair">
-                        <div className="typography-400-regular">Neues Passwort *</div>
+                        <div className="typography-400-regular">{t("Neues Passwort *")}</div>
                         <div className="password-warning">
                             <input type="password" value={formik.values.newpass} onChange={(e) => setInputValue('newpass', e.target.value)}></input>
                             {formik.touched.newpass && formik.errors.newpass ? (
-                                <p className="validation">{formik.errors.newpass}</p>
+                                <p className="validation">{t(formik.errors.newpass)}</p>
                             ) : null}
-                            <div className="typography-400-regular label-group"><li>Password must consist of at least 8 characters</li></div>
-                            <div className="typography-400-regular label-group"><li>Password must contain upper and lower case letters</li></div>
-                            <div className="typography-400-regular label-group"><li>Password must contain at least one number</li></div>
-                            <div className="typography-400-regular label-group"><li>Password must contain at least one special character</li></div>
-                            <div className="label-group" type="submit" onClick={formik.handleSubmit}><TemplateButton content={"Speichern"} /></div>
+                            <div className="typography-400-regular label-group"><li>{t("Das Passwort muss aus mindestens 8 Zeichen bestehen")}</li></div>
+                            <div className="typography-400-regular label-group"><li>{t("Das Passwort muss Groß- und Kleinbuchstaben enthalten")}</li></div>
+                            <div className="typography-400-regular label-group"><li>{t("Das Passwort muss mindestens eine Ziffer enthalten")}</li></div>
+                            <div className="typography-400-regular label-group"><li>{t("Das Passwort muss mindestens ein Sonderzeichen enthalten")}</li></div>
+                            <div className="label-group" type="submit" onClick={formik.handleSubmit}><TemplateButton content={t("Speichern")} /></div>
                         </div>
                     </div>
                 </div>

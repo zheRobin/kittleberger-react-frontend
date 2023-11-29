@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from "react-redux"
+import { useTranslation } from "react-i18next"
 
 const UserList = ({ name, email, handlemodal, setMode, setUserinfo, userInfo, setDeleteModal }) => {
   return (
@@ -35,6 +36,7 @@ const ManageUser = () => {
   const [userInfo, setUserinfo] = useState({});
   const [loading, setloading] = useState(false);
   const token = useSelector(state => state.auth.token)
+  const { t } = useTranslation()
   useEffect(() => {
     userList(token, (success) => {
       if (success.data.code === 200 && success.data.status === "success") {
@@ -58,10 +60,10 @@ const ManageUser = () => {
 
   return (
     <div className="user-manage-form">
-      <div className="create-user" ><div className="pointer" onClick={() => { setModalView(true); setEditMode(false) }}><TemplateButton content={"Neuen Benutzer anlegen"} /></div></div>
+      <div className="create-user" ><div className="pointer" onClick={() => { setModalView(true); setEditMode(false) }}><TemplateButton content={t("Neuen Benutzer anlegen")} /></div></div>
       <div className="setting-panel-user">
         <div className="setting-panel-user__top">
-          <div className="typography-400-regular">Passwort ändern</div>
+          <div className="typography-400-regular">{t("Passwort ändern")}</div>
         </div>
         <div className="setting-panel-user__bottom">
           <div className="user-group">
@@ -112,44 +114,43 @@ const ManageUser = () => {
                   <div className="modal-content">
                     <div className="modal-box">
                       <div className="label">
-                        <div className="typography-700-bold">Neuen Benutzer anlegen</div>
+                        <div className="typography-700-bold">{t("Neuen Benutzer anlegen")}</div>
                         <img className="pointer" src={close} alt="close" onClick={() => setModalView(false)} />
                       </div>
                       <div className="box">
                         <div className="label-input-pair">
-                          <div className="typography-400-regular">Name *</div>
+                          <div className="typography-400-regular">{t("Name *")}</div>
                           <div>
                             <input {...formik.getFieldProps('name')} required />
                             {formik.touched.name && formik.errors.name ? (
-                              <div className="validation">{formik.errors.name}</div>
+                              <div className="validation">{t(formik.errors.name)}</div>
                             ) : null}
                           </div>
 
                         </div>
                         <div className="label-input-pair">
-                          <div className="typography-400-regular">E-Mail-Adresse *</div>
+                          <div className="typography-400-regular">{t("E-Mail-Adresse")} *</div>
                           <div>
                             <input {...formik.getFieldProps('email')} />
                             {formik.touched.email && formik.errors.email ? (
-                              <div className="validation">{formik.errors.email}</div>
+                              <div className="validation">{t(formik.errors.email)}</div>
                             ) : null}
                           </div>
 
                         </div>
                         <div className="label-input-pair">
-                          <div className="typography-400-regular">Passwort *</div>
+                          <div className="typography-400-regular">{t("Passwort")} *</div>
                           <div>
                             <input type="password"  {...formik.getFieldProps('password')} />
                             {formik.touched.password && formik.errors.password ? (
                               <div className="validation">{formik.errors.password}</div>
                             ) : null}
                           </div>
-
                         </div>
                       </div>
                       <div className="button-group pointer">
-                        <div onClick={() => setModalView(false)}><TemplateButton content={"Abbrechen"} type={"transparent"} /></div>
-                        <div onClick={formik.handleSubmit}><TemplateButton content={"Bestätigen"} /></div>
+                        <div onClick={() => setModalView(false)}><TemplateButton content={t("Abbrechen")} type={"transparent"} /></div>
+                        <div onClick={formik.handleSubmit}><TemplateButton content={t("Bestätigen")} /></div>
                       </div>
                     </div>
                   </div>

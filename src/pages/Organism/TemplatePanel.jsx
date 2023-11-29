@@ -352,7 +352,7 @@ const TemplatePanel = () => {
 												</div>
 												<div className="label-input-pair">
 													<div className="label__left">
-														<div className="typography-400-regular">{t("breite")}*</div>
+														<div className="typography-400-regular">{t("Breite")}*</div>
 													</div>
 													<div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
 														<Field as={TextField} type="number" name="resolution_width" />
@@ -583,7 +583,7 @@ const TemplatePanel = () => {
 														// write your building UI
 														<div className="upload__image-wrapper">
 															<div className="image-position__left" onClick={() => { onImageUpload(); }}>
-																<TemplateButton content={t("Einen anderen Hintergrund hinzufügen")} />
+																<TemplateButton content={t("Fügen Sie eine andere Vorschau hinzu")} />
 															</div>
 															<div className="image-position__left">
 																{preView ? (
@@ -664,7 +664,7 @@ const TemplatePanel = () => {
 											className="bottom-template-button"
 											onClick={handleSubmit}
 										>
-											<TemplateButton content={"Template speichern"} />
+											<TemplateButton content={t("Template speichern")} />
 										</div>
 									) : null}
 								</div>

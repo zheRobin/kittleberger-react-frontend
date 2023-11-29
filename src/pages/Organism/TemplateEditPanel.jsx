@@ -361,7 +361,7 @@ const TemplateEditPanel = () => {
                                                 </div>
                                                 <div className="label-input-pair">
                                                     <div className="label__left">
-                                                        <div className="typography-400-regular">{t("breite")}*</div>
+                                                        <div className="typography-400-regular">{t("Breite")}*</div>
                                                     </div>
                                                     <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
                                                         <Field as={TextField} name="resolution_width" />
@@ -596,7 +596,7 @@ const TemplateEditPanel = () => {
                                                         // write your building UI
                                                         <div className="upload__image-wrapper">
                                                             <div className="image-position__left" onClick={() => { onImageUpload(); }}>
-                                                                <TemplateButton content={"Einen anderen Hintergrund hinzufügen"} />
+                                                                <TemplateButton content={t("Fügen Sie eine andere Vorschau hinzu")} />
                                                             </div>
                                                             <div className="image-position__left">
                                                                 {preView ? (
@@ -641,7 +641,7 @@ const TemplateEditPanel = () => {
                                             <div className="image-setting-panel">
                                             </div>
                                             <div className="product-setting-panel__top">
-                                                <div className="typography-400-regular top-typo">Platzhalterbild</div>
+                                                <div className="typography-400-regular top-typo">{t("Platzhalterbild")}</div>
                                             </div>
                                             <div className="product-setting-panel__bottom">
                                                 <div className="image-setting-panel">
@@ -682,7 +682,7 @@ const TemplateEditPanel = () => {
                                             className="bottom-template-button"
                                             onClick={handleSubmit}
                                         >
-                                            <TemplateButton content={"Template speichern"} />
+                                            <TemplateButton content={t("Template speichern")} />
                                         </div>
                                     ) : null}
 
