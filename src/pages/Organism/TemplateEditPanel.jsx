@@ -222,7 +222,7 @@ const TemplateEditPanel = () => {
         return () => {
             window.removeEventListener('resize', handleResize);
         }
-    }, []);
+    }, [tempImages]);
 
     let validationSchema = Yup.object().shape({
         name: Yup.string()
@@ -354,7 +354,7 @@ const TemplateEditPanel = () => {
                                                                 <MenuItem value="TIFF">.tiff</MenuItem>
                                                             </Field>
                                                             <p className="typography-400-regular select-subtitle">
-                                                                .jpg {t("und")} .png {t("sind in 72 dpi;")} .tiff {t("ist in 300 dpi")}
+                                                                .jpg {t("und")} .png {t("sind in 144 dpi;")} .tiff {t("ist in 300 dpi")}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -364,7 +364,7 @@ const TemplateEditPanel = () => {
                                                         <div className="typography-400-regular">{t("Breite")}*</div>
                                                     </div>
                                                     <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
-                                                        <Field as={TextField} name="resolution_width" />
+                                                        <Field as={TextField} type="number" name="resolution_width" />
                                                         <div style={{ display: "flex", justifyContent: "flex-start" }}>
                                                             <ErrorMessage name="resolution_width" component="p" className="validation" />
                                                         </div>
@@ -375,7 +375,7 @@ const TemplateEditPanel = () => {
                                                         <div className="typography-400-regular">{t("Hähe")}*</div>
                                                     </div>
                                                     <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
-                                                        <Field as={TextField} name="resolution_height" />
+                                                        <Field as={TextField} type="number" name="resolution_height" />
                                                         <div style={{ display: "flex", justifyContent: "flex-start" }}>
                                                             <ErrorMessage name="resolution_height" component="p" className="validation" />
                                                         </div>
@@ -661,6 +661,12 @@ const TemplateEditPanel = () => {
                                                                             bg_width={values.resolution_width}
                                                                             bg_height={values.resolution_height}
                                                                             setTempImages={setTempImages}
+                                                                            backgroundWidth={
+                                                                                backgroundWidth
+                                                                            }
+                                                                            backgroundHeight={
+                                                                                backgroundHeight
+                                                                            }
                                                                         />
                                                                     ))}
                                                             </div>

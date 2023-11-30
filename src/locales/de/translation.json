@@ -8,5 +8,11 @@
     "This field is required":"Dieses Feld ist erforderlich",
     "Brand Create":"Marke schaffen",
     "Country Create":"Land erstellen",
-    "Application Create":"Anwendung erstellen"
+    "Application Create":"Anwendung erstellen",
+    "Edit Brand Name":"Markennamen bearbeiten",
+    "Edit Country Name":"Ländernamen bearbeiten",
+    "Edit Application Name":"Bearbeiten Sie den Anwendungsnamen",
+    "Country Name":"Ländername",
+    "Brand Name":"Markenname",
+    "Application Name":"Anwendungsname"
   }

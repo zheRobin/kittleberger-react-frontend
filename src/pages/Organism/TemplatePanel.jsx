@@ -112,23 +112,23 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
 								<div className="input-groups">
 									<div>
 										<div className="typography-400-regular">{t("top")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.position_y || ''} name={`article_placements.${index}.position_y`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.position_y || '0'} name={`article_placements.${index}.position_y`} /></div>
 									</div>
 									<div>
 										<div className="typography-400-regular">{t("left")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.position_x || ''} name={`article_placements.${index}.position_x`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.position_x || '0'} name={`article_placements.${index}.position_x`} /></div>
 									</div>
 									<div>
 										<div className="typography-400-regular">{t("width")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.width || ''} name={`article_placements.${index}.width`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.width || '0'} name={`article_placements.${index}.width`} /></div>
 									</div>
 									<div>
 										<div className="typography-400-regular">{t("height")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.height || ''} name={`article_placements.${index}.height`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.height || '0'} name={`article_placements.${index}.height`} /></div>
 									</div>
 									<div>
 										<div className="typography-400-regular">{t("z-index")}</div>
-										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.z_index || ''} name={`article_placements.${index}.z_index`} /></div>
+										<div className="input-group__bottom"><Field as={TextField} inputProps={{ type: "number", style: { textAlign: 'center' } }} value={value.z_index || '0'} name={`article_placements.${index}.z_index`} /></div>
 									</div>
 									<div className="image-settings__common pointer" onClick={() => {
 										arrayHelpers.remove(index)
@@ -218,7 +218,7 @@ const TemplatePanel = () => {
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		}
-	}, []);
+	}, [tempImages]);
 
 	let validationSchema = Yup.object().shape({
 		name: Yup.string()
@@ -345,7 +345,7 @@ const TemplatePanel = () => {
 																<MenuItem value="TIFF">.tiff</MenuItem>
 															</Field>
 															<p className="typography-400-regular select-subtitle">
-																{t(".jpg und .png sind in 72 dpi; .tiff ist in 300 dpi")}
+																{t(".jpg und .png sind in 144 dpi; .tiff ist in 300 dpi")}
 															</p>
 														</div>
 													</div>
@@ -616,11 +616,10 @@ const TemplatePanel = () => {
 											</div>
 										</div>
 									) : null}
-									{values.resolution_width && values.resolution_height && backView ? (
+									{values.resolution_width && values.resolution_height &&
+										backView ? (
 										<div className="product-setting-panel image-setting">
 											<div className="image-setting-panel">
-
-
 											</div>
 											<div className="product-setting-panel__top">
 												<div className="typography-400-regular top-typo">{t("Platzhalterbild")}</div>
@@ -628,9 +627,10 @@ const TemplatePanel = () => {
 											<div className="product-setting-panel__bottom">
 												<div className="image-setting-panel">
 													<div className="left-b-image" ref={elementRef} >
-														<div className="image-backgroud select-part" style={{ height: backgroundWidth >= backgroundHeight ? `${backgroundHeight}%` : "100%", width: backgroundWidth >= backgroundHeight ? "100%" : `${backgroundWidth}%`, backgroundImage: `url(${images[0]?.data_url})`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat", }}>
+														<div className="image-backgroud select-part" style={{ height: backgroundWidth >= backgroundHeight ? `${backgroundHeight}%` : "100%", width: backgroundWidth >= backgroundHeight ? "100%" : `${backgroundWidth}%`, backgroundImage: `url(${images[0]?.data_url})`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat" }}>
 															<div className="image-compare">
-																{values.resolution_width && values.resolution_height && images.length !== 0 &&
+
+																{values.resolution_width && values.resolution_height &&
 																	values.article_placements.map((value, index) => (
 																		<ImageTemplate
 																			key={index}
@@ -643,6 +643,12 @@ const TemplatePanel = () => {
 																			bg_width={values.resolution_width}
 																			bg_height={values.resolution_height}
 																			setTempImages={setTempImages}
+																			backgroundWidth={
+																				backgroundWidth
+																			}
+																			backgroundHeight={
+																				backgroundHeight
+																			}
 																		/>
 																	))}
 															</div>

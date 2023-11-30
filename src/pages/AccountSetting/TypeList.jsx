@@ -15,6 +15,8 @@ import { createTemplatesTypes, editTemplatesTypes, deleteTemplatesTypes } from "
 import close from "../../assets/icons/cross-black.svg"
 import { Loading } from "../Organism/TemplatePanel"
 import { authActions } from "../../store"
+import plus from "../../assets/icons/plus-square.svg"
+
 const TypeList = ({ type, label }) => {
     const dispatch = useDispatch()
     const templateTypes = useSelector(state => state.auth.templateTypes)
@@ -23,10 +25,12 @@ const TypeList = ({ type, label }) => {
     const [modalView, setModalView] = useState(false)
     const [selectedId, setSelectedId] = useState(0)
     const token = useSelector(state => state.auth.token)
+    const [submitType, setSubmitType] = useState(0)
     const { t } = useTranslation()
     const schema = Yup.object({
         name: Yup.string().required("Name field is required"),
     })
+    const [selectedName, setSelectedName] = useState("")
     useEffect(
         () => {
             setTemplateListInfo(templateTypes)
@@ -73,7 +77,7 @@ const TypeList = ({ type, label }) => {
             <div className="setting-list">
                 <div className="typography-400-regular">{token?.token?.name}</div>
                 <div className="typography-400-regular">
-                    <img className="pointer" src={pencil} alt="cross" onClick={() => { setModalView(true); setSelectedId(token?.token?.id) }} />
+                    <img className="pointer" src={pencil} alt="cross" onClick={() => { setModalView(true); setSubmitType(0); setSelectedId(token?.token?.id); setSelectedName(token?.token?.name) }} />
                     <img className="pointer" src={cross} alt="cross" onClick={() => handleDelete(token?.token?.id)} />
                 </div>
             </div>
@@ -103,32 +107,6 @@ const TypeList = ({ type, label }) => {
         }
     )
 
-    // useEffect(
-    //     () => {
-    //         tokenList(token, (success) => {
-    //             if (success.data.code === 200 && success.data.status === "success") {
-    //                 setTokenLists(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-    //             }
-    //             if (success.data.code === 400 && success.data.status === "failed") {
-    //                 toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-    //             }
-    //         })
-    //     }, []
-    // )
-
-    // useEffect(
-    //     () => {
-    //         tokenList(token, (success) => {
-    //             if (success.data.code === 200 && success.data.status === "success") {
-    //                 setTokenLists(success.data.data)
-    //             }
-    //             if (success.data.code === 400 && success.data.status === "failed") {
-    //                 toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-    //             }
-    //         })
-    //     }, [loading]
-    // )
-
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
@@ -136,24 +114,11 @@ const TypeList = ({ type, label }) => {
                 <div className="api-setting">
                     <div>
                         <div className="api-setting__top">
-                            <div className="typography-400-regular">{t(label[0].toUpperCase() + label.slice(1) + ' Create')}</div>
-                        </div>
-                        <div className="api-setting__bottom">
-                            <div className="label-input-pair">
-                                <div className="typography-400-regular">{t(type)} *</div>
-                                <div className="password-warning">
-                                    <input name="name" onChange={formik.handleChange} value={formik.values.name} />
-                                    {formik.touched.name && formik.errors.name ? (
-                                        <p className="validation">{t(formik.errors.name)}</p>
-                                    ) : null}
-                                    <div className="label-group" onClick={formik.handleSubmit}><TemplateButton content={t("Speichern")} /></div>
-                                </div>
+                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                <div className="typography-400-regular">{t(type)}</div>
+                                <div className="pointer" onClick={() => { setModalView(true); setSubmitType(1) }} style={{ marginRight: "16px" }}><img src={plus} alt="plus"></img></div>
                             </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="api-setting__top">
-                            <div className="typography-400-regular">{t(type)}</div>
+
                         </div>
                         <div className="api-setting__bottom">
                             <div className="api-token">
@@ -184,13 +149,25 @@ const TypeList = ({ type, label }) => {
                 </div>
                 {modalView ? (
                     <Formik
-                        initialValues={{ password: '' }}
+                        initialValues={{ password: submitType ? '' : selectedName }}
                         validationSchema={Yup.object({
                             password: Yup.string()
                                 .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
                         })}
                         onSubmit={(values, { setSubmitting }) => {
-                            handleEdit(selectedId, values.password)
+                            !submitType && handleEdit(selectedId, values.password)
+                            submitType && createTemplatesTypes({ host: label, value: values.password }, token, (success) => {
+                                if (success.data.code === 200 && success.data.status === "success") {
+                                    dispatch(authActions.setTemplateTypes(success.data.data))
+                                    setModalView(false)
+                                    toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                }
+                                if (success.data.code === 400 && success.data.status === "failed") {
+                                    setModalView(false)
+                                    toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                }
+                                setLoading(false)
+                            })
                         }}
                     >
                         {formik => (
@@ -199,12 +176,13 @@ const TypeList = ({ type, label }) => {
                                     <div className="modal-content">
                                         <div className="modal-box">
                                             <div className="label">
-                                                <div className="typography-700-bold">{t("Neues Element erstellen")}</div>
-                                                <img className="pointer" src={close} alt="close" onClick={() => setModalView(false)} />
+                                                <div className="typography-700-bold">
+                                                    {submitType === 1 ? t(label[0].toUpperCase() + label.slice(1) + " " + "Name") : t("Edit" + " " + label[0].toUpperCase() + label.slice(1) + " " + "Name")}
+                                                </div>                                                <img className="pointer" src={close} alt="close" onClick={() => setModalView(false)} />
                                             </div>
                                             <div className="box">
                                                 <div className="label-input-pair">
-                                                    <div className="typography-400-regular">{t("Neuer Name")} *</div>
+                                                    <div className="typography-400-regular">{submitType == 1 ? t("Neuer Name") : t("Name")} *</div>
                                                     <div>
                                                         <input type="text"  {...formik.getFieldProps('password')} />
                                                         {formik.touched.password && formik.errors.password ? (
