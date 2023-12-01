@@ -72,7 +72,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
           return accumulator;
         }, []);
         const newList = uniqueUsedArticle.map((product) => ({
-          label: `${product.name}(${product.article_number})`,
+          label: `${product.name} (${product.article_number})`,
           value: product.number
         }));
         return newList;

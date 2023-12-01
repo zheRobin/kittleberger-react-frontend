@@ -14,10 +14,17 @@ const CheckboxGroup = (props) => {
     useEffect(() => {
         if (resetStatus) {
             setIsChecked(false);
+            props.setFilters({
+                article_number: [],
+                application: [],
+                brand: [],
+                country: []
+            })
+            // handleFilter(props.type, props.element.id, false)
         }
     }, [resetStatus]);
-    const handleFilter = (type, id, status) => {
-        setIsChecked(!isChecked)
+    const handleFilter = (type, id, status, resetStatus = false) => {
+        !resetStatus && setIsChecked(!isChecked)
         dispatch(setResetStatus(false))
         switch (type) {
             case "number":

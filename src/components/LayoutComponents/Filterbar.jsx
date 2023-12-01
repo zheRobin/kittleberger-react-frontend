@@ -19,7 +19,8 @@ export const ProductNumberFilter = (resetValue) => {
     const [filters, setFilters] = useState({
         article_number: [],
         application: [],
-        brand: []
+        brand: [],
+        country: []
     })
     const [showNumList, setShowNumList] = useState(false)
     const [showCountryList, setShowCountryList] = useState(false)
@@ -159,10 +160,6 @@ export const ProductNumberFilter = (resetValue) => {
                             )}
 
                         </div>
-                        {/* <div className="product-list">
-                            <img src={plusButton} alt="plusButton" />
-                            <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
-                        </div> */}
                     </div>
                     <div className="by-Aplikationen">
                         <div className="product-list">
