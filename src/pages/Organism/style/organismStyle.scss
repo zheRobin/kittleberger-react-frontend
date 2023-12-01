@@ -788,8 +788,10 @@
     }
 
     .image-setting-panel {
-        flex-direction: column;
-        align-items: start;
+        gap: 2px;
+        .input-groups{
+            gap: 1px;
+        }
     }
 
     .left-b-image {

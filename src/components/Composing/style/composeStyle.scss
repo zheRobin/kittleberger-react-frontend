@@ -111,4 +111,11 @@
             text-align: start;
         }
     }
+
+    @media ( max-width: 1460px
+    ) {
+        .input-groups{
+            gap: 1px;
+        }
+    }
 }

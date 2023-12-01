@@ -75,7 +75,7 @@ const SideNav = () => {
                 {items?.map((productItem, index) => {
                     return (
                         <div key={index} onDragOver={(e) => onDragOver(e, index)} draggable
-                            onDragStart={e => onDragStart(e, index)} onDragEnd={e => onDragEnd()} className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer "} >{path === "/product/product-select" ? (<OverlayGroup productInfo={productItem} index={index} />) : <OverlaySide productInfo={productItem} />}</div>
+                            onDragStart={e => onDragStart(e, index)} onDragEnd={e => onDragEnd()} className={path === "/product/product-select" ? "nav-items--active" : "nav-items--inactive"} >{path === "/product/product-select" ? (<OverlayGroup productInfo={productItem} index={index} />) : <OverlaySide productInfo={productItem} />}</div>
                     )
                 })}
 

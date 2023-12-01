@@ -285,7 +285,10 @@
                 grid-template-columns: [first] 33% [line2] 33% [line3] 33% [end]; 
                 grid-template-rows: [first] 33% [line2] 33% [line3] 33% [end]; 
                 width: 130px;
-                height: 130px
+                height: 130px;
+                div {
+                    cursor: pointer;
+                }
             }
         }
     }

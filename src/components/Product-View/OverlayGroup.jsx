@@ -101,12 +101,12 @@ const OverlayGroup = ({ productInfo, index }) => {
                     </div>
                     <div className="overlay__product">
                         <div className="typography-400-regular" style={{ color: "white", overflow: "hidden", lineHeight: "16px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{`${productInfo.name} (${productInfo.article_number})`}</div>
-                        <div>
+                        <div className="pointer">
                             <img src={CrossIcon} alt="CrossIcon" onClick={(e) => { dispatch(removeProducts(productInfo)) }}></img>
                         </div>
                     </div>
                     <div className="overlay__setting">
-                        <img src={SettingIcon} alt="SettingIcon" onClick={(e) => setShowModal(true)}></img>
+                        <img className="pointer" src={SettingIcon} alt="SettingIcon" onClick={(e) => setShowModal(true)}></img>
                         {showModal ? (
                             <div className="overlay__setting__panel" ref={wrapperRef}>
                                 <div className="panel-top">
