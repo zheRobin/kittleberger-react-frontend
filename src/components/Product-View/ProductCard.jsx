@@ -71,9 +71,9 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                     }
                 }}>
                     <div style={{ display: loading ? "block" : "none" }}>
-                        <img src={spinner} alt="preview" onLoad={imageLoaded} style={{ width: "150px" }}></img>
+                        <img src={spinner} alt="preview" style={{ width: "150px" }}></img>
                     </div>
-                    <div style={{ display: loading ? "none" : "block" }}>
+                    <div style={{ display: loading ? "none" : "block" }} onLoad={imageLoaded}>
                         <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? cardInfo?.preview_image_cdn_url : cardInfo?.bg_image_cdn_url) : (cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url)} alt="preview" onLoad={imageLoaded}></img>
                     </div>
                 </div>

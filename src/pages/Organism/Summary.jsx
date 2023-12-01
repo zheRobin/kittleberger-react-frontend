@@ -81,16 +81,32 @@ const Summary = () => {
     const token = useSelector(state => state.auth.token)
     const submitArticleInfo = {
         articles: [...selectedProducts.map((product, index) => {
+            const positionStyle = selectedTemplate?.article_placements;
+            const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index == product?.pos_index);
+            const sliderScale = product?.sliderScale === undefined ? 1 : product?.sliderScale;
+            const position = calcPosition(
+                product?.align === undefined ? 'middle-center' : product?.align,
+                selectedStyle[0]?.position_x,
+                selectedStyle[0]?.position_y,
+                selectedStyle[0]?.width,
+                selectedStyle[0]?.height,
+                sliderScale
+            );
+            const positionX = position ? position[0] : selectedStyle[0].position_x;
+            const positionY = position ? position[1] : selectedStyle[0].position_y;
             return {
                 id: product.id,
                 name: product.name,
                 article_number: product?.article_number,
                 mediaobject_id: product?.mediaobject_id,
                 render_url: product?.render_url ? product.render_url : product.render_url,
+                tiff_url: product?.tiff_url ? product.tiff_url : null,
                 pos_index: product?.pos_index,
                 is_transparent: product?.is_transparent ? product?.is_transparent : false,
                 scaling: product?.sliderScale === undefined ? 1 : product?.sliderScale,
                 alignment: product?.align === undefined ? "top-left" : product?.align,
+                top: positionY,
+                left: positionX,
                 height: selectedTemplate?.article_placements[index]?.height,
                 width: selectedTemplate?.article_placements[index]?.width,
                 z_index: selectedTemplate?.article_placements[index]?.z_index
@@ -314,7 +330,7 @@ const Summary = () => {
                         <img src={composedProduct} alt="composedProduct" />
                     </div>
                     <div className="summary__image__desc">
-                        <div className="typography-700-bold">{selectedTemplate.name}</div>
+                        <div className="typography-700-bold">{editableName}</div>
                         <div className="typography-400-regular desc__text">
                             <div>{t('Marke')}: {selectedTemplate.brand.map((brand, index) => (
                                 <React.Fragment key={index}>

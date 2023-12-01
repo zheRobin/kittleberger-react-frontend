@@ -11,7 +11,7 @@
 }
 
 .product-card{
-    width: 320px;
+    width: 325px;
     height: 329px;
     background-color: white;
     display: flex;
@@ -101,6 +101,22 @@
             transform: translate(-50%, -50%);
         }
     }
+
+      @media (min-width: 768px) {
+
+      }
+
+      @media only screen and (max-width: 1463px) {
+        // width: 60%;
+      }
+    
+      @media (max-width: 576px) {
+        // Styles for screens with a maximum width of 576px and below
+      }
+    
+      @media (min-width: 576px) and (max-width: 768px) {
+        // Styles for screens with a width between 576px and 768px
+      }
 }
 
 .search-bar{

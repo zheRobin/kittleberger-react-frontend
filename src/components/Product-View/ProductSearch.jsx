@@ -18,7 +18,6 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
   const [page, setPage] = useState(1);
   const [searchString, setSearchString] = useState("");
   const { t } = useTranslation()
-
   useEffect(() => {
     const delay = 200;
     const clearStoreData = () => {
@@ -30,7 +29,6 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
 
       } catch (error) {
         console.error("Error fetching products:", error);
-        // Handle the error appropriately
       }
     };
     const timeoutId = setTimeout(() => {
@@ -48,25 +46,26 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
   };
   useEffect(
     () => {
-      const filteredProducts = filterData.filter((product) =>
-        selectedValues.every((selectedValue) =>
-          product.articles.some((article) => article.number === selectedValue.value)
-        )
-      );
+      const filteredProducts = selectedValues ? filterData.filter((product) => {
+        return selectedValues.every((selectedValue) => {
+          const result = product.articles.some((article) => { return selectedValue.label.includes(article.article_number); })
+          return result
+        })
+      }) : filterData;
       setFilterData((preview_image) => filteredProducts)
     }, [selectedValues]
   )
   const filteredProducts = filterData.filter((product) =>
     selectedValues.every((selectedValue) =>
-      product.articles.some((article) => article.number === selectedValue.value)
+      product.articles.some((article) => article.article_number === selectedValue.value)
     )
   );
 
-  function getProductInfo(page, productInfo = "", country = "") {
+  function getProductInfo(page, productInfo = "", country) {
     getProductsbyFilter(token, { page, productInfo, country }, (success) => {
       setProductList((prevProductList) => {
         const uniqueUsedArticle = usedArticles.reduce((accumulator, current) => {
-          const duplicate = accumulator.find(item => item.number === current.number);
+          const duplicate = accumulator.find(item => item.article_number === current.article_number);
           if (!duplicate) {
             accumulator.push(current);
           }
@@ -76,7 +75,6 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
           label: `${product.name}(${product.article_number})`,
           value: product.number
         }));
-        // setSelectedValues(newList)
         return newList;
 
       });
@@ -91,7 +89,6 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
       id="combo-box-demo"
       options={productList}
       hiddenlabel="true"
-      isOptionEqualToValue={(option, value) => option.value === value.value}
       value={selectedValues}
       onInputChange={(e) => { setSearchString(e.target.value); }}
       onChange={handleAutocompleteChange}
@@ -120,11 +117,10 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
             ...params.InputProps,
             endAdornment: (
               <InputAdornment position="end">
-                <div className="search-multi pointer" onClick={(e) => setFilterData(filteredProducts)}><img src={search} alt="search"></img></div>
+                <div className="search-multi pointer"><img src={search} alt="search"></img></div>
               </InputAdornment>
             )
           }}
-
         />
       )}
     />

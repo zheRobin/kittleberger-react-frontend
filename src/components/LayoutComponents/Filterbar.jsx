@@ -33,9 +33,7 @@ export const ProductNumberFilter = (resetValue) => {
     useEffect(() => {
         const delay = 200;
 
-        const timeoutId = setTimeout(() => {
-            clearStoreData();
-        }, delay);
+        const timeoutId = clearStoreData();
 
         return () => {
             clearTimeout(timeoutId);
