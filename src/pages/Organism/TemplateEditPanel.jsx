@@ -136,7 +136,7 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                     </div>
                 )
                 )}
-                <div className="right-b__bottom" onClick={() => { values.length < 9 && arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', }) }}>
+                <div className="right-b__bottom" onClick={() => { values.length < 9 && arrayHelpers.push({ position_x: '0', position_y: '0', width: '0', height: '0', z_index: '0' }) }}>
                     {values.length >= 9 ? null : (
                         <>
                             <img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
@@ -246,14 +246,13 @@ const TemplateEditPanel = () => {
     return (
         <>
             <ThemeProvider theme={theme}>
-
                 <Formik
                     initialValues={{
                         preview_image: productInfo?.preview_image_cdn_url,
                         background_image: productInfo?.bg_image_cdn_url,
                         brands: [...productInfo?.brand, ...brands.filter(brand => !productInfo?.brand.some(productBrand => productBrand.name === brand.name))],
                         applications: [...productInfo?.application, ...applications.filter(application => !productInfo?.application.some(productBrand => productBrand.name === application.name))],
-                        article_placements: productInfo?.article_placements,
+                        article_placements: productInfo?.article_placements?.length === 0 ? [{ position_x: '0', position_y: '0', width: '0', height: '0', z_index: '0' }] : productInfo?.article_placements,
                         name: productInfo?.name,
                         is_shadow: productInfo?.is_shadow,
                         resolution_width: productInfo?.resolution_width,

@@ -80,8 +80,9 @@ const Organism = () => {
         }, [products]
     )
     useEffect(() => {
+        setLoading(true)
         infiniteTemplate(token, 1, filters, (success) => {
-            setLoading(true)
+
             if (success.data.next == null) {
                 dispatch(setLoadingStatus(false))
                 setLoading(false)
@@ -138,7 +139,7 @@ const Organism = () => {
                     </div> : null
                 }
 
-
+                {loading ? <Loading /> : (<div></div>)}
                 <ThemeProvider theme={theme}>
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: '#E0E2E5' }}>
@@ -161,8 +162,7 @@ const Organism = () => {
                                 <Tab label={products.length + t(" erstellte Kompositionen")} value="2" style={styles.tab} />
                             </TabList>
                         </Box>
-                        {loading ? <Loading /> : (<></>
-                        )}
+
                         <>
                             <TabPanel value="1"
                             >

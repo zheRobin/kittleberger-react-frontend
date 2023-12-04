@@ -12,6 +12,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const switchRole = useSelector(state => state.info.adminMethod)
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(true);
+    const [tempImage, setTempImage] = useState(false)
     const counter = useRef(0);
     const imageLoaded = () => {
         counter.current += 1;
@@ -19,7 +20,10 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
             setLoading(false);
         }
     }
-
+    const handleImageError = () => {
+        setTempImage(true);
+        setLoading(false);
+    }
     return (
         <>
             <div className="product-card">
@@ -74,7 +78,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         <img src={spinner} alt="preview" style={{ width: "150px" }}></img>
                     </div>
                     <div style={{ display: loading ? "none" : "block" }} onLoad={imageLoaded}>
-                        <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? cardInfo?.preview_image_cdn_url : cardInfo?.bg_image_cdn_url) : (cardInfo?.cdn_url.split('.').pop() === 'tiff' ? cardInfo?.png_result : cardInfo?.cdn_url)} alt="preview" onLoad={imageLoaded}></img>
+                        <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? (!tempImage ? cardInfo?.preview_image_cdn_url : require("../../assets/images/img_error.png")) : (!tempImage ? cardInfo?.bg_image_cdn_url : require("../../assets/images/img_error.png"))) : (cardInfo?.cdn_url.split('.').pop() === 'tiff' ? (!tempImage ? cardInfo?.png_result : require("../../assets/images/img_error.png")) : (!tempImage ? cardInfo?.cdn_url : require("../../assets/images/img_error.png")))} alt="preview" onError={handleImageError} onLoad={imageLoaded}></img>
                     </div>
                 </div>
             </div>

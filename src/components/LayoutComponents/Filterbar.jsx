@@ -32,21 +32,23 @@ export const ProductNumberFilter = (resetValue) => {
         }, [templateTypes]
     )
     useEffect(() => {
-        const delay = 200;
-
-        const timeoutId = clearStoreData();
+        const delay = 800;
+        const clearStoreData = () => {
+            dispatch(selectPage(1))
+            dispatch(setLoadingStatus(true))
+            dispatch(setFilterData(filters))
+        };
+        const timeoutId = setTimeout(() => {
+            clearStoreData();
+        }, delay);
 
         return () => {
             clearTimeout(timeoutId);
         };
-    }, [filters]);
+    }, [dispatch, filters]);
 
 
-    const clearStoreData = () => {
-        dispatch(selectPage(1))
-        dispatch(setLoadingStatus(true))
-        dispatch(setFilterData(filters))
-    };
+
 
     return (
         <>

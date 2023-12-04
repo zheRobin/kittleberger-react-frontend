@@ -140,7 +140,7 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
 					</div>
 				)
 				)}
-				<div className="right-b__bottom" onClick={() => { values.length < 9 && arrayHelpers.push({ position_x: '', position_y: '', width: '', height: '', z_index: '', }) }}>
+				<div className="right-b__bottom" onClick={() => { values.length < 9 && arrayHelpers.push({ position_x: '0', position_y: '0', width: '0', height: '0', z_index: '0' }) }}>
 					{values.length >= 9 ? null : (
 						<>
 							<img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
@@ -249,7 +249,7 @@ const TemplatePanel = () => {
 						background_image: '',
 						brands: brands,
 						applications: applications,
-						article_placements: [],
+						article_placements: [{ position_x: '0', position_y: '0', width: '0', height: '0', z_index: '0' }],
 						name: "",
 						is_shadow: false,
 						resolution_width: "",
