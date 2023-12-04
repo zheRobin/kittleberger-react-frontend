@@ -38,8 +38,13 @@ const OverlayGroup = ({ productInfo, index }) => {
     const [sliderValue, setSliderValue] = useState(100)
     const wrapperRef = useRef(null);
     const [loading, setLoading] = useState(false)
-    const [checked, setChecked] = useState(productInfo?.is_transparent !== undefined ? productInfo?.is_transparent : false)
+    const [checked, setChecked] = useState(false)
     const align = productInfo?.align === undefined ? "middle-center" : productInfo?.align
+    useEffect(
+        () => {
+            setChecked(productInfo?.is_transparent !== undefined ? productInfo?.is_transparent : false)
+        }, [productInfo]
+    )
     useEffect(() => {
         function handleOutsideClick(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -66,7 +71,6 @@ const OverlayGroup = ({ productInfo, index }) => {
             dispatch(setProductTransImg({ ...productInfo, is_transparent: checkStatus }))
         }
         else {
-            const trans_img = ""
             dispatch(setProductTransImg({ ...productInfo, is_transparent: checkStatus }))
         }
     }

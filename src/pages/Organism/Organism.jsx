@@ -65,6 +65,7 @@ const Organism = () => {
         const formattedDate = `${day}.${month}.${year}`;
         return formattedDate;
     }
+    console.log("templates", templates)
     useEffect(
         () => {
             dispatch(emptyStore())
@@ -82,7 +83,7 @@ const Organism = () => {
     useEffect(() => {
         setLoading(true)
         infiniteTemplate(token, 1, filters, (success) => {
-
+            console.log("success:", success)
             if (success.data.next == null) {
                 dispatch(setLoadingStatus(false))
                 setLoading(false)
@@ -110,7 +111,7 @@ const Organism = () => {
                         dispatch(selectPage(page + 1))
                         dispatch(appendTemplate(success.data.results.templates))
                         dispatch(appendProductsOnTemplate(success.data.results.products))
-                    }, 1000);
+                    }, 500);
                 }
             }
             if (success.data.code === 400 && success.data.status === "failed") {
@@ -188,7 +189,7 @@ const Organism = () => {
                                                 scrollableTarget="scrollableDiv"
                                                 id='scrollable'
                                             >
-                                                {templates.map((templateEle, key) => {
+                                                {templates?.map((templateEle, key) => {
                                                     return (
                                                         < ProductCard key={key} cardInfo={templateEle} />
                                                     )

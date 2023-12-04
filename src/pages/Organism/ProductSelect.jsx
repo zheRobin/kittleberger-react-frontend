@@ -2,7 +2,7 @@ import "./style/organismStyle.scss"
 import plus from "../../assets/icons/add-2.svg"
 import { useSelector } from "react-redux"
 import { useEffect, useState, useRef } from "react"
-import { appendProducts, setComposedProduct, updateProducts } from "../../store"
+import { appendProducts, setComposedProduct } from "../../store"
 import { useDispatch } from "react-redux"
 import { getProductsbyFilter } from "../../_services/Product"
 import { Suspense } from "react"
@@ -23,7 +23,12 @@ export const ProductView = () => {
     const token = useSelector(state => state.auth.token)
     const imgRef = useRef(null);
     const [loading, setLoading] = useState(false)
+    const [tempImage, setTempImage] = useState(false)
     const [composeImage, setComposeImage] = useState('')
+    const handleImageError = () => {
+        setTempImage(true);
+        setLoading(false);
+    }
     useEffect(() => {
         if (imgRef.current && selectedProducts) {
             setLoading(true);
@@ -64,7 +69,7 @@ export const ProductView = () => {
             const timeoutId = setTimeout(() => {
                 setLoading(false);
                 toast.error("Looks like the server is taking to long to respond", { theme: "colored", hideProgressBar: "true", autoClose: 2500 })
-                dispatch(updateProducts([]))
+                // dispatch(updateProducts([]))
             }, 50000);
 
             composeByInfo(token, composingInfo, (success) => {
@@ -81,7 +86,7 @@ export const ProductView = () => {
                 <Loading />
             ) : (
                 <div className="saved-images" style={{ width: "100%", height: "800px" }}>
-                    <img ref={imgRef} src={composeImage} alt="background" style={{ height: '100%', width: "100%", objectFit: 'contain' }} />
+                    <img ref={imgRef} src={!tempImage ? composeImage : require("../../assets/images/2x2_bg.png")} alt="background" onError={handleImageError} style={{ height: '100%', width: "100%", objectFit: 'contain' }} />
                 </div>
             )}
 
@@ -170,21 +175,20 @@ const ProductSelect = () => {
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation()
-    const clearStoreData = () => {
-        setProductList([]);
-        setPage(1);
-        const productInfo = searchString;
-        try {
-            getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "" : String(selectedCountryGroup.map(selectedCountry => { return selectedCountry })));
-        } catch (error) {
-            console.error("Error fetching products:", error);
-            // Handle the error appropriately
-        }
-    };
+
 
     useEffect(() => {
         const delay = 200;
-
+        const clearStoreData = () => {
+            setProductList([]);
+            setPage(1);
+            const productInfo = searchString;
+            try {
+                getProductInfo(page, productInfo, selectedCountryGroup?.length === 0 ? "" : String(selectedCountryGroup.map(selectedCountry => { return selectedCountry })));
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
         const timeoutId = setTimeout(() => {
             clearStoreData();
         }, delay);
@@ -194,24 +198,26 @@ const ProductSelect = () => {
         };
     }, [searchString]);
 
-    function getProductInfo(page, productInfo = "", country = "") {
+    function getProductInfo(page, productInfo = "", country) {
         setLoading(true)
-        getProductsbyFilter(token, { page, productInfo, country }, (success) => {
-            if (success.data.code === 200 && success.data.status === "success") {
-                setProductList((prevProductList) => {
-                    const newList = prevProductList.length === 0 ? success.data.data.products : [...prevProductList, ...success.data.data.products];
-                    return newList;
-                });
-                setPageInfo({
-                    currentPage: success.data.data.current_page,
-                    count: success.data.data.count
-                })
-                setLoading(false)
-            }
-            else {
-            }
+        if (country !== undefined) {
+            getProductsbyFilter(token, { page, productInfo, country }, (success) => {
+                if (success.data.code === 200 && success.data.status === "success") {
+                    setProductList((prevProductList) => {
+                        const newList = prevProductList?.length === 0 ? success.data.data.products : [...prevProductList, ...success.data.data.products];
+                        return newList;
+                    });
+                    setPageInfo({
+                        currentPage: success.data.data.current_page,
+                        count: success.data.data.count
+                    })
+                    setLoading(false)
+                }
+            })
+        } else {
+            setLoading(false)
+        }
 
-        })
     }
 
     useEffect(() => {

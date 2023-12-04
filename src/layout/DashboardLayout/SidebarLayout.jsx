@@ -7,6 +7,10 @@ import { useTranslation } from "react-i18next"
 const SidebarLayout = ({ children }) => {
     const date = useSelector(state => state.info.updatedDate)
     const { t } = useTranslation()
+    const openInNewTab = (url) => {
+        window.open(url, '_blank', 'noreferrer');
+    };
+    const langType = useSelector(state => state.info.language)
     return (
         <div className="sidebar-container">
             <div className="sidebar-top">
@@ -20,9 +24,19 @@ const SidebarLayout = ({ children }) => {
                 {children}
             </div>
             <div className="sidebar-footer">
+                <div onClick={() => openInNewTab(langType === 'en' ? "https://www.bosch-homecomfortgroup.com/en/impressum/" : "https://www.bosch-homecomfortgroup.com/de/impressum/")}>
+                    <Typography className="side-footer pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">
+                        {t("Impressum")}
+                    </Typography>
+                </div>
+
                 <AlertDialog text={t("Datenschutz")} />
-                <AlertDialog text={t("Impressum")} />
-                <AlertDialog text={t("Rechtliche Hinweise")} />
+                <div onClick={() => openInNewTab(langType === 'en' ? "https://www.bosch-homecomfortgroup.com/en/legal-notes/" : "https://www.bosch-homecomfortgroup.com/de/rechtshinweise/")}>
+                    <Typography className="side-footer pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">
+                        {t("Rechtliche Hinweise")}
+                    </Typography>
+                </div>
+
             </div>
         </div>
     )
