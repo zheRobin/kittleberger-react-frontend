@@ -65,7 +65,6 @@ const Organism = () => {
         const formattedDate = `${day}.${month}.${year}`;
         return formattedDate;
     }
-    console.log("templates", templates)
     useEffect(
         () => {
             dispatch(emptyStore())
@@ -83,7 +82,6 @@ const Organism = () => {
     useEffect(() => {
         setLoading(true)
         infiniteTemplate(token, 1, filters, (success) => {
-            console.log("success:", success)
             if (success.data.next == null) {
                 dispatch(setLoadingStatus(false))
                 setLoading(false)

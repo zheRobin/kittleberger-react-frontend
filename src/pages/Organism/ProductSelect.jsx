@@ -221,8 +221,10 @@ const ProductSelect = () => {
     }
 
     useEffect(() => {
+        const productInfo = searchString;
         try {
-            getProductInfo(page)
+            page !== 1 && getProductInfo(page, productInfo, selectedCountryGroup?.length === 0 ? "" : String(selectedCountryGroup.map(selectedCountry => { return selectedCountry })));
+
         } catch (error) {
             console.error("Error fetching products:", error);
         }
