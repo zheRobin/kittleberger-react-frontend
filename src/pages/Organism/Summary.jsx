@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import { Typography } from "@mui/material"
 import { TemplateButton } from "./TemplatePanel"
 import copy from "../../assets/icons/copy.svg"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import React, { useEffect, useState } from "react"
 import { getOnlineInfo, updateOnlineInfo, refreshCompose, replacePreviewImage } from "../../_services/Product"
 import { ToastContainer, toast } from "react-toastify"
@@ -18,10 +18,13 @@ import { useLocation } from "react-router-dom"
 import { useTranslation } from 'react-i18next';
 import { useRef } from "react"
 import { calcPosition } from "../../_services/Product";
+import { setCardInfo, setComposedProduct, findTemplates } from "../../store";
+
 
 const Summary = () => {
     const { t } = useTranslation();
     const { state } = useLocation()
+    const dispatch = useDispatch()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate)
     const selectedProducts = useSelector(state => state.products.selectedProducts)
     const composedProduct = useSelector(state => state.products.composedProduct)
@@ -248,13 +251,17 @@ const Summary = () => {
         setLoading(true)
         getOnlineInfo(token, submitPreviewInfo, (success) => {
             if (success.data.code === 201) {
-                setdeploymentName({ ...deploymentName, value: success.data.data })
+                setOpen(false)
+                setdeploymentName({ ...deploymentName, value: success.data.data?.cdn_url })
+                localStorage.setItem('cardInfo', JSON.stringify(success.data.data));
+                dispatch(setCardInfo(success.data.data))
+                dispatch(setComposedProduct(success.data.data?.cdn_url.split('.').pop() === 'tiff' ? success.data.data?.png_result : success.data.data?.cdn_url))
                 setLoading(false)
-                toast.success("Successfully Submitted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                toast.success("Successfully Submitted, It's new updated composing summary", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
             }
             if (success.data.status === "failed") {
                 setLoading(false)
-                toast.error("Sorry but failed to submit", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                toast.error("Sorry but failed to submit", { theme: "colored", hideProgressBar: "true", autoClose: 2500 })
             }
         })
     }
@@ -397,7 +404,6 @@ const Summary = () => {
                         <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={t('Download Bilddatei')} type="transparent" /></div>
                         <div className="download-button" onClick={() => downloadMetaData()}><TemplateButton content={t('Download Metadaten')} type="transparent" /></div>
                     </div>) : null}
-
                 </div>
                 <ToastContainer />
                 <Dialog
@@ -423,7 +429,7 @@ const Summary = () => {
                     <DialogActions>
                         <div onClick={createPreviewInfo}><TemplateButton content={t('Akzeptieren')} /></div>
                         <div onClick={replacePreviewInfo}><TemplateButton content={t('Überschreiben')} /></div>
-                        <div onClick={handleClose}><TemplateButton content={t('stornieren')} /></div>
+                        <div onClick={handleClose}><TemplateButton content={t('Stornieren')} /></div>
                     </DialogActions>
                 </Dialog>
             </div>

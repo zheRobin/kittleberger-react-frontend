@@ -6,7 +6,8 @@ export const templateSlice = createSlice(
     initialState:{
         templateData:[],
         productsOnTemplates:[],
-        loadingStatus:true,
+        loadingTemplateStatus:true,
+        loadingProductStatus:true,
         page:1,
         filterData:{},
         resetStatus:false
@@ -24,8 +25,11 @@ export const templateSlice = createSlice(
         appendProductsOnTemplate:(state,action) => {
             state.productsOnTemplates = [...state.productsOnTemplates,...action.payload]
         },
-        setLoadingStatus:(state,action) => {
-            state.loadingStatus = action.payload
+        setTemplateLoadingStatus:(state,action) => {
+            state.loadingTemplateStatus = action.payload
+        },
+        setProductLoadingStatus:(state,action) => {
+            state.loadingProductStatus = action.payload
         },
         selectPage:(state,action) =>{
             state.page = action.payload
@@ -40,6 +44,6 @@ export const templateSlice = createSlice(
 }
 )
 
-export const {initTemplate, initProductsOnTemplates, appendTemplate, setLoadingStatus, selectPage, setFilterData, setResetStatus, appendProductsOnTemplate} = templateSlice.actions
+export const {initTemplate, initProductsOnTemplates, appendTemplate, setTemplateLoadingStatus,setProductLoadingStatus, selectPage, setFilterData, setResetStatus, appendProductsOnTemplate} = templateSlice.actions
 export const templateReducer = templateSlice.reducer
 export default templateSlice.reducer

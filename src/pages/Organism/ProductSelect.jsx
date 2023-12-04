@@ -15,6 +15,7 @@ import spinner from "../../assets/icons/tube-spinner.svg"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from "react-i18next"
+import { setCardInfo } from "../../store"
 
 export const ProductView = () => {
     const dispatch = useDispatch()
@@ -175,7 +176,13 @@ const ProductSelect = () => {
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation()
-
+    const dispatch = useDispatch()
+    useEffect(
+        () => {
+            localStorage.setItem('cardInfo', JSON.stringify({}));
+            dispatch(setCardInfo({}))
+        }, []
+    )
 
     useEffect(() => {
         const delay = 200;

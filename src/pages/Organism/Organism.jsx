@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
-import { appendTemplate, setUsedArticles, selectPage, setUpdatedDate, setLoadingStatus, initTemplate, initProductsOnTemplates, appendProductsOnTemplate, authActions } from '../../store';
+import { appendTemplate, setUsedArticles, selectPage, setUpdatedDate, setTemplateLoadingStatus, initTemplate, setProductLoadingStatus, initProductsOnTemplates, appendProductsOnTemplate, authActions } from '../../store';
 import { infiniteTemplate } from '../../_services/Template';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import 'react-toastify/dist/ReactToastify.css';
@@ -44,6 +44,7 @@ const Organism = () => {
     const dispatch = useDispatch()
     const [value, setValue] = useState('1');
     const [count, setCount] = useState(0)
+    const [productCount, setProductCount] = useState(0)
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -52,7 +53,8 @@ const Organism = () => {
     const token = useSelector(state => state.auth.token)
     const templates = useSelector(state => state.templates.templateData)
     const products = useSelector(state => state.templates.productsOnTemplates)
-    const loadingStatus = useSelector(state => state.templates.loadingStatus)
+    const loadingTemplateStatus = useSelector(state => state.templates.loadingTemplateStatus)
+    const loadingProductStatus = useSelector(state => state.templates.loadingProductStatus)
     const usedArticles = useSelector(state => state.products.usedArticles)
     const adminMethod = useSelector(state => state.info.adminMethod)
     let page = useSelector(state => state.templates.page)
@@ -82,33 +84,49 @@ const Organism = () => {
     useEffect(() => {
         setLoading(true)
         infiniteTemplate(token, 1, filters, (success) => {
-            if (success.data.next == null) {
-                dispatch(setLoadingStatus(false))
-                setLoading(false)
-            }
             if (success.status === 200) {
                 dispatch(setUpdatedDate(dateConvert(success.data.results.document_last_update)))
                 dispatch(setUsedArticles(success.data.results.articles))
                 dispatch(selectPage(page + 1))
                 dispatch(initTemplate(success.data.results.templates))
                 dispatch(initProductsOnTemplates(success.data.results.products))
-                setCount(success.data.count)
+                setCount(success.data.results.template_count)
+                setProductCount(success.data.results.product_count)
                 setLoading(false)
             }
         })
     }, [filters]);
 
-    const fetchMoreData = () => {
+    const fetchMoreData = (type) => {
         infiniteTemplate(token, page, filters, (success) => {
             if (success.status === 200) {
-                if (success.data.next == null) {
-                    dispatch(setLoadingStatus(false))
-                }
-                if (loadingStatus === true) {
+                dispatch(setUsedArticles(success.data.results.articles))
+                if (loadingTemplateStatus === true) {
                     setTimeout(() => {
-                        dispatch(selectPage(page + 1))
-                        dispatch(appendTemplate(success.data.results.templates))
-                        dispatch(appendProductsOnTemplate(success.data.results.products))
+                        if (type === "template" && success.data.results?.templates.length === 10) {
+                            dispatch(selectPage(page + 1))
+                            dispatch(appendTemplate(success.data.results.templates))
+                            dispatch(appendProductsOnTemplate(success.data.results.products))
+                        }
+                        if (type === "template" && success.data.results?.templates.length < 10) {
+                            dispatch(setTemplateLoadingStatus(false));
+                            dispatch(appendTemplate(success.data.results.templates))
+                            dispatch(appendProductsOnTemplate(success.data.results.products))
+                        }
+                    }, 500);
+                }
+                if (loadingProductStatus === true) {
+                    setTimeout(() => {
+                        if (type === "product" && success.data.results?.products.length === 10) {
+                            dispatch(selectPage(page + 1))
+                            dispatch(appendTemplate(success.data.results.templates))
+                            dispatch(appendProductsOnTemplate(success.data.results.products))
+                        }
+                        if (type === "product" && success.data.results?.products.length < 10) {
+                            dispatch(setProductLoadingStatus(false));
+                            dispatch(appendTemplate(success.data.results.templates))
+                            dispatch(appendProductsOnTemplate(success.data.results.products))
+                        }
                     }, 500);
                 }
             }
@@ -158,7 +176,7 @@ const Organism = () => {
                                 }}
                             >
                                 <Tab label={count + t(" Vorlagen")} value="1" style={styles.tab} />
-                                <Tab label={products.length + t(" erstellte Kompositionen")} value="2" style={styles.tab} />
+                                <Tab label={productCount + t(" erstellte Kompositionen")} value="2" style={styles.tab} />
                             </TabList>
                         </Box>
 
@@ -174,9 +192,9 @@ const Organism = () => {
                                         }}>
                                             <InfiniteScroll
                                                 dataLength={templates.length}
-                                                next={fetchMoreData}
+                                                next={(e) => fetchMoreData("template")}
                                                 hasMore={true}
-                                                loader={loadingStatus === true ? <div className="loading">Loading&#8230;</div> : null}
+                                                loader={loadingTemplateStatus === true ? <div className="loading">Loading&#8230;</div> : null}
                                                 className='infinite-scroll-component'
                                                 endMessage={
                                                     <p style={{ textAlign: 'center' }}>
@@ -201,15 +219,36 @@ const Organism = () => {
 
                             <TabPanel value="2">
                                 <ProductSearch usedArticles={usedArticles} filterData={products} setFilterData={setFilterData} />
-                                {products.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
+
+                                {products?.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
                                     <div className='template-tab-2'>
-                                        <div id="scrollableDiv" className='multi-product-container'>
-                                            {filterData.map((productEle, key) => {
-                                                return (
-                                                    < ProductCard key={key} cardInfo={productEle} type={2} />
-                                                )
-                                            }
-                                            )}
+                                        <div id="scrollableDiv" className='product-container' style={{
+                                            overflow: 'scroll',
+                                            overflowX: 'hidden',
+                                            marginBottom: "60px"
+                                        }}>
+                                            <InfiniteScroll
+                                                dataLength={products.length}
+                                                next={(e) => fetchMoreData("product")}
+                                                hasMore={true}
+                                                loader={loadingProductStatus === true ? <div className="loading">Loading&#8230;</div> : null}
+                                                className='infinite-scroll-component'
+                                                endMessage={
+                                                    <p style={{ textAlign: 'center' }}>
+                                                        <b>Yay! You have seen it all</b>
+                                                    </p>
+                                                }
+                                                style={{ overflowX: "hidden" }}
+                                                scrollableTarget="scrollableDiv"
+                                                id='scrollable'
+                                            >
+                                                {filterData.map((productEle, key) => {
+                                                    return (
+                                                        < ProductCard key={key} cardInfo={productEle} type={2} />
+                                                    )
+                                                }
+                                                )}
+                                            </InfiniteScroll>
                                         </div>
                                     </div>
                                 )}

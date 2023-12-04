@@ -8,7 +8,7 @@ import { SelectCountry } from "../Composing/CheckboxGroup";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { selectPage, setLoadingStatus, setFilterData, setResetStatus } from "../../store";
+import { selectPage, setTemplateLoadingStatus, setProductLoadingStatus, setFilterData, setResetStatus } from "../../store";
 import { useTranslation } from "react-i18next";
 
 export const ProductNumberFilter = (resetValue) => {
@@ -35,7 +35,8 @@ export const ProductNumberFilter = (resetValue) => {
         const delay = 800;
         const clearStoreData = () => {
             dispatch(selectPage(1))
-            dispatch(setLoadingStatus(true))
+            dispatch(setTemplateLoadingStatus(true))
+            dispatch(setProductLoadingStatus(true))
             dispatch(setFilterData(filters))
         };
         const timeoutId = setTimeout(() => {

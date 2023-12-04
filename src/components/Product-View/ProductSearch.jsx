@@ -14,10 +14,19 @@ import { useTranslation } from "react-i18next";
 export default function ProductSearch({ filterData, usedArticles, setFilterData }) {
   const selectedCountryGroup = useSelector(state => state.products.selectedCountry)
   const token = useSelector(state => state.auth.token);
+  const [articleGroup, setArticleGroup] = useState([])
   const [productList, setProductList] = useState([]);
   const [page, setPage] = useState(1);
   const [searchString, setSearchString] = useState("");
   const { t } = useTranslation()
+  const [selectedValues, setSelectedValues] = useState([]);
+  console.log("usedArticles", usedArticles)
+
+  useEffect(() => {
+    const productInfo = searchString;
+    getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "" : selectedCountryGroup);
+    setArticleGroup(usedArticles)
+  }, [filterData, usedArticles, searchString])
   useEffect(() => {
     const delay = 200;
     const clearStoreData = () => {
@@ -40,7 +49,6 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
     };
   }, [searchString]);
 
-  const [selectedValues, setSelectedValues] = useState([]);
   const handleAutocompleteChange = async (event, newValue) => {
     setSelectedValues((preValue) => { return newValue });
   };
@@ -64,7 +72,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
   function getProductInfo(page, productInfo = "", country) {
     getProductsbyFilter(token, { page, productInfo, country }, (success) => {
       setProductList((prevProductList) => {
-        const uniqueUsedArticle = usedArticles.reduce((accumulator, current) => {
+        const uniqueUsedArticle = articleGroup?.reduce((accumulator, current) => {
           const duplicate = accumulator.find(item => item.article_number === current.article_number);
           if (!duplicate) {
             accumulator.push(current);

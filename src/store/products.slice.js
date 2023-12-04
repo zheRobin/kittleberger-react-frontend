@@ -15,7 +15,7 @@ export const productsSlice = createSlice({
             state.cardInfo = action.payload
         },
         setUsedArticles:(state,action) => {
-            state.usedArticles = action.payload
+            state.usedArticles = [...state.usedArticles,...action.payload]
         },
         emptyStore:(state, action) => {
             state.selectedProducts = []
@@ -23,6 +23,9 @@ export const productsSlice = createSlice({
             state.selectedCountry = []
             state.cardInfo ={}
             state.usedArticles =[]
+            localStorage.setItem('cardInfo', JSON.stringify({}));
+            localStorage.setItem('productsInfo', JSON.stringify([]));
+            localStorage.setItem('templateInfo', JSON.stringify({}));
           },
         appendProducts: (state, action) => {
             const productsLength = state.selectedProducts.length
@@ -61,6 +64,7 @@ export const productsSlice = createSlice({
                 
                 return product;
             });
+            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         setUpdatedPosition:(state,action) =>{
             const mediaobject_id= action.payload.mediaobject_id;
@@ -73,6 +77,7 @@ export const productsSlice = createSlice({
                 }
                 return product;
             });
+            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         setProductTransImg:(state,action) =>{
             const mediaobject_id= action.payload.mediaobject_id;
@@ -85,6 +90,7 @@ export const productsSlice = createSlice({
                 }
                 return product;
             });
+            localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         setSliderScale:(state,action) =>{
             const mediaobject_id= action.payload.mediaobject_id;
