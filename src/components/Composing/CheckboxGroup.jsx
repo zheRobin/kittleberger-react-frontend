@@ -77,9 +77,9 @@ const CheckboxGroup = (props) => {
     const productNumber = (type, index) => {
         switch (type) {
             case "brand":
-                return templateTypes?.brand_data[index] >= 0 && ` (${templateTypes?.brand_data[index]})`
+                return templateTypes?.brand_data ? (templateTypes?.brand_data[index] >= 0 && ` (${templateTypes?.brand_data[index]})`) : ""
             case "app":
-                return templateTypes?.application_data[index] >= 0 && ` (${templateTypes?.application_data[index]})`
+                return templateTypes?.application_data ? (templateTypes?.application_data[index] >= 0 && ` (${templateTypes?.application_data[index]})`) : ""
             default:
                 return ""
         }
@@ -90,7 +90,7 @@ const CheckboxGroup = (props) => {
         <>
             <div className='checkbox-group'>
                 <Checkbox onChange={(e) => handleFilter(props.type, props.element.id, e.target.checked)} checked={isChecked} value={props.value} name={props.name} style={{ color: props.fillColor ? props.fillColor : "white", borderColor: 'white', padding: 0, margin: 0 }} />
-                <div onClick={(e) => handleFilter(props.type, props.element.id, !isChecked)} className='typography-400-regular checkbox-group__label pointer' style={{ color: props.textColor ? props.textColor : "white" }}>{t(props.title) + productNumber(props.type, props.element.index)}</div>
+                <div onClick={(e) => handleFilter(props.type, props.element.id, !isChecked)} className='typography-400-regular checkbox-group__label pointer' style={{ color: props.textColor ? props.textColor : "white" }}>{t(props.title) + productNumber(props?.type && props?.type, props?.element?.index && props?.element?.index)}</div>
             </div>
         </>
 
@@ -113,7 +113,6 @@ export const SelectCountry = (props) => {
     };
 
     return (
-
         <>
             <div className='checkbox-group'>
                 <Checkbox onChange={(e) => handleFilter(props?.type, props.element?.id, e.target?.checked)} checked={isChecked} value={props?.value} name={props?.name} style={{ color: props.fillColor ? props.fillColor : "white", borderColor: 'white', padding: 0, margin: 0 }} />

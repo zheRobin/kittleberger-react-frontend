@@ -62,14 +62,11 @@ function createExtraReducers() {
     },
     [fulfilled]: (state, action) => {
       const user = action.payload;
-      // store user details and jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('user', JSON.stringify(user.user));
       localStorage.setItem('token', JSON.stringify(user.access_token));
       state.role = user.user.is_superuser ? "super" : (user.user.is_staff? "admin": "customer")
       state.user = user.user;
       state.token = user.access_token;
-      state.templateTypes = user.page_data
-      localStorage.setItem('templateTypes',JSON.stringify(user.page_data))
     },
     [rejected]: (state, action) => {
       state.error = action.error;
