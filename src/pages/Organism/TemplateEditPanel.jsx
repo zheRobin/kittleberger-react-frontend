@@ -356,7 +356,7 @@ const TemplateEditPanel = () => {
                                                                 <MenuItem value="TIFF">.tiff</MenuItem>
                                                             </Field>
                                                             <p className="typography-400-regular select-subtitle">
-                                                                .jpg {t("und")} .png {t("sind in 144 dpi;")} .tiff {t("ist in 300 dpi")}
+                                                                .jpg {t("und")} .png {t("sind in 72 dpi;")} .tiff {t("ist in 300 dpi")}
                                                             </p>
                                                         </div>
                                                     </div>

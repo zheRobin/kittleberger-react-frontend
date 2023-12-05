@@ -28,7 +28,7 @@ export const ProductNumberFilter = (resetValue) => {
     const templateTypes = useSelector(state => state.auth.templateTypes)
     useEffect(
         () => {
-            setLandMokeUp(templateTypes.country_list)
+            setLandMokeUp(templateTypes?.country_list)
         }, [templateTypes]
     )
     useEffect(() => {
@@ -107,7 +107,7 @@ export const ProductNumberFilter = (resetValue) => {
                             <Typography fontSize="14px" lineHeight="20px">{t('Brand')}</Typography>
                         </div>
                         <div className="check-group">
-                            {templateTypes.brands.map((ele, index) => {
+                            {templateTypes?.brands?.map((ele, index) => {
                                 return (
                                     <CheckboxGroup
                                         key={"brandMokeup" + index}
@@ -135,7 +135,7 @@ export const ProductNumberFilter = (resetValue) => {
                                     />
                                 );
                             }) :
-                                landMokeup?.slice(0, 5).map((ele, index) => {
+                                landMokeup?.slice(0, 5)?.map((ele, index) => {
                                     return (
                                         <SelectCountry
                                             key={"landMokeup" + index}
@@ -166,7 +166,7 @@ export const ProductNumberFilter = (resetValue) => {
                             <Typography fontSize="14px" lineHeight="20px">{t('Aplikationen')}</Typography>
                         </div>
                         <div className="check-group">
-                            {templateTypes.applications.map((ele, index) => {
+                            {templateTypes?.applications?.map((ele, index) => {
                                 return (
                                     <CheckboxGroup
                                         key={"aplikationenMokeup" + index}

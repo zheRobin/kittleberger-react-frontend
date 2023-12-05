@@ -85,6 +85,13 @@ const Organism = () => {
         setLoading(true)
         infiniteTemplate(token, 1, filters, (success) => {
             if (success.status === 200) {
+                if (success.data.results?.products?.length < 10) {
+                    dispatch(setProductLoadingStatus(false));
+                }
+                if (success.data.results?.templates.length < 10) {
+                    dispatch(setTemplateLoadingStatus(false));
+                }
+                success.data.results?.templates.length < 10 && dispatch(setTemplateLoadingStatus(false));
                 dispatch(setUpdatedDate(dateConvert(success.data.results.document_last_update)))
                 dispatch(setUsedArticles(success.data.results.articles))
                 dispatch(selectPage(page + 1))
@@ -93,6 +100,7 @@ const Organism = () => {
                 setCount(success.data.results.template_count)
                 setProductCount(success.data.results.product_count)
                 setLoading(false)
+
             }
         })
     }, [filters]);
@@ -117,12 +125,12 @@ const Organism = () => {
                 }
                 if (loadingProductStatus === true) {
                     setTimeout(() => {
-                        if (type === "product" && success.data.results?.products.length === 10) {
+                        if (type === "product" && success.data.results?.products?.length === 10) {
                             dispatch(selectPage(page + 1))
                             dispatch(appendTemplate(success.data.results.templates))
                             dispatch(appendProductsOnTemplate(success.data.results.products))
                         }
-                        if (type === "product" && success.data.results?.products.length < 10) {
+                        if (type === "product" && success.data.results?.products?.length < 10) {
                             dispatch(setProductLoadingStatus(false));
                             dispatch(appendTemplate(success.data.results.templates))
                             dispatch(appendProductsOnTemplate(success.data.results.products))

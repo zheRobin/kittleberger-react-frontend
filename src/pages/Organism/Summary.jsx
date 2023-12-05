@@ -304,7 +304,7 @@ const Summary = () => {
         if (cardInfo?.created_by === undefined) {
             getOnlineInfo(token, submitInfo, (success) => {
                 if (success.data.code === 201) {
-                    setdeploymentName({ ...deploymentName, value: success.data.data })
+                    setdeploymentName({ ...deploymentName, value: success.data.data.cdn_url })
                     setLoading(false)
                     toast.success("Successfully Submitted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 }
