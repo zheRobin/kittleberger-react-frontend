@@ -14,7 +14,6 @@ import { useTranslation } from "react-i18next";
 export default function ProductSearch({ filterData, usedArticles, setFilterData }) {
   const selectedCountryGroup = useSelector(state => state.products.selectedCountry)
   const token = useSelector(state => state.auth.token);
-  const [articleGroup, setArticleGroup] = useState([])
   const [productList, setProductList] = useState([]);
   const [page, setPage] = useState(1);
   const [searchString, setSearchString] = useState("");
@@ -23,10 +22,23 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
   console.log("usedArticles", usedArticles)
 
   useEffect(() => {
-    const productInfo = searchString;
-    getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "" : selectedCountryGroup);
-    setArticleGroup(usedArticles)
-  }, [filterData, usedArticles, searchString])
+    setProductList((prevProductList) => {
+      const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
+        const duplicate = accumulator.find(item => item.article_number === current.article_number);
+        if (!duplicate) {
+          accumulator.push(current);
+        }
+        return accumulator;
+      }, []);
+      const newList = uniqueUsedArticle.map((product) => ({
+        label: `${product.name} (${product.article_number})`,
+        value: product.number
+      }));
+      return newList;
+
+    });
+    console.log("productList", productList)
+  }, [usedArticles])
   useEffect(() => {
     const delay = 200;
     const clearStoreData = () => {
@@ -72,7 +84,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
   function getProductInfo(page, productInfo = "", country) {
     getProductsbyFilter(token, { page, productInfo, country }, (success) => {
       setProductList((prevProductList) => {
-        const uniqueUsedArticle = articleGroup?.reduce((accumulator, current) => {
+        const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
           const duplicate = accumulator.find(item => item.article_number === current.article_number);
           if (!duplicate) {
             accumulator.push(current);
