@@ -184,6 +184,7 @@ const TemplateEditPanel = () => {
     const [width, setWidth] = useState(500);
     const [height, setHeight] = useState(500);
     const [loading, setLoading] = useState(false);
+    const [deleteSign, setDeleteSign] = useState(true)
     const elementRef = useRef(null);
     let backgroundHeight = (tempImages.height / tempImages.width * width) * 100 / height
     let backgroundWidth = (tempImages.width / tempImages.height * height) * 100 / width
@@ -258,6 +259,7 @@ const TemplateEditPanel = () => {
                         resolution_width: productInfo?.resolution_width,
                         resolution_height: productInfo?.resolution_height,
                         type: productInfo?.file_type,
+
                     }}
                     validationSchema={validationSchema}
                     onSubmit={values => {
@@ -275,6 +277,7 @@ const TemplateEditPanel = () => {
                                 .map(application => application.id)
                                 .join(",")
                         );
+                        formData.append("is_deleted", deleteSign)
                         formData.append("article_placements", JSON.stringify(values.article_placements));
                         formData.append("name", values.name);
                         formData.append("is_shadow", values.is_shadow);
@@ -594,7 +597,7 @@ const TemplateEditPanel = () => {
                                                     }) => (
                                                         // write your building UI
                                                         <div className="upload__image-wrapper">
-                                                            <div className="image-position__left" onClick={() => { onImageUpload(); }}>
+                                                            <div className="image-position__left" onClick={() => { onImageUpload(); setDeleteSign(false) }}>
                                                                 <TemplateButton content={t("Fügen Sie eine andere Vorschau hinzu")} />
                                                             </div>
                                                             <div className="image-position__left">
@@ -606,7 +609,7 @@ const TemplateEditPanel = () => {
                                                                                     <div className="product-name"></div>
                                                                                     <div className="product-image-info"></div>
                                                                                 </div>
-                                                                                <div className="product-icon pointer" onClick={(e) => { if (previewImages.length !== 0 && previewImages[0]?.data_url !== undefined) { onImageRemoveAll() } setPreView(false) }}>
+                                                                                <div className="product-icon pointer" onClick={(e) => { if (previewImages.length !== 0 && previewImages[0]?.data_url !== undefined) { onImageRemoveAll(); setDeleteSign(true) } setPreView(false) }}>
                                                                                     <img src={DeleteIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
                                                                                 </div>
                                                                             </div>

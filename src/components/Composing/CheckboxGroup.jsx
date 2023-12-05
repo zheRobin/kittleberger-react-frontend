@@ -77,9 +77,9 @@ const CheckboxGroup = (props) => {
     const productNumber = (type, index) => {
         switch (type) {
             case "brand":
-                return templateTypes?.brand_data[index] > 0 && ` (${templateTypes?.brand_data[index]})`
+                return templateTypes?.brand_data[index] >= 0 && ` (${templateTypes?.brand_data[index]})`
             case "app":
-                return templateTypes?.application_data[index] > 0 && ` (${templateTypes?.application_data[index]})`
+                return templateTypes?.application_data[index] >= 0 && ` (${templateTypes?.application_data[index]})`
             default:
                 return ""
         }
