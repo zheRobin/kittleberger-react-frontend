@@ -90,8 +90,8 @@ const CheckboxGroup = (props) => {
         <>
             <div className='checkbox-group'>
                 <Checkbox onChange={(e) => handleFilter(props.type, props.element.id, e.target.checked)} checked={isChecked} value={props.value} name={props.name} style={{ color: props.fillColor ? props.fillColor : "white", borderColor: 'white', padding: 0, margin: 0 }} />
-                <div className='typography-400-regular checkbox-group__label' style={{ color: props.textColor ? props.textColor : "white" }}>{t(props.title) + productNumber(props.type, props.element.index)}</div>
-            </div >
+                <div onClick={(e) => handleFilter(props.type, props.element.id, !isChecked)} className='typography-400-regular checkbox-group__label pointer' style={{ color: props.textColor ? props.textColor : "white" }}>{t(props.title) + productNumber(props.type, props.element.index)}</div>
+            </div>
         </>
 
     )
@@ -117,7 +117,7 @@ export const SelectCountry = (props) => {
         <>
             <div className='checkbox-group'>
                 <Checkbox onChange={(e) => handleFilter(props?.type, props.element?.id, e.target?.checked)} checked={isChecked} value={props?.value} name={props?.name} style={{ color: props.fillColor ? props.fillColor : "white", borderColor: 'white', padding: 0, margin: 0 }} />
-                <div className='typography-400-regular checkbox-group__label' style={{ color: props.textColor ? props.textColor : "white" }}>{t(props.country.name)}</div>
+                <div onClick={(e) => handleFilter(props?.type, props.element?.id, !isChecked)} className='typography-400-regular checkbox-group__label pointer' style={{ color: props.textColor ? props.textColor : "white" }}>{t(props.country.name)}</div>
             </div >
         </>
 
