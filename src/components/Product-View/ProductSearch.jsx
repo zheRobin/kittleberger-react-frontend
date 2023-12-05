@@ -19,7 +19,6 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
   const [searchString, setSearchString] = useState("");
   const { t } = useTranslation()
   const [selectedValues, setSelectedValues] = useState([]);
-  console.log("usedArticles", usedArticles)
 
   useEffect(() => {
     setProductList((prevProductList) => {
@@ -37,7 +36,6 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
       return newList;
 
     });
-    console.log("productList", productList)
   }, [usedArticles])
   useEffect(() => {
     const delay = 200;

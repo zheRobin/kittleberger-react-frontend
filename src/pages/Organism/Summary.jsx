@@ -18,7 +18,7 @@ import { useLocation } from "react-router-dom"
 import { useTranslation } from 'react-i18next';
 import { useRef } from "react"
 import { calcPosition } from "../../_services/Product";
-import { setCardInfo, setComposedProduct, findTemplates } from "../../store";
+import { setCardInfo, setComposedProduct } from "../../store";
 
 
 const Summary = () => {
@@ -39,6 +39,7 @@ const Summary = () => {
         copied: false,
     })
     const [previewImage, setPreviewImage] = useState("")
+    const token = useSelector(state => state.auth.token)
     useEffect(
         () => {
             setLangType(langInfo)
@@ -81,7 +82,7 @@ const Summary = () => {
         link.click();
     }
 
-    const token = useSelector(state => state.auth.token)
+
     const submitArticleInfo = {
         articles: [...selectedProducts.map((product, index) => {
             const positionStyle = selectedTemplate?.article_placements;
@@ -270,6 +271,7 @@ const Summary = () => {
         updateOnlineInfo(token, updatePreviewInfo, (success) => {
 
             if (success.data.code === 201 || success.data.status === "success") {
+                dispatch(setComposedProduct(previewImage))
                 setdeploymentName({ ...deploymentName, value: success.data.data.cdn_url })
                 setLoading(false)
                 setOpen(false)

@@ -48,9 +48,6 @@ export const ProductNumberFilter = (resetValue) => {
         };
     }, [dispatch, filters]);
 
-
-
-
     return (
         <>
             <div className="filter-box">

@@ -10,6 +10,7 @@ const CheckboxGroup = (props) => {
     const dispatch = useDispatch()
     const [isChecked, setIsChecked] = useState(false);
     const resetStatus = useSelector(state => state.templates.resetStatus);
+    const templateTypes = useSelector(state => state.auth.templateTypes)
     const { t } = useTranslation()
     useEffect(() => {
         if (resetStatus) {
@@ -73,13 +74,23 @@ const CheckboxGroup = (props) => {
                 props.setFilters({});
         }
     };
+    const productNumber = (type, index) => {
+        switch (type) {
+            case "brand":
+                return templateTypes?.brand_data[index] > 0 && ` (${templateTypes?.brand_data[index]})`
+            case "app":
+                return templateTypes?.application_data[index] > 0 && ` (${templateTypes?.application_data[index]})`
+            default:
+                return ""
+        }
+    }
 
     return (
 
         <>
             <div className='checkbox-group'>
                 <Checkbox onChange={(e) => handleFilter(props.type, props.element.id, e.target.checked)} checked={isChecked} value={props.value} name={props.name} style={{ color: props.fillColor ? props.fillColor : "white", borderColor: 'white', padding: 0, margin: 0 }} />
-                <div className='typography-400-regular checkbox-group__label' style={{ color: props.textColor ? props.textColor : "white" }}>{t(props.title)}</div>
+                <div className='typography-400-regular checkbox-group__label' style={{ color: props.textColor ? props.textColor : "white" }}>{t(props.title) + productNumber(props.type, props.element.index)}</div>
             </div >
         </>
 

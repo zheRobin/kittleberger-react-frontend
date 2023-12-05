@@ -30,6 +30,7 @@
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
+    "react-html-parser": "^2.0.2",
     "react-i18next": "^13.4.1",
     "react-images-uploading": "^3.1.7",
     "react-infinite-scroll-component": "^6.1.0",

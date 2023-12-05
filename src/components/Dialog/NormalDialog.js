@@ -5,18 +5,36 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from "@mui/material"
 import "./_dialog_style.scss"
+import { useTranslation } from 'react-i18next';
+import { getDynamicContent } from '../../_services/Info';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import ReactHtmlParser from 'react-html-parser'; 
 
 export default function AlertDialog({text}) {
   const [open, setOpen] = React.useState(false);
-
+  const {t} = useTranslation()
+  const langType = useSelector(state => state.info.language)
+  const token = useSelector(state => state.auth.token)
+  const [content, setContent] = useState("")
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
-
+  useEffect(
+    () => {
+      
+      getDynamicContent(token, langType === 'en' ? "en-GB":"de-DE",(success) => {
+        setContent(
+            success.data.data
+          )
+      })
+      
+    }, [token,langType]
+  )
   return (
     <React.Fragment>
       <Typography onClick={handleClickOpen} className="side-footer pointer" textAlign="left" color="#8F7300" fontWeight={400} fontSize="12px" lineHeight="16px">
@@ -31,7 +49,7 @@ export default function AlertDialog({text}) {
       >
          <div className='custom-dialog__header'>
          <DialogTitle id="alert-dialog-title">
-            {"This is the title"}
+            {t("Datenschutz")}
          </DialogTitle>
          <p className='pointer' onClick={handleClose}>
          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -40,12 +58,7 @@ export default function AlertDialog({text}) {
          </p>
          </div>
         <DialogContent className='custom-dialog__content'>
-          <h1>Headline</h1>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-          <h1>Headline</h1>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-          <h1>Headline</h1>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        {ReactHtmlParser(content ? content : '')}  
         </DialogContent>
       </Dialog>
     </React.Fragment>
