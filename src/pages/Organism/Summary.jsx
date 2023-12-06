@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useRef } from "react"
 import { calcPosition } from "../../_services/Product";
 import { setCardInfo, setComposedProduct } from "../../store";
-
+import { saveAs } from "file-saver";
 
 const Summary = () => {
     const { t } = useTranslation();
@@ -74,11 +74,14 @@ const Summary = () => {
             setEditableName(composeName)
         }, [composeName]
     )
-    function handleDownload() {
+    async function handleDownload() {
         const imageUrl = deploymentName.value;
+        const parts = imageUrl.split('/');
+        const lastFilename = parts[parts.length - 1];
         const link = document.createElement('a');
         link.href = imageUrl;
-        link.download = 'image.png';
+        link.download = lastFilename;
+        link.setAttribute('target', '_blank');
         link.click();
     }
 

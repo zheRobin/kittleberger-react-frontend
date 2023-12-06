@@ -184,7 +184,7 @@ const TemplateEditPanel = () => {
     const [width, setWidth] = useState(500);
     const [height, setHeight] = useState(500);
     const [loading, setLoading] = useState(false);
-    const [deleteSign, setDeleteSign] = useState(true)
+    const [deleteSign, setDeleteSign] = useState(false)
     const elementRef = useRef(null);
     let backgroundHeight = (tempImages.height / tempImages.width * width) * 100 / height
     let backgroundWidth = (tempImages.width / tempImages.height * height) * 100 / width
@@ -244,6 +244,7 @@ const TemplateEditPanel = () => {
 
         return new Blob([arrayBuffer], { type: contentType });
     }
+
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -609,7 +610,7 @@ const TemplateEditPanel = () => {
                                                                                     <div className="product-name"></div>
                                                                                     <div className="product-image-info"></div>
                                                                                 </div>
-                                                                                <div className="product-icon pointer" onClick={(e) => { if (previewImages.length !== 0 && previewImages[0]?.data_url !== undefined) { onImageRemoveAll(); setDeleteSign(true) } setPreView(false) }}>
+                                                                                <div className="product-icon pointer" onClick={(e) => { if (previewImages.length !== 0 && previewImages[0]?.data_url !== undefined) { onImageRemoveAll() } setPreView(false); setDeleteSign(true) }}>
                                                                                     <img src={DeleteIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
                                                                                 </div>
                                                                             </div>

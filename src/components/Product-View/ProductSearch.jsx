@@ -7,19 +7,44 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
 import { getProductsbyFilter } from "../../_services/Product";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { setFilterData, selectPage, setProductLoadingStatus } from "../../store";
 
-export default function ProductSearch({ filterData, usedArticles, setFilterData }) {
-  const selectedCountryGroup = useSelector(state => state.products.selectedCountry)
+export default function ProductSearch({ filterData, usedArticles }) {
+  console.log("filterData", filterData)
+  const dispatch = useDispatch()
   const token = useSelector(state => state.auth.token);
   const [productList, setProductList] = useState([]);
   const [page, setPage] = useState(1);
   const [searchString, setSearchString] = useState("");
   const { t } = useTranslation()
   const [selectedValues, setSelectedValues] = useState([]);
-
+  const [articleList, setArticleList] = useState([])
+  let filters = useSelector(state => state.templates.filterData)
+  useEffect(
+    () => {
+      const selectedArticles = selectedValues.map((item) => { return item.value })
+      setArticleList(selectedArticles)
+    }, [selectedValues]
+  )
+  useEffect(
+    () => {
+      dispatch(selectPage(1))
+      const filterData = Object.keys(filters).length === 0 ? {
+        article_number: [],
+        application: [],
+        brand: [],
+        country: [],
+        article_list: articleList.length > 1 ? articleList : [],
+      } : {
+        ...filters, article_list: articleList.length > 1 ? articleList : []
+      }
+      dispatch(setFilterData(filterData))
+      dispatch(setProductLoadingStatus(true))
+    }, [articleList]
+  )
   useEffect(() => {
     setProductList((prevProductList) => {
       const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
@@ -44,7 +69,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
       setPage(1);
       const productInfo = searchString;
       try {
-        getProductInfo(page, productInfo, selectedCountryGroup.length === 0 ? "" : selectedCountryGroup);
+        getProductInfo(page, productInfo, "");
 
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -61,23 +86,8 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
 
   const handleAutocompleteChange = async (event, newValue) => {
     setSelectedValues((preValue) => { return newValue });
+
   };
-  useEffect(
-    () => {
-      const filteredProducts = selectedValues ? filterData.filter((product) => {
-        return selectedValues.every((selectedValue) => {
-          const result = product.articles.some((article) => { return selectedValue.label.includes(article.article_number); })
-          return result
-        })
-      }) : filterData;
-      setFilterData((preview_image) => filteredProducts)
-    }, [selectedValues]
-  )
-  const filteredProducts = filterData.filter((product) =>
-    selectedValues.every((selectedValue) =>
-      product.articles.some((article) => article.article_number === selectedValue.value)
-    )
-  );
 
   function getProductInfo(page, productInfo = "", country) {
     getProductsbyFilter(token, { page, productInfo, country }, (success) => {
@@ -91,14 +101,13 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
         }, []);
         const newList = uniqueUsedArticle.map((product) => ({
           label: `${product.name} (${product.article_number})`,
-          value: product.number
+          value: product.article_number
         }));
         return newList;
 
       });
 
     })
-    setFilterData(filteredProducts)
   }
 
   return (
@@ -112,9 +121,7 @@ export default function ProductSearch({ filterData, usedArticles, setFilterData 
       onChange={handleAutocompleteChange}
       limitTags={3}
       sx={{
-        // border: "1px solid blue",
         "& .MuiOutlinedInput-root": {
-          // border: "1px solid yellow",
           borderRadius: "0",
           padding: "0"
         },

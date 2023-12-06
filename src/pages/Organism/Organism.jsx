@@ -67,6 +67,7 @@ const Organism = () => {
         const formattedDate = `${day}.${month}.${year}`;
         return formattedDate;
     }
+    console.log("FilterList:", filters)
     useEffect(
         () => {
             dispatch(emptyStore())
@@ -85,13 +86,12 @@ const Organism = () => {
         setLoading(true)
         infiniteTemplate(token, 1, filters, (success) => {
             if (success.status === 200) {
-                if (success.data.results?.products?.length < 10) {
+                if (success.data.results?.products?.length < 5) {
                     dispatch(setProductLoadingStatus(false));
                 }
-                if (success.data.results?.templates.length < 10) {
+                if (success.data.results?.templates.length < 5) {
                     dispatch(setTemplateLoadingStatus(false));
                 }
-                success.data.results?.templates.length < 10 && dispatch(setTemplateLoadingStatus(false));
                 dispatch(setUpdatedDate(dateConvert(success.data.results.document_last_update)))
                 dispatch(setUsedArticles(success.data.results.articles))
                 dispatch(selectPage(page + 1))
@@ -226,7 +226,7 @@ const Organism = () => {
                             </TabPanel>
 
                             <TabPanel value="2">
-                                <ProductSearch usedArticles={usedArticles} filterData={products} setFilterData={setFilterData} />
+                                <ProductSearch usedArticles={usedArticles} filterData={products} setFilters={setFilterData} />
 
                                 {products?.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
                                     <div className='template-tab-2'>
@@ -250,7 +250,7 @@ const Organism = () => {
                                                 scrollableTarget="scrollableDiv"
                                                 id='scrollable'
                                             >
-                                                {filterData.map((productEle, key) => {
+                                                {filterData.length > 0 && filterData?.map((productEle, key) => {
                                                     return (
                                                         < ProductCard key={key} cardInfo={productEle} type={2} />
                                                     )
