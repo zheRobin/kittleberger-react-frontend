@@ -80,7 +80,7 @@ export const editTemplatesTypes = (templateInfo,token,success) => {
 
 export const infiniteTemplate = (token,page,dependencies,success) => {
     setAuthToken(token)
-    const limit = 5
+    const limit = 15
     const offset = (page - 1) * limit
     axios.post(`${process.env.REACT_APP_API_URL}api/v1/compose/templates/filter?limit=${limit}&offset=${offset}`, {
         ...dependencies

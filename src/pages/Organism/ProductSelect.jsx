@@ -16,7 +16,7 @@ import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from "react-i18next"
 import { setCardInfo } from "../../store"
-
+import imgError from "../../assets/images/img_error.png";
 export const ProductView = () => {
     const dispatch = useDispatch()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate);
@@ -69,6 +69,7 @@ export const ProductView = () => {
 
             const timeoutId = setTimeout(() => {
                 setLoading(false);
+                setTempImage(true);
                 toast.error("Looks like the server is taking to long to respond", { theme: "colored", hideProgressBar: "true", autoClose: 2500 })
                 // dispatch(updateProducts([]))
             }, 50000);
@@ -87,7 +88,7 @@ export const ProductView = () => {
                 <Loading />
             ) : (
                 <div className="saved-images" style={{ width: "100%", height: "800px" }}>
-                    <img ref={imgRef} src={!tempImage ? composeImage : require("../../assets/images/2x2_bg.png")} alt="background" onError={handleImageError} style={{ height: '100%', width: "100%", objectFit: 'contain' }} />
+                    <img ref={imgRef} src={!tempImage ? composeImage : require("../../assets/images/img_error.png")} alt="background" style={{ height: '100%', width: "100%", objectFit: 'contain' }} />
                 </div>
             )}
 

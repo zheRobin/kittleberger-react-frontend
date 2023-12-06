@@ -110,12 +110,12 @@ const Organism = () => {
                 dispatch(setUsedArticles(success.data.results.articles))
                 if (loadingTemplateStatus === true) {
                     setTimeout(() => {
-                        if (type === "template" && success.data.results?.templates.length === 10) {
+                        if (type === "template" && success.data.results?.templates.length === 15) {
                             dispatch(selectPage(page + 1))
                             dispatch(appendTemplate(success.data.results.templates))
                             dispatch(appendProductsOnTemplate(success.data.results.products))
                         }
-                        if (type === "template" && success.data.results?.templates.length < 10) {
+                        if (type === "template" && success.data.results?.templates.length < 15) {
                             dispatch(setTemplateLoadingStatus(false));
                             dispatch(appendTemplate(success.data.results.templates))
                             dispatch(appendProductsOnTemplate(success.data.results.products))
@@ -124,12 +124,12 @@ const Organism = () => {
                 }
                 if (loadingProductStatus === true) {
                     setTimeout(() => {
-                        if (type === "product" && success.data.results?.products?.length === 10) {
+                        if (type === "product" && success.data.results?.products?.length === 15) {
                             dispatch(selectPage(page + 1))
                             dispatch(appendTemplate(success.data.results.templates))
                             dispatch(appendProductsOnTemplate(success.data.results.products))
                         }
-                        if (type === "product" && success.data.results?.products?.length < 10) {
+                        if (type === "product" && success.data.results?.products?.length < 15) {
                             dispatch(setProductLoadingStatus(false));
                             dispatch(appendTemplate(success.data.results.templates))
                             dispatch(appendProductsOnTemplate(success.data.results.products))
@@ -191,7 +191,7 @@ const Organism = () => {
                             <TabPanel value="1"
                             >
                                 {templates.length === 0 ? (
-                                    <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Templates</div>) : (
+                                    <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>{t("No matching templates found")}</div>) : (
                                     <div className='template-tab-1'>
                                         <div id="scrollableDiv" className='product-container' style={{
                                             overflow: 'scroll',
@@ -227,7 +227,7 @@ const Organism = () => {
                             <TabPanel value="2">
                                 <ProductSearch usedArticles={usedArticles} filterData={products} setFilters={setFilterData} />
 
-                                {products?.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>No Products</div>) : (
+                                {products?.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>{t("No matching composings found")}</div>) : (
                                     <div className='template-tab-2'>
                                         <div id="scrollableDiv" className='product-container' style={{
                                             overflow: 'scroll',

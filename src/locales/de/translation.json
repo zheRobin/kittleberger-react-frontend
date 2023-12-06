@@ -15,5 +15,7 @@
     "Country Name":"Ländername",
     "Brand Name":"Markenname",
     "Application Name":"Anwendungsname",
-    "Preview Image":"Vorschaubild"
+    "Preview Image":"Vorschaubild",
+    "No matching templates found":"Keine passenden Vorlagen gefunden",
+    "No matching composings found":"Keine passenden Kompositionen gefunden"
   }
