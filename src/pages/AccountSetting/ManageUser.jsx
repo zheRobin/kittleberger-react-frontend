@@ -63,7 +63,7 @@ const ManageUser = () => {
       <div className="create-user" ><div className="pointer" onClick={() => { setModalView(true); setEditMode(false) }}><TemplateButton content={t("Neuen Benutzer anlegen")} /></div></div>
       <div className="setting-panel-user">
         <div className="setting-panel-user__top">
-          <div className="typography-400-regular">{t("Passwort ändern")}</div>
+          <div className="typography-400-regular">{t("Benutzer verwalten")}</div>
         </div>
         <div className="setting-panel-user__bottom">
           <div className="user-group">
