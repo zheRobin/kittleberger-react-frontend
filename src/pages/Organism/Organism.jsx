@@ -67,7 +67,6 @@ const Organism = () => {
         const formattedDate = `${day}.${month}.${year}`;
         return formattedDate;
     }
-    console.log("FilterList:", filters)
     useEffect(
         () => {
             dispatch(emptyStore())

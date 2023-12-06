@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next";
 import { setFilterData, selectPage, setProductLoadingStatus } from "../../store";
 
 export default function ProductSearch({ filterData, usedArticles }) {
-  console.log("filterData", filterData)
   const dispatch = useDispatch()
   const token = useSelector(state => state.auth.token);
   const [productList, setProductList] = useState([]);
@@ -37,9 +36,9 @@ export default function ProductSearch({ filterData, usedArticles }) {
         application: [],
         brand: [],
         country: [],
-        article_list: articleList.length > 1 ? articleList : [],
+        article_list: articleList.length > 0 ? articleList : [],
       } : {
-        ...filters, article_list: articleList.length > 1 ? articleList : []
+        ...filters, article_list: articleList.length > 0 ? articleList : []
       }
       dispatch(setFilterData(filterData))
       dispatch(setProductLoadingStatus(true))
@@ -56,7 +55,7 @@ export default function ProductSearch({ filterData, usedArticles }) {
       }, []);
       const newList = uniqueUsedArticle.map((product) => ({
         label: `${product.name} (${product.article_number})`,
-        value: product.number
+        value: product.mediaobject_id
       }));
       return newList;
 
@@ -101,7 +100,7 @@ export default function ProductSearch({ filterData, usedArticles }) {
         }, []);
         const newList = uniqueUsedArticle.map((product) => ({
           label: `${product.name} (${product.article_number})`,
-          value: product.article_number
+          value: product.mediaobject_id
         }));
         return newList;
 
