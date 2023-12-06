@@ -2,7 +2,7 @@ import refreshIcon from "../../assets/icons/rotate.svg"
 import { Typography } from "@mui/material";
 import "../Composing/style/composeStyle.scss"
 import plusButton from "../../assets/icons/add-2.svg"
-import miusButton from "../../assets/icons/minus.svg"
+import miusButton from "../../assets/icons/minus-white.svg"
 import CheckboxGroup from "../Composing/CheckboxGroup"
 import { SelectCountry } from "../Composing/CheckboxGroup";
 import { useSelector } from "react-redux";

@@ -30,7 +30,7 @@ export default function ProductSearch({ filterData, usedArticles }) {
   )
   useEffect(
     () => {
-      dispatch(selectPage(1))
+
       const filterData = Object.keys(filters).length === 0 ? {
         article_number: [],
         application: [],
@@ -41,6 +41,7 @@ export default function ProductSearch({ filterData, usedArticles }) {
         ...filters, article_list: articleList.length > 0 ? articleList : []
       }
       dispatch(setFilterData(filterData))
+      dispatch(selectPage(1))
       dispatch(setProductLoadingStatus(true))
     }, [articleList]
   )
@@ -84,10 +85,12 @@ export default function ProductSearch({ filterData, usedArticles }) {
   }, [searchString]);
 
   const handleAutocompleteChange = async (event, newValue) => {
-    setSelectedValues((preValue) => { return newValue });
-
+    const previousIds = selectedValues.map(item => item.value);
+    const newlyImported = newValue.filter(item => !previousIds.includes(item.value));
+    const newlyCreated = newValue.slice(-1)[0];
+    const newSetValue = (selectedValues.length < newValue.length) ? (newlyImported.length === 0 ? newValue.filter(item => item.value !== newlyCreated.value) : newValue) : newValue
+    setSelectedValues((preValue) => { return newSetValue });
   };
-
   function getProductInfo(page, productInfo = "", country) {
     getProductsbyFilter(token, { page, productInfo, country }, (success) => {
       setProductList((prevProductList) => {

@@ -50,7 +50,7 @@ const ProfileLayout = ({ handleModal }) => {
     const switchRole = useSelector(state => state.info.adminMethod)
     const selectedLanguage = useSelector(state => state.info.language)
     const user = useSelector(state => state.auth.user)
-    const userType = user.is_superuser ? "super" : (user.is_staff ? "admin" : "customer")
+    const userType = user.is_superuser ? "super" : (user.is_staff ? "admin" : "user")
     const capitalizedUserType = userType.charAt(0).toUpperCase() + userType.slice(1);
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, handleModal);

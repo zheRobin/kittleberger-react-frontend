@@ -67,7 +67,7 @@ const ApiToken = () => {
                 <div className="typography-400-regular">{token?.token?.apikey}</div>
                 <div className="typography-400-regular">
                     <div className="typography-400-regular">{token?.token?.name}</div>
-                    <div className="typography-400-regular">{token?.token?.last_used == null ? (`Not used yet`) : `Last used` + formatDate(token?.token?.last_used)}</div>
+                    <div className="typography-400-regular">{token?.token?.last_used == null ? (`Not used yet`) : `Last used ` + formatDate(token?.token?.last_used)}</div>
                     <img className="pointer" src={cross} alt="cross" onClick={() => handleDelete(token?.token?.id)} />
                 </div>
             </div>

@@ -64,7 +64,7 @@ function createExtraReducers() {
       const user = action.payload;
       localStorage.setItem('user', JSON.stringify(user.user));
       localStorage.setItem('token', JSON.stringify(user.access_token));
-      state.role = user.user.is_superuser ? "super" : (user.user.is_staff? "admin": "customer")
+      state.role = user.user.is_superuser ? "super" : (user.user.is_staff? "admin": "user")
       state.user = user.user;
       state.token = user.access_token;
     },

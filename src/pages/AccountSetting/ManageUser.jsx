@@ -166,14 +166,14 @@ const ManageUser = () => {
                 <div className="modal-content">
                   <div className="modal-box">
                     <div className="label">
-                      <div className="typography-700-bold">Neuen Benutzer anlegen</div>
+                      <div className="typography-700-bold">{t("Benutzer löschen")}</div>
                       <img className="pointer" src={close} alt="close" onClick={() => setDeleteModal(false)} />
                     </div>
                     <div className="box">
-                      Werden Sie dieses Konto löschen?
+                      {t("Werden Sie dieses Konto löschen")}?
                     </div>
                     <div className="button-group pointer">
-                      <div onClick={() => setDeleteModal(false)}><TemplateButton content={"Abbrechen"} type={"transparent"} /></div>
+                      <div onClick={() => setDeleteModal(false)}><TemplateButton content={t("Abbrechen")} type={"transparent"} /></div>
                       <div onClick={() => {
                         setloading(true)
                         userDelete(userInfo.id, token, (success) => {
@@ -187,7 +187,7 @@ const ManageUser = () => {
                             setDeleteModal(false)
                           }
                         })
-                      }}><TemplateButton content={"Bestätigen"} /></div>
+                      }}><TemplateButton content={t("Bestätigen")} /></div>
                     </div>
                   </div>
                 </div>
