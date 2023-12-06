@@ -130,6 +130,12 @@ export default function ProductSearch({ filterData, usedArticles }) {
         "& .MuiButtonBase-root": {
           backgroundColor: "#8F7300",
           color: "white",
+        },
+        "& .MuiAutocomplete-inputRoot": {
+          marginRight: "5px"
+        },
+        "& .MuiAutocomplete-inputRoot .MuiAutocomplete-input": {
+          marginRight: "5px",
         }
       }}
       className="search-bar"

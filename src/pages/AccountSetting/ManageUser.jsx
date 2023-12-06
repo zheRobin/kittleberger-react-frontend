@@ -114,7 +114,7 @@ const ManageUser = () => {
                   <div className="modal-content">
                     <div className="modal-box">
                       <div className="label">
-                        <div className="typography-700-bold">{t("Neuen Benutzer anlegen")}</div>
+                        <div className="typography-700-bold">{editMode ? t("Benutzer bearbeiten") : t("Neuen Benutzer anlegen")}</div>
                         <img className="pointer" src={close} alt="close" onClick={() => setModalView(false)} />
                       </div>
                       <div className="box">

@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useRef } from "react"
 import { calcPosition } from "../../_services/Product";
 import { setCardInfo, setComposedProduct } from "../../store";
+import { getImageFromUrl } from "../../_services/Info";
 import { saveAs } from "file-saver";
 
 const Summary = () => {
@@ -78,11 +79,17 @@ const Summary = () => {
         const imageUrl = deploymentName.value;
         const parts = imageUrl.split('/');
         const lastFilename = parts[parts.length - 1];
-        const link = document.createElement('a');
-        link.href = imageUrl;
-        link.download = lastFilename;
-        link.setAttribute('target', '_blank');
-        link.click();
+        setLoading(true)
+        getImageFromUrl(token, imageUrl, (success) => {
+            if (success.data.code === 200 || success.data.status === "success") {
+                setLoading(false)
+                saveAs(success.data.data, lastFilename);
+            }
+            if (success.data.status === "failed") {
+                setLoading(false)
+                toast.error("Sorry, failed to download", { theme: "colored", hideProgressBar: "true", autoClose: 2500 })
+            }
+        })
     }
 
 
