@@ -33,6 +33,7 @@ export const ProductView = () => {
     useEffect(() => {
         if (imgRef.current && selectedProducts) {
             setLoading(true);
+            setTempImage(false);
             const article = selectedProducts.map((product) => {
                 const positionStyle = selectedTemplate?.article_placements;
                 const selectedStyle = positionStyle.filter((article_placement) => article_placement.pos_index === product?.pos_index);
