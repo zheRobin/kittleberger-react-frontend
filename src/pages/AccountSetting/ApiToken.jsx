@@ -139,7 +139,7 @@ const ApiToken = () => {
                                     {formik.touched.name && formik.errors.name ? (
                                         <p className="validation">{t(formik.errors.name)}</p>
                                     ) : null}
-                                    <div className="label-group" onClick={formik.handleSubmit}><TemplateButton content={t("Speichern")} /></div>
+                                    <div className="label-group" style={{ display: "flex", justifyContent: "flex-start" }} ><div style={{ padding: "0 0 0 0", marginTop: "0" }} onClick={formik.handleSubmit}><TemplateButton content={t("Speichern")} /></div></div>
                                 </div>
                             </div>
                         </div>

@@ -86,7 +86,8 @@ const PasswordChange = () => {
                             <div className="typography-400-regular label-group"><li>{t("Das Passwort muss Groß- und Kleinbuchstaben enthalten")}</li></div>
                             <div className="typography-400-regular label-group"><li>{t("Das Passwort muss mindestens eine Ziffer enthalten")}</li></div>
                             <div className="typography-400-regular label-group"><li>{t("Das Passwort muss mindestens ein Sonderzeichen enthalten")}</li></div>
-                            <div className="label-group" type="submit" onClick={formik.handleSubmit}><TemplateButton content={t("Speichern")} /></div>
+                            <div className="label-group" style={{ display: "flex", justifyContent: "flex-start" }} type="submit" ><div style={{ padding: "0 0 0 0", marginTop: "0" }} onClick={formik.handleSubmit}>
+                                <TemplateButton content={t("Speichern")} /></div></div>
                         </div>
                     </div>
                 </div>

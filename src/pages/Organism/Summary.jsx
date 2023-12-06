@@ -79,27 +79,17 @@ const Summary = () => {
         const imageUrl = deploymentName.value;
         const parts = imageUrl.split('/');
         const lastFilename = parts[parts.length - 1];
-        if (imageUrl.split('.').pop() === 'tiff') {
-            const link = document.createElement('a');
-            link.href = imageUrl;
-            link.download = lastFilename;
-            link.setAttribute('target', '_blank');
-            link.click();
-        }
-        else {
-            setLoading(true)
-            getImageFromUrl(token, imageUrl, (success) => {
-                if (success.data.code === 200 || success.data.status === "success") {
-                    setLoading(false)
-                    saveAs(success.data.data, lastFilename);
-                }
-                if (success.data.status === "failed") {
-                    setLoading(false)
-                    toast.error("Sorry, failed to download", { theme: "colored", hideProgressBar: "true", autoClose: 2500 })
-                }
-            })
-        }
-
+        setLoading(true)
+        getImageFromUrl(token, imageUrl, (success) => {
+            if (success.data.code === 200 || success.data.status === "success") {
+                setLoading(false)
+                saveAs(success.data.data, lastFilename);
+            }
+            if (success.data.status === "failed") {
+                setLoading(false)
+                toast.error("Sorry, failed to download", { theme: "colored", hideProgressBar: "true", autoClose: 2500 })
+            }
+        })
     }
 
 
