@@ -18,9 +18,10 @@ export const ProductNumberFilter = (resetValue) => {
         , { id: "6", name: 6 }, { id: "7", name: 7 }, { id: "8", name: 8 }, { id: "9", name: 9 }]
     const [filters, setFilters] = useState({
         article_number: [],
+        article_list: [],
         application: [],
         brand: [],
-        country: []
+        country: [],
     })
     const [showNumList, setShowNumList] = useState(false)
     const [showCountryList, setShowCountryList] = useState(false)

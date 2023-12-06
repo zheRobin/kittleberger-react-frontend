@@ -1,7 +1,6 @@
 
 import search from "../../assets/icons/search2.svg"
 import "./style/productViewStyle.scss"
-import CloseIcon from '@mui/icons-material/Close';
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -12,7 +11,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { setFilterData, selectPage, setProductLoadingStatus } from "../../store";
 
-export default function ProductSearch({ filterData, usedArticles }) {
+export default function ProductSearch({ filters, usedArticles }) {
   const dispatch = useDispatch()
   const token = useSelector(state => state.auth.token);
   const [productList, setProductList] = useState([]);
@@ -21,29 +20,28 @@ export default function ProductSearch({ filterData, usedArticles }) {
   const { t } = useTranslation()
   const [selectedValues, setSelectedValues] = useState([]);
   const [articleList, setArticleList] = useState([])
-  let filters = useSelector(state => state.templates.filterData)
+  const [initialized, setInitialized] = useState(true);
+
+  useEffect(() => {
+    const filterData = {
+      ...filters,
+      article_list: articleList
+    };
+    if (initialized) {
+      dispatch(selectPage(1));
+      setInitialized(false);
+    }
+    else {
+      dispatch(setFilterData(filterData));
+      dispatch(selectPage(1));
+      dispatch(setProductLoadingStatus(true));
+    }
+  }, [articleList, initialized]);
   useEffect(
     () => {
       const selectedArticles = selectedValues.map((item) => { return item.value })
       setArticleList(selectedArticles)
     }, [selectedValues]
-  )
-  useEffect(
-    () => {
-
-      const filterData = Object.keys(filters).length === 0 ? {
-        article_number: [],
-        application: [],
-        brand: [],
-        country: [],
-        article_list: articleList.length > 0 ? articleList : [],
-      } : {
-        ...filters, article_list: articleList.length > 0 ? articleList : []
-      }
-      dispatch(setFilterData(filterData))
-      dispatch(selectPage(1))
-      dispatch(setProductLoadingStatus(true))
-    }, [articleList]
   )
   useEffect(() => {
     setProductList((prevProductList) => {

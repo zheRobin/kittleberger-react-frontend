@@ -9,7 +9,13 @@ export const templateSlice = createSlice(
         loadingTemplateStatus:true,
         loadingProductStatus:true,
         page:1,
-        filterData:{},
+        filterData:{
+            article_number: [],
+            article_list: [],
+            application: [],
+            brand: [],
+            country: [],
+        },
         resetStatus:false,
         selectedValues:[]
     },

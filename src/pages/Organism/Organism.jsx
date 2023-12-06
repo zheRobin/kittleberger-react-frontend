@@ -224,7 +224,7 @@ const Organism = () => {
                             </TabPanel>
 
                             <TabPanel value="2">
-                                <ProductSearch usedArticles={usedArticles} filterData={products} setFilterData={setFilterData} />
+                                <ProductSearch filters={filters} usedArticles={usedArticles} filterData={products} setFilterData={setFilterData} />
 
                                 {products?.length === 0 ? (<div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>{t("No matching composings found")}</div>) : (
                                     <div className='template-tab-2'>
