@@ -90,12 +90,12 @@ export const ProductNumberFilter = (resetValue) => {
                         <div className="product-list pointer" onClick={(e) => setShowNumList(!showNumList)}>
                             {showNumList ? (
                                 <>
-                                    <img src={miusButton} alt="plusButton" />
+                                    <img style={{ marginLeft: "3px" }} src={miusButton} alt="plusButton" />
                                     <Typography fontSize="14px" lineHeight="20px">{t('Weniger anzeigen')}</Typography>
                                 </>
                             ) : (
                                 <>
-                                    <img src={plusButton} alt="plusButton" />
+                                    <img style={{ marginLeft: "3px" }} src={plusButton} alt="plusButton" />
                                     <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
                                 </>
 
@@ -149,12 +149,12 @@ export const ProductNumberFilter = (resetValue) => {
                         <div className="product-list pointer" onClick={(e) => setShowCountryList(!showCountryList)}>
                             {showCountryList ? (
                                 <>
-                                    <img src={miusButton} alt="plusButton" />
+                                    <img style={{ marginLeft: "3px" }} src={miusButton} alt="plusButton" />
                                     <Typography fontSize="14px" lineHeight="20px">{t('Weniger anzeigen')}</Typography>
                                 </>
                             ) : (
                                 <>
-                                    <img src={plusButton} alt="plusButton" />
+                                    <img style={{ marginLeft: "3px" }} src={plusButton} alt="plusButton" />
                                     <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
                                 </>
 

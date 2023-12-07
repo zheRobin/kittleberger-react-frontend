@@ -69,7 +69,7 @@ const Summary = () => {
             setdeploymentName({ value: state.cdn ?? composedProduct, copied: false });
         }
     }, [composedProduct]);
-    const composeName = state?.name ? state?.name : `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} | ${selectedProducts?.map((product, index) => { return product.name })}`
+    const composeName = state?.name ? state?.name : `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} |${selectedProducts?.map((product, index) => { return ` ` + product.name })}`
     useEffect(
         () => {
             setEditableName(composeName)

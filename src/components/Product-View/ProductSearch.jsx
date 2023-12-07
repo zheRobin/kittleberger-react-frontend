@@ -15,13 +15,13 @@ export default function ProductSearch({ filters, usedArticles }) {
   const dispatch = useDispatch()
   const token = useSelector(state => state.auth.token);
   const [productList, setProductList] = useState([]);
+  const [originList, setOriginList] = useState([])
   const [page, setPage] = useState(1);
   const [searchString, setSearchString] = useState("");
   const { t } = useTranslation()
   const [selectedValues, setSelectedValues] = useState([]);
   const [articleList, setArticleList] = useState([])
   const [initialized, setInitialized] = useState(true);
-
   useEffect(() => {
     const filterData = {
       ...filters,
@@ -40,26 +40,14 @@ export default function ProductSearch({ filters, usedArticles }) {
   useEffect(
     () => {
       const selectedArticles = selectedValues.map((item) => { return item.value })
-      setArticleList(selectedArticles)
+      setArticleList(selectedArticles);
+      setProductList((prevProductList) => {
+        return originList.filter((product) => {
+          return !selectedArticles.includes(product.value);
+        });
+      });
     }, [selectedValues]
   )
-  useEffect(() => {
-    setProductList((prevProductList) => {
-      const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
-        const duplicate = accumulator.find(item => item.article_number === current.article_number);
-        if (!duplicate) {
-          accumulator.push(current);
-        }
-        return accumulator;
-      }, []);
-      const newList = uniqueUsedArticle.map((product) => ({
-        label: `${product.name} (${product.article_number})`,
-        value: product.mediaobject_id
-      }));
-      return newList;
-
-    });
-  }, [usedArticles])
   useEffect(() => {
     const delay = 200;
     const clearStoreData = () => {
@@ -92,6 +80,21 @@ export default function ProductSearch({ filters, usedArticles }) {
   function getProductInfo(page, productInfo = "", country) {
     getProductsbyFilter(token, { page, productInfo, country }, (success) => {
       setProductList((prevProductList) => {
+        const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
+          const duplicate = accumulator.find(item => item.article_number === current.article_number);
+          if (!duplicate) {
+            accumulator.push(current);
+          }
+          return accumulator;
+        }, []);
+        const newList = uniqueUsedArticle.map((product) => ({
+          label: `${product.name} (${product.article_number})`,
+          value: product.mediaobject_id
+        }));
+        return newList;
+
+      });
+      setOriginList((prevProductList) => {
         const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
           const duplicate = accumulator.find(item => item.article_number === current.article_number);
           if (!duplicate) {
