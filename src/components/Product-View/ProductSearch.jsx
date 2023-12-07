@@ -1,4 +1,3 @@
-
 import search from "../../assets/icons/search2.svg"
 import "./style/productViewStyle.scss"
 import * as React from "react";

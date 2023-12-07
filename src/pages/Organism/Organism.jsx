@@ -59,6 +59,7 @@ const Organism = () => {
     const adminMethod = useSelector(state => state.info.adminMethod)
     let page = useSelector(state => state.templates.page)
     let filters = useSelector(state => state.templates.filterData)
+    const [initialized, setInitialized] = useState(true);
     const dateConvert = (originDate) => {
         const date = new Date(originDate);
         const day = date.getDate().toString().padStart(2, '0');
@@ -83,24 +84,31 @@ const Organism = () => {
     )
     useEffect(() => {
         setLoading(true)
-        infiniteTemplate(token, 1, filters, (success) => {
-            if (success.status === 200) {
-                if (success.data.results?.products?.length < 5) {
-                    dispatch(setProductLoadingStatus(false));
+        if (initialized) {
+            setLoading(false)
+            setInitialized(false);
+        }
+        else {
+            infiniteTemplate(token, 1, filters, (success) => {
+                if (success.status === 200) {
+                    if (success.data.results?.products?.length < 5) {
+                        dispatch(setProductLoadingStatus(false));
+                    }
+                    if (success.data.results?.templates.length < 5) {
+                        dispatch(setTemplateLoadingStatus(false));
+                    }
+                    dispatch(setUpdatedDate(dateConvert(success.data.results.document_last_update)))
+                    dispatch(setUsedArticles(success.data.results.articles))
+                    dispatch(selectPage(page + 1))
+                    dispatch(initTemplate(success.data.results.templates))
+                    dispatch(initProductsOnTemplates(success.data.results.products))
+                    setCount(success.data.results.template_count)
+                    setProductCount(success.data.results.product_count)
+                    setLoading(false)
                 }
-                if (success.data.results?.templates.length < 5) {
-                    dispatch(setTemplateLoadingStatus(false));
-                }
-                dispatch(setUpdatedDate(dateConvert(success.data.results.document_last_update)))
-                dispatch(setUsedArticles(success.data.results.articles))
-                dispatch(selectPage(page + 1))
-                dispatch(initTemplate(success.data.results.templates))
-                dispatch(initProductsOnTemplates(success.data.results.products))
-                setCount(success.data.results.template_count)
-                setProductCount(success.data.results.product_count)
-                setLoading(false)
-            }
-        })
+            })
+        }
+
     }, [filters]);
 
     const fetchMoreData = (type) => {
