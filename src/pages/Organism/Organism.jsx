@@ -91,19 +91,19 @@ const Organism = () => {
         else {
             infiniteTemplate(token, 1, filters, (success) => {
                 if (success.status === 200) {
-                    if (success.data.results?.products?.length < 5) {
+                    if (success.data?.data?.products?.length < 5) {
                         dispatch(setProductLoadingStatus(false));
                     }
-                    if (success.data.results?.templates.length < 5) {
+                    if (success.data?.data?.templates.length < 5) {
                         dispatch(setTemplateLoadingStatus(false));
                     }
-                    dispatch(setUpdatedDate(dateConvert(success.data.results.document_last_update)))
-                    dispatch(setUsedArticles(success.data.results.articles))
+                    dispatch(setUpdatedDate(dateConvert(success.data.data?.document_last_update)))
+                    dispatch(setUsedArticles(success.data.data?.articles))
                     dispatch(selectPage(page + 1))
-                    dispatch(initTemplate(success.data.results.templates))
-                    dispatch(initProductsOnTemplates(success.data.results.products))
-                    setCount(success.data.results.template_count)
-                    setProductCount(success.data.results.product_count)
+                    dispatch(initTemplate(success.data.data?.templates))
+                    dispatch(initProductsOnTemplates(success.data.data?.products))
+                    setCount(success.data.data?.template_count)
+                    setProductCount(success.data.data?.product_count)
                     setLoading(false)
                 }
             })
@@ -114,32 +114,32 @@ const Organism = () => {
     const fetchMoreData = (type) => {
         infiniteTemplate(token, page, filters, (success) => {
             if (success.status === 200) {
-                dispatch(setUsedArticles(success.data.results.articles))
+                dispatch(setUsedArticles(success.data.data?.articles))
                 if (loadingTemplateStatus === true) {
                     setTimeout(() => {
-                        if (type === "template" && success.data.results?.templates.length === 15) {
+                        if (type === "template" && success.data?.data?.templates.length === 15) {
                             dispatch(selectPage(page + 1))
-                            dispatch(appendTemplate(success.data.results.templates))
-                            dispatch(appendProductsOnTemplate(success.data.results.products))
+                            dispatch(appendTemplate(success.data.data?.templates))
+                            dispatch(appendProductsOnTemplate(success.data.data?.products))
                         }
-                        if (type === "template" && success.data.results?.templates.length < 15) {
+                        if (type === "template" && success.data?.data?.templates.length < 15) {
                             dispatch(setTemplateLoadingStatus(false));
-                            dispatch(appendTemplate(success.data.results.templates))
-                            dispatch(appendProductsOnTemplate(success.data.results.products))
+                            dispatch(appendTemplate(success.data.data?.templates))
+                            dispatch(appendProductsOnTemplate(success.data.data?.products))
                         }
                     }, 500);
                 }
                 if (loadingProductStatus === true) {
                     setTimeout(() => {
-                        if (type === "product" && success.data.results?.products?.length === 15) {
+                        if (type === "product" && success.data?.data?.products?.length === 15) {
                             dispatch(selectPage(page + 1))
-                            dispatch(appendTemplate(success.data.results.templates))
-                            dispatch(appendProductsOnTemplate(success.data.results.products))
+                            dispatch(appendTemplate(success.data.data?.templates))
+                            dispatch(appendProductsOnTemplate(success.data.data?.products))
                         }
-                        if (type === "product" && success.data.results?.products?.length < 15) {
+                        if (type === "product" && success.data?.data?.products?.length < 15) {
                             dispatch(setProductLoadingStatus(false));
-                            dispatch(appendTemplate(success.data.results.templates))
-                            dispatch(appendProductsOnTemplate(success.data.results.products))
+                            dispatch(appendTemplate(success.data.data?.templates))
+                            dispatch(appendProductsOnTemplate(success.data.data?.products))
                         }
                     }, 500);
                 }

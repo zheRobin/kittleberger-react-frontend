@@ -38,11 +38,11 @@ export default function ProductSearch({ filters, usedArticles }) {
   }, [articleList, initialized]);
   useEffect(
     () => {
-      const selectedArticles = selectedValues.map((item) => { return item.value })
+      const selectedArticles = selectedValues.map((item) => { return item.mediaSearchId })
       setArticleList(selectedArticles);
       setProductList((prevProductList) => {
         return originList.filter((product) => {
-          return !selectedArticles.includes(product.value);
+          return !selectedArticles.includes(product.mediaSearchId);
         });
       });
     }, [selectedValues]
@@ -70,10 +70,10 @@ export default function ProductSearch({ filters, usedArticles }) {
   }, [searchString]);
 
   const handleAutocompleteChange = async (event, newValue) => {
-    const previousIds = selectedValues.map(item => item.value);
-    const newlyImported = newValue.filter(item => !previousIds.includes(item.value));
+    const previousIds = selectedValues.map(item => item.mediaSearchId);
+    const newlyImported = newValue.filter(item => !previousIds.includes(item.mediaSearchId));
     const newlyCreated = newValue.slice(-1)[0];
-    const newSetValue = (selectedValues.length < newValue.length) ? (newlyImported.length === 0 ? newValue.filter(item => item.value !== newlyCreated.value) : newValue) : newValue
+    const newSetValue = (selectedValues.length < newValue.length) ? (newlyImported.length === 0 ? newValue.filter(item => item.mediaSearchId !== newlyCreated.mediaSearchId) : newValue) : newValue
     setSelectedValues((preValue) => { return newSetValue });
   };
   function getProductInfo(page, productInfo = "", country) {
@@ -88,7 +88,8 @@ export default function ProductSearch({ filters, usedArticles }) {
         }, []);
         const newList = uniqueUsedArticle.map((product) => ({
           label: `${product.name} (${product.article_number})`,
-          value: product.mediaobject_id
+          value: product.id,
+          mediaSearchId: product.mediaobject_id,
         }));
         return newList;
 
@@ -103,10 +104,10 @@ export default function ProductSearch({ filters, usedArticles }) {
         }, []);
         const newList = uniqueUsedArticle.map((product) => ({
           label: `${product.name} (${product.article_number})`,
-          value: product.mediaobject_id
+          value: product.id,
+          mediaSearchId: product.mediaobject_id
         }));
         return newList;
-
       });
 
     })

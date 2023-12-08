@@ -27,6 +27,8 @@ export const ProductNumberFilter = (resetValue) => {
     const [showCountryList, setShowCountryList] = useState(false)
     const [landMokeup, setLandMokeUp] = useState([])
     const templateTypes = useSelector(state => state.auth.templateTypes)
+    const templateFilterData = useSelector(state => state.templates.filterData)
+    const selectedCountry = useSelector(state => state.products.selectedCountry)
     useEffect(
         () => {
             setLandMokeUp(templateTypes?.country_list)
@@ -68,6 +70,7 @@ export const ProductNumberFilter = (resetValue) => {
                                             title={t(ele.name)}
                                             setFilters={setFilters}
                                             filters={filters}
+                                            templateFilterData={templateFilterData}
                                         />
                                     );
                                 })
@@ -81,6 +84,7 @@ export const ProductNumberFilter = (resetValue) => {
                                             title={t(ele.name)}
                                             setFilters={setFilters}
                                             filters={filters}
+                                            templateFilterData={templateFilterData}
                                         />
                                     );
                                 })
@@ -117,6 +121,7 @@ export const ProductNumberFilter = (resetValue) => {
                                         title={t(ele.name)}
                                         setFilters={setFilters}
                                         filters={filters}
+                                        templateFilterData={templateFilterData}
                                     />
                                 );
                             })}
@@ -133,6 +138,7 @@ export const ProductNumberFilter = (resetValue) => {
                                     <SelectCountry
                                         key={"landMokeup" + index}
                                         country={ele}
+                                        selectedCountry={selectedCountry}
                                     />
                                 );
                             }) :
@@ -141,6 +147,7 @@ export const ProductNumberFilter = (resetValue) => {
                                         <SelectCountry
                                             key={"landMokeup" + index}
                                             country={ele}
+                                            selectedCountry={selectedCountry}
                                         />
                                     );
                                 })
@@ -176,6 +183,7 @@ export const ProductNumberFilter = (resetValue) => {
                                         title={t(ele.name)}
                                         setFilters={setFilters}
                                         filters={filters}
+                                        templateFilterData={templateFilterData}
                                     />
                                 );
                             })}

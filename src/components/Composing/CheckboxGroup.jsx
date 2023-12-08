@@ -12,6 +12,23 @@ const CheckboxGroup = (props) => {
     const resetStatus = useSelector(state => state.templates.resetStatus);
     const templateTypes = useSelector(state => state.auth.templateTypes)
     const { t } = useTranslation()
+    useEffect(
+        () => {
+            switch (props.type) {
+                case "number":
+                    props?.templateFilterData?.article_number?.includes(props.element.id) ? setIsChecked(true) : setIsChecked(false)
+                    break;
+                case "brand":
+                    props?.templateFilterData?.brand?.includes(props.element.id) ? setIsChecked(true) : setIsChecked(false)
+                    break;
+                case "app":
+                    props?.templateFilterData?.application?.includes(props.element.id) ? setIsChecked(true) : setIsChecked(false)
+                    break;
+                default:
+                    props.setFilters({});
+            }
+        }, [props.templateFilterData]
+    )
     useEffect(() => {
         if (resetStatus) {
             setIsChecked(false);
@@ -102,6 +119,11 @@ export const SelectCountry = (props) => {
     const [isChecked, setIsChecked] = useState(false);
     const resetStatus = useSelector(state => state.templates.resetStatus);
     const { t } = useTranslation()
+    useEffect(
+        () => {
+            props?.selectedCountry?.includes(props.country.id) ? setIsChecked(true) : setIsChecked(false)
+        }, [props.selectedCountry]
+    )
     useEffect(() => {
         if (resetStatus) {
             setIsChecked(false);
