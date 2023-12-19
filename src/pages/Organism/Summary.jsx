@@ -18,7 +18,7 @@ import { useLocation } from "react-router-dom"
 import { useTranslation } from 'react-i18next';
 import { useRef } from "react"
 import { calcPosition } from "../../_services/Product";
-import { setCardInfo, setComposedProduct } from "../../store";
+import { setCardInfo, setComposedProduct, setSaveStatus } from "../../store";
 import { getImageFromUrl } from "../../_services/Info";
 import { saveAs } from "file-saver";
 
@@ -41,6 +41,11 @@ const Summary = () => {
     })
     const [previewImage, setPreviewImage] = useState("")
     const token = useSelector(state => state.auth.token)
+    useEffect(
+        () => {
+            deploymentName.value !== '' && dispatch(setSaveStatus(true))
+        }, [deploymentName]
+    )
     useEffect(
         () => {
             setLangType(langInfo)
@@ -69,7 +74,7 @@ const Summary = () => {
             setdeploymentName({ value: state.cdn ?? composedProduct, copied: false });
         }
     }, [composedProduct]);
-    const composeName = state?.name ? state?.name : `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return product.name })} |${selectedProducts?.map((product, index) => { return ` ` + product.name })}`
+    const composeName = state?.name ? state?.name : `${selectedTemplate?.name} | ${selectedTemplate?.application.map((product, index) => { return ` ` + product.name })} |${selectedProducts?.map((product, index) => { return ` ` + product.name })}`
     useEffect(
         () => {
             setEditableName(composeName)
@@ -224,13 +229,12 @@ const Summary = () => {
     ${t('Erstellt von ')}${userInfo.username} ${formattedDate_created}
     ${t('Zuletzt bearbeitet von ')}${userInfo.username} ${formattedDate_modified}
   `;
-    const fileName = "metadata"
     const downloadMetaData = () => {
         const blob = new Blob([metadata], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = fileName;
+        link.download = composeName + ".txt";
         link.click();
         URL.revokeObjectURL(url);
 
@@ -401,21 +405,22 @@ const Summary = () => {
                         />
                         <div onClick={(e) => saveInfo()}><TemplateButton content={t('Speichern')} /></div>
                         {switchRole ? (<div onClick={(e) => updatePreviewImage()}><TemplateButton content={t('Als Vorlagenvorschaubild festlegen')} /></div>) : null}
-                        {cardInfo?.created_by !== undefined ? <div onClick={(e) => refresh()}><TemplateButton content={t('Aktualisierung')} /></div> : null}
+                        {cardInfo?.created_by !== undefined || deploymentName.value !== '' ? <div onClick={(e) => refresh()}><TemplateButton content={t('Aktualisierung')} /></div> : null}
                     </div>
-                    {deploymentName.value !== '' ? (<div className="deployment">
-                        <div className="typography-700-regular">{t('Bereitstellung')}</div>
-                        <div className="url-group">
-                            <Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="100%">
-                                {deploymentName.value}
-                            </Typography>
-                            <CopyToClipboard text={deploymentName.value} onCopy={() => setdeploymentName({ ...deploymentName, copied: true })}>
-                                <img className="pointer" src={copy} alt=" copy" />
-                            </CopyToClipboard>
-                        </div>
-                        <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={t('Download Bilddatei')} type="transparent" /></div>
-                        <div className="download-button" onClick={() => downloadMetaData()}><TemplateButton content={t('Download Metadaten')} type="transparent" /></div>
-                    </div>) : null}
+                    {deploymentName.value !== '' ? (
+                        <div className="deployment">
+                            <div className="typography-700-regular">{t('Bereitstellung')}</div>
+                            <div className="url-group">
+                                <Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="100%">
+                                    {deploymentName.value}
+                                </Typography>
+                                <CopyToClipboard text={deploymentName.value} onCopy={() => setdeploymentName({ ...deploymentName, copied: true })}>
+                                    <img className="pointer" src={copy} alt=" copy" />
+                                </CopyToClipboard>
+                            </div>
+                            <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={t('Download Bilddatei')} type="transparent" /></div>
+                            <div className="download-button" onClick={() => downloadMetaData()}><TemplateButton content={t('Download Metadaten')} type="transparent" /></div>
+                        </div>) : null}
                 </div>
                 <ToastContainer />
                 <Dialog

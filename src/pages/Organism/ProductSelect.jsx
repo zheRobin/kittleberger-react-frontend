@@ -2,7 +2,7 @@ import "./style/organismStyle.scss"
 import plus from "../../assets/icons/add-2.svg"
 import { useSelector } from "react-redux"
 import { useEffect, useState, useRef } from "react"
-import { appendProducts, setComposedProduct } from "../../store"
+import { appendProducts, setComposedProduct, setSaveStatus } from "../../store"
 import { useDispatch } from "react-redux"
 import { getProductsbyFilter } from "../../_services/Product"
 import { Suspense } from "react"
@@ -30,6 +30,11 @@ export const ProductView = () => {
         setTempImage(true);
         setLoading(false);
     }
+    useEffect(
+        () => {
+            dispatch(setSaveStatus(false))
+        }, []
+    )
     useEffect(() => {
         if (imgRef.current && selectedProducts) {
             setLoading(true);

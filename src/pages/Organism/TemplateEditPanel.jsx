@@ -196,6 +196,7 @@ const TemplateEditPanel = () => {
     const applications = templateTypes.applications.map(app => ({ ...app, value: false }));
     const [backLoading, setBackLoading] = useState(false)
     const [previewLoading, setPreviewLoading] = useState(false)
+    const backColor = ["#4747ff", "#329bdd", "#dd3246", "#c3dd32", "#0ce425", "#e4710c", "#15dfdf", "#ee08db", "#363c54"]
     const theme = createTheme({
         palette: {
             ochre: {
@@ -375,7 +376,7 @@ const TemplateEditPanel = () => {
                                                 </div>
                                                 <div className="label-input-pair" >
                                                     <div className="label__left">
-                                                        <div className="typography-400-regular">{t("Hähe")}*</div>
+                                                        <div className="typography-400-regular">{t("Höhe")}*</div>
                                                     </div>
                                                     <div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
                                                         <Field as={TextField} type="number" name="resolution_height" />
@@ -670,6 +671,7 @@ const TemplateEditPanel = () => {
                                                                             backgroundHeight={
                                                                                 backgroundHeight
                                                                             }
+                                                                            backColor={backColor[index]}
                                                                         />
                                                                     ))}
                                                             </div>

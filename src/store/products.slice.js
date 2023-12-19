@@ -8,9 +8,13 @@ export const productsSlice = createSlice({
         selectedCountry:[],
         composedProduct:localStorage.getItem('composeInfo'),
         usedArticles:[],
-        cardInfo:JSON.parse(localStorage.getItem('cardInfo'))
+        cardInfo:JSON.parse(localStorage.getItem('cardInfo')),
+        saveStatus: false
     },
     reducers:{
+        setSaveStatus: (state, action) => {
+            state.saveStatus = action.payload
+        },
         setCardInfo:(state, action) =>{
             state.cardInfo = action.payload
         },
@@ -121,6 +125,6 @@ export const productsSlice = createSlice({
 })
 
 
-export const {setUsedArticles,setCardInfo, emptyStore,setProductLists, appendCountries, removeCountries, appendProducts, updateProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
+export const {setSaveStatus, setUsedArticles,setCardInfo, emptyStore,setProductLists, appendCountries, removeCountries, appendProducts, updateProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
 export const productsReducer = productsSlice.reducer
 export default productsSlice.reducer

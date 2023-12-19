@@ -12,6 +12,7 @@ const ImageTemplate = ({
     backgroundHeight,
     backgroundWidth,
     title,
+    backColor
 }) => {
     const [article, setArticle] = useState({});
     const [style, setStyle] = useState({});
@@ -35,7 +36,8 @@ const ImageTemplate = ({
         setStyle({
             position: "absolute",
             boxSizing: "border-box",
-            border: "solid 1px #9747FF",
+            border: `solid 1px ${backColor ? backColor : "#9747FF"
+                }`,
             width: `${img_width < 0 ? 0 : img_width}px`,
             height: `${img_height < 0 ? 0 : img_height}px`,
             top: `${top}px`,
@@ -48,7 +50,7 @@ const ImageTemplate = ({
 
     return (
         <div style={style}>
-            <div style={{ padding: "4px 10px", backgroundColor: "#9747FF", boxSizing: "border-box", display: "inline-block" }}>
+            <div style={{ padding: "4px 10px", backgroundColor: `${backColor ? backColor : "#9747FF"}`, boxSizing: "border-box", display: "inline-block" }}>
                 {title}
             </div>
         </div>

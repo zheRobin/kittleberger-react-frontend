@@ -34,7 +34,6 @@ export const TemplateButton = ({ content, type = "brown" }) => {
 export const CheckboxGroupComponent = ({ label, values, ...props }) => {
 	const { setFieldValue } = useFormikContext();
 	const [field] = useField(props);
-
 	return (
 		<div className="label-check-pair">
 			<div className="label-check-pair__label">
@@ -197,6 +196,7 @@ const TemplatePanel = () => {
 	const templateTypes = useSelector(state => state.auth.templateTypes)
 	const brands = templateTypes.brands.map(brand => ({ ...brand, value: false }));
 	const applications = templateTypes.applications.map(app => ({ ...app, value: false }));
+	const backColor = ["#4747ff", "#329bdd", "#dd3246", "#c3dd32", "#0ce425", "#e4710c", "#15dfdf", "#ee08db", "#363c54"]
 	const theme = createTheme({
 		palette: {
 			ochre: {
@@ -363,7 +363,7 @@ const TemplatePanel = () => {
 												</div>
 												<div className="label-input-pair" >
 													<div className="label__left">
-														<div className="typography-400-regular">{t("Hähe")}*</div>
+														<div className="typography-400-regular">{t("Höhe")}*</div>
 													</div>
 													<div className="label__right" style={{ flexDirection: "column", alignItems: "center" }}>
 														<Field as={TextField} type="number" name="resolution_height" />
@@ -649,6 +649,7 @@ const TemplatePanel = () => {
 																			backgroundHeight={
 																				backgroundHeight
 																			}
+																			backColor={backColor[index]}
 																		/>
 																	))}
 															</div>
