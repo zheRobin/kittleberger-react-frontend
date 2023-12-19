@@ -318,6 +318,12 @@ const Summary = () => {
 
     const saveInfo = () => {
         setLoading(true)
+        if (editableName?.length > 255) {
+            toast.error(t("Ihr Verfassername umfasst mehr als 255 Zeichen"), { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+            setLoading(false)
+            return
+        }
+
         if (cardInfo?.created_by === undefined) {
             getOnlineInfo(token, submitInfo, (success) => {
                 if (success.data.code === 201) {

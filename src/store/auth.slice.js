@@ -24,6 +24,9 @@ function createReducers() {
     localStorage.removeItem('templateTypes')
     localStorage.removeItem('composeInfo')
     localStorage.removeItem('templateInfo')
+    localStorage.removeItem('productsInfo')
+    localStorage.removeItem('i18nextLng')
+    localStorage.removeItem('cardInfo')
     goURL()
   }
   const setTemplateTypes = (state,action) => {

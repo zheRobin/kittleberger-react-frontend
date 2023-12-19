@@ -38,6 +38,7 @@
     "Speichern":"Save",
     "Aktualisierung":"Refresh",
     "Bereitstellung":"Deployment",
+    "Ihr Verfassername umfasst mehr als 255 Zeichen":"Your composing name exceeded 255 characters",
     "Als Vorlagenvorschaubild festlegen":"Set As Template Preview Image",
     "Zurück zur Startseite":"Back to home page",
     "Letztes Update":"Last Updated",
