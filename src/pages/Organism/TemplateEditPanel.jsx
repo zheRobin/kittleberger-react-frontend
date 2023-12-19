@@ -336,21 +336,25 @@ const TemplateEditPanel = () => {
                                                     </div>
                                                     <div className="label__right">
                                                         <div className="select-group">
-                                                            <Field as={Select}
+                                                            <Field
+                                                                as={Select}
                                                                 labelId="demo-customized-select-label"
                                                                 id="demo-customized-select"
                                                                 name="type"
                                                                 displayEmpty
                                                                 IconComponent={ExpandMoreIcon}
                                                                 sx={{
-                                                                    width: "472px", height: "40px", padding: "0px 10px 10px 10px",
+                                                                    width: "472px",
+                                                                    height: "40px",
+                                                                    padding: "0px 10px 10px 10px",
                                                                     "& .MuiOutlinedInput-input": {
                                                                         textAlign: "start",
                                                                         marginLeft: "9px"
                                                                     }
                                                                 }}
+                                                                disabled  // Add the disabled attribute here
                                                             >
-                                                                <MenuItem value="" disabled>
+                                                                <MenuItem value="">
                                                                     <em>{t("Dateityp wählen")}</em>
                                                                 </MenuItem>
                                                                 <MenuItem value="JPEG">.jpg</MenuItem>

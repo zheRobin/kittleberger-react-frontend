@@ -72,7 +72,6 @@ export const ProductView = () => {
                 template_id: selectedTemplate.id,
                 articles: article.filter(Boolean),
             };
-
             const timeoutId = setTimeout(() => {
                 setLoading(false);
                 setTempImage(true);

@@ -202,7 +202,10 @@ const Summary = () => {
         const val = evt.target?.value;
         setEditableName(val);
     };
-    let date_created = new Date(selectedTemplate.created);
+    const now = new Date().toISOString();
+    const date = new Date(now);
+    const formattedDate = new Date(`${date.toDateString()} ${date.toTimeString()}`);
+    let date_created = cardInfo?.created ? new Date(cardInfo?.created) : formattedDate;
     const formattedDate_created = `${t("am")} ${date_created.toLocaleDateString(langType === 'en' ? "en-US" : "de-DE", {
         day: "2-digit",
         month: "2-digit",
@@ -211,7 +214,7 @@ const Summary = () => {
         hour: "2-digit",
         minute: "2-digit"
     })} ${t("Uhr")}`;
-    let date_modified = new Date(selectedTemplate.modified);
+    let date_modified = cardInfo?.modified ? new Date(cardInfo?.modified) : formattedDate;
     const formattedDate_modified = `${t("am")} ${date_modified.toLocaleDateString(langType === 'en' ? "en-US" : "de-DE", {
         day: "2-digit",
         month: "2-digit",

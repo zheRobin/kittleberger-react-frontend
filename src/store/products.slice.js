@@ -58,8 +58,9 @@ export const productsSlice = createSlice({
         },
         setProductAligns:(state,action) =>{
             const mediaobject_id= action.payload.mediaobject_id;
+            const pos_index = action.payload.pos_index
             state.selectedProducts = state.selectedProducts.map((product,index) => {
-                if (product.mediaobject_id === mediaobject_id) {
+                if (product.mediaobject_id === mediaobject_id && product.pos_index === pos_index) {
                     return {
                         ...product,
                         align: action.payload.align
@@ -72,8 +73,9 @@ export const productsSlice = createSlice({
         },
         setUpdatedPosition:(state,action) =>{
             const mediaobject_id= action.payload.mediaobject_id;
+            const pos_index = action.payload.pos_index
             state.selectedProducts = state.selectedProducts.map((product) => {
-                if (product.mediaobject_id === mediaobject_id) {
+                if (product.mediaobject_id === mediaobject_id && product.pos_index === pos_index) {
                     return {
                         ...product,
                         updatedPosition: action.payload.updatedPosition
@@ -85,8 +87,9 @@ export const productsSlice = createSlice({
         },
         setProductTransImg:(state,action) =>{
             const mediaobject_id= action.payload.mediaobject_id;
+            const pos_index = action.payload.pos_index
             state.selectedProducts = state.selectedProducts.map((product) => {
-                if (product.mediaobject_id === mediaobject_id) {
+                if (product.mediaobject_id === mediaobject_id && product.pos_index === pos_index) {
                     return {
                         ...product,
                         is_transparent: action.payload.is_transparent
@@ -98,9 +101,10 @@ export const productsSlice = createSlice({
         },
         setSliderScale:(state,action) =>{
             const mediaobject_id= action.payload.mediaobject_id;
+            const pos_index = action.payload.pos_index
             state.selectedProducts = state.selectedProducts.map((product,index) => {
 
-                if (product.mediaobject_id === mediaobject_id) {
+                if (product.mediaobject_id === mediaobject_id && product.pos_index === pos_index) {
                     return {
                         ...product,
                         sliderScale: action.payload.sliderScale,
