@@ -237,7 +237,7 @@ const Summary = () => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = composeName + ".txt";
+        link.download = editableName + ".txt";
         link.click();
         URL.revokeObjectURL(url);
 
