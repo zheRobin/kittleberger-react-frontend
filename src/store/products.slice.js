@@ -42,7 +42,8 @@ export const productsSlice = createSlice({
             localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         removeProducts:(state,action) =>{
-            state.selectedProducts = state.selectedProducts.filter((product) => product.mediaobject_id !== action.payload.mediaobject_id)
+            const pos_index = action.payload.pos_index
+            state.selectedProducts = state.selectedProducts.filter((product) => product.mediaobject_id !== action.payload.mediaobject_id && product.pos_index === pos_index)
             localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         updateProducts:(state,action) =>{
