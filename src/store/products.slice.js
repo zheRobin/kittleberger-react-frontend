@@ -1,4 +1,4 @@
-import { createSlice  } from "@reduxjs/toolkit";
+import { createSlice, current  } from "@reduxjs/toolkit";
 
 export const productsSlice = createSlice({
     name: 'products',
@@ -43,7 +43,7 @@ export const productsSlice = createSlice({
         },
         removeProducts:(state,action) =>{
             const pos_index = action.payload.pos_index
-            state.selectedProducts = state.selectedProducts.filter((product) => product.mediaobject_id !== action.payload.mediaobject_id && product.pos_index === pos_index)
+            state.selectedProducts = state.selectedProducts.filter((product) => product.pos_index !== pos_index)
             localStorage.setItem('productsInfo', JSON.stringify(state.selectedProducts));
         },
         updateProducts:(state,action) =>{
