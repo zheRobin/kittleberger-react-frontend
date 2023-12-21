@@ -67,20 +67,20 @@ const ManageUser = () => {
         </div>
         <div className="setting-panel-user__bottom">
           <div className="user-group">
-            {userlists?.map((userli) => {
+            {userlists?.sort((a, b) => a.username.localeCompare(b.username)).map((userli) => {
               return (
                 <UserList key={userli.id} name={userli.username} email={userli.email} handlemodal={setModalView} setDeleteModal={setDeleteModal} setMode={setEditMode} userInfo={userli} setUserinfo={setUserinfo} />
-              )
+              );
             })}
 
           </div>
         </div>
         {modalView ? (
           <Formik
-            initialValues={editMode ? { name: userInfo.username, password: '', email: userInfo.email } : { name: '', password: '', email: '' }}
+            initialValues={editMode ? { name: userInfo.username, password: '', email: userInfo.email, is_admin: false } : { name: '', password: '', email: '', is_admin: false }}
             validationSchema={Yup.object({
               name: Yup.string()
-                .max(15, 'Must be 15 characters or less')
+                .max(60, 'Must be 60 characters or less')
                 .required('Required'),
               password: Yup.string()
                 .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
@@ -145,6 +145,18 @@ const ManageUser = () => {
                             {formik.touched.password && formik.errors.password ? (
                               <div className="validation">{formik.errors.password}</div>
                             ) : null}
+                          </div>
+
+                        </div>
+                        <div className="label-input-pair">
+                          <div className="typography-400-regular">{t("Administratorin")}</div>
+                          <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                            <input
+                              type="checkbox"
+                              {...formik.getFieldProps('is_admin')}
+                              checked={formik.values.is_admin} // Use checked attribute to reflect the value in formik
+                              style={{ height: "15px", width: "15px", margin: "0" }}
+                            />
                           </div>
                         </div>
                       </div>

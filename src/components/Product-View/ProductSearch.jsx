@@ -22,6 +22,12 @@ export default function ProductSearch({ filters, usedArticles }) {
   const [articleList, setArticleList] = useState([])
   const [initialized, setInitialized] = useState(true);
   useEffect(() => {
+    const selectedArticles = selectedValues.map((item) => { return item.mediaSearchId })
+    setProductList((prevProductList) => {
+      return originList.filter((product) => {
+        return !selectedArticles.includes(product.mediaSearchId);
+      });
+    });
     const filterData = {
       ...filters,
       article_list: articleList
@@ -40,11 +46,7 @@ export default function ProductSearch({ filters, usedArticles }) {
     () => {
       const selectedArticles = selectedValues.map((item) => { return item.mediaSearchId })
       setArticleList(selectedArticles);
-      setProductList((prevProductList) => {
-        return originList.filter((product) => {
-          return !selectedArticles.includes(product.mediaSearchId);
-        });
-      });
+
     }, [selectedValues]
   )
   useEffect(() => {
@@ -76,43 +78,39 @@ export default function ProductSearch({ filters, usedArticles }) {
     const newSetValue = (selectedValues.length < newValue.length) ? (newlyImported.length === 0 ? newValue.filter(item => item.mediaSearchId !== newlyCreated.mediaSearchId) : newValue) : newValue
     setSelectedValues((preValue) => { return newSetValue });
   };
-  function getProductInfo(page, productInfo = "", country) {
-    getProductsbyFilter(token, { page, productInfo, country }, (success) => {
-      setProductList((prevProductList) => {
-        const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
-          const duplicate = accumulator.find(item => item.article_number === current.article_number);
-          if (!duplicate) {
-            accumulator.push(current);
-          }
-          return accumulator;
-        }, []);
-        const newList = uniqueUsedArticle.map((product) => ({
-          label: `${product.name} (${product.article_number})`,
-          value: product.id,
-          mediaSearchId: product.mediaobject_id,
-        }));
-        return newList;
+  function getProductInfo(page, productInfo, country) {
+    setProductList((prevProductList) => {
+      const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
+        const duplicate = accumulator.find(item => item.article_number === current.article_number);
+        if (!duplicate) {
+          accumulator.push(current);
+        }
+        return accumulator;
+      }, []);
+      const newList = uniqueUsedArticle.map((product) => ({
+        label: `${product.name} (${product.article_number})`,
+        value: product.id,
+        mediaSearchId: product.mediaobject_id,
+      }));
+      return newList;
 
-      });
-      setOriginList((prevProductList) => {
-        const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
-          const duplicate = accumulator.find(item => item.article_number === current.article_number);
-          if (!duplicate) {
-            accumulator.push(current);
-          }
-          return accumulator;
-        }, []);
-        const newList = uniqueUsedArticle.map((product) => ({
-          label: `${product.name} (${product.article_number})`,
-          value: product.id,
-          mediaSearchId: product.mediaobject_id
-        }));
-        return newList;
-      });
-
-    })
+    });
+    setOriginList((prevProductList) => {
+      const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
+        const duplicate = accumulator.find(item => item.article_number === current.article_number);
+        if (!duplicate) {
+          accumulator.push(current);
+        }
+        return accumulator;
+      }, []);
+      const newList = uniqueUsedArticle.map((product) => ({
+        label: `${product.name} (${product.article_number})`,
+        value: product.id,
+        mediaSearchId: product.mediaobject_id
+      }));
+      return newList;
+    });
   }
-
   return (
     <Autocomplete
       multiple

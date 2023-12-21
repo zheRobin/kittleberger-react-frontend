@@ -228,7 +228,7 @@ const Summary = () => {
     ${t('Applikation')}: ${selectedTemplate.application.map((application, index) => application.name).join(", ")}
     ${t('Technische Daten')}: ${selectedTemplate.resolution_width} x ${selectedTemplate.resolution_height} px (${selectedTemplate.resolution_dpi} dpi)
     ${t('Dateiformat')}: ${selectedTemplate.file_type} (RGB)
-    ${t('Enthaltene Produkte')}: ${selectedProducts.map((product, index) => `${product.name} (${product.article_number})`).join(", ")}
+    ${t('Enthaltene Produkte')}: ${selectedProducts.map((product, index) => `${product.name} (ID: ${product.article_number}; Mediaobject-ID: ${product.mediaobject_id})`).join(", ")}
     ${t('Erstellt von ')}${userInfo.username} ${formattedDate_created}
     ${t('Zuletzt bearbeitet von ')}${userInfo.username} ${formattedDate_modified}
   `;
@@ -386,7 +386,7 @@ const Summary = () => {
                                 <React.Fragment key={index}>
                                     <div>
                                         <span>&#8226;{" " + product.name + " "}</span>
-                                        <span>({product.article_number})</span>
+                                        <span>(ID: {product.article_number}; Mediaobject-ID: {product.mediaobject_id})</span>
                                     </div>
                                 </React.Fragment>
                             ))}</div>
