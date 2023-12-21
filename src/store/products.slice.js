@@ -18,8 +18,11 @@ export const productsSlice = createSlice({
         setCardInfo:(state, action) =>{
             state.cardInfo = action.payload
         },
-        setUsedArticles:(state,action) => {
+        appendUsedArticles:(state,action) => {
             state.usedArticles = [...state.usedArticles,...action.payload]
+        },
+        setUsedArticles:(state,action) => {
+            state.usedArticles = action.payload
         },
         emptyStore:(state, action) => {
             state.selectedProducts = []
@@ -130,6 +133,6 @@ export const productsSlice = createSlice({
 })
 
 
-export const {setSaveStatus, setUsedArticles,setCardInfo, emptyStore,setProductLists, appendCountries, removeCountries, appendProducts, updateProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
+export const {setSaveStatus,setUsedArticles, appendUsedArticles,setCardInfo, emptyStore,setProductLists, appendCountries, removeCountries, appendProducts, updateProducts, findTemplates, removeProducts, setComposedProduct, setProductAligns, setProductTransImg, setSliderScale,setUpdatedPosition} = productsSlice.actions
 export const productsReducer = productsSlice.reducer
 export default productsSlice.reducer

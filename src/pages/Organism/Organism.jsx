@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
-import { appendTemplate, setUsedArticles, selectPage, setUpdatedDate, setTemplateLoadingStatus, initTemplate, setProductLoadingStatus, initProductsOnTemplates, appendProductsOnTemplate, authActions } from '../../store';
+import { appendTemplate, appendUsedArticles, selectPage, setUpdatedDate, setTemplateLoadingStatus, initTemplate, setProductLoadingStatus, initProductsOnTemplates, appendProductsOnTemplate, authActions, setUsedArticles } from '../../store';
 import { infiniteTemplate } from '../../_services/Template';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import 'react-toastify/dist/ReactToastify.css';
@@ -50,6 +50,7 @@ const Organism = () => {
     };
     const [loading, setLoading] = useState(false)
     const [filterData, setFilterData] = useState([])
+    const [searchItems, setSearchItems] = useState([])
     const token = useSelector(state => state.auth.token)
     const templates = useSelector(state => state.templates.templateData)
     const products = useSelector(state => state.templates.productsOnTemplates)
@@ -82,8 +83,10 @@ const Organism = () => {
             setFilterData(products)
         }, [products]
     )
+
     useEffect(() => {
         setLoading(true)
+
         if (initialized) {
             setLoading(false)
             setInitialized(false);
@@ -114,7 +117,7 @@ const Organism = () => {
     const fetchMoreData = (type) => {
         infiniteTemplate(token, page, filters, (success) => {
             if (success.status === 200) {
-                dispatch(setUsedArticles(success.data.data?.articles))
+                dispatch(appendUsedArticles(success.data.data?.articles))
                 if (loadingTemplateStatus === true) {
                     setTimeout(() => {
                         if (type === "template" && success.data?.data?.templates.length === 15) {

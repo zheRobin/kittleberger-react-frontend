@@ -22,12 +22,6 @@ export default function ProductSearch({ filters, usedArticles }) {
   const [articleList, setArticleList] = useState([])
   const [initialized, setInitialized] = useState(true);
   useEffect(() => {
-    const selectedArticles = selectedValues.map((item) => { return item.mediaSearchId })
-    setProductList((prevProductList) => {
-      return originList.filter((product) => {
-        return !selectedArticles.includes(product.mediaSearchId);
-      });
-    });
     const filterData = {
       ...filters,
       article_list: articleList
@@ -44,7 +38,8 @@ export default function ProductSearch({ filters, usedArticles }) {
   }, [articleList, initialized]);
   useEffect(
     () => {
-      const selectedArticles = selectedValues.map((item) => { return item.mediaSearchId })
+      // const selectedArticles = selectedValues.map((item) => { return item.mediaSearchId })
+      const selectedArticles = selectedValues.map((item) => { return item.article_number })
       setArticleList(selectedArticles);
 
     }, [selectedValues]
@@ -69,18 +64,22 @@ export default function ProductSearch({ filters, usedArticles }) {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [searchString]);
+  }, [searchString, usedArticles]);
 
   const handleAutocompleteChange = async (event, newValue) => {
-    const previousIds = selectedValues.map(item => item.mediaSearchId);
-    const newlyImported = newValue.filter(item => !previousIds.includes(item.mediaSearchId));
+    const previousIds = selectedValues.map(item => item.article_number);
+    const newlyImported = newValue.filter(item => !previousIds.includes(item.article_number));
     const newlyCreated = newValue.slice(-1)[0];
-    const newSetValue = (selectedValues.length < newValue.length) ? (newlyImported.length === 0 ? newValue.filter(item => item.mediaSearchId !== newlyCreated.mediaSearchId) : newValue) : newValue
+    const newSetValue = (selectedValues.length < newValue.length) ? (newlyImported.length === 0 ? newValue.filter(item => (item.article_number !== newlyCreated.article_number)) : newValue) : newValue
     setSelectedValues((preValue) => { return newSetValue });
   };
   function getProductInfo(page, productInfo, country) {
     setProductList((prevProductList) => {
-      const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
+      const selectedList = selectedValues.map((item) => {
+        return item.article_number
+      })
+      const filtered = selectedList.length > 0 ? usedArticles.filter((item) => !selectedList.includes(item.article_number)) : usedArticles
+      const uniqueUsedArticle = filtered?.reduce((accumulator, current) => {
         const duplicate = accumulator.find(item => item.article_number === current.article_number);
         if (!duplicate) {
           accumulator.push(current);
@@ -91,9 +90,9 @@ export default function ProductSearch({ filters, usedArticles }) {
         label: `${product.name} (${product.article_number})`,
         value: product.id,
         mediaSearchId: product.mediaobject_id,
+        article_number: product.article_number
       }));
       return newList;
-
     });
     setOriginList((prevProductList) => {
       const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
@@ -106,7 +105,8 @@ export default function ProductSearch({ filters, usedArticles }) {
       const newList = uniqueUsedArticle.map((product) => ({
         label: `${product.name} (${product.article_number})`,
         value: product.id,
-        mediaSearchId: product.mediaobject_id
+        mediaSearchId: product.mediaobject_id,
+        article_number: product.article_number
       }));
       return newList;
     });

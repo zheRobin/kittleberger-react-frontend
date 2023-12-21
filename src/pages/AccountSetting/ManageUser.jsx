@@ -12,10 +12,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from "react-redux"
 import { useTranslation } from "react-i18next"
 
-const UserList = ({ name, email, handlemodal, setMode, setUserinfo, userInfo, setDeleteModal }) => {
+const UserList = ({ name, email, is_staff, handlemodal, setMode, setUserinfo, userInfo, setDeleteModal }) => {
   return (
     <div className="user-list">
       <div className="user-list__label">{name}</div>
+      <div className="user-list__label">{is_staff && 'admin'}</div>
       <div className="user-list__user">
         <div className="user-list__user-email">{email}</div>
         <div className="edit pointer" >
@@ -69,7 +70,7 @@ const ManageUser = () => {
           <div className="user-group">
             {userlists?.sort((a, b) => a.username.localeCompare(b.username)).map((userli) => {
               return (
-                <UserList key={userli.id} name={userli.username} email={userli.email} handlemodal={setModalView} setDeleteModal={setDeleteModal} setMode={setEditMode} userInfo={userli} setUserinfo={setUserinfo} />
+                <UserList key={userli.id} is_staff={userli.is_staff} name={userli.username} email={userli.email} handlemodal={setModalView} setDeleteModal={setDeleteModal} setMode={setEditMode} userInfo={userli} setUserinfo={setUserinfo} />
               );
             })}
 
@@ -77,7 +78,7 @@ const ManageUser = () => {
         </div>
         {modalView ? (
           <Formik
-            initialValues={editMode ? { name: userInfo.username, password: '', email: userInfo.email, is_admin: false } : { name: '', password: '', email: '', is_admin: false }}
+            initialValues={editMode ? { name: userInfo.username, password: '', email: userInfo.email, is_admin: userInfo.is_staff } : { name: '', password: '', email: '', is_admin: false }}
             validationSchema={Yup.object({
               name: Yup.string()
                 .max(60, 'Must be 60 characters or less')
