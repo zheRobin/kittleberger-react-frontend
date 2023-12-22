@@ -75,7 +75,7 @@ const TypeList = ({ type, label }) => {
     const ApiViewList = (token) => {
         return (
             <div className="setting-list">
-                <div className="typography-400-regular">{token?.token?.name}</div>
+                <div className="typography-400-regular">{t(token?.token?.name)}</div>
                 <div className="typography-400-regular">
                     <img className="pointer" src={pencil} alt="cross" onClick={() => { setModalView(true); setSubmitType(0); setSelectedId(token?.token?.id); setSelectedName(token?.token?.name) }} />
                     <img className="pointer" src={cross} alt="cross" onClick={() => handleDelete(token?.token?.id)} />
