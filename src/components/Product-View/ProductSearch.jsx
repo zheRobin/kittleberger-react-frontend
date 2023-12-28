@@ -96,7 +96,7 @@ export default function ProductSearch({ filters, usedArticles }) {
     });
     setOriginList((prevProductList) => {
       const uniqueUsedArticle = usedArticles?.reduce((accumulator, current) => {
-        const duplicate = accumulator.find(item => item.article_number === current.article_number);
+        const duplicate = accumulator.find(item => item.article_number === current.article_number || item.mediaobject_id === current.mediaobject_id);
         if (!duplicate) {
           accumulator.push(current);
         }
