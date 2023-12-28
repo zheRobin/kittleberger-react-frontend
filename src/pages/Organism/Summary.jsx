@@ -40,8 +40,11 @@ const Summary = () => {
         value: '',
         copied: false,
     })
+    const [submitRefresh,setSubmitRefresh] = useState(false)
     const [previewImage, setPreviewImage] = useState("")
     const [updatedDate, setUpdatedDate] = useState(null)
+    const [dateModified, setDateModified] = useState(null);
+    const [formattedDateModified, setFormattedDateModified] = useState('');
     const token = useSelector(state => state.auth.token)
     useEffect(
         () => {
@@ -231,48 +234,44 @@ const Summary = () => {
         hour: "2-digit",
         minute: "2-digit"
     })} ${t("Uhr")}`;
-    let date_modified = cardInfo?.modified ? new Date(cardInfo?.modified) : formattedDate;
-    const formattedDate_modified = `${t("am")} ${date_modified.toLocaleDateString(langType === 'en' ? "en-US" : "de-DE", {
+  
+
+  // Use useEffect to update the formatted date when the date_modified value changes
+  useEffect(() => {
+    if (cardInfo?.modified) {
+        const now = new Date().toISOString();
+        const date = new Date(now);
+        const currentDate = new Date(`${date.toDateString()} ${date.toTimeString()}`);
+        const newDate = submitRefresh? currentDate :(new Date(cardInfo.modified));
+        const formattedDate = `${t("am")} ${newDate.toLocaleDateString(langType === 'en' ? "en-US" : "de-DE", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric"
-    }).replace(/\./g, '/')} ${t("um")} ${date_modified.toLocaleTimeString(langType === 'en' ? "en-US" : "de-DE", {
+      })} ${t("um")} ${newDate.toLocaleTimeString(langType === 'en' ? "en-US" : "de-DE", {
         hour: "2-digit",
         minute: "2-digit"
-    }).replace(/^(\d{1,2}):(\d{2})$/, function (_, h, m) {
-        return (h % 12 || 12) + ':' + m + ' ' + (h < 12 ? 'AM' : 'PM');
-    })} ${langType === 'en' ? 'AM' : 'Uhr'}`;
-    const [dateModified, setDateModified] = useState(date_modified)
-    const [formatedDate, setFormatedDate] = useState(formattedDate_modified)
-    useEffect(
-        () => {
-            const formattedDate_modified = `${t("am")} ${date_modified.toLocaleDateString(langType === 'en' ? "en-US" : "de-DE", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric"
-            })} ${t("um")} ${date_modified.toLocaleTimeString(langType === 'en' ? "en-US" : "de-DE", {
-                hour: "2-digit",
-                minute: "2-digit"
-            })} ${t("Uhr")}`;
-            setDateModified(formattedDate_modified, langType)
-        }, []
-    )
-    useEffect(
-        () => {
-            if (updatedDate) {
-                let date_modified = new Date(updatedDate)
-                let formattedDate_mod = `${t("am")} ${date_modified.toLocaleDateString(langType === 'en' ? "en-US" : "de-DE", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                })} ${t("um")} ${date_modified.toLocaleTimeString(langType === 'en' ? "en-US" : "de-DE", {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                })} ${t("Uhr")}`;
-                setFormatedDate(formattedDate_mod)
-            }
-        }, [updatedDate, dateModified]
-    )
+      })} ${t("Uhr")}`;
+      setDateModified(newDate);
+      setFormattedDateModified(formattedDate);
+    } else {
+        const now = new Date().toISOString();
+        const date = new Date(now);
+        const currentDate = new Date(`${date.toDateString()} ${date.toTimeString()}`);
+        const newDate = currentDate;
+        const formattedDate = `${t("am")} ${newDate.toLocaleDateString(langType === 'en' ? "en-US" : "de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      })} ${t("um")} ${newDate.toLocaleTimeString(langType === 'en' ? "en-US" : "de-DE", {
+        hour: "2-digit",
+        minute: "2-digit"
+      })} ${t("Uhr")}`;
+      setDateModified(newDate);
+      setFormattedDateModified(formattedDate);
+    }
+  }, [cardInfo.modified, langType, submitRefresh]);
+
+    
     const metadata = `
     ${t('Marke')}: ${selectedTemplate.brand.map((brand, index) => brand.name).join(", ")}
     ${t('Applikation')}: ${selectedTemplate.application.map((application, index) => application.name).join(", ")}
@@ -280,7 +279,7 @@ const Summary = () => {
     ${t('Dateiformat')}: ${selectedTemplate.file_type} (RGB)
     ${t('Enthaltene Produkte')}: ${selectedProducts.map((product, index) => `${product.name} (ID: ${product.article_number}; Mediaobject-ID: ${product.mediaobject_id})`).join(", ")}
     ${t('Erstellt von ')}${userInfo.username} ${formattedDate_created}
-    ${t('Zuletzt bearbeitet von ')}${userInfo.username} ${formatedDate}
+    ${t('Zuletzt bearbeitet von ')}${userInfo.username} ${formattedDateModified}
   `;
     const downloadMetaData = () => {
         const blob = new Blob([metadata], { type: 'text/plain' });
@@ -338,6 +337,7 @@ const Summary = () => {
         updateOnlineInfo(token, updatePreviewInfo, (success) => {
 
             if (success.data.code === 201 || success.data.status === "success") {
+                setSubmitRefresh(true)
                 dispatch(setComposedProduct(previewImage))
                 setdeploymentName({ ...deploymentName, value: success.data.data.cdn_url })
                 setLoading(false)
@@ -444,7 +444,7 @@ const Summary = () => {
                             ))}</div>
                             <div style={{ marginTop: "14px" }}></div>
                             <p>{t('Erstellt von ')}{userInfo.username} {formattedDate_created}</p>
-                            <p>{t('Zuletzt bearbeitet von ')}{userInfo.username} {formatedDate}</p>
+                            <p>{t('Zuletzt bearbeitet von ')}{userInfo.username} {formattedDateModified}</p>
                         </div>
                     </div>
                 </div>
