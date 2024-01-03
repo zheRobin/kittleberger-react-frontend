@@ -257,7 +257,7 @@ const ProductSelect = () => {
                             }
                             )}
                         </div>
-                        {30 === pageInfo?.count ? (loading ? <div className="" style={{ display: "flex", paddingTop: "10px", justifyContent: "center", height: "50px" }}><img src={productSpinner} alt="productSpinner" ></img></div> : <div className="typography-400-bold pointer" onClick={(e) => setPage(page + 1)} style={{ textAlign: "center", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>Load More</div>) : null}
+                        {30 === pageInfo?.count ? (loading ? <div className="" style={{ display: "flex", paddingTop: "10px", justifyContent: "center", height: "50px" }}><img src={productSpinner} alt="productSpinner" ></img></div> : <div className="typography-400-bold pointer" onClick={(e) => setPage(page + 1)} style={{ textAlign: "center", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>{t("Mehr laden")}</div>) : (productList.length == 0 ?<div style={{marginTop: "10px"}}>{t("Keine Ergebnisse")}</div>:null)}
                     </div>
                     <PhotoSlider
                         images={images.map((item) => ({ src: item, key: item }))}
