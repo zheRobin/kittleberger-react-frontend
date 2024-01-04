@@ -178,6 +178,7 @@ const ProductSelect = () => {
     const [pageInfo, setPageInfo] = useState(
         {}
     )
+    const [loadingResult, setLoadingResult] = useState(false)
     const [visible, setVisible] = useState(false);
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -192,6 +193,7 @@ const ProductSelect = () => {
 
     useEffect(() => {
         const delay = 200;
+        setLoadingResult(false)
         const clearStoreData = () => {
             setProductList([]);
             setPage(1);
@@ -225,10 +227,12 @@ const ProductSelect = () => {
                         count: success.data.data.count
                     })
                     setLoading(false)
+                    setLoadingResult(true)
                 }
             })
         } else {
             setLoading(false)
+            setLoadingResult(true)
         }
 
     }
@@ -257,7 +261,7 @@ const ProductSelect = () => {
                             }
                             )}
                         </div>
-                        {30 === pageInfo?.count ? (loading ? <div className="" style={{ display: "flex", paddingTop: "10px", justifyContent: "center", height: "50px" }}><img src={productSpinner} alt="productSpinner" ></img></div> : <div className="typography-400-bold pointer" onClick={(e) => setPage(page + 1)} style={{ textAlign: "center", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>{t("Mehr laden")}</div>) : (productList.length == 0 ?<div style={{marginTop: "10px"}}>{t("Keine Ergebnisse")}</div>:null)}
+                        {30 === pageInfo?.count ? (loading ? <div className="" style={{ display: "flex", paddingTop: "10px", justifyContent: "center", height: "50px" }}><img src={productSpinner} alt="productSpinner" ></img></div> : <div className="typography-400-bold pointer" onClick={(e) => setPage(page + 1)} style={{ textAlign: "center", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>{t("Mehr laden")}</div>) : (productList.length == 0 && loadingResult ?<div style={{marginTop: "10px"}}>{t("Keine Ergebnisse")}</div>: productList.length !== 0 && loadingResult ? null : <div className="" style={{ display: "flex", paddingTop: "10px", justifyContent: "center", height: "50px" }}><img src={productSpinner} alt="productSpinner" ></img></div>)}
                     </div>
                     <PhotoSlider
                         images={images.map((item) => ({ src: item, key: item }))}
