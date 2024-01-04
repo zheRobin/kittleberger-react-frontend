@@ -59,8 +59,10 @@ const Organism = () => {
     const usedArticles = useSelector(state => state.products.usedArticles)
     const adminMethod = useSelector(state => state.info.adminMethod)
     let page = useSelector(state => state.templates.page)
-    let filters = useSelector(state => state.templates.filterData)
+    const filters = useSelector(state => state.templates.filterData)
+    const {article_list, ...filterOptions} = filters;
     const [initialized, setInitialized] = useState(true);
+    const [articleChanges, setArticleChange] = useState(null)
     const dateConvert = (originDate) => {
         const date = new Date(originDate);
         const day = date.getDate().toString().padStart(2, '0');
@@ -85,8 +87,8 @@ const Organism = () => {
     )
 
     useEffect(() => {
-        setLoading(true)
-
+        filters.article_list.length === articleChanges ? setLoading(false) : setLoading(true)
+        setArticleChange(filters.article_list.length)
         if (initialized) {
             setLoading(false)
             setInitialized(false);
@@ -94,10 +96,10 @@ const Organism = () => {
         else {
             infiniteTemplate(token, 1, filters, (success) => {
                 if (success.status === 200) {
-                    if (success.data?.data?.products?.length < 5) {
+                    if (success.data?.data?.products?.length < 15) {
                         dispatch(setProductLoadingStatus(false));
                     }
-                    if (success.data?.data?.templates.length < 5) {
+                    if (success.data?.data?.templates.length < 15) {
                         dispatch(setTemplateLoadingStatus(false));
                     }
                     dispatch(setUpdatedDate(dateConvert(success.data.data?.document_last_update)))
@@ -111,14 +113,13 @@ const Organism = () => {
                 }
             })
         }
-
     }, [filters]);
 
     const fetchMoreData = (type) => {
         infiniteTemplate(token, page, filters, (success) => {
             if (success.status === 200) {
                 dispatch(appendUsedArticles(success.data.data?.articles))
-                if (loadingTemplateStatus === true) {
+                if (loadingTemplateStatus === false) {
                     setTimeout(() => {
                         if (type === "template" && success.data?.data?.templates.length === 15) {
                             dispatch(selectPage(page + 1))
@@ -132,7 +133,7 @@ const Organism = () => {
                         }
                     }, 500);
                 }
-                if (loadingProductStatus === true) {
+                if (loadingProductStatus === false) {
                     setTimeout(() => {
                         if (type === "product" && success.data?.data?.products?.length === 15) {
                             dispatch(selectPage(page + 1))
