@@ -63,6 +63,7 @@ const Organism = () => {
     const {article_list, ...filterOptions} = filters;
     const [initialized, setInitialized] = useState(true);
     const [articleChanges, setArticleChange] = useState(null)
+    const [renderNum, setRenderNum] = useState(0)
     const dateConvert = (originDate) => {
         const date = new Date(originDate);
         const day = date.getDate().toString().padStart(2, '0');
@@ -87,10 +88,10 @@ const Organism = () => {
     )
 
     useEffect(() => {
-        filters.article_list.length === articleChanges ? setLoading(false) : setLoading(true)
+        filters.article_list.length === articleChanges ? (renderNum ===0 ? setLoading(true):setLoading(false) ) : setLoading(true)
         setArticleChange(filters.article_list.length)
         if (initialized) {
-            setLoading(false)
+            setLoading(true)
             setInitialized(false);
         }
         else {
@@ -110,6 +111,7 @@ const Organism = () => {
                     setCount(success.data.data?.template_count)
                     setProductCount(success.data.data?.product_count)
                     setLoading(false)
+                    setRenderNum(renderNum+1)
                 }
             })
         }
