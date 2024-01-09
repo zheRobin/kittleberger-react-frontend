@@ -1,5 +1,5 @@
 import "./style/productViewStyle.scss"
-import cancel from "../../assets/icons/cross.svg"
+import cancel from "assets/icons/cross.svg"
 import { useState } from "react"
 
 const ProductBackgroundCard = () => {

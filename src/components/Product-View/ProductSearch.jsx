@@ -1,14 +1,14 @@
-import search from "../../assets/icons/search2.svg"
-import "./style/productViewStyle.scss"
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
-import { getProductsbyFilter } from "../../_services/Product";
-import { useDispatch, useSelector } from "react-redux";
+// import { getProductsbyFilter } from "libs/_services/Product";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { setFilterData, selectPage, setProductLoadingStatus } from "../../store/reducer";
+import { setFilterData, selectPage, setProductLoadingStatus } from "store/reducer";
+import SearchIcon from "assets/icons/search2.svg"
+import "./style/productViewStyle.scss"
 
 export default function ProductSearch({ filters, usedArticles }) {
   const dispatch = useDispatch()
@@ -149,7 +149,7 @@ export default function ProductSearch({ filters, usedArticles }) {
             ...params.InputProps,
             endAdornment: (
               <InputAdornment position="end">
-                <div className="search-multi pointer"><img src={search} alt="search"></img></div>
+                <div className="search-multi pointer"><img src={SearchIcon} alt="search"></img></div>
               </InputAdornment>
             )
           }}

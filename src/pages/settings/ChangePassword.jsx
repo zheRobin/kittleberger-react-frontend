@@ -1,9 +1,9 @@
 import "./style/AccountSetting.scss"
-import { TemplateButton } from "../Organism/TemplatePanel"
+import { TemplateButton } from "pages/main/TemplatePanel"
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useCallback } from "react";
-import { changePassword } from "../../_services/User";
+import { changePassword } from "libs/_services/User";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from "react-redux";

@@ -8,17 +8,17 @@ import { useTranslation } from 'react-i18next';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from 'react';
 import { useSelector } from "react-redux";
-import PlusIcon from "../../assets/icons/add.svg"
-import DeleteIcon from "../../assets/icons/cross.svg"
-import DragIcon from "../../assets/icons/drag&drop.svg"
+import PlusIcon from "assets/icons/add.svg"
+import DeleteIcon from "assets/icons/cross.svg"
+import DragIcon from "assets/icons/drag&drop.svg"
 import 'react-toastify/dist/ReactToastify.css';
-import "../../components/Composing/style/composeStyle.scss"
-import ImageTemplate from "../../components/Composing/ImageTempate"
+import "components/Composing/style/composeStyle.scss"
+import ImageTemplate from "components/Composing/ImageTempate"
 import { useRef, useLayoutEffect, useEffect } from 'react';
 import * as Yup from 'yup'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { updateTemplate } from '../../_services/Template';
-import spinner from "../../assets/icons/tube-spinner.svg"
+import { updateTemplate } from 'libs/_services/Template';
+import spinner from "assets/icons/tube-spinner.svg"
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
         <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -304,7 +304,7 @@ const TemplateEditPanel = () => {
 
                         <Form className='template-form'>
                             <div className='template-panel'>
-                                <canvas src="../../assets/images/bali.tif" />
+                                <canvas src="assets/images/bali.tif" />
                                 <div
                                     className="top-template-button"
                                     onClick={handleSubmit}

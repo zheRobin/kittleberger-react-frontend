@@ -1,13 +1,13 @@
 
 import "./style/AccountSetting.scss"
-import { TemplateButton } from "../Organism/TemplatePanel"
-import cross from "../../assets/icons/cross.svg"
-import { tokenList } from "../../_services/ApiToken"
+import { TemplateButton } from "pages/main/TemplatePanel"
+import cross from "assets/icons/cross.svg"
+import { tokenList } from "libs/_services/ApiToken"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useFormik } from 'formik';
-import { createToken } from "../../_services/ApiToken"
-import { deleteToken } from "../../_services/ApiToken"
+import { createToken } from "libs/_services/ApiToken"
+import { deleteToken } from "libs/_services/ApiToken"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';

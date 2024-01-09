@@ -1,8 +1,8 @@
 
 import "./style/AccountSetting.scss"
-import { TemplateButton } from "../Organism/TemplatePanel"
-import cross from "../../assets/icons/cross.svg"
-import pencil from "../../assets/icons/pencil.svg"
+import { TemplateButton } from "pages/main/TemplatePanel"
+import cross from "assets/icons/cross.svg"
+import pencil from "assets/icons/pencil.svg"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useFormik } from 'formik';
@@ -11,11 +11,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Formik } from "formik"
 import * as Yup from 'yup';
 import { useTranslation } from "react-i18next"
-import { createTemplatesTypes, editTemplatesTypes, deleteTemplatesTypes } from "../../_services/Template"
-import close from "../../assets/icons/cross-black.svg"
-import { Loading } from "../Organism/TemplatePanel"
+import { createTemplatesTypes, editTemplatesTypes, deleteTemplatesTypes } from "libs/_services/Template"
+import close from "assets/icons/cross-black.svg"
+import { Loading } from "pages/main/TemplatePanel"
 import { authActions } from "../../store/reducer"
-import plus from "../../assets/icons/plus-square.svg"
+import plus from "assets/icons/plus-square.svg"
 
 const TypeList = ({ type, label }) => {
     const dispatch = useDispatch()

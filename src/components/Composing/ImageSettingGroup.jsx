@@ -1,5 +1,5 @@
-import dragIcon from "../../assets/icons/drag&drop.svg"
-import cancel from "../../assets/icons/cross.svg"
+import dragIcon from "assets/icons/drag&drop.svg"
+import cancel from "assets/icons/cross.svg"
 import { useState } from "react"
 
 const ImageSettingGroup = () => {

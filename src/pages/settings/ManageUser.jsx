@@ -1,10 +1,10 @@
 import "./style/AccountSetting.scss"
-import pencil from "../../assets/icons/pencil.svg"
-import { TemplateButton } from "../Organism/TemplatePanel"
-import close from "../../assets/icons/cross-black.svg"
-import cross from "../../assets/icons/cross.svg"
+import pencil from "assets/icons/pencil.svg"
+import { TemplateButton } from "pages/main/TemplatePanel"
+import close from "assets/icons/cross-black.svg"
+import cross from "assets/icons/cross.svg"
 import { useEffect, useState } from "react"
-import { userCreate, userEdit, userDelete, userList } from "../../_services/User"
+import { userCreate, userEdit, userDelete, userList } from "libs/_services/User"
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';

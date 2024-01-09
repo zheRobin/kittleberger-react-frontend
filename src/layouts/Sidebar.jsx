@@ -1,6 +1,6 @@
 import "./style/dashboardStyle.scss"
 import { Typography } from "@mui/material"
-import AlertDialog from '../../components/Dialog/NormalDialog'
+import AlertDialog from 'components/Dialog/NormalDialog'
 import { useSelector } from "react-redux"
 import { useTranslation } from "react-i18next"
 

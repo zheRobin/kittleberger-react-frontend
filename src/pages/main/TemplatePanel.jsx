@@ -8,18 +8,18 @@ import ImageUploading from 'react-images-uploading';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from 'react';
 import { useSelector } from "react-redux";
-import { createTemplate } from "../../_services/Template";
-import PlusIcon from "../../assets/icons/add.svg"
-import DeleteIcon from "../../assets/icons/cross.svg"
-import DragIcon from "../../assets/icons/drag&drop.svg"
-import ImageTemplate from "../../components/Composing/ImageTempate"
+import { createTemplate } from "libs/_services/Template";
+import PlusIcon from "assets/icons/add.svg"
+import DeleteIcon from "assets/icons/cross.svg"
+import DragIcon from "assets/icons/drag&drop.svg"
+import ImageTemplate from "components/Composing/ImageTempate"
 import { useRef, useLayoutEffect } from 'react';
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom';
-import spinner from "../../assets/icons/tube-spinner.svg"
+import spinner from "assets/icons/tube-spinner.svg"
 import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
-import "../../components/Composing/style/composeStyle.scss"
+import "components/Composing/style/composeStyle.scss"
 
 export const TemplateButton = ({ content, type = "brown" }) => {
 	return (

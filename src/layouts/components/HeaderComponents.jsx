@@ -1,5 +1,5 @@
 
-import ProfileIcon from "../../../components/LayoutComponents/ProfileIcon";
+import ProfileIcon from "components/LayoutComponents/ProfileIcon";
 import ProfileLayout from "./ProfileLayoutModal";
 import { useState } from "react";
 import { Typography } from "@mui/material";
@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import "../style/dashboardStyle.scss"
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { switchRole } from "../../../store";
-import bosch from "../../../assets/images/Header_bosch.svg"
+import { switchRole } from "store/reducer";
+import bosch from "assets/images/Header_bosch.svg"
 
 const HeaderComponents = () => {
     const [accountModalShow, setAccountModal] = useState(false)

@@ -78,7 +78,7 @@ const Organism = () => {
                 localStorage.setItem('templateTypes', JSON.stringify(success.data.data))
                 dispatch(authActions.setTemplateTypes(success.data.data))
             })
-        }, [dispatch, token]
+        }, []
     )
     useEffect(
         () => {
@@ -114,7 +114,7 @@ const Organism = () => {
                 }
             })
         }
-    }, [articleChanges, dispatch, filters, initialized, page, renderNum, token]);
+    }, [filters]);
 
     const fetchMoreData = (type) => {
         infiniteTemplate(token, page, filters, (success) => {

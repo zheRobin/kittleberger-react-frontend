@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from "@mui/material"
 import "./_dialog_style.scss"
 import { useTranslation } from 'react-i18next';
-import { getDynamicContent } from '../../_services/Info';
+import { getDynamicContent } from 'libs/_services/Info';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';

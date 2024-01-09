@@ -1,11 +1,11 @@
 import "./style/productViewStyle.scss"
-import editPencil from "../../assets/icons/pencil-white.svg"
-import cancel from "../../assets/icons/cross.svg"
+import editPencil from "assets/icons/pencil-white.svg"
+import cancel from "assets/icons/cross.svg"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { findTemplates, setProductLists, setComposedProduct, setCardInfo } from "../../store/reducer"
 import { useState, useRef } from "react"
-import spinner from "../../assets/icons/tube-spinner.svg"
+import spinner from "assets/icons/tube-spinner.svg"
 
 const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const navigate = useNavigate();
@@ -78,7 +78,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                         <img src={spinner} alt="preview" style={{ width: "150px" }}></img>
                     </div>
                     <div style={{ display: loading ? "none" : "block" }} onLoad={imageLoaded}>
-                        <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? (!tempImage ? cardInfo?.preview_image_cdn_url : require("../../assets/images/img_error.png")) : (!tempImage ? cardInfo?.bg_image_cdn_url : require("../../assets/images/img_error.png"))) : (cardInfo?.cdn_url.split('.').pop() === 'tiff' ? (!tempImage ? cardInfo?.png_result : require("../../assets/images/img_error.png")) : (!tempImage ? cardInfo?.cdn_url : require("../../assets/images/img_error.png")))} alt="preview" onError={handleImageError} onLoad={imageLoaded}></img>
+                        <img src={type === 1 ? (cardInfo?.preview_image_cdn_url ? (!tempImage ? cardInfo?.preview_image_cdn_url : require("assets/images/img_error.png")) : (!tempImage ? cardInfo?.bg_image_cdn_url : require("assets/images/img_error.png"))) : (cardInfo?.cdn_url.split('.').pop() === 'tiff' ? (!tempImage ? cardInfo?.png_result : require("assets/images/img_error.png")) : (!tempImage ? cardInfo?.cdn_url : require("assets/images/img_error.png")))} alt="preview" onError={handleImageError} onLoad={imageLoaded}></img>
                     </div>
                 </div>
             </div>

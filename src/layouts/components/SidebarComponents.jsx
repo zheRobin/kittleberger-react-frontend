@@ -1,8 +1,8 @@
-import Filterbar from "../../../components/LayoutComponents/Filterbar"
+import Filterbar from "components/LayoutComponents/Filterbar"
 import "../style/dashboardStyle.scss"
 import { useLocation } from "react-router-dom"
-import ReturnPath from "../../../components/LayoutComponents/ReturnPath"
-import SideNav from "../../../components/LayoutComponents/SideNav"
+import ReturnPath from "components/LayoutComponents/ReturnPath"
+import SideNav from "components/LayoutComponents/SideNav"
 
 const SidebarComponents = () => {
     const location = useLocation()

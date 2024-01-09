@@ -1,4 +1,4 @@
-import { store, authActions } from '../store/';
+import { store, authActions } from 'store/reducer';
 
 export const fetchWrapper = {
     get: request('GET'),

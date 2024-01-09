@@ -1,22 +1,22 @@
 import "./style/organismStyle.scss"
-import plus from "../../assets/icons/add-2.svg"
+import plus from "assets/icons/add-2.svg"
 import { useSelector } from "react-redux"
 import { useEffect, useState, useRef } from "react"
 import { appendProducts, setComposedProduct, setSaveStatus } from "../../store/reducer"
 import { useDispatch } from "react-redux"
-import { getProductsbyFilter } from "../../_services/Product"
+import { getProductsbyFilter } from "libs/_services/Product"
 import { Suspense } from "react"
 import 'react-photo-view/dist/react-photo-view.css';
 import { PhotoSlider } from 'react-photo-view';
-import { composeByInfo } from "../../_services/Product"
-import { calcPosition } from "../../_services/Product"
-import productSpinner from "../../assets/icons/tube-spinner.svg"
-import spinner from "../../assets/icons/tube-spinner.svg"
+import { composeByInfo } from "libs/_services/Product"
+import { calcPosition } from "libs/_services/Product"
+import productSpinner from "assets/icons/tube-spinner.svg"
+import spinner from "assets/icons/tube-spinner.svg"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from "react-i18next"
 import { setCardInfo } from "../../store/reducer"
-import imgError from "../../assets/images/img_error.png";
+import imgError from "assets/images/img_error.png";
 export const ProductView = () => {
     const dispatch = useDispatch()
     const selectedTemplate = useSelector(state => state.products.selectedTemplate);
@@ -93,7 +93,7 @@ export const ProductView = () => {
                 <Loading />
             ) : (
                 <div className="saved-images" style={{ width: "100%", height: "800px" }}>
-                    <img ref={imgRef} src={!tempImage ? composeImage : require("../../assets/images/img_error.png")} alt="background" style={{ height: '100%', width: "100%", objectFit: 'contain' }} />
+                    <img ref={imgRef} src={!tempImage ? composeImage : require("assets/images/img_error.png")} alt="background" style={{ height: '100%', width: "100%", objectFit: 'contain' }} />
                 </div>
             )}
 
@@ -131,7 +131,7 @@ export const ProductList = ({ productItem, possiblePos, setPreview, setVisible }
                 marginRight: '5px',
                 display: loading ? "none" : "block"
             }} className="pointer" onClick={() => { setPreview([productItem?.render_url]); setVisible(true) }} onLoad={imageLoaded}>
-                <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src={productItem?.render_url ? (!tempImage ? productItem?.render_url : require("../../assets/images/img_error.png")) : require("../../assets/images/product-image.png")} alt="product" onError={handleImageError} onLoad={imageLoaded} />
+                <img style={{ width: "100%", height: "100%", objectFit: "contain" }} src={productItem?.render_url ? (!tempImage ? productItem?.render_url : require("assets/images/img_error.png")) : require("assets/images/product-image.png")} alt="product" onError={handleImageError} onLoad={imageLoaded} />
             </div>
             <div className="product-info" >
                 <div className="label-info">
