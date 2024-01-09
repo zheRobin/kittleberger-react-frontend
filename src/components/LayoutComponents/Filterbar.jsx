@@ -8,7 +8,7 @@ import { SelectCountry } from "../Composing/CheckboxGroup";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { selectPage, setTemplateLoadingStatus, setProductLoadingStatus, setFilterData, setResetStatus } from "../../store";
+import { selectPage, setTemplateLoadingStatus, setProductLoadingStatus, setFilterData, setResetStatus } from "../../store/reducer";
 import { useTranslation } from "react-i18next";
 
 export const ProductNumberFilter = (resetValue) => {

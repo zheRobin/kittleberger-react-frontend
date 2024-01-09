@@ -8,7 +8,7 @@ import { getProductsbyFilter } from "../../_services/Product";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { setFilterData, selectPage, setProductLoadingStatus } from "../../store";
+import { setFilterData, selectPage, setProductLoadingStatus } from "../../store/reducer";
 
 export default function ProductSearch({ filters, usedArticles }) {
   const dispatch = useDispatch()

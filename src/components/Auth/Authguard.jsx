@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { authActions } from "../../store"
+import { authActions } from "../../store/reducer"
 
 
 const Authguard = ({ component }) => {

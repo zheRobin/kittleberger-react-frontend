@@ -1,72 +1,83 @@
 import { Route, Routes } from "react-router-dom";
-import LoginPage from "./pages/Login/LoginPage"
-import ForgotPage from "./pages/Login/ForgotPage"
-import Organism from "./pages/Organism/Organism";
-import PrivateRoute from './components/Login/PrivateRoute.jsx'
-import LayOutDashboard from "./layout/LayOutDashboard.jsx";
-import TemplatePanel from "./pages/Organism/TemplatePanel";
-import PasswordChange from "./pages/AccountSetting/PasswordChange";
-import ManageUser from "./pages/AccountSetting/ManageUser";
-import ApiToken from "./pages/AccountSetting/ApiToken";
-import ProductSelect from "./pages/Organism/ProductSelect";
-import Summary from "./pages/Organism/Summary";
-import Authguard from "./components/Auth/Authguard.jsx";
-import UnAuthguard from "./components/Auth/UnAuthGuard.jsx";
-import TemplateEditPanel from "./pages/Organism/TemplateEditPanel.jsx";
-import Setting from "./pages/AccountSetting/Setting.jsx";
+import Layout from "layouts";
+
+// Anon user pages
+import Login from "pages/auth/login"
+import ForgetPassword from "pages/auth/forget-password.jsx"
+
+// Authed user main pages
+import Home from "pages/main/Home";
+import Composing from "pages/main/Composing";
+import Summary from "pages/main/Summary";
+
+// Authed user sub pages
+import TemplateItem from "pages/main/partials/TemplateItem";
+import TemplateEditPanel from "pages/main/TemplateEditPanel.jsx";
+
+// Authed user setting pages
+import ChangePassword from "pages/settings/ChangePassword";
+import ManageUser from "pages/settings/ManageUser";
+import ApiToken from "pages/settings/ApiToken";
+import Setting from "pages/settings/Setting.jsx";
+
+// Auth components
+import PrivateRoute from 'components/auth/PrivateRoute.jsx'
+import Authguard from "components/auth/Authguard.jsx";
+import UnAuthguard from "components/auth/UnAuthGuard.jsx";
+
 const AuthRouteGroup = [
     {
         path: "product",
         element:
-            <LayOutDashboard><Organism /></ LayOutDashboard>,
+            <Layout><Home /></ Layout>,
         title: "product"
     },
     {
         path: "product/template",
         element:
-            <LayOutDashboard><TemplatePanel /></LayOutDashboard>,
+            <Layout><TemplateItem /></Layout>,
         title: 'product/template'
     },
     {
         path: "product/edittemplate",
         element:
-            <LayOutDashboard><TemplateEditPanel /></LayOutDashboard>,
+            <Layout><TemplateEditPanel /></Layout>,
         title: 'product/Edit-template'
     },
     {
         path: "user/password-change",
         element:
-            <LayOutDashboard><PasswordChange /></LayOutDashboard>,
+            <Layout><ChangePassword /></Layout>,
         title: 'password-change'
     },
     {
         path: "user/user-manage",
         element:
-            <LayOutDashboard><ManageUser /></LayOutDashboard>,
+            <Layout><ManageUser /></Layout>,
         title: 'user-manage'
     },
     {
         path: "user/api-token",
         element:
-            <LayOutDashboard><ApiToken /></LayOutDashboard>,
+            <Layout><ApiToken /></Layout>,
         title: 'ApiToken'
     },
     {
         path: "user/setting",
         element:
-            <LayOutDashboard><Setting /></LayOutDashboard>,
+            <Layout><Setting /></Layout>,
         title: 'ApiToken'
     },
     {
         path: "product/product-select",
         element:
-            <LayOutDashboard><ProductSelect /></LayOutDashboard>,
+            <Layout><Composing /></Layout>,
         title: 'Product Select'
     },
     {
         path: "product/summary",
         element:
-            <LayOutDashboard><Summary /></LayOutDashboard>,
+            <Layout><Summary /></Layout>,
         title: 'Summary'
     }
 ]
@@ -76,13 +87,13 @@ const UnAuthGroup = [
     path: "",
     element:
         < PrivateRoute >
-            <LoginPage />
+            <Login />
         </PrivateRoute >,
     title: "Login"
   },
   {
     path: "forgot",
-    element: <ForgotPage />,
+    element: <ForgetPassword />,
     title: "forgot"
   },
 ]

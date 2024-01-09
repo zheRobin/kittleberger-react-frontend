@@ -2,7 +2,7 @@ import "./style/layoutCompoStyle.scss"
 import returnIcon from "../../assets/icons/arw-node-l.svg"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
-import { emptyStore } from "../../store"
+import { emptyStore } from "../../store/reducer"
 import { useTranslation } from "react-i18next"
 
 const ReturnPath = () => {

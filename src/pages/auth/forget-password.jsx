@@ -1,11 +1,11 @@
-import './style/loginStyle.scss'
+import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useEffect } from "react";
-import { loadCaptchaEnginge, LoadCanvasTemplateNoReload } from 'react-simple-captcha';
 import { InputAdornment } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
+import { loadCaptchaEnginge, LoadCanvasTemplateNoReload } from 'react-simple-captcha';
+import './style/loginStyle.scss'
 
 const ForgotPage = () => {
     const navigate = useNavigate()

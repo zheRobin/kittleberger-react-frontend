@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchWrapper } from '../_utils/fetch-wrapper';
+import { fetchWrapper } from 'libs/_utils/fetch-wrapper';
 // implementation
 function createInitialState() {
   return {

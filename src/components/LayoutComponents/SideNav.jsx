@@ -5,7 +5,7 @@ import OverlayGroup from "../Product-View/OverlayGroup"
 import OverlaySide from "../Product-View/OverlaySide"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
-import { updateProducts } from "../../store"
+import { updateProducts } from "../../store/reducer"
 import { useTranslation } from "react-i18next"
 
 const SideNav = () => {

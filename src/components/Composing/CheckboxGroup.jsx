@@ -2,8 +2,8 @@ import Checkbox from '@mui/material/Checkbox';
 import "./style/composeStyle.scss"
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { setResetStatus } from '../../store';
-import { appendCountries, removeCountries } from '../../store';
+import { setResetStatus } from '../../store/reducer';
+import { appendCountries, removeCountries } from '../../store/reducer';
 import { useTranslation } from 'react-i18next';
 
 const CheckboxGroup = (props) => {

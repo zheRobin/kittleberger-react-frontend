@@ -1,24 +1,23 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import './style/organismStyle.scss'
-import ProductCard from "../../components/Product-View/ProductCard";
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
-import ProductSearch from '../../components/Product-View/ProductSearch';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
-import { ToastContainer, toast } from 'react-toastify';
-import { appendTemplate, appendUsedArticles, selectPage, setUpdatedDate, setTemplateLoadingStatus, initTemplate, setProductLoadingStatus, initProductsOnTemplates, appendProductsOnTemplate, authActions, setUsedArticles } from '../../store';
-import { infiniteTemplate } from '../../_services/Template';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
-import { Loading } from './ProductSelect';
-import { emptyStore } from '../../store';
-import { getTemplatesTypes } from '../../_services/Template';
+import { ToastContainer, toast } from 'react-toastify';
+import ProductCard from "components/Product-View/ProductCard";
+import ProductSearch from 'components/Product-View/ProductSearch';
+import { Loading } from './Composing';
+import { infiniteTemplate } from 'libs/_services/Template';
+import { getTemplatesTypes } from 'libs/_services/Template';
+import { appendTemplate, appendUsedArticles, selectPage, setUpdatedDate, setTemplateLoadingStatus, initTemplate, setProductLoadingStatus, initProductsOnTemplates, appendProductsOnTemplate, authActions, setUsedArticles,emptyStore } from 'store/reducer';
+import './style/organismStyle.scss'
+import 'react-toastify/dist/ReactToastify.css';
 
 const theme = createTheme({
     components: {
@@ -50,7 +49,7 @@ const Organism = () => {
     };
     const [loading, setLoading] = useState(false)
     const [filterData, setFilterData] = useState([])
-    const [searchItems, setSearchItems] = useState([])
+    // const [searchItems, setSearchItems] = useState([])
     const token = useSelector(state => state.auth.token)
     const templates = useSelector(state => state.templates.templateData)
     const products = useSelector(state => state.templates.productsOnTemplates)
@@ -60,7 +59,7 @@ const Organism = () => {
     const adminMethod = useSelector(state => state.info.adminMethod)
     let page = useSelector(state => state.templates.page)
     const filters = useSelector(state => state.templates.filterData)
-    const {article_list, ...filterOptions} = filters;
+    // const {article_list, ...filterOptions} = filters;
     const [initialized, setInitialized] = useState(true);
     const [articleChanges, setArticleChange] = useState(null)
     const [renderNum, setRenderNum] = useState(0)
@@ -79,7 +78,7 @@ const Organism = () => {
                 localStorage.setItem('templateTypes', JSON.stringify(success.data.data))
                 dispatch(authActions.setTemplateTypes(success.data.data))
             })
-        }, []
+        }, [dispatch, token]
     )
     useEffect(
         () => {
@@ -88,7 +87,7 @@ const Organism = () => {
     )
 
     useEffect(() => {
-        filters.article_list.length === articleChanges ? (renderNum ===0 ? setLoading(true):setLoading(false) ) : setLoading(true)
+        filters.article_list.length === articleChanges ? (renderNum === 0 ? setLoading(true):setLoading(false) ) : setLoading(true)
         setArticleChange(filters.article_list.length)
         if (initialized) {
             setLoading(true)
@@ -115,7 +114,7 @@ const Organism = () => {
                 }
             })
         }
-    }, [filters]);
+    }, [articleChanges, dispatch, filters, initialized, page, renderNum, token]);
 
     const fetchMoreData = (type) => {
         infiniteTemplate(token, page, filters, (success) => {

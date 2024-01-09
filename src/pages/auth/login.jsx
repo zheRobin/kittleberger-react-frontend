@@ -1,14 +1,14 @@
-import './style/loginStyle.scss'
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { InputAdornment } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
-import { authActions } from "../../store"
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { InputAdornment } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify"
+import { authActions } from 'store/reducer'
+import './style/loginStyle.scss'
 import 'react-toastify/dist/ReactToastify.css';
 
 

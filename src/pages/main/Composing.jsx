@@ -2,7 +2,7 @@ import "./style/organismStyle.scss"
 import plus from "../../assets/icons/add-2.svg"
 import { useSelector } from "react-redux"
 import { useEffect, useState, useRef } from "react"
-import { appendProducts, setComposedProduct, setSaveStatus } from "../../store"
+import { appendProducts, setComposedProduct, setSaveStatus } from "../../store/reducer"
 import { useDispatch } from "react-redux"
 import { getProductsbyFilter } from "../../_services/Product"
 import { Suspense } from "react"
@@ -15,7 +15,7 @@ import spinner from "../../assets/icons/tube-spinner.svg"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from "react-i18next"
-import { setCardInfo } from "../../store"
+import { setCardInfo } from "../../store/reducer"
 import imgError from "../../assets/images/img_error.png";
 export const ProductView = () => {
     const dispatch = useDispatch()

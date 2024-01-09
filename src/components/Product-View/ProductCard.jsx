@@ -3,7 +3,7 @@ import editPencil from "../../assets/icons/pencil-white.svg"
 import cancel from "../../assets/icons/cross.svg"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { findTemplates, setProductLists, setComposedProduct, setCardInfo } from "../../store"
+import { findTemplates, setProductLists, setComposedProduct, setCardInfo } from "../../store/reducer"
 import { useState, useRef } from "react"
 import spinner from "../../assets/icons/tube-spinner.svg"
 

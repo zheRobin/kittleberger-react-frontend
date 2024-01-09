@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next"
 import { createTemplatesTypes, editTemplatesTypes, deleteTemplatesTypes } from "../../_services/Template"
 import close from "../../assets/icons/cross-black.svg"
 import { Loading } from "../Organism/TemplatePanel"
-import { authActions } from "../../store"
+import { authActions } from "../../store/reducer"
 import plus from "../../assets/icons/plus-square.svg"
 
 const TypeList = ({ type, label }) => {

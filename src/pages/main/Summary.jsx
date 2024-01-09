@@ -1,26 +1,24 @@
-import "../Organism/style/organismStyle.scss"
-import "../../components/Dialog/_dialog_style.scss"
+import React, { useEffect, useState, useRef } from "react"
+import { useLocation } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import { Typography } from "@mui/material"
-import { TemplateButton } from "./TemplatePanel"
-import copy from "../../assets/icons/copy.svg"
-import { useDispatch, useSelector } from "react-redux"
-import React, { useEffect, useState } from "react"
-import { getOnlineInfo, updateOnlineInfo, refreshCompose, replacePreviewImage } from "../../_services/Product"
-import { ToastContainer, toast } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Loading } from "./ProductSelect"
-import { useLocation } from "react-router-dom"
-import { useTranslation } from 'react-i18next';
-import { useRef } from "react"
-import { calcPosition } from "../../_services/Product";
-import { setCardInfo, setComposedProduct, setSaveStatus } from "../../store";
-import { getImageFromUrl } from "../../_services/Info";
 import { saveAs } from "file-saver";
+import { ToastContainer, toast } from "react-toastify"
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useTranslation } from 'react-i18next';
+import { setCardInfo, setComposedProduct, setSaveStatus } from "store/reducer";
+import { getOnlineInfo, updateOnlineInfo, refreshCompose, replacePreviewImage, calcPosition } from "libs/_services/Product";
+import { getImageFromUrl } from "libs/_services/Info";
+import { TemplateButton } from "./TemplatePanel"
+import { Loading } from "./Composing"
+import CopyIcon from "assets/icons/copy.svg"
+import "components/Dialog/_dialog_style.scss"
+import "./style/organismStyle.scss"
+import 'react-toastify/dist/ReactToastify.css';
 
 const Summary = () => {
     const { t } = useTranslation();
@@ -476,7 +474,7 @@ const Summary = () => {
                                     {deploymentName.value}
                                 </Typography>
                                 <CopyToClipboard text={deploymentName.value} onCopy={() => setdeploymentName({ ...deploymentName, copied: true })}>
-                                    <img className="pointer" src={copy} alt=" copy" />
+                                    <img className="pointer" src={CopyIcon} alt=" copy" />
                                 </CopyToClipboard>
                             </div>
                             <div className="download-button" onClick={() => handleDownload()}><TemplateButton content={t('Download Bilddatei')} type="transparent" /></div>
