@@ -42,8 +42,8 @@ const Summary = () => {
     })
     const [submitRefresh,setSubmitRefresh] = useState(false)
     const [previewImage, setPreviewImage] = useState("")
-    const [updatedDate, setUpdatedDate] = useState(null)
-    const [dateModified, setDateModified] = useState(null);
+    const [, setUpdatedDate] = useState(null)
+    const [, setDateModified] = useState(null);
     const [formattedDateModified, setFormattedDateModified] = useState('');
     const token = useSelector(state => state.auth.token)
     useEffect(
@@ -278,8 +278,8 @@ const Summary = () => {
     ${t('Technische Daten')}: ${selectedTemplate.resolution_width} x ${selectedTemplate.resolution_height} px (${selectedTemplate.resolution_dpi} dpi)
     ${t('Dateiformat')}: ${selectedTemplate.file_type} (RGB)
     ${t('Enthaltene Produkte')}: ${selectedProducts.map((product, index) => `${product.name} (ID: ${product.article_number}; Mediaobject-ID: ${product.mediaobject_id})`).join(", ")}
-    ${t('Erstellt von ')}${userInfo.username} ${formattedDate_created}
-    ${t('Zuletzt bearbeitet von ')}${userInfo.username} ${formattedDateModified}
+    ${t('Erstellt von ')}${cardInfo?.created_by !== undefined || deploymentName.value !== '' ? cardInfo?.created_by?.username : userInfo.username} ${formattedDate_created}
+    ${t('Zuletzt bearbeitet von ')}${cardInfo?.modified_by !== undefined || deploymentName.value !== '' ? cardInfo?.modified_by?.username : userInfo.username} ${formattedDateModified}
   `;
     const downloadMetaData = () => {
         const blob = new Blob([metadata], { type: 'text/plain' });
@@ -443,8 +443,8 @@ const Summary = () => {
                                 </React.Fragment>
                             ))}</div>
                             <div style={{ marginTop: "14px" }}></div>
-                            <p>{t('Erstellt von ')}{userInfo.username} {formattedDate_created}</p>
-                            <p>{t('Zuletzt bearbeitet von ')}{userInfo.username} {formattedDateModified}</p>
+                            <p>{t('Erstellt von ')}{cardInfo?.created_by !== undefined || deploymentName.value !== '' ? cardInfo?.created_by?.username : userInfo.username} {formattedDate_created}</p>
+                            <p>{t('Zuletzt bearbeitet von ')}{cardInfo?.modified_by !== undefined || deploymentName.value !== '' ? cardInfo?.modified_by?.username : userInfo.username} {formattedDateModified}</p>
                         </div>
                     </div>
                 </div>
