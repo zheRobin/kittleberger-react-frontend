@@ -1,17 +1,14 @@
 
-import "./style/AccountSetting.scss"
-import { TemplateButton } from "pages/main/TemplatePanel"
-import cross from "assets/icons/cross.svg"
-import { tokenList } from "libs/_services/ApiToken"
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
 import { useFormik } from 'formik';
-import { createToken } from "libs/_services/ApiToken"
-import { deleteToken } from "libs/_services/ApiToken"
+import { TemplateButton } from "pages/main/TemplatePanel"
+import { CrossIcon } from "libs/icons"; 
+import { tokenList, createToken, deleteToken } from "libs/_services/ApiToken"
 import { ToastContainer, toast } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
 import { useTranslation } from "react-i18next"
+import "./style/AccountSetting.scss"
+import 'react-toastify/dist/ReactToastify.css';
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -38,90 +35,65 @@ const formatDate = (dateString) => {
         return "Just now";
     }
 };
-
-
 const ApiToken = () => {
-
     const [tokenLists, setTokenLists] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const token = useSelector(state => state.auth.token)
     const { t } = useTranslation()
     const schema = Yup.object({
         name: Yup.string().required("Name field is required"),
     })
-    const handleDelete = (id) => {
-        setLoading(true)
-        deleteToken(id, token, (success) => {
-            if (success.data.code === 200 && success.data.status === "success") {
-                toast.success("Successfully Deleted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-            }
-            if (success.data.code === 400 && success.data.status === "failed") {
-                toast.error("Failed to Delete", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-            }
-            setLoading(false)
-        })
-    }
-    const ApiViewList = (token) => {
-        return (
-            <div className="token-list">
-                <div className="typography-400-regular">{token?.token?.apikey}</div>
-                <div className="typography-400-regular">
-                    <div className="typography-400-regular">{token?.token?.name}</div>
-                    <div className="typography-400-regular">{token?.token?.last_used == null ? (`Not used yet`) : `Last used ` + formatDate(token?.token?.last_used)}</div>
-                    <img className="pointer" src={cross} alt="cross" onClick={() => handleDelete(token?.token?.id)} />
-                </div>
-            </div>
-        )
-    }
-
     const formik = useFormik(
         {
             initialValues: {
                 name: ""
             },
             validationSchema: schema,
-            onSubmit: () => {
-                setLoading(true)
-                createToken(formik.values.name, token, (success) => {
-                    if (success.data.code === 200 && success.data.status === "success") {
-                        toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                    }
-                    if (success.data.code === 400 && success.data.status === "failed") {
-                        toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                    }
-                    setLoading(false)
-                })
+            onSubmit: async () => {
+                const data = {
+                    'name': formik.values.name
+                }
+                const response = await createToken(data);
+                if (response.code === 200) {
+                    setTokenLists(response.data);
+                    toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                } else {
+                    toast.error(response.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                }
             }
 
         }
     )
-
-    useEffect(
-        () => {
-            tokenList(token, (success) => {
-                if (success.data.code === 200 && success.data.status === "success") {
-                    setTokenLists(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                }
-                if (success.data.code === 400 && success.data.status === "failed") {
-                    toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                }
-            })
-        }, []
-    )
-
-    useEffect(
-        () => {
-            tokenList(token, (success) => {
-                if (success.data.code === 200 && success.data.status === "success") {
-                    setTokenLists(success.data.data)
-                }
-                if (success.data.code === 400 && success.data.status === "failed") {
-                    toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                }
-            })
-        }, [loading]
-    )
-
+    const handleDelete = async (id) => {
+        const response = await deleteToken(id);
+        if (response.code === 200) {
+            setTokenLists(response.data);
+            toast.success("Successfully Deleted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+        } else {
+            toast.error("Failed to Delete", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+        }
+    }
+    useEffect(() => {
+        const fetchTokens = async () => {
+            const response = await tokenList();
+            if (response.code === 200) {
+                setTokenLists(response.data);
+            } else {
+                toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+            }
+        };
+        fetchTokens();
+    }, []);
+    const TokenItem = (item) => {    
+        return (
+            <div className="token-list">
+                <div className="typography-400-regular">{item?.token?.apikey}</div>
+                <div className="typography-400-regular">
+                    <div className="typography-400-regular">{item?.token?.name}</div>
+                    <div className="typography-400-regular">{item?.token?.last_used == null ? (`Not used yet`) : `Last used ` + formatDate(item?.token?.last_used)}</div>
+                    <img className="pointer" src={CrossIcon} alt="cross" onClick={() => handleDelete(item?.token?.id)} />
+                </div>
+            </div>
+        )
+    }
     return (
         <>
             <form onSubmit={formik.handleSubmit} className="setting-form">
@@ -152,9 +124,7 @@ const ApiToken = () => {
                             <div className="typography-400-regular">{t("Sie können alle vorhandenen Tokens löschen, wenn sie nicht mehr benötigt werden.")}</div>
                             <div className="api-token">
                                 {tokenLists.map(
-                                    (tokenlist) => {
-                                        return (<ApiViewList key={tokenlist.id} token={tokenlist} />)
-                                    }
+                                    (el) => <TokenItem key={el.id} token={el} />
                                 )}
                             </div>
                         </div>

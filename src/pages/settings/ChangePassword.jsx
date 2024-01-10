@@ -1,20 +1,18 @@
-import "./style/AccountSetting.scss"
-import { TemplateButton } from "pages/main/TemplatePanel"
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useCallback } from "react";
 import { changePassword } from "libs/_services/User";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { TemplateButton } from "pages/main/TemplatePanel"
+import 'react-toastify/dist/ReactToastify.css';
+import "./style/AccountSetting.scss"
 
 const PasswordChange = () => {
-    const token = useSelector(state => state.auth.token)
     const { t } = useTranslation()
     const schema = yup.object().shape({
-        oldpass: yup.string().required("This field is required"),
-        newpass: yup.string()
+        old_password: yup.string().required("This field is required"),
+        new_password: yup.string()
             .min(8, "Password must consist of at least 8 characters")
             .matches(/[a-z]/, "Password must contain at least one lowercase letter")
             .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
@@ -28,25 +26,20 @@ const PasswordChange = () => {
 
     const formik = useFormik({
         initialValues: {
-            oldpass: "",
-            newpass: ""
+            old_password: "",
+            new_password: ""
         },
         validationSchema: schema,
-        onSubmit: () => {
-            changePassword(formik.values, token, (success) => {
-                if (success.data.code === 200 && success.data.status === "success") {
-                    toast.success("Successfully Changed", { theme: "colored", hideProgressBar: "true", autoClose: 1500 });
-                }
-                else {
-                    toast.error("Something went wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 });
-                }
-            });
+        onSubmit: async () => {
+            const response = await changePassword(formik.values)
+            if (response.code === 200) {
+                toast.success("Successfully Changed", { theme: "colored", hideProgressBar: "true", autoClose: 1500 });
+            }
+            else {
+                toast.error("Something went wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 });
+            }
         },
     });
-
-
-
-
     const setInputValue = useCallback(
         (key, value) => formik.setValues(
             {
@@ -68,9 +61,9 @@ const PasswordChange = () => {
                     <div className="label-input-pair">
                         <div className="typography-400-regular">{t("Altes Passwort *")}</div>
                         <div className="password-warning" style={{ width: "470px" }}>
-                            <input type="password" value={formik.values.oldpass} onChange={(e) => setInputValue('oldpass', e.target.value)}></input>
-                            {formik.touched.oldpass && formik.errors.oldpass ? (
-                                <p className="validation">{t(formik.errors.oldpass)}</p>
+                            <input type="password" value={formik.values.old_password} onChange={(e) => setInputValue('old_password', e.target.value)}></input>
+                            {formik.touched.old_password && formik.errors.old_password ? (
+                                <p className="validation">{t(formik.errors.old_password)}</p>
                             ) : null}
                         </div>
 
@@ -78,9 +71,9 @@ const PasswordChange = () => {
                     <div className="label-input-pair">
                         <div className="typography-400-regular">{t("Neues Passwort *")}</div>
                         <div className="password-warning">
-                            <input type="password" value={formik.values.newpass} onChange={(e) => setInputValue('newpass', e.target.value)}></input>
-                            {formik.touched.newpass && formik.errors.newpass ? (
-                                <p className="validation">{t(formik.errors.newpass)}</p>
+                            <input type="password" value={formik.values.new_password} onChange={(e) => setInputValue('new_password', e.target.value)}></input>
+                            {formik.touched.new_password && formik.errors.new_password ? (
+                                <p className="validation">{t(formik.errors.new_password)}</p>
                             ) : null}
                             <div className="typography-400-regular label-group"><li>{t("Das Passwort muss aus mindestens 8 Zeichen bestehen")}</li></div>
                             <div className="typography-400-regular label-group"><li>{t("Das Passwort muss Groß- und Kleinbuchstaben enthalten")}</li></div>

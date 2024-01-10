@@ -1,13 +1,11 @@
-import { TemplateButton } from "pages/main/TemplatePanel"
 import { useEffect, useState } from "react"
 import { userCreate, userEdit, userDelete, userList } from "libs/_services/User"
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from "react-i18next"
-import CloseIcon from "assets/icons/cross-black.svg"
-import CrossIcon from "assets/icons/cross.svg"
-import EditIcon from "assets/icons/pencil.svg"
+import { TemplateButton } from "pages/main/TemplatePanel"
+import { CloseIcon, CrossIcon, EditIcon } from "libs/icons";
 import 'react-toastify/dist/ReactToastify.css';
 import "./style/AccountSetting.scss"
 
