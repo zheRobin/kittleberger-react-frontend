@@ -1,90 +1,78 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchWrapper } from 'libs/_utils/fetch-wrapper';
-// implementation
-function createInitialState() {
-  return {
-    // initialize state from local storage to enable user to stay logged in
-    user: JSON.parse(localStorage.getItem('user')),
-    token: JSON.parse(localStorage.getItem('token')),
-    role: null,
-    error: null,
-    templateTypes:JSON.parse(localStorage.getItem('templateTypes'))
-  };
-}
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Request } from "libs/_utils/request";
 
-const goURL = () => {
-  window.location.assign('/'); 
-}
+const initialState = {
+  user: JSON.parse(localStorage.getItem('user')) || null,
+  token: JSON.parse(localStorage.getItem('token')) || null,
+  role: null,
+  error: null,
+  templateTypes: JSON.parse(localStorage.getItem("templateTypes")),
+};
 
-function createReducers() {
-  const logout = (state) => {
+const reducers = {
+  logout: (state) => {
     state.user = null;
+    state.token = null;
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    localStorage.removeItem('templateTypes')
-    localStorage.removeItem('composeInfo')
-    localStorage.removeItem('templateInfo')
-    localStorage.removeItem('productsInfo')
-    localStorage.removeItem('i18nextLng')
-    localStorage.removeItem('cardInfo')
-    goURL()
+    localStorage.removeItem("templateTypes");
+    localStorage.removeItem("composeInfo");
+    localStorage.removeItem("templateInfo");
+    localStorage.removeItem("productsInfo");
+    localStorage.removeItem("i18nextLng");
+    localStorage.removeItem("cardInfo");
+    window.location.assign("/");
+  },
+  setTemplateTypes: (state, action) => {
+    state.templateTypes = action.payload;
+  },
+};
+
+const login = createAsyncThunk('auth/login', async ({ email, password }, {rejectWithValue}) => {
+  try {
+    const response = await Request.post(`api/v1/user/login/`, { email, password });
+    return response;
+  } catch (err) {
+    return rejectWithValue(err.message);
   }
-  const setTemplateTypes = (state,action) => {
-    state.templateTypes = action.payload
+});
+
+const getUser = createAsyncThunk('auth/getUser', async ({ token }, { dispatch, rejectWithValue }) => {
+  try {
+    const response = await Request.get(`/api/v1/user/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (err) {
+    if (err.response.status === 401) {
+      dispatch(authActions.logout());
+    }
+    return rejectWithValue(err.message);
   }
-  return {
-    logout,
-    setTemplateTypes
-  };
-}
+});
 
-function createExtraActions() {
-  const loginUrl = `${process.env.REACT_APP_API_URL}api/v1/user/login/`;
-  return {
-    login: login(),
-  };
+const extraReducers = (builder) => {
+  builder
+    .addCase(login.fulfilled, (state, action) => {
+      localStorage.setItem('user', JSON.stringify(action.payload.data.user));
+      localStorage.setItem('token', JSON.stringify(action.payload.data.access_token));
+      state.role = action.payload.data.user.is_staff ? "admin" : "user";
+      state.user = action.payload.data.user;
+      state.token = action.payload.data.access_token;
+    })
+    .addCase(getUser.fulfilled, (state, action) => {
+      localStorage.setItem('user', JSON.stringify(action.payload.data.user));
+      state.role = action.payload.data.user.is_staff ? "admin" : "user";
+      state.user = action.payload.data.user;
+    });
+};
 
-  function login() {
-    return createAsyncThunk(
-      `${name}/login`,
-      async ({ email, password }) =>{
-        const response = await fetchWrapper.post(`${loginUrl}`, { email, password })
-        return response.data
-      }
-    );
-  }
-}
+const authSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers,
+  extraReducers,
+});
 
-function createExtraReducers() {
-  const { login } = createExtraActions();
-  var { pending, fulfilled, rejected } = login;
-
-  return {
-    [pending]: (state) => {
-      state.error = null;
-    },
-    [fulfilled]: (state, action) => {
-      const user = action.payload;
-      localStorage.setItem('user', JSON.stringify(user.user));
-      localStorage.setItem('token', JSON.stringify(user.access_token));
-      state.role = user.user.is_superuser ? "super" : (user.user.is_staff? "admin": "user")
-      state.user = user.user;
-      state.token = user.access_token;
-    },
-    [rejected]: (state, action) => {
-      state.error = action.error;
-    },
-  };
-}
-
-// create slice
-const name = 'auth';
-const initialState = createInitialState();
-const reducers = createReducers();
-const extraActions = createExtraActions();
-const extraReducers = createExtraReducers();
-const slice = createSlice({ name, initialState, reducers, extraReducers });
-
-// exports
-export const authActions = { ...slice.actions, ...extraActions };
-export const authReducer = slice.reducer;
+export const authActions = { ...authSlice.actions, login, getUser };
+export const authReducer = authSlice.reducer;

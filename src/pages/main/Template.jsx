@@ -291,7 +291,7 @@ const TemplateEditPanel = () => {
                             if (success.data.code === 201 || success.data.status === "success") {
                                 setLoading(false)
                                 toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                                navigate("/product")
+                                navigate("/")
                             }
                             if (success.data.code === 400 || success.data.status === "failed") {
                                 setLoading(false)

@@ -1,0 +1,42 @@
+import API from './api';
+class AxiosWrapper {
+  static async get(url, options = {}) {
+    return this.request('get', url, options);
+  }
+
+  static async post(url, body, options = {}) {
+    return this.request('post', url, {...options, data: body});
+  }
+
+  static async put(url, body, options = {}) {
+    return this.request('put', url, {...options, data: body});
+  }
+
+  static async delete(url, options = {}) {
+    return this.request('delete', url, options);
+  }
+
+  static async request(method, url, options = {}) {
+    options.headers = options.headers || {}; 
+    options.headers['Content-Type'] = 'application/json'; 
+
+    try {
+      const response = await API({method, url, ...options});
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data);
+    }
+  }
+}
+
+export const Request = AxiosWrapper;
+
+export const handleRequest = async (method, url, data = {}) => {
+  try {
+    const response = await Request[method](`${process.env.REACT_APP_API_URL}${url}`, data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error; 
+  }
+}

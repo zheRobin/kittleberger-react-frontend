@@ -8,7 +8,7 @@ import { authActions } from "store/reducer"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { setSelectedLanguage } from "store/reducer"
 import gear from "assets/icons/settings-gear.svg"
@@ -46,11 +46,10 @@ const ProfileLayout = ({ handleModal }) => {
     const handlelogout = (e) => {
         dispatch(authActions.logout())
     }
-    const { i18n } = useTranslation();
     const switchRole = useSelector(state => state.info.adminMethod)
     const selectedLanguage = useSelector(state => state.info.language)
     const user = useSelector(state => state.auth.user)
-    const userType = user.is_superuser ? "super" : (user.is_staff ? "admin" : "user")
+    const userType = user.is_staff ? "admin" : "user"
     const capitalizedUserType = userType.charAt(0).toUpperCase() + userType.slice(1);
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, handleModal);
@@ -62,10 +61,9 @@ const ProfileLayout = ({ handleModal }) => {
             }
         }
     }, []);
-    const { t } = useTranslation()
-    const handleLanguageChange = (lang) => {
-        const newLang = lang;
-        i18n.changeLanguage(newLang);
+    const { t, i18n } = useTranslation()
+    const handleLanguageChange = lng  => {
+        i18n.changeLanguage(lng);
     };
     return (
         <>
@@ -108,26 +106,26 @@ const ProfileLayout = ({ handleModal }) => {
                         <div className="account-label">{t('Konto')}</div>
                         <div className="account-setting">
                             <div className="account-detail">
-                                <div className="account-detail-info pointer" onClick={() => { navigate("/user/password-change"); handleModal(false) }}>
+                                <div className="account-detail-info pointer" onClick={() => { navigate("/setting/password"); handleModal(false) }}>
                                     <img src={passwordSetting} alt={t('Password Change')}></img>
                                     <div className="account-description">{t('Passwort ändern')}</div>
                                 </div>
                             </div>
                             {switchRole ? (
                                 <>
-                                    <div className="account-detail pointer" onClick={() => { navigate("/user/user-manage"); handleModal(false) }}>
+                                    <div className="account-detail pointer" onClick={() => { navigate("/setting/users"); handleModal(false) }}>
                                         <div className="account-detail-info">
                                             <img src={infoEdit} alt={t('Password Change')}></img>
                                             <div className="account-description">{t('Benutzer verwalten')}</div>
                                         </div>
                                     </div>
-                                    <div className="account-detail pointer" onClick={() => { navigate("/user/api-token"); handleModal(false) }}>
+                                    <div className="account-detail pointer" onClick={() => { navigate("/setting/api-token"); handleModal(false) }}>
                                         <div className="account-detail-info">
                                             <img src={tokenSearch} alt={t('Token')}></img>
                                             <div className="account-description">{t('API-Token')}</div>
                                         </div>
                                     </div>
-                                    <div className="account-detail pointer" onClick={() => { navigate("/user/setting"); handleModal(false) }}>
+                                    <div className="account-detail pointer" onClick={() => { navigate("/setting/contents"); handleModal(false) }}>
                                         <div className="account-detail-info">
                                             <img src={gear} alt={t('Setting')}></img>
                                             <div className="account-description">{t('Einstellung')}</div>

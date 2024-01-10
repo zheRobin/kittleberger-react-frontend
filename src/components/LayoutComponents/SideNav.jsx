@@ -20,10 +20,10 @@ const SideNav = () => {
     const [posIndexGroup, setPosIndexGroup] = useState([])
     const { t } = useTranslation()
     const handleSelect = () => {
-        navigate('/product/product-select')
+        navigate('/composing/edit')
     }
     const handleSummary = () => {
-        navigate('/product/summary')
+        navigate('/composing/view')
     }
     useEffect(
         () => {
@@ -71,7 +71,7 @@ const SideNav = () => {
     return (
         <>
             <div className="nav-items">
-                {saveStatus === false && <div className={path === "/product/product-select" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSelect() }}>{t("Produkte auswählen")}</div>}
+                {saveStatus === false && <div className={path === "/composing/edit" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSelect() }}>{t("Produkte auswählen")}</div>}
                 {saveStatus === false && items
                     ?.slice() // Create a shallow copy of the array to avoid modifying the original array
                     .sort((a, b) => a.pos_index - b.pos_index)
@@ -83,9 +83,9 @@ const SideNav = () => {
                                 draggable
                                 onDragStart={(e) => onDragStart(e, index)}
                                 onDragEnd={(e) => onDragEnd()}
-                                className={path === "/product/product-select" ? "nav-items--active" : "nav-items--inactive"}
+                                className={path === "/composing/edit" ? "nav-items--active" : "nav-items--inactive"}
                             >
-                                {path === "/product/product-select" ? (
+                                {path === "/composing/edit" ? (
                                     <OverlayGroup productInfo={productItem} index={index} />
                                 ) : (
                                     <OverlaySide productInfo={productItem} />
@@ -94,7 +94,7 @@ const SideNav = () => {
                         );
                     })}
 
-                <div className={path === "/product/summary" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSummary() }}>{t("Zusammenfassung")}</div>
+                <div className={path === "/composing/view" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSummary() }}>{t("Zusammenfassung")}</div>
             </div>
         </>
     )

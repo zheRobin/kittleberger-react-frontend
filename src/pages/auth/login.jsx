@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux'
+import React from "react";
+import { useDispatch } from 'react-redux'
 import { useFormik } from 'formik'
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -14,38 +13,23 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const LoginPage = () => {
     const dispatch = useDispatch()
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-    const handleNavigate = () => {
-        // navigate('/forgot');
-    }
-
-
     const formik = useFormik({
         initialValues: {
             username: '',
             password: '',
         },
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             try {
-                dispatch(authActions.login({ email: values.username, password: values.password })).then((response) => {
-                    response?.error?.message === 'Unauthorized' && toast.error("Invalid username or password", { theme: "colored", hideProgressBar: "true", autoClose: 2000 })
-                })
-
+                const response = await dispatch(authActions.login({ email: values.username, password: values.password }));
+                if (response?.error?.message === 'Rejected') {
+                    toast.error("Invalid username or password", { theme: "colored", hideProgressBar: "true", autoClose: 2000 });
+                }
             }
             catch (error) {
-                setPassword("")
+                formik.setFieldValue("password", "");
             }
         },
     });
-    const authUser = useSelector(state => state.auth.user)
-
-    useEffect(() => {
-        // redirect to home if already logged in
-        if (authUser) navigate('/');
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
     return (
         <div className="homepage">
 
@@ -82,7 +66,6 @@ const LoginPage = () => {
                                     marginLeft="20px"
                                     marginBottom="8px"
                                     color="black"
-                                    value={password}
                                     display="inline-block"
                                 >
                                     Composing Generator
@@ -140,9 +123,6 @@ const LoginPage = () => {
                                 </div>
                             </div>
                             <div className="form-footer">
-                                <div className="pointer forgot-pass" onClick={handleNavigate}>
-                                    {/* Forgot password */}
-                                </div>
                                 <Button
                                     type="submit"
                                     variant="contained"

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from 'store/reducer';
 import App from 'App';
 import reportWebVitals from 'libs/reportWebVitals';
+import './i18n';
 import 'assets/css/index.css';
 import "assets/scss/global.scss"
 

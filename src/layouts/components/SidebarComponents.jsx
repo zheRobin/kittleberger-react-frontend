@@ -9,11 +9,11 @@ const SidebarComponents = () => {
     const path = location.pathname
     const SideBar = () => {
         switch (path) {
-            case "/product":
+            case "/":
                 return (<Filterbar />)
-            case "/product/product-select":
+            case "/composing/edit":
                 return (<><ReturnPath /><SideNav /></>);
-            case "/product/summary":
+            case "/composing/view":
                 return (<><ReturnPath /><SideNav /></>);
             default:
                 return <ReturnPath />

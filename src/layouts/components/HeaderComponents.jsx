@@ -21,12 +21,12 @@ const HeaderComponents = () => {
     return (
         <>
             <div className="header-top-layout">
-                <div className="bosch-icon pointer" onClick={() => navigate("/product")}>
+                <div className="bosch-icon pointer" onClick={() => navigate("/")}>
                     <img src={bosch} alt="bosch" style={{ height: "55px" }}></img>
                     <Typography fontSize="20px" fontWeight="400" lineHeight="26px" sx={{ display: 'inline' }}>Composing Generator</Typography>
                 </div>
                 <div className="profile-info-reference">
-                    {/* {location.pathname === "/product" && user.is_superuser === true ? <AdminToggle /> : null} */}
+                    {/* {location.pathname === "/" && user.is_superuser === true ? <AdminToggle /> : null} */}
                     <ProfileIcon setModalView={setAccountModal} modalView={accountModalShow} />
                     {accountModalShow === true ? <ProfileLayout handleModal={setAccountModal} /> : null}
                 </div>

@@ -10,7 +10,7 @@ const ReturnPath = () => {
     const dispatch = useDispatch()
     const returnHistory = () => {
         dispatch(emptyStore())
-        navigate('/product')
+        navigate('/')
     }
     const { t, i18n } = useTranslation()
     return (

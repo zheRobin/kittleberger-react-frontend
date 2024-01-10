@@ -73,6 +73,7 @@
   },
   "proxy": "http://192.168.118.233:8000",
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.23.3",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint-config-react": "^1.1.7",

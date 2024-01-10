@@ -34,10 +34,7 @@ const theme = createTheme({
     },
 });
 
-
-
-
-const Organism = () => {
+const Home = () => {
     const { t } = useTranslation();
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -169,7 +166,7 @@ const Organism = () => {
             <div className="organism-tabs">
                 {
                     adminMethod ? <div className='typography-400-regular template-button pointer'
-                        onClick={() => navigate("/product/template")}
+                        onClick={() => navigate("/template")}
                     >
                         {t("Neues Template anlegen")}
                     </div> : null
@@ -282,4 +279,4 @@ const Organism = () => {
     )
 }
 
-export default Organism
+export default Home

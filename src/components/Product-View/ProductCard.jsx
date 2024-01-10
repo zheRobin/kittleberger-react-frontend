@@ -35,7 +35,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                                 {type === 1 ? cardInfo?.resolution_width + '\u00D7' + cardInfo?.resolution_height + 'px | ' + cardInfo?.resolution_dpi + "dpi | " + cardInfo?.file_type : cardInfo?.template?.resolution_width + '\u00D7' + cardInfo?.template?.resolution_height + 'px | ' + cardInfo?.template?.resolution_dpi + "dpi | " + cardInfo?.template?.file_type}
                             </div>
                         </div>
-                        <div className="product-icon pointer" onClick={() => { if (type === 1) { navigate("/product/edittemplate", { state: cardInfo }) } else { navigate("/product/edittemplate", { state: cardInfo.template }) } }}>
+                        <div className="product-icon pointer" onClick={() => { if (type === 1) { navigate("/template", { state: cardInfo }) } else { navigate("/template", { state: cardInfo.template }) } }}>
                             {switchRole ? <img src={cardtype === "edit" ? editPencil : cancel} style={cardtype !== "edit" ? { backgroundColor: "white", border: "none" } : { borderColor: "#FFFFFF" }} alt="editIcon"></img> : null}
                         </div>
                     </div>
@@ -44,7 +44,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                     if (type === 1) {
                         localStorage.setItem('templateInfo', JSON.stringify(cardInfo));
                         dispatch(findTemplates(cardInfo));
-                        navigate(`/product/product-select`)
+                        navigate(`/composing/edit`)
                     }
                     if (type === 2) {
                         const positionStyle = cardInfo.template?.article_placements;
@@ -69,7 +69,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                             })
                             .filter((product) => product !== null);
                         dispatch(setProductLists(article));
-                        navigate(`/product/summary`, {
+                        navigate(`/composing/view`, {
                             state: { cdn: cardInfo?.cdn_url, name: cardInfo?.name }
                         })
                     }

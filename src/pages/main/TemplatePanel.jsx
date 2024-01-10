@@ -279,7 +279,7 @@ const TemplatePanel = () => {
 							if (success.data.code === 201 || success.data.status === "success") {
 								setLoading(false);
 								toast.success("Successfully Created", { theme: "colored", hideProgressBar: true, autoClose: 1500 });
-								navigate("/product");
+								navigate("/");
 							} else if (success.data.code === 400 || success.data.status === "failed") {
 								setLoading(false);
 								toast.error(success.data.data, { theme: "colored", hideProgressBar: true, autoClose: 2000 });
