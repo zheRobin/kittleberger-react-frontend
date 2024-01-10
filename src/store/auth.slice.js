@@ -23,9 +23,6 @@ const reducers = {
     localStorage.removeItem("cardInfo");
     window.location.assign("/");
   },
-  setTemplateTypes: (state, action) => {
-    state.templateTypes = action.payload;
-  },
 };
 
 const login = createAsyncThunk('auth/login', async ({ email, password }, {rejectWithValue}) => {

@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
-import { switchRole } from '../../store/reducer';
+import { infoActions } from 'store/reducer';
 import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 30,
@@ -67,7 +66,7 @@ export default function AdminToggle() {
     const dispatch = useDispatch()
     const handleToggleChange = (e) => {
         setToggleValue((state) => !state)
-        dispatch(switchRole(!toggleValue))
+        dispatch(infoActions.switchRole(!toggleValue))
     }
     return (
         <FormGroup>

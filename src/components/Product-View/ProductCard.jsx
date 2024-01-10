@@ -9,7 +9,7 @@ import spinner from "assets/icons/tube-spinner.svg"
 
 const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
     const navigate = useNavigate();
-    const switchRole = useSelector(state => state.info.adminMethod)
+    const role = useSelector(state => state.auth.role)
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(true);
     const [tempImage, setTempImage] = useState(false)
@@ -36,7 +36,7 @@ const ProductCard = ({ cardInfo, cardtype = "edit", type = 1 }) => {
                             </div>
                         </div>
                         <div className="product-icon pointer" onClick={() => { if (type === 1) { navigate("/template", { state: cardInfo }) } else { navigate("/template", { state: cardInfo.template }) } }}>
-                            {switchRole ? <img src={cardtype === "edit" ? editPencil : cancel} style={cardtype !== "edit" ? { backgroundColor: "white", border: "none" } : { borderColor: "#FFFFFF" }} alt="editIcon"></img> : null}
+                            {role === 'admin' ? <img src={cardtype === "edit" ? editPencil : cancel} style={cardtype !== "edit" ? { backgroundColor: "white", border: "none" } : { borderColor: "#FFFFFF" }} alt="editIcon"></img> : null}
                         </div>
                     </div>
                 </div>

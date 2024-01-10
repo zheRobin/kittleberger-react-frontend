@@ -85,7 +85,7 @@ const Summary = () => {
         }, [textAreaRef, value]);
     };
     const userInfo = useSelector(state => state.auth.user)
-    const switchRole = useSelector(state => state.info.adminMethod)
+    const role = useSelector(state => state.auth.role)
     useEffect(() => {
         if (!composedProduct.startsWith("data:")) {
             setdeploymentName({ value: state.cdn ?? composedProduct, copied: false });
@@ -463,7 +463,7 @@ const Summary = () => {
                             style={{ fontSize: "14px" }}
                         />
                         <div onClick={(e) => saveInfo()}><TemplateButton content={t('Speichern')} /></div>
-                        {switchRole ? (<div onClick={(e) => updatePreviewImage()}><TemplateButton content={t('Als Vorlagenvorschaubild festlegen')} /></div>) : null}
+                        {role === 'admin' ? (<div onClick={(e) => updatePreviewImage()}><TemplateButton content={t('Als Vorlagenvorschaubild festlegen')} /></div>) : null}
                         {cardInfo?.created_by !== undefined || deploymentName.value !== '' ? <div onClick={(e) => refresh()}><TemplateButton content={t('Aktualisierung')} /></div> : null}
                     </div>
                     {deploymentName.value !== '' ? (

@@ -15,7 +15,7 @@ import ProductSearch from 'components/Product-View/ProductSearch';
 import { Loading } from './Composing';
 import { infiniteTemplate } from 'libs/_services/Template';
 import { getTemplatesTypes } from 'libs/_services/Template';
-import { appendTemplate, appendUsedArticles, selectPage, setUpdatedDate, setTemplateLoadingStatus, initTemplate, setProductLoadingStatus, initProductsOnTemplates, appendProductsOnTemplate, authActions, setUsedArticles,emptyStore } from 'store/reducer';
+import { appendTemplate, appendUsedArticles, selectPage, setTemplateLoadingStatus, initTemplate, setProductLoadingStatus, initProductsOnTemplates, appendProductsOnTemplate, infoActions, setUsedArticles,emptyStore } from 'store/reducer';
 import './style/organismStyle.scss'
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -35,6 +35,7 @@ const theme = createTheme({
 });
 
 const Home = () => {
+    const role = useSelector(state => state.auth.role)
     const { t } = useTranslation();
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -53,7 +54,6 @@ const Home = () => {
     const loadingTemplateStatus = useSelector(state => state.templates.loadingTemplateStatus)
     const loadingProductStatus = useSelector(state => state.templates.loadingProductStatus)
     const usedArticles = useSelector(state => state.products.usedArticles)
-    const adminMethod = useSelector(state => state.info.adminMethod)
     let page = useSelector(state => state.templates.page)
     const filters = useSelector(state => state.templates.filterData)
     // const {article_list, ...filterOptions} = filters;
@@ -73,7 +73,7 @@ const Home = () => {
             dispatch(emptyStore())
             getTemplatesTypes(token, (success) => {
                 localStorage.setItem('templateTypes', JSON.stringify(success.data.data))
-                dispatch(authActions.setTemplateTypes(success.data.data))
+                dispatch(infoActions.setTemplateTypes(success.data.data))
             })
         }, []
     )
@@ -99,7 +99,7 @@ const Home = () => {
                     if (success.data?.data?.templates.length < 15) {
                         dispatch(setTemplateLoadingStatus(false));
                     }
-                    dispatch(setUpdatedDate(dateConvert(success.data.data?.document_last_update)))
+                    dispatch(infoActions.setUpdatedDate(dateConvert(success.data.data?.document_last_update)))
                     dispatch(setUsedArticles(success.data.data?.articles))
                     dispatch(selectPage(page + 1))
                     dispatch(initTemplate(success.data.data?.templates))
@@ -165,7 +165,7 @@ const Home = () => {
         <>
             <div className="organism-tabs">
                 {
-                    adminMethod ? <div className='typography-400-regular template-button pointer'
+                    role === 'admin' ? <div className='typography-400-regular template-button pointer'
                         onClick={() => navigate("/template")}
                     >
                         {t("Neues Template anlegen")}

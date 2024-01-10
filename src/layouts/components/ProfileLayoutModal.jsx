@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import { setSelectedLanguage } from "store/reducer"
+import { infoActions } from "store/reducer"
 import gear from "assets/icons/settings-gear.svg"
 function getInitials(string) {
     const words = string.split(" ");
@@ -35,7 +35,7 @@ function useOutsideAlerter(ref, handleModal) {
             // Unbind the event listener on clean up
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [ref]);
+    }, [handleModal, ref]);
 }
 
 
@@ -46,7 +46,6 @@ const ProfileLayout = ({ handleModal }) => {
     const handlelogout = (e) => {
         dispatch(authActions.logout())
     }
-    const switchRole = useSelector(state => state.info.adminMethod)
     const selectedLanguage = useSelector(state => state.info.language)
     const user = useSelector(state => state.auth.user)
     const userType = user.is_staff ? "admin" : "user"
@@ -60,7 +59,7 @@ const ProfileLayout = ({ handleModal }) => {
                 handleModal(false)
             }
         }
-    }, []);
+    }, [handleModal]);
     const { t, i18n } = useTranslation()
     const handleLanguageChange = lng  => {
         i18n.changeLanguage(lng);
@@ -84,7 +83,7 @@ const ProfileLayout = ({ handleModal }) => {
                         <div
                             className={selectedLanguage === 'en' ? "language-active pointer" : "language-inactive pointer"}
                             onClick={(e) => {
-                                dispatch(setSelectedLanguage('en'));
+                                dispatch(infoActions.setSelectedLanguage('en'));
                                 handleLanguageChange('en');
                             }}
                         >
@@ -94,7 +93,7 @@ const ProfileLayout = ({ handleModal }) => {
                         <div
                             className={selectedLanguage === 'de' ? "language-active pointer" : "language-inactive pointer"}
                             onClick={(e) => {
-                                dispatch(setSelectedLanguage('de'));
+                                dispatch(infoActions.setSelectedLanguage('de'));
                                 handleLanguageChange('de');
                             }}
                         >
@@ -111,7 +110,7 @@ const ProfileLayout = ({ handleModal }) => {
                                     <div className="account-description">{t('Passwort ändern')}</div>
                                 </div>
                             </div>
-                            {switchRole ? (
+                            {user.is_staff ? (
                                 <>
                                     <div className="account-detail pointer" onClick={() => { navigate("/setting/users"); handleModal(false) }}>
                                         <div className="account-detail-info">
