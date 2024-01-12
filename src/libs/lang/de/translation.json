@@ -17,5 +17,6 @@
     "Application Name":"Anwendungsname",
     "Preview Image":"Vorschaubild",
     "No matching templates found":"Keine passenden Vorlagen gefunden",
-    "No matching composings found":"Keine passenden Kompositionen gefunden"
+    "No matching composings found":"Keine passenden Kompositionen gefunden",
+    "No matching items found": "Keine passenden Artikel gefunden"
   }

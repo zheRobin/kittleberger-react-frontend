@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useCallback } from "react";
-import { changePassword } from "libs/_services/User";
+import { changePassword } from "libs/_utils/actions";
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from "react-i18next";
 import { TemplateButton } from "pages/main/TemplatePanel"

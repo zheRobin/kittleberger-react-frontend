@@ -10,7 +10,7 @@ const CheckboxGroup = (props) => {
     const dispatch = useDispatch()
     const [isChecked, setIsChecked] = useState(false);
     const resetStatus = useSelector(state => state.templates.resetStatus);
-    const templateTypes = useSelector(state => state.auth.templateTypes)
+    const pageData = useSelector(state => state.info.pageData)
     const { t } = useTranslation()
     useEffect(
         () => {
@@ -94,9 +94,9 @@ const CheckboxGroup = (props) => {
     const productNumber = (type, index) => {
         switch (type) {
             case "brand":
-                return templateTypes?.brand_data ? (templateTypes?.brand_data[index] >= 0 && ` (${templateTypes?.brand_data[index]})`) : ""
+                return pageData?.brand_data ? (pageData?.brand_data[index] >= 0 && ` (${pageData?.brand_data[index]})`) : ""
             case "app":
-                return templateTypes?.application_data ? (templateTypes?.application_data[index] >= 0 && ` (${templateTypes?.application_data[index]})`) : ""
+                return pageData?.application_data ? (pageData?.application_data[index] >= 0 && ` (${pageData?.application_data[index]})`) : ""
             default:
                 return ""
         }

@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from "@mui/material"
 import "./_dialog_style.scss"
 import { useTranslation } from 'react-i18next';
-import { getDynamicContent } from 'libs/_services/Info';
+import { getDynamicContent } from 'libs/_utils/actions';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -16,7 +16,6 @@ export default function AlertDialog({text}) {
   const [open, setOpen] = React.useState(false);
   const {t} = useTranslation()
   const langType = useSelector(state => state.info.language)
-  const token = useSelector(state => state.auth.token)
   const [content, setContent] = useState("")
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,16 +23,17 @@ export default function AlertDialog({text}) {
   const handleClose = () => {
     setOpen(false);
   };
-  useEffect(
-    () => {
-      
-      getDynamicContent(token, langType === 'en' ? "en-GB":"de-DE",(success) => {
-        setContent(
-            success.data.data
-          )
-      })
-      
-    }, [token,langType]
+  useEffect(() => {
+    const fetchContents = async () => {
+      const response =  await getDynamicContent(langType === 'en' ? "en-GB":"de-DE")
+        if(response.code === 200){
+          setContent(response.data)
+        }else {
+          setContent("")
+        }
+    }
+    fetchContents();
+    }, [langType]
   )
   return (
     <React.Fragment>
@@ -58,7 +58,7 @@ export default function AlertDialog({text}) {
          </p>
          </div>
         <DialogContent className='custom-dialog__content'>
-        {ReactHtmlParser(content ? content : '')}  
+          {ReactHtmlParser(content ? content : '')}  
         </DialogContent>
       </Dialog>
     </React.Fragment>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { userCreate, userEdit, userDelete, userList } from "libs/_services/User"
+import { userCreate, userEdit, userDelete, userList } from "libs/_utils/actions"
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';

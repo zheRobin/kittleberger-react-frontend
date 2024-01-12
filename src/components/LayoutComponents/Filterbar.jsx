@@ -26,13 +26,13 @@ export const ProductNumberFilter = (resetValue) => {
     const [showNumList, setShowNumList] = useState(false)
     const [showCountryList, setShowCountryList] = useState(false)
     const [landMokeup, setLandMokeUp] = useState([])
-    const templateTypes = useSelector(state => state.auth.templateTypes)
+    const pageData = useSelector(state => state.info.pageData)
     const templateFilterData = useSelector(state => state.templates.filterData)
     const selectedCountry = useSelector(state => state.products.selectedCountry)
     useEffect(
         () => {
-            setLandMokeUp(templateTypes?.country_list)
-        }, [templateTypes]
+            setLandMokeUp(pageData?.country_list)
+        }, [pageData]
     )
     useEffect(() => {
         const delay = 800;
@@ -112,7 +112,7 @@ export const ProductNumberFilter = (resetValue) => {
                             <Typography fontSize="14px" lineHeight="20px">{t('Brand')}</Typography>
                         </div>
                         <div className="check-group">
-                            {templateTypes?.brands?.map((ele, index) => {
+                            {pageData?.brands?.map((ele, index) => {
                                 return (
                                     <CheckboxGroup
                                         key={"brandMokeup" + index}
@@ -174,7 +174,7 @@ export const ProductNumberFilter = (resetValue) => {
                             <Typography fontSize="14px" lineHeight="20px">{t('Aplikationen')}</Typography>
                         </div>
                         <div className="check-group">
-                            {templateTypes?.applications?.map((ele, index) => {
+                            {pageData?.applications?.map((ele, index) => {
                                 return (
                                     <CheckboxGroup
                                         key={"aplikationenMokeup" + index}

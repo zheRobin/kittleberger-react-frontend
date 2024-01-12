@@ -22,27 +22,27 @@ const routes = [
     { path: "setting/users", component: ManageUser },
     { path: "setting/api-token", component: ApiToken },
     { path: "setting/contents", component: Setting },
-    { path: "composing/edit", component: Composing },
+    { path: "composing/edit/:id", component: Composing },
     { path: "composing/view", component: Summary }
   ];
   
-  const AuthRoutes = () => {
-    return (
-      <Routes>
-        {routes.map(({ path, component: Component }) => (
-          <Route key={path} path={path} element={<Layout><Component /></Layout>} />
-        ))}
-      </Routes>
-    );
-  };
-  
-  const AnonRoutes = () => {
-    return (
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="forgot-password" element={<ForgetPassword />} />
-      </Routes>
-    );
-  };
+const AuthRoutes = () => {
+  return (
+    <Routes>
+      {routes.map(({ path, component: Component }) => (
+        <Route key={path} path={path} element={<Layout><Component /></Layout>} />
+      ))}
+    </Routes>
+  );
+};
+
+const AnonRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="forgot-password" element={<ForgetPassword />} />
+    </Routes>
+  );
+};
 
 export { AuthRoutes, AnonRoutes };

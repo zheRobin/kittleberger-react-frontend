@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Formik } from "formik"
 import * as Yup from 'yup';
 import { useTranslation } from "react-i18next"
-import { createTemplatesTypes, editTemplatesTypes, deleteTemplatesTypes } from "libs/_services/Template"
+import { createTemplatesTypes, editTemplatesTypes, deleteTemplatesTypes } from "libs/_utils/actions"
 import close from "assets/icons/cross-black.svg"
 import { Loading } from "pages/main/TemplatePanel"
 import { authActions } from "../../store/reducer"
@@ -19,7 +19,7 @@ import plus from "assets/icons/plus-square.svg"
 
 const TypeList = ({ type, label }) => {
     const dispatch = useDispatch()
-    const templateTypes = useSelector(state => state.auth.templateTypes)
+    const pageData = useSelector(state => state.info.pageData)
     const [templateListInfo, setTemplateListInfo] = useState([])
     const [loading, setLoading] = useState(false);
     const [modalView, setModalView] = useState(false)
@@ -33,8 +33,8 @@ const TypeList = ({ type, label }) => {
     const [selectedName, setSelectedName] = useState("")
     useEffect(
         () => {
-            setTemplateListInfo(templateTypes)
-        }, [templateTypes]
+            setTemplateListInfo(pageData)
+        }, [pageData]
     )
     const handleDelete = (id) => {
         setLoading(true)

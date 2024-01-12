@@ -8,7 +8,7 @@ import ImageUploading from 'react-images-uploading';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useState } from 'react';
 import { useSelector } from "react-redux";
-import { createTemplate } from "libs/_services/Template";
+import { createTemplate } from "libs/_utils/actions";
 import PlusIcon from "assets/icons/add.svg"
 import DeleteIcon from "assets/icons/cross.svg"
 import DragIcon from "assets/icons/drag&drop.svg"
@@ -193,9 +193,9 @@ const TemplatePanel = () => {
 	const [previewImages, setPreviewImages] = useState([]);
 	const maxNumber = 69;
 	const token = useSelector(state => state.auth.token)
-	const templateTypes = useSelector(state => state.auth.templateTypes)
-	const brands = templateTypes.brands.map(brand => ({ ...brand, value: false }));
-	const applications = templateTypes.applications.map(app => ({ ...app, value: false }));
+	const pageData = useSelector(state => state.info.pageData)
+	const brands = pageData.brands.map(brand => ({ ...brand, value: false }));
+	const applications = pageData.applications.map(app => ({ ...app, value: false }));
 	const backColor = ["#4747ff", "#329bdd", "#dd3246", "#c3dd32", "#0ce425", "#e4710c", "#15dfdf", "#ee08db", "#363c54"]
 	const theme = createTheme({
 		palette: {

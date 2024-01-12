@@ -18,8 +18,6 @@ class AxiosWrapper {
 
   static async request(method, url, options = {}) {
     options.headers = options.headers || {}; 
-    options.headers['Content-Type'] = 'application/json'; 
-
     try {
       const response = await API({method, url, ...options});
       return response.data;
@@ -33,7 +31,25 @@ export const Request = AxiosWrapper;
 
 export const handleRequest = async (method, url, data = {}) => {
   try {
-    const response = await Request[method](`${process.env.REACT_APP_API_URL}${url}`, data);
+    const response = await Request[method](`${process.env.REACT_APP_API_URL}${url}`, data, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error; 
+  }
+}
+
+export const handleFormRequest = async (method, url, data = {}) => {
+  try {
+    const response = await Request[method](`${process.env.REACT_APP_API_URL}${url}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return response;
   } catch (error) {
     console.error(error);

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useFormik } from 'formik';
 import { TemplateButton } from "pages/main/TemplatePanel"
 import { CrossIcon } from "libs/icons"; 
-import { tokenList, createToken, deleteToken } from "libs/_services/ApiToken"
+import { tokenList, createToken, deleteToken } from "libs/_utils/actions"
 import { ToastContainer, toast } from "react-toastify"
 import * as Yup from 'yup';
 import { useTranslation } from "react-i18next"

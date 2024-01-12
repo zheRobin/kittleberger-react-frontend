@@ -17,7 +17,7 @@ import ImageTemplate from "components/Composing/ImageTempate"
 import { useRef, useLayoutEffect, useEffect } from 'react';
 import * as Yup from 'yup'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { updateTemplate } from 'libs/_services/Template';
+import { updateTemplate } from 'libs/_utils/actions';
 import spinner from "assets/icons/tube-spinner.svg"
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
@@ -191,9 +191,9 @@ const TemplateEditPanel = () => {
     const [previewImages, setPreviewImages] = useState([]);
     const maxNumber = 69;
     const token = useSelector(state => state.auth.token)
-    const templateTypes = useSelector(state => state.auth.templateTypes)
-    const brands = templateTypes.brands.map(brand => ({ ...brand, value: false }));
-    const applications = templateTypes.applications.map(app => ({ ...app, value: false }));
+    const pageData = useSelector(state => state.info.pageData)
+    const brands = pageData.brands.map(brand => ({ ...brand, value: false }));
+    const applications = pageData.applications.map(app => ({ ...app, value: false }));
     const [backLoading, setBackLoading] = useState(false)
     const [previewLoading, setPreviewLoading] = useState(false)
     const backColor = ["#4747ff", "#329bdd", "#dd3246", "#c3dd32", "#0ce425", "#e4710c", "#15dfdf", "#ee08db", "#363c54"]

@@ -11,10 +11,10 @@ import { ToastContainer, toast } from "react-toastify"
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import { setCardInfo, setComposedProduct, setSaveStatus } from "store/reducer";
-import { getOnlineInfo, updateOnlineInfo, refreshCompose, replacePreviewImage, calcPosition } from "libs/_services/Product";
-import { getImageFromUrl } from "libs/_services/Info";
+import { getOnlineInfo, updateOnlineInfo, refreshCompose, replacePreviewImage, calcPosition } from "libs/_utils/actions";
+import { getImageFromUrl } from "libs/_utils/actions";
 import { TemplateButton } from "./TemplatePanel"
-import { Loading } from "./Composing"
+import { Loading } from "libs/icons"
 import CopyIcon from "assets/icons/copy.svg"
 import "components/Dialog/_dialog_style.scss"
 import "./style/organismStyle.scss"

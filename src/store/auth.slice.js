@@ -6,7 +6,6 @@ const initialState = {
   token: JSON.parse(localStorage.getItem('token')) || null,
   role: null,
   error: null,
-  templateTypes: JSON.parse(localStorage.getItem("templateTypes")),
 };
 
 const reducers = {
@@ -15,12 +14,13 @@ const reducers = {
     state.token = null;
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    localStorage.removeItem("templateTypes");
+    localStorage.removeItem("pageData");
     localStorage.removeItem("composeInfo");
     localStorage.removeItem("templateInfo");
     localStorage.removeItem("productsInfo");
     localStorage.removeItem("i18nextLng");
     localStorage.removeItem("cardInfo");
+    localStorage.removeItem("currentTab");
     window.location.assign("/");
   },
 };
