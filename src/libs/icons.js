@@ -7,6 +7,29 @@ import logoIcon from "assets/images/Header_bosch.svg"
 import searchIcon2 from "assets/icons/search2.svg"
 import spinnerIcon from "assets/icons/tube-spinner.svg"
 import plusIcon2 from "assets/icons/add-2.svg"
+import listIcon from "assets/icons/drag&drop.svg"
+import crossIcon2 from "assets/icons/cross-white.svg"
+import settingIcon from "assets/icons/controal-4.svg"
+import vectorIcon from "assets/icons/vector.svg"
+import arrowTLIcon from "assets/icons/arrowTL.svg"
+import arrowTCIcon from "assets/icons/arrowTC.svg"
+import arrowTRIcon from "assets/icons/arrowTR.svg"
+import arrowCLIcon from "assets/icons/arrowCL.svg"
+import arrowCCIcon from "assets/icons/arrowCC.svg"
+import arrowCRIcon from "assets/icons/arrowCR.svg"
+import arrowBLIcon from "assets/icons/arrowBL.svg"
+import arrowBCIcon from "assets/icons/arrowBC.svg"
+import arrowBRIcon from "assets/icons/arrowBR.svg"
+import arrowTLActiveIcon from "assets/icons/arrowTL-active.svg"
+import arrowTCActiveIcon from "assets/icons/arrowTC-active.svg"
+import arrowTRActiveIcon from "assets/icons/arrowTR-active.svg"
+import arrowCLActiveIcon from "assets/icons/arrowCL-active.svg"
+import arrowCCActiveIcon from "assets/icons/arrowCC-active.svg"
+import arrowCRActiveIcon from "assets/icons/arrowCR-active.svg"
+import arrowBLActiveIcon from "assets/icons/arrowBL-active.svg"
+import arrowBCActiveIcon from "assets/icons/arrowBC-active.svg"
+import arrowBRActiveIcon from "assets/icons/arrowBR-active.svg"
+
 export const CrossIcon = crossIcon
 export const CloseIcon = closeIcon
 export const EditIcon = editIcon
@@ -16,6 +39,28 @@ export const SearchIcon2 = searchIcon2
 export const SpinnerIcon = spinnerIcon
 export const PencelWhiteIcon = editPencilIcon
 export const PlusIcon2 = plusIcon2
+export const ListIcon = listIcon
+export const CrossIcon2 = crossIcon2
+export const SettingIcon = settingIcon
+export const VectorIcon = vectorIcon
+export const ArrowTLIcon = arrowTLIcon
+export const ArrowTCIcon = arrowTCIcon
+export const ArrowTRIcon = arrowTRIcon
+export const ArrowCLIcon = arrowCLIcon
+export const ArrowCCIcon = arrowCCIcon
+export const ArrowCRIcon = arrowCRIcon
+export const ArrowBLIcon = arrowBLIcon
+export const ArrowBCIcon = arrowBCIcon
+export const ArrowBRIcon = arrowBRIcon
+export const ArrowTLActiveIcon = arrowTLActiveIcon
+export const ArrowTCActiveIcon = arrowTCActiveIcon
+export const ArrowTRActiveIcon = arrowTRActiveIcon
+export const ArrowCLActiveIcon = arrowCLActiveIcon
+export const ArrowCCActiveIcon = arrowCCActiveIcon
+export const ArrowCRActiveIcon = arrowCRActiveIcon
+export const ArrowBLActiveIcon = arrowBLActiveIcon
+export const ArrowBCActiveIcon = arrowBCActiveIcon
+export const ArrowBRActiveIcon = arrowBRActiveIcon
 export const Loading = () => {
     return (
         <div className="cover-spin" style={{ margin: "0px 0px 0px 0px" }}>

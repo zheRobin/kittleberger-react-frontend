@@ -22,7 +22,10 @@ class AxiosWrapper {
       const response = await API({method, url, ...options});
       return response.data;
     } catch (error) {
-      throw new Error(error.response.data);
+      // if(error.response.status === 401){
+      //   localStorage.removeItem('token');
+      // }
+      // window.location.assign("/");
     }
   }
 }

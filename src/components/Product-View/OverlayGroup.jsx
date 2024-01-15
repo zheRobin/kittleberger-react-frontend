@@ -1,210 +1,173 @@
+import { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { composingActions } from "store/reducer";
+import { 
+    FormControlLabel, Checkbox, Slider    
+} from "@mui/material";
+import { 
+    ArrowBCActiveIcon, ArrowBCIcon, ArrowBLActiveIcon, ArrowBLIcon, ArrowBRActiveIcon, 
+    ArrowBRIcon, ArrowCCActiveIcon, ArrowCCIcon, ArrowCLActiveIcon, ArrowCLIcon, 
+    ArrowCRActiveIcon, ArrowCRIcon, ArrowTCActiveIcon, ArrowTCIcon, ArrowTLActiveIcon, 
+    ArrowTLIcon, ArrowTRActiveIcon, ArrowTRIcon, CrossIcon2, ListIcon, SettingIcon, VectorIcon  
+} from "libs/icons";
+import "./style/productViewStyle.scss";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { convArticle } from "libs/_utils/conv";
 
-import ListIcon from "assets/icons/drag&drop.svg"
-import CrossIcon from "assets/icons/cross-white.svg"
-import SettingIcon from "assets/icons/controal-4.svg"
-import VectorIcon from "assets/icons/vector.svg"
-import { removeProducts, setProductAligns } from "../../store/reducer"
-import { FormControlLabel } from '@mui/material';
-import { useDispatch } from "react-redux"
-import { setProductTransImg, setSliderScale } from "../../store/reducer"
-import "./style/productViewStyle.scss"
-import { Checkbox } from "@mui/material"
-import { Slider } from "@mui/material"
-import { useState, useEffect, useRef } from "react"
-import { ToastContainer } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
-import ArrowTLIcon from "assets/icons/arrowTL.svg"
-import ArrowTCIcon from "assets/icons/arrowTC.svg"
-import ArrowTRIcon from "assets/icons/arrowTR.svg"
-import ArrowCLIcon from "assets/icons/arrowCL.svg"
-import ArrowCCIcon from "assets/icons/arrowCC.svg"
-import ArrowCRIcon from "assets/icons/arrowCR.svg"
-import ArrowBLIcon from "assets/icons/arrowBL.svg"
-import ArrowBCIcon from "assets/icons/arrowBC.svg"
-import ArrowBRIcon from "assets/icons/arrowBR.svg"
-import ArrowTLActiveIcon from "assets/icons/arrowTL-active.svg"
-import ArrowTCActiveIcon from "assets/icons/arrowTC-active.svg"
-import ArrowTRActiveIcon from "assets/icons/arrowTR-active.svg"
-import ArrowCLActiveIcon from "assets/icons/arrowCL-active.svg"
-import ArrowCCActiveIcon from "assets/icons/arrowCC-active.svg"
-import ArrowCRActiveIcon from "assets/icons/arrowCR-active.svg"
-import ArrowBLActiveIcon from "assets/icons/arrowBL-active.svg"
-import ArrowBCActiveIcon from "assets/icons/arrowBC-active.svg"
-import ArrowBRActiveIcon from "assets/icons/arrowBR-active.svg"
-
-const OverlayGroup = ({ productInfo, index }) => {
-    const dispatch = useDispatch()
-    const [showModal, setShowModal] = useState(false)
-    const [sliderValue, setSliderValue] = useState(100)
+const useOutsideAlerter = (isVisible, onHide) => {
     const wrapperRef = useRef(null);
-    const [loading, setLoading] = useState(false)
-    const [checked, setChecked] = useState(false)
-    const align = productInfo?.align === undefined ? "middle-center" : productInfo?.align
-    useEffect(
-        () => {
-            setChecked(productInfo?.is_transparent !== undefined ? productInfo?.is_transparent : false)
-        }, [productInfo]
-    )
+  
     useEffect(() => {
-        function handleOutsideClick(event) {
-            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                setShowModal(false);
-            }
+      const handleClickOutside = event => {
+        if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+          onHide();
         }
-        document.addEventListener("mousedown", handleOutsideClick);
-        document.addEventListener("touchstart", handleOutsideClick);
-        return () => {
-            document.removeEventListener("mousedown", handleOutsideClick);
-            document.removeEventListener("touchstart", handleOutsideClick);
-        };
-    }, [showModal, setShowModal]);
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [isVisible, onHide]);
+    
+    return wrapperRef;
+};
 
-    useEffect(
-        () => {
-            const sliderSetValue = productInfo?.sliderScale
-            setSliderValue(sliderSetValue !== undefined ? sliderSetValue * 100 : 100)
-        }, []
-    )
-    const handleComposing = (checkStatus) => {
-        setChecked(!checked)
-        if (checkStatus) {
-            dispatch(setProductTransImg({ ...productInfo, is_transparent: checkStatus }))
-        }
-        else {
-            dispatch(setProductTransImg({ ...productInfo, is_transparent: checkStatus }))
-        }
-    }
-
-    const handleSetAlign = (align) => {
-        dispatch(setProductAligns({ ...productInfo, align }))
-    }
-
-    useEffect(() => {
-        const delay = 1000;
-
-        const timeoutId = setTimeout(() => {
-            updateSliderValue();
-        }, delay);
-
-        return () => {
-            clearTimeout(timeoutId);
-        };
-    }, [sliderValue]);
-
-
-    const updateSliderValue = () => {
-        dispatch(setSliderScale({ ...productInfo, sliderScale: sliderValue / 100 }))
+const OverlayGroup = ({ article, id }) => {
+    const dispatch = useDispatch()    
+    const [showModal, setShowModal] = useState(false)
+    const wrapperRef = useOutsideAlerter(showModal, () => setShowModal(false));
+    const templateItem = useSelector(state => state.info.templateData.find(item => item.id === parseInt(id)));
+    const [params, setParams] = useState({
+        is_transparent: article?.is_transparent !== undefined ? article?.is_transparent : false,
+        scaling: article?.scaling !== undefined ? article?.scaling : 1,
+        alignment: article?.align === undefined ? "top-left" : article?.align
+    });
+    const [scale, setScale] = useState(params.scaling);
+    const handleSliderChange = (event, newValue) => {
+        setScale(newValue/100);
     };
+    const handleMouseUp = () => {
+        handleParams('scaling', scale);
+      };
+    const handleParams = (field, value) => {
+        setParams({...params, [field]: value})
+    };
+    
+    useEffect(() => {
+        const newArticle = convArticle(article, templateItem.article_placements.find(i => i.pos_index === article.pos_index), params)
+        dispatch(composingActions.updateComposingArticle(newArticle))
+    }, [params]);
 
     return (
         <>
-            {loading ? <div className="loading"></div> : (
-                <div className="overlay">
-                    <div className="overlay__list drag">
-                        <img src={ListIcon} alt="ListIcon"></img>
-                    </div>
-                    <div className="overlay__product">
-                        <div className="typography-400-regular" style={{ color: "white", overflow: "hidden", lineHeight: "16px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{`${productInfo.name} (${productInfo.article_number})`}</div>
-                        <div className="pointer">
-                            <img src={CrossIcon} alt="CrossIcon" onClick={(e) => { dispatch(removeProducts(productInfo)) }}></img>
-                        </div>
-                    </div>
-                    <div className="overlay__setting">
-                        <img className="pointer" src={SettingIcon} alt="SettingIcon" onClick={(e) => setShowModal(true)}></img>
-                        {showModal ? (
-                            <div className="overlay__setting__panel" ref={wrapperRef}>
-                                <div className="panel-top">
-                                    <div className="vector">
-                                        <img src={VectorIcon} alt="VectorIcon"></img>
-                                    </div>
-                                    <div className="panel-top__title">
-                                        {productInfo.name}
-                                    </div>
-                                    <div className="panel-top__title" style={{ fontWeight: "400" }}>
-                                        {productInfo.article_number}
-                                    </div>
-                                    <div className="panel-top__drag">
-                                        <Slider value={sliderValue} valueLabelDisplay="auto" track={false} onChange={(e) => { setSliderValue(e.target.value) }}
-                                            sx={{
-                                                "& .MuiSlider-thumb": {
-                                                    color: "#8F7300"
-                                                },
-                                                "& .MuiSlider-track": {
-                                                    color: "#8F7300"
-                                                },
-                                                "& .MuiSlider-root": {
-                                                    color: "#000000"
-                                                },
-                                                "& .MuiSlider-rail": {
-                                                    color: "black"
-                                                }
-                                            }}
-                                        />
-                                        <div className="percent">
-                                            <input max={100} type="number" className="percent-amount" value={sliderValue} readOnly />
-                                            <div className="percent-mark"><p>%</p></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="panel-center">
-                                    <div className="panel-center__title">
-                                        Produkt freistellen
-                                    </div>
-                                    <div className="panel-center__check-box">
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    name="transparent"
-                                                    onClick={(e) => handleComposing(e.target.checked)}
-                                                    checked={checked}
-                                                />
-                                            }
-                                            label="Transparent" />
-                                    </div>
-                                </div>
-                                <div className="panel-bottom">
-                                    <div className="panel-bottom__title">
-                                        Ausrichtung
-                                    </div>
-                                    <div className="panel-bottom__drop">
-                                        <div className="arrow-Setting">
-                                            <div onClick={(e) => handleSetAlign("top-left")}>
-                                                <img src={align === "top-left" ? ArrowTLActiveIcon : ArrowTLIcon} alt="arrow" />
-                                            </div>
-                                            <div onClick={(e) => handleSetAlign("top-center")}>
-                                                <img src={align === "top-center" ? ArrowTCActiveIcon : ArrowTCIcon} alt="arrow" />
-                                            </div>
-                                            <div onClick={(e) => handleSetAlign("top-right")}>
-                                                <img src={align === "top-right" ? ArrowTRActiveIcon : ArrowTRIcon} alt="arrow" />
-                                            </div>
-                                            <div onClick={(e) => handleSetAlign("middle-left")}>
-                                                <img src={align === "middle-left" ? ArrowCLActiveIcon : ArrowCLIcon} alt="arrow" />
-                                            </div>
-                                            <div onClick={(e) => handleSetAlign("middle-center")}>
-                                                <img src={align === "middle-center" ? ArrowCCActiveIcon : ArrowCCIcon} alt="arrow" />
-                                            </div >
-                                            <div onClick={(e) => handleSetAlign("middle-right")}>
-                                                <img src={align === "middle-right" ? ArrowCRActiveIcon : ArrowCRIcon} alt="arrow" />
-                                            </div>
-                                            <div onClick={(e) => handleSetAlign("bottom-left")}>
-                                                <img src={align === "bottom-left" ? ArrowBLActiveIcon : ArrowBLIcon} alt="arrow" />
-                                            </div>
-                                            <div onClick={(e) => handleSetAlign("bottom-center")}>
-                                                <img src={align === "bottom-center" ? ArrowBCActiveIcon : ArrowBCIcon} alt="arrow" />
-                                            </div>
-                                            <div onClick={(e) => handleSetAlign("bottom-right")}>
-                                                <img src={align === "bottom-right" ? ArrowBRActiveIcon : ArrowBRIcon} alt="arrow" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>) : null}
-
-                    </div>
-                    <ToastContainer />
+            <div className="overlay">
+                <div className="overlay__list drag">
+                    <img src={ListIcon} alt="ListIcon"></img>
                 </div>
-            )}
+                <div className="overlay__product">
+                    <div className="typography-400-regular" style={{ color: "white", overflow: "hidden", lineHeight: "16px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{`${article.name} (${article.article_number})`}</div>
+                    <div className="pointer">
+                        <img src={CrossIcon2} alt="CrossIcon" onClick={(e) => { dispatch(composingActions.removeComposingArticle(article)) }}></img>
+                    </div>
+                </div>
+                <div className="overlay__setting">
+                    <img className="pointer" src={SettingIcon} alt="SettingIcon" onClick={(e) => setShowModal(true)}></img>
+                    {showModal ? (
+                        <div className="overlay__setting__panel" ref={wrapperRef}>
+                            <div className="panel-top">
+                                <div className="vector">
+                                    <img src={VectorIcon} alt="VectorIcon"></img>
+                                </div>
+                                <div className="panel-top__title">
+                                    {article.name}
+                                </div>
+                                <div className="panel-top__title" style={{ fontWeight: "400" }}>
+                                    {article.article_number}
+                                </div>
+                                <div className="panel-top__drag">
+                                <Slider valueLabelDisplay="auto" track={false} 
+                                        value={scale * 100} 
+                                        onChange={handleSliderChange} 
+                                        onMouseUp={handleMouseUp}
+                                        sx={{
+                                            "& .MuiSlider-thumb": {
+                                                color: "#8F7300"
+                                            },
+                                            "& .MuiSlider-track": {
+                                                color: "#8F7300"
+                                            },
+                                            "& .MuiSlider-root": {
+                                                color: "#000000"
+                                            },
+                                            "& .MuiSlider-rail": {
+                                                color: "black"
+                                            }
+                                        }}
+                                    />
+                                    <div className="percent">
+                                        <input max={100} type="number" className="percent-amount" value={scale * 100} readOnly />
+                                        <div className="percent-mark"><p>%</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="panel-center">
+                                <div className="panel-center__title">
+                                    Produkt freistellen
+                                </div>
+                                <div className="panel-center__check-box">
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            name="transparent"
+                                            onClick={(e) => handleParams('is_transparent', e.target.checked)}
+                                            checked={params.is_transparent}
+                                        />
+                                    }
+                                    label="Transparent" />
+                                </div>
+                            </div>
+                            <div className="panel-bottom">
+                                <div className="panel-bottom__title">
+                                    Ausrichtung
+                                </div>
+                                <div className="panel-bottom__drop">
+                                    <div className="arrow-Setting">
+                                        <div onClick={(e) => handleParams('alignment',"top-left")}>
+                                            <img src={params.alignment === "top-left" ? ArrowTLActiveIcon : ArrowTLIcon} alt="arrow" />
+                                        </div>
+                                        <div onClick={(e) => handleParams('alignment',"top-center")}>
+                                            <img src={params.alignment === "top-center" ? ArrowTCActiveIcon : ArrowTCIcon} alt="arrow" />
+                                        </div>
+                                        <div onClick={(e) => handleParams('alignment',"top-right")}>
+                                            <img src={params.alignment === "top-right" ? ArrowTRActiveIcon : ArrowTRIcon} alt="arrow" />
+                                        </div>
+                                        <div onClick={(e) => handleParams('alignment',"middle-left")}>
+                                            <img src={params.alignment === "middle-left" ? ArrowCLActiveIcon : ArrowCLIcon} alt="arrow" />
+                                        </div>
+                                        <div onClick={(e) => handleParams('alignment',"middle-center")}>
+                                            <img src={params.alignment === "middle-center" ? ArrowCCActiveIcon : ArrowCCIcon} alt="arrow" />
+                                        </div >
+                                        <div onClick={(e) => handleParams('alignment',"middle-right")}>
+                                            <img src={params.alignment === "middle-right" ? ArrowCRActiveIcon : ArrowCRIcon} alt="arrow" />
+                                        </div>
+                                        <div onClick={(e) => handleParams('alignment',"bottom-left")}>
+                                            <img src={params.alignment === "bottom-left" ? ArrowBLActiveIcon : ArrowBLIcon} alt="arrow" />
+                                        </div>
+                                        <div onClick={(e) => handleParams('alignment',"bottom-center")}>
+                                            <img src={params.alignment === "bottom-center" ? ArrowBCActiveIcon : ArrowBCIcon} alt="arrow" />
+                                        </div>
+                                        <div onClick={(e) => handleParams('alignment',"bottom-right")}>
+                                            <img src={params.alignment === "bottom-right" ? ArrowBRActiveIcon : ArrowBRIcon} alt="arrow" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>) : null}
 
+                </div>
+                <ToastContainer />
+            </div>
         </>
 
     )

@@ -1,33 +1,35 @@
 import "./style/layoutCompoStyle.scss"
-import { useLocation } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useParams, useNavigate } from "react-router-dom"
 import OverlayGroup from "../Product-View/OverlayGroup"
 import OverlaySide from "../Product-View/OverlaySide"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
-import { updateProducts } from "../../store/reducer"
+import { composingActions } from "store/reducer"
 import { useTranslation } from "react-i18next"
 
 const SideNav = () => {
+    const { id } = useParams();
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { t } = useTranslation()
+    const selectedProducts = useSelector(state => state.composing.composingElements)
     const [items, setItems] = useState([])
     const location = useLocation()
     const path = location.pathname
-    const navigate = useNavigate()
-    const selectedProducts = useSelector(state => state.products.selectedProducts)
     const saveStatus = useSelector(state => state.products.saveStatus)
     const [draggedItem, setDraggedItem] = useState({})
-    const dispatch = useDispatch()
     const [posIndexGroup, setPosIndexGroup] = useState([])
-    const { t } = useTranslation()
     const handleSelect = () => {
-        navigate('/composing/edit')
+        navigate(`/composing/edit/${id}`);
     }
     const handleSummary = () => {
         navigate('/composing/view')
     }
+    console.log("posIndexGroup",posIndexGroup)
     useEffect(
         () => {
             const posIndexGroup = [];
+            console.log("selectedProducts",selectedProducts)
             for (const product of selectedProducts ? selectedProducts : []) {
                 posIndexGroup.push(product.pos_index);
             }
@@ -57,7 +59,6 @@ const SideNav = () => {
         itemGroups.splice(index, 0, draggedItem);
         setItems(itemGroups)
     };
-
     const onDragEnd = () => {
         const posIndexGroups = [...posIndexGroup];
         const updatedItems = items.map((item, index) => {
@@ -66,36 +67,50 @@ const SideNav = () => {
                 pos_index: posIndexGroups[index],
             };
         });
-        dispatch(updateProducts(updatedItems));
+        dispatch(composingActions.setComposingArticle(updatedItems));
     };
     return (
         <>
-            <div className="nav-items">
-                {saveStatus === false && <div className={path === "/composing/edit" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSelect() }}>{t("Produkte auswählen")}</div>}
-                {saveStatus === false && items
-                    ?.slice() // Create a shallow copy of the array to avoid modifying the original array
-                    .sort((a, b) => a.pos_index - b.pos_index)
-                    .map((productItem, index) => {
-                        return (
-                            <div
-                                key={index}
-                                onDragOver={(e) => onDragOver(e, index)}
-                                draggable
-                                onDragStart={(e) => onDragStart(e, index)}
-                                onDragEnd={(e) => onDragEnd()}
-                                className={path === "/composing/edit" ? "nav-items--active" : "nav-items--inactive"}
-                            >
-                                {path === "/composing/edit" ? (
-                                    <OverlayGroup productInfo={productItem} index={index} />
-                                ) : (
-                                    <OverlaySide productInfo={productItem} />
-                                )}
-                            </div>
-                        );
-                    })}
+        {path === "/composing/view" ?
+        <div className="nav-items">
+            <div className="nav-items--inactive pointer" onClick={() => { handleSelect() }}>{t("Produkte auswählen")}</div>
+            {saveStatus === false && items
+                ?.slice()
+                .sort((a, b) => a.pos_index - b.pos_index)
+                .map((productItem, index) => {
+                    return (
+                        <div
+                            key={index}
+                            className="nav-items--inactive"
+                        >
+                            <OverlaySide productInfo={productItem} />
+                        </div>
+                    );
+                })}
+            <div className="nav-items--active pointer" onClick={() => { handleSummary() }}>{t("Zusammenfassung")}</div>
+        </div>:
+        <div className="nav-items">
+            <div className="nav-items--active pointer" onClick={() => { handleSelect() }}>{t("Produkte auswählen")}</div>
+            {saveStatus === false && items
+                ?.slice()
+                .sort((a, b) => a.pos_index - b.pos_index)
+                .map((productItem, index) => {
+                    return (
+                        <div
+                            key={index}
+                            onDragOver={(e) => onDragOver(e, index)}
+                            draggable
+                            onDragStart={(e) => onDragStart(e, index)}
+                            onDragEnd={(e) => onDragEnd()}
+                            className="nav-items--active"
+                        >
+                            <OverlayGroup article={productItem} id={id} />
+                        </div>
+                    );
+                })}
 
-                <div className={path === "/composing/view" ? "nav-items--active pointer" : "nav-items--inactive pointer"} onClick={() => { handleSummary() }}>{t("Zusammenfassung")}</div>
-            </div>
+            <div className="nav-items--inactive pointer" onClick={() => { handleSummary() }}>{t("Zusammenfassung")}</div>
+        </div>}
         </>
     )
 }
