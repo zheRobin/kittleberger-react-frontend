@@ -26,7 +26,7 @@ export default function AlertDialog({text}) {
   useEffect(() => {
     const fetchContents = async () => {
       const response =  await getDynamicContent(langType === 'en' ? "en-GB":"de-DE")
-        if(response.code === 200){
+        if(response?.code === 200){
           setContent(response.data)
         }else {
           setContent("")

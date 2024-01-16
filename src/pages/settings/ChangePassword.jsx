@@ -32,7 +32,7 @@ const PasswordChange = () => {
         validationSchema: schema,
         onSubmit: async () => {
             const response = await changePassword(formik.values)
-            if (response.code === 200) {
+            if (response?.code === 200) {
                 toast.success("Successfully Changed", { theme: "colored", hideProgressBar: "true", autoClose: 1500 });
             }
             else {

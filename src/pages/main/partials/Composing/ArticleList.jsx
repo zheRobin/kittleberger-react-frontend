@@ -24,8 +24,10 @@ const ArticleItem = ({ item, template }) => {
     useEffect(() => {
         if (template.article_placements.length === usedArticle.length) {
             setVisbleIcon(false)
+        } else {
+            setVisbleIcon(true)
         }
-    }, [template.article_placements.length, usedArticle.length])
+    }, [template, usedArticle])
     return (
         <div className="product-list-panel">
             <div style={{ display: loading ? "block" : "none" }}>
@@ -71,9 +73,9 @@ const ArticleList = ({ template }) => {
         const getArticlesData = async () => {
             setLoading(true)
             const response = await getArticleList({ page, productInfo, country });
-            if (response.code === 200) {
+            if (response?.code === 200) {
                 dispatch(composingActions.setArticleList(response.data))
-                if(response.data.length === 0 ){ //assuming it returns an empty array when no more articles
+                if(response.data.length === 0 ){ 
                     setNoMoreArticles(true)
                 }
             }
@@ -94,7 +96,10 @@ const ArticleList = ({ template }) => {
             <div className="product-add">
                 {articlesData.map((article, index) => <ArticleItem key={index} item={article} template={template} />)}
             </div>
-            {loading ? <div className="" style={{ display: "flex", paddingTop: "10px", justifyContent: "center", height: "50px" }}><img src={SpinnerIcon} alt="productSpinner" ></img></div> : 
+            {loading ? 
+            <div className="" style={{ display: "flex", paddingTop: "10px", justifyContent: "center", height: "50px" }}>
+                <img src={SpinnerIcon} alt="productSpinner" ></img>
+            </div> : 
             noMoreArticles ? <div>{t("Keine Ergebnisse")}</div> : 
             <div className="typography-400-bold pointer" onClick={handleLoadMore} style={{ textAlign: "center", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>{t("Mehr laden")}</div>}
         </div>

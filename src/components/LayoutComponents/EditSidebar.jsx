@@ -1,35 +1,27 @@
-import "./style/layoutCompoStyle.scss"
-import { useLocation, useParams, useNavigate } from "react-router-dom"
-import OverlayGroup from "../Product-View/OverlayGroup"
-import OverlaySide from "../Product-View/OverlaySide"
-import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
-import { composingActions } from "store/reducer"
+import { useParams, useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
 import { useTranslation } from "react-i18next"
+import OverlayGroup from "../Product-View/OverlayGroup"
+import { composingActions } from "store/reducer"
+import "./style/layoutCompoStyle.scss"
 
-const SideNav = () => {
+const EditSidebar = () => {
     const { id } = useParams();
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { t } = useTranslation()
-    const selectedProducts = useSelector(state => state.composing.composingElements)
     const [items, setItems] = useState([])
-    const location = useLocation()
-    const path = location.pathname
-    const saveStatus = useSelector(state => state.products.saveStatus)
     const [draggedItem, setDraggedItem] = useState({})
     const [posIndexGroup, setPosIndexGroup] = useState([])
-    const handleSelect = () => {
-        navigate(`/composing/edit/${id}`);
-    }
+    const selectedProducts = useSelector(state => state.composing.composingElements)
+    const savedComposing = useSelector(state => state.composing.savedComposing)
     const handleSummary = () => {
-        navigate('/composing/view')
+        savedComposing?navigate(`/composing/view/${savedComposing.id}`):navigate(`/composing/view`)
     }
-    console.log("posIndexGroup",posIndexGroup)
     useEffect(
         () => {
             const posIndexGroup = [];
-            console.log("selectedProducts",selectedProducts)
             for (const product of selectedProducts ? selectedProducts : []) {
                 posIndexGroup.push(product.pos_index);
             }
@@ -40,7 +32,6 @@ const SideNav = () => {
     const onDragStart = (e, index) => {
         const draggedItems = items[index];
         setDraggedItem(draggedItems)
-        setDraggedItem(state => { return state })
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData("text/html", e.target.parentNode);
         e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
@@ -67,34 +58,15 @@ const SideNav = () => {
                 pos_index: posIndexGroups[index],
             };
         });
-        dispatch(composingActions.setComposingArticle(updatedItems));
+        dispatch(composingActions.resetComposingArticle(updatedItems));
     };
     return (
-        <>
-        {path === "/composing/view" ?
         <div className="nav-items">
-            <div className="nav-items--inactive pointer" onClick={() => { handleSelect() }}>{t("Produkte auswählen")}</div>
-            {saveStatus === false && items
+            <div className="nav-items--active pointer">{t("Produkte auswählen")}</div>
+            {items
                 ?.slice()
                 .sort((a, b) => a.pos_index - b.pos_index)
-                .map((productItem, index) => {
-                    return (
-                        <div
-                            key={index}
-                            className="nav-items--inactive"
-                        >
-                            <OverlaySide productInfo={productItem} />
-                        </div>
-                    );
-                })}
-            <div className="nav-items--active pointer" onClick={() => { handleSummary() }}>{t("Zusammenfassung")}</div>
-        </div>:
-        <div className="nav-items">
-            <div className="nav-items--active pointer" onClick={() => { handleSelect() }}>{t("Produkte auswählen")}</div>
-            {saveStatus === false && items
-                ?.slice()
-                .sort((a, b) => a.pos_index - b.pos_index)
-                .map((productItem, index) => {
+                .map((item, index) => {
                     return (
                         <div
                             key={index}
@@ -104,15 +76,13 @@ const SideNav = () => {
                             onDragEnd={(e) => onDragEnd()}
                             className="nav-items--active"
                         >
-                            <OverlayGroup article={productItem} id={id} />
+                            <OverlayGroup article={item} id={id} />
                         </div>
                     );
                 })}
-
             <div className="nav-items--inactive pointer" onClick={() => { handleSummary() }}>{t("Zusammenfassung")}</div>
-        </div>}
-        </>
+        </div>
     )
 }
 
-export default SideNav
+export default EditSidebar

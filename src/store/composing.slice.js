@@ -3,14 +3,20 @@ import { createSlice } from "@reduxjs/toolkit";
 const composingSlice = createSlice({
     name: 'composing',
     initialState: {
+        currentTemplate: JSON.parse(localStorage.getItem('currentTemplate')) || {},
         articleList: JSON.parse(localStorage.getItem('articleList')) || [],
         composingElements: JSON.parse(localStorage.getItem('composingElements')) || [],
+        savedComposing: JSON.parse(localStorage.getItem('savedComposing')) || {},
         currentListPage: 1,
         comparedListPage: 1,
-        renderedCompose: '',
+        renderedCompose: localStorage.getItem('renderedCompose') || '',
         filterList: []
     },
     reducers:{
+        setTemplate: (state, action) => {
+            state.currentTemplate = action.payload
+            localStorage.setItem('currentTemplate', JSON.stringify(state.currentTemplate));
+        },
         setArticleList: (state, action) => {
             if (action.payload.current_page === 1) {
                 state.articleList = action.payload.products
@@ -27,6 +33,10 @@ const composingSlice = createSlice({
             state.composingElements = [...state.composingElements, action.payload]
             localStorage.setItem('composingElements', JSON.stringify(state.composingElements));
         },
+        resetComposingArticle: (state, action) => {
+            state.composingElements = action.payload
+            localStorage.setItem('composingElements', JSON.stringify(state.composingElements));
+        },
         updateComposingArticle: (state, action) => {
             state.composingElements = state.composingElements.map((el, index) =>
                 el.pos_index === action.payload.pos_index ? { ...el, ...action.payload } : el
@@ -40,7 +50,12 @@ const composingSlice = createSlice({
         },
         setRenderedCompose: (state, action) => {
             state.renderedCompose = action.payload
+            localStorage.setItem('renderedCompose', state.renderedCompose);
         },
+        setSavedCompose: (state, action) => {
+            state.savedComposing = action.payload
+            localStorage.setItem('savedComposing', JSON.stringify(action.payload))
+        }
     },
 })
 

@@ -36,14 +36,14 @@ export const imageComposing = productInfo =>
         document_id: productInfo.document_id,
         image_url: productInfo?.render_url
     })
-export const getOnlineInfo = templateInfo =>
-    handleRequest('post', 'api/v1/compose/product/', templateInfo)
+export const createCompose = data =>
+    handleRequest('post', 'api/v1/compose/product/', data)
+export const updateCompose = data =>
+    handleRequest('put', 'api/v1/compose/product/', data)
 export const replacePreviewImage = previwInfo =>
     handleRequest('post', 'api/v1/compose/setpreview/', previwInfo)
 export const refreshCompose = templateInfo => 
     handleRequest('post', 'api/v1/compose/refresh/', templateInfo)
-export const updateOnlineInfo = templateInfo =>
-    handleRequest('put', 'api/v1/compose/product/', templateInfo)
 
 // Template action
 export const getTemplateListbyFilter = (templateArgs = {}) =>

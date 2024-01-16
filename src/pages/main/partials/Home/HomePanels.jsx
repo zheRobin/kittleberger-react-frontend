@@ -16,7 +16,7 @@ export const ProductPanel = () => {
         if (loading){
             const fetchProducts = async () => {
                 const response = await getProducts(page);
-                if(response.code ===200){
+                if(response?.code ===200){
                     dispatch(infoActions.setProductData(response.data))
                 }
             }
@@ -48,7 +48,7 @@ export const TemplatePanel = () => {
         if (loading){
             const fetchTemplates = async () => {
                 const response = await getTemplates(page);
-                if(response.code ===200){
+                if(response?.code ===200){
                     dispatch(infoActions.setTemplateData(response.data))
                 }
             }

@@ -52,3 +52,21 @@ export function getIndex(usedArticle, template) {
         return -1;
     }
 }
+
+export function getSaveDate(lang, inputDate) {
+    const date = new Date(inputDate);
+    const options = {
+        day: "2-digit", 
+        month: "2-digit", 
+        year: "numeric", 
+        hour: "2-digit", 
+        minute: "2-digit"
+    };
+    const dateString = date.toLocaleDateString(lang === 'en' ? 'en-US' : 'de-DE', options);
+    const timeString = date.toLocaleTimeString(lang === 'en' ? 'en-US' : 'de-DE', options);
+    const preDate = lang === 'en' ? "at the" : "am";
+    const preTime = lang === 'en' ? "around" : "um";
+    const postTime = lang === 'en' ? "Clock" : "Uhr";
+    
+    return `${preDate} ${dateString} ${preTime} ${timeString} ${postTime}`;
+}

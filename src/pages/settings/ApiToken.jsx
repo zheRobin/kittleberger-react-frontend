@@ -52,7 +52,7 @@ const ApiToken = () => {
                     'name': formik.values.name
                 }
                 const response = await createToken(data);
-                if (response.code === 200) {
+                if (response?.code === 200) {
                     setTokenLists(response.data);
                     toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 } else {
@@ -64,7 +64,7 @@ const ApiToken = () => {
     )
     const handleDelete = async (id) => {
         const response = await deleteToken(id);
-        if (response.code === 200) {
+        if (response?.code === 200) {
             setTokenLists(response.data);
             toast.success("Successfully Deleted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
         } else {
@@ -74,7 +74,7 @@ const ApiToken = () => {
     useEffect(() => {
         const fetchTokens = async () => {
             const response = await tokenList();
-            if (response.code === 200) {
+            if (response?.code === 200) {
                 setTokenLists(response.data);
             } else {
                 toast.error("Something Went Wrong", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })

@@ -29,7 +29,7 @@ import arrowCRActiveIcon from "assets/icons/arrowCR-active.svg"
 import arrowBLActiveIcon from "assets/icons/arrowBL-active.svg"
 import arrowBCActiveIcon from "assets/icons/arrowBC-active.svg"
 import arrowBRActiveIcon from "assets/icons/arrowBR-active.svg"
-
+import copyIcon from "assets/icons/copy.svg"
 export const CrossIcon = crossIcon
 export const CloseIcon = closeIcon
 export const EditIcon = editIcon
@@ -61,6 +61,7 @@ export const ArrowCRActiveIcon = arrowCRActiveIcon
 export const ArrowBLActiveIcon = arrowBLActiveIcon
 export const ArrowBCActiveIcon = arrowBCActiveIcon
 export const ArrowBRActiveIcon = arrowBRActiveIcon
+export const CopyIcon = copyIcon
 export const Loading = () => {
     return (
         <div className="cover-spin" style={{ margin: "0px 0px 0px 0px" }}>

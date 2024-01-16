@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import ArticleList from "./partials/Composing/ArticleList";
-import ProductView from "./partials/Composing/ProductView";
+import ProductView from "./partials/Composing/Preview";
 import { composeByInfo } from "libs/_utils/actions";
 import { Loading } from "libs/icons"
 import { composingActions } from "store/composing.slice";
@@ -19,6 +19,7 @@ const ComposingEdit = () => {
             if(!templateItem) {
                 navigate('/')
             } else {
+                dispatch(composingActions.setTemplate(templateItem))
                 const composeRender = async () => {
                     const request = {
                         template_id: id,

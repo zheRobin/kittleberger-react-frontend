@@ -8,6 +8,7 @@ import ForgetPassword from "pages/auth/forget-password"
 import Home from "pages/main/Home";
 import Composing from "pages/main/Composing";
 import Summary from "pages/main/Summary";
+import ProductView from "pages/main/ProductView";
 import Template from "pages/main/Template";
 
 import ChangePassword from "pages/settings/ChangePassword";
@@ -23,7 +24,8 @@ const routes = [
     { path: "setting/api-token", component: ApiToken },
     { path: "setting/contents", component: Setting },
     { path: "composing/edit/:id", component: Composing },
-    { path: "composing/view", component: Summary }
+    { path: "composing/view", component: Summary },
+    { path: "composing/view/:id", component: ProductView }
   ];
   
 const AuthRoutes = () => {

@@ -39,7 +39,7 @@ const Home = () => {
     useEffect(() => {
         const fetchPageData = async() => {
             const response = await getPageData();
-            if (response.code === 200) {
+            if (response?.code === 200) {
                 dispatch(infoActions.setPageData(response.data))
             } else {
                 //
