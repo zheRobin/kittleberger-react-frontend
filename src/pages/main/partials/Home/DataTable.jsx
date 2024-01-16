@@ -2,14 +2,12 @@ import React from "react";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Item from "./Item";
 const DataTable = ({items, index, page, next})=> {
-    console.log(items)
     return(
         <div className='template-tab-1'>
-            {items?.map((el, key) => (index === "template"?<TemplateItem key={key} item={el} />:<ProductItem key={key} item={el} />))}
-            {/* <div id="scrollableDiv" className='product-container' style={{
+            <div id={`scrollableDiv-${index}`} className='product-container' style={{
                 overflow: 'scroll',
                 overflowX: 'hidden'
-            }}>
+            }}> 
                 <InfiniteScroll
                     dataLength={items.length}
                     next={(e) => next(page+1)}
@@ -22,12 +20,12 @@ const DataTable = ({items, index, page, next})=> {
                         </p>
                     }
                     style={{ overflowX: "hidden" }}
-                    scrollableTarget="scrollableDiv"
+                    scrollableTarget={`scrollableDiv-${index}`}
                     id='scrollable'
-                >                  
-                    {items?.map((el, key) => < Item key={key} cardInfo={el} />)}
+                >               
+                    {items?.map((el, key) => (index === "template"?<TemplateItem key={key} item={el} />:<ProductItem key={key} item={el} />))}
                 </InfiniteScroll>
-            </div> */}
+            </div>
         </div>
     );
 }

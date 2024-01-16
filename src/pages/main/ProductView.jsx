@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Typography } from "@mui/material";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Loading, CopyIcon } from "libs/icons"
+import { Loading, CopyIcon, SpinnerIcon } from "libs/icons"
 import { getSaveDate } from "libs/_utils/conv";
 import { ToastContainer, toast } from "react-toastify"
 import { updateCompose, replacePreviewImage, getImageFromUrl } from "libs/_utils/actions";
@@ -16,6 +16,7 @@ const ProductView = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false)
+    const [rendering, setRendering] = useState(true)
     const savedComposing = useSelector(state => state.composing.savedComposing)
     const productData = useSelector(state => state.info.productData)
     const lang = useSelector(state => state.info.language)
@@ -129,8 +130,11 @@ const ProductView = () => {
         {loading ? <Loading /> : (<></>)}
         <div className="summary">
             <div className="summary__image">
-                <div className="summary__image__content">
-                    <img src={product.cdn_url} alt="composedProduct" />
+                <div className="summary__image__content"  style={{display: rendering ? "block" : "none"}}>
+                    <img src={SpinnerIcon} alt="composedProduct"/>
+                </div>
+                <div className="summary__image__content"  style={{display: rendering ? "none" : "block"}}>
+                    <img src={product.png_result !== '' ? product.png_result : product.cdn_url} alt="composedProduct" onLoad={() => setRendering(false)}/>
                 </div>
                 <div className="summary__image__desc">
                     <div className="typography-700-bold">{data.name}</div>

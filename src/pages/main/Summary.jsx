@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useTranslation } from 'react-i18next';
 import { TemplateButton } from "./CreateTemplate"
 import { ToastContainer, toast } from "react-toastify"
-import { Loading } from "libs/icons"
+import { Loading, SpinnerIcon } from "libs/icons"
 import "components/Dialog/_dialog_style.scss"
 import "./style/organismStyle.scss"
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +16,7 @@ const ComposingPreview = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
+    const [rendering, setRendering] = useState(true)
     const selectedTemplate = useSelector(state => state.composing.currentTemplate)
     const selectedProducts = useSelector(state => state.composing.composingElements)
     const renderedCompose = useSelector(state => state.composing.renderedCompose)
@@ -83,8 +84,11 @@ const ComposingPreview = () => {
         {loading ? <Loading /> : (<></>)}
         <div className="summary">
             <div className="summary__image">
-                <div className="summary__image__content">
-                    <img src={renderedCompose} alt="composedProduct" />
+                <div className="summary__image__content"  style={{display: rendering ? "block" : "none"}}>
+                    <img src={SpinnerIcon} alt="composedProduct"/>
+                </div>
+                <div className="summary__image__content" style={{display: rendering ? "none" : "block"}}>
+                    <img src={renderedCompose} alt="composedProduct" onLoad={() => setRendering(false)}/>
                 </div>
                 <div className="summary__image__desc">
                     <div className="typography-700-bold">{data.name}</div>

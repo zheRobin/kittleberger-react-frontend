@@ -138,11 +138,10 @@
     justify-content: flex-start;
     gap: 17px;
     margin-top: 20px;
-    position: absolute;
+    position: relative;
     width: 100%;
     top: 0px;
-    bottom: 0px;
-    overflow-y: hidden;
+    height: calc(100vh - 247px);
     
 
     .infinite-scroll-component {
