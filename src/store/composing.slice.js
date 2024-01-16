@@ -11,7 +11,8 @@ const composingSlice = createSlice({
         comparedListPage: 1,
         renderedCompose: localStorage.getItem('renderedCompose') || '',
         filterList: [],
-        saveStatus: false
+        saveStatus: false,
+        countryList: []
     },
     reducers:{
         initComposingState: (state) => {
@@ -78,6 +79,9 @@ const composingSlice = createSlice({
         },
         setSaveStatus: (state, action) => {
             state.saveStatus = action.payload
+        },
+        setCountryList: (state, action) => {
+            state.countryList = action.payload
         }
     },
 })

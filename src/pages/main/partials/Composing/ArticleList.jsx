@@ -65,15 +65,20 @@ const ArticleItem = ({ item, template }) => {
 const ArticleList = ({ template }) => {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(true)
+    const [searchString, setSearchString] = useState("");
     const [noMoreArticles, setNoMoreArticles] = useState(false)
     const page = useSelector(state => state.composing.currentListPage)
-    const productInfo = ''
-    const country = null
+    const [productInfo, setProductInfo] = useState('');
+    const country = useSelector(state => state.composing.countryList)
     const dispatch = useDispatch();
     useEffect(() => {
         const getArticlesData = async () => {
             setLoading(true)
-            const response = await getArticleList({ page, productInfo, country });
+            const response = await getArticleList({ 
+                page, 
+                productInfo, 
+                country: country?.length === 0 ? "" : country.join(',') 
+            });
             if (response?.code === 200) {
                 dispatch(composingActions.setArticleList(response.data))
                 if(response.data.length === 0 ){ 
@@ -83,16 +88,20 @@ const ArticleList = ({ template }) => {
             setLoading(false)
         }
         getArticlesData();
-      }, [dispatch, page])
+      }, [dispatch, page, productInfo, country])
   
       const handleLoadMore = () => {
           dispatch(composingActions.setListPage(page + 1))
       }
     const articlesData = useSelector(state => state.composing.articleList)
+    const handleChange = (event) => {
+        setProductInfo(event.target.value);
+        dispatch(composingActions.setListPage(1));
+      };
     return (
         <div className="product-select__l">
             <div className="product-search">
-                <input placeholder={t("Produkte durchsuchen")} />
+                <input placeholder={t("Produkte durchsuchen")} onChange={handleChange}/>
             </div>
             <div className="product-add">
                 {articlesData.map((article, index) => <ArticleItem key={index} item={article} template={template} />)}
