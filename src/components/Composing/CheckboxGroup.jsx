@@ -38,7 +38,7 @@ export const DetailCheckbox = (props) => {
 }
 export const CountryCheckbox = (props) => {
     const dispatch = useDispatch();
-    const countryList = useSelector(state => state.composing.countryList);
+    const countryList = useSelector(state => state.composing && state.composing.countryList ? state.composing.countryList : {});
     const isChecked = props.type in countryList && countryList[props.type].includes(props.element.id);
     const handleFilter = (type, id, checked) => {
         if(checked) {

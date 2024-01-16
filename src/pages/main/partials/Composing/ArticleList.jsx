@@ -65,7 +65,6 @@ const ArticleItem = ({ item, template }) => {
 const ArticleList = ({ template }) => {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(true)
-    const [searchString, setSearchString] = useState("");
     const [noMoreArticles, setNoMoreArticles] = useState(false)
     const page = useSelector(state => state.composing.currentListPage)
     const [productInfo, setProductInfo] = useState('');

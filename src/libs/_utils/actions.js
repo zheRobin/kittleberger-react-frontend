@@ -40,6 +40,8 @@ export const createCompose = data =>
     handleRequest('post', 'api/v1/compose/product/', data)
 export const updateCompose = data =>
     handleRequest('put', 'api/v1/compose/product/', data)
+export const deleteCompose = data =>
+    handleRequest('delete', `api/v1/compose/product/${data}/`)
 export const replacePreviewImage = previwInfo =>
     handleRequest('post', 'api/v1/compose/setpreview/', previwInfo)
 export const refreshCompose = templateInfo => 

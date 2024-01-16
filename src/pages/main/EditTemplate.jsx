@@ -183,7 +183,6 @@ const TemplateEditPanel = () => {
     let backgroundWidth = (tempImages.width / tempImages.height * height) * 100 / width
     const [previewImages, setPreviewImages] = useState([]);
     const maxNumber = 69;
-    const token = useSelector(state => state.auth.token)
     const pageData = useSelector(state => state.info.pageData)
     const brands = pageData.brands.map(brand => ({ ...brand, value: false }));
     const applications = pageData.applications.map(app => ({ ...app, value: false }));

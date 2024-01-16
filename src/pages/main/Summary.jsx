@@ -8,7 +8,7 @@ import { Loading, SpinnerIcon } from "libs/icons"
 import "components/Dialog/_dialog_style.scss"
 import "./style/organismStyle.scss"
 import 'react-toastify/dist/ReactToastify.css';
-import { createCompose } from "libs/_utils/actions";
+import { createCompose, replacePreviewImage } from "libs/_utils/actions";
 import { getSaveDate } from "libs/_utils/conv";
 import { composingActions } from "store/composing.slice";
 const ComposingPreview = () => {
@@ -56,6 +56,7 @@ const ComposingPreview = () => {
     const textAreaRef = useRef(null);
     useAutosizeTextArea(textAreaRef.current, data.name);
     const user = useSelector(state => state.auth.user)
+    const role = useSelector(state => state.auth.role)
     const lang = useSelector(state => state.info.language)
     const saveDate = getSaveDate(lang, Date.now());
     const handleSubmit = () => {
@@ -78,6 +79,23 @@ const ComposingPreview = () => {
             }
         }
         composeSubmit();
+    }
+    const updatePreviewImage = () => {
+        const templateSubmit = async () => {
+            setLoading(true)
+            const response = await replacePreviewImage({
+                template_id: data.template_id,
+                preview_img: renderedCompose
+            })
+            if (response?.code === 200){
+                setLoading(false)
+                toast.success("Successfully updated template preview image", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+            } else {
+                setLoading(false)
+                toast.error("Sorry but failed To Update", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+            }
+        }
+        templateSubmit();
     }
     return(
         <>
@@ -142,7 +160,7 @@ const ComposingPreview = () => {
                         style={{ fontSize: "14px" }}
                     />
                     <div onClick={(e) => handleSubmit()}><TemplateButton content={t('Speichern')} /></div>
-                    {/* {role === 'admin' ? (<div onClick={(e) => updatePreviewImage()}><TemplateButton content={t('Als Vorlagenvorschaubild festlegen')} /></div>) : null} */}
+                    {role === 'admin' ? (<div onClick={(e) => updatePreviewImage()}><TemplateButton content={t('Als Vorlagenvorschaubild festlegen')} /></div>) : null}
                 </div>
             </div>
             <ToastContainer />
