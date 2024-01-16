@@ -11,6 +11,7 @@ export const infoSlice = createSlice({
         productData: JSON.parse(localStorage.getItem("productData")) || [],
         usedArticleData: JSON.parse(localStorage.getItem("usedArticleData")) || [],
         templateData: JSON.parse(localStorage.getItem("templateData")) || [],
+        filterData:{}
     },
     reducers:{
         setSelectedLanguage:(state, action) => {
@@ -46,6 +47,9 @@ export const infoSlice = createSlice({
             localStorage.setItem('templateData', JSON.stringify(action.payload.templates));
             state.templateData = action.payload.templates;
         },
+        setFilterData: (state, action) => {
+            state.filterData = action.payload
+        }
     }
 })
 

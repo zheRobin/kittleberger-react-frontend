@@ -12,21 +12,21 @@ export const ProductPanel = () => {
     const { t } = useTranslation();
     const products = useSelector(state => state.info.productData)
     const page = useSelector(state => state.info.currentProductPage)
+    const filter = useSelector(state => state.info.filterData)
     useEffect(()=>{
-        if (loading){
-            const fetchProducts = async () => {
-                const response = await getProducts(page);
-                if(response?.code ===200){
-                    dispatch(infoActions.setProductData(response.data))
-                }
+        setLoading(true)
+        const fetchProducts = async () => {
+            const response = await getProducts(page, filter);
+            if(response?.code ===200){
+                dispatch(infoActions.setProductData(response.data))
             }
-            fetchProducts();
         }
+        fetchProducts();
         setLoading(false)
-    },[dispatch, loading, page])
+    },[dispatch, loading, page, filter])
     return(
         <>
-            <ProductSearch filters={[]} filterData={products} />
+            <ProductSearch />
             {loading ? <Loading /> : 
                 (products.length === 0 ? 
                 <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>
@@ -44,18 +44,18 @@ export const TemplatePanel = () => {
     const { t } = useTranslation();
     const templates = useSelector(state => state.info.templateData)
     const page = useSelector(state => state.info.currentTemplatePage)
+    const filter = useSelector(state => state.info.filterData)
     useEffect(()=>{
-        if (loading){
-            const fetchTemplates = async () => {
-                const response = await getTemplates(page);
-                if(response?.code ===200){
-                    dispatch(infoActions.setTemplateData(response.data))
-                }
+        setLoading(true)
+        const fetchTemplates = async () => {
+            const response = await getTemplates(page, filter);
+            if(response?.code ===200){
+                dispatch(infoActions.setTemplateData(response.data))
             }
-            fetchTemplates();
         }
+        fetchTemplates();
         setLoading(false)
-    },[dispatch, loading, page])
+    },[dispatch, loading, page, filter])
     return(
         <>
             {loading ? <Loading /> : 

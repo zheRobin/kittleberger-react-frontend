@@ -32,6 +32,10 @@ import arrowBCActiveIcon from "assets/icons/arrowBC-active.svg"
 import arrowBRActiveIcon from "assets/icons/arrowBR-active.svg"
 import copyIcon from "assets/icons/copy.svg"
 import dragIcon from "assets/icons/drag&drop.svg"
+import miusButton from "assets/icons/minus-white.svg"
+import refreshIcon from "assets/icons/rotate.svg"
+export const RefreshIcon = refreshIcon
+export const MinusIcon = miusButton
 export const CrossIcon = crossIcon
 export const CloseIcon = closeIcon
 export const EditIcon = editIcon
