@@ -275,7 +275,9 @@ const TemplatePanel = () => {
 							if (response?.code === 201) {
 								setLoading(false);
 								toast.success("Successfully Created", { theme: "colored", hideProgressBar: true, autoClose: 1500 });
-								navigate("/");
+								setTimeout(() => {
+									navigate("/");
+								}, 1500); 
 							} else {
 								setLoading(false);
 								toast.error(response?.data?.data, { theme: "colored", hideProgressBar: true, autoClose: 2000 });

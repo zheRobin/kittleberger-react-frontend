@@ -284,8 +284,10 @@ const TemplateEditPanel = () => {
                             const response = await updateTemplate(formData, productInfo?.id)
                             if(response?.code === 200) {
                                 setLoading(false)
-                                toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                                navigate("/")
+                                toast.success("Successfully updated", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                                setTimeout(() => {
+                                    navigate("/");
+                                }, 1500); 
                             } else {
                                 setLoading(false)
                                 toast.error(response.data, { theme: "colored", hideProgressBar: "true", autoClose: 2000 })
