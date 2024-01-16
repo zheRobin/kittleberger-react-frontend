@@ -74,28 +74,3 @@ export const createTemplate = (formData) =>
     handleFormRequest('post', `api/v1/compose/templates/`, formData)
 export const updateTemplate = (formData, id) => 
     handleFormRequest('put', `api/v1/compose/templates/${id}/`, formData)
-
-export function calcPosition(type = 'middle-center', posX, posY, templateWidth, templateHeight, sliderScale) {
-    switch (type) {
-        case "top-left":
-            return [posX, posY];
-        case "top-center":
-            return [(posX + templateWidth * (1 - sliderScale) / 2), posY];
-        case "top-right":
-            return [(posX + templateWidth * (1 - sliderScale)), posY];
-        case "middle-left":
-            return [posX, (posY + templateHeight * (1 - sliderScale) / 2)];
-        case "middle-center":
-            return [(posX + templateWidth * (1 - sliderScale) / 2), (posY + templateHeight * (1 - sliderScale) / 2)];
-        case "middle-right":
-            return [(posX + templateWidth * (1 - sliderScale)), (posY + templateHeight * (1 - sliderScale) / 2)];
-        case "bottom-left":
-            return [posX, (posY + templateHeight * (1 - sliderScale))];
-        case "bottom-center":
-            return [(posX + templateWidth * (1 - sliderScale) / 2), (posY + templateHeight * (1 - sliderScale))];
-        case "bottom-right":
-            return [(posX + templateWidth * (1 - sliderScale)), (posY + templateHeight * (1 - sliderScale))];
-        default:
-            return [posX, posY];
-    }
-}

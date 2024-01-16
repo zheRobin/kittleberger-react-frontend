@@ -1,24 +1,20 @@
-import React from 'react';
+import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import { Formik, Form, Field, FieldArray, useField, useFormikContext, ErrorMessage } from 'formik';
+import ImageUploading from 'react-images-uploading';
 import { ToastContainer, toast } from 'react-toastify';
+import * as Yup from 'yup'
 import { createTheme } from "@mui/material/styles";
 import { Typography, ThemeProvider, Checkbox, TextField, Select, MenuItem } from "@mui/material"
-import ImageUploading from 'react-images-uploading';
 import { useTranslation } from 'react-i18next';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useState } from 'react';
-import { useSelector } from "react-redux";
-import PlusIcon from "assets/icons/add.svg"
-import DeleteIcon from "assets/icons/cross.svg"
-import DragIcon from "assets/icons/drag&drop.svg"
+import { PlusIcon1, CrossIcon, DragIcon, SpinnerIcon } from 'libs/icons';
+import ImageTemplate from "components/Composing/ImageTempate"
 import 'react-toastify/dist/ReactToastify.css';
 import "components/Composing/style/composeStyle.scss"
-import ImageTemplate from "components/Composing/ImageTempate"
-import { useRef, useLayoutEffect, useEffect } from 'react';
-import * as Yup from 'yup'
-import { useLocation, useNavigate } from 'react-router-dom';
+
 import { updateTemplate } from 'libs/_utils/actions';
-import spinner from "assets/icons/tube-spinner.svg"
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
         <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -129,7 +125,7 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                                     </div>
                                     <div className="image-settings__common pointer" onClick={() => {
                                         arrayHelpers.remove(index)
-                                    }}><img src={DeleteIcon} alt="Delete Article"></img></div>
+                                    }}><img src={CrossIcon} alt="Delete Article"></img></div>
                                 </div>
                             </div>
                         </div>
@@ -139,7 +135,7 @@ export const ArticlePlacementsComponent = ({ values, arrayHelpers, setFieldValue
                 <div className="right-b__bottom" onClick={() => { values.length < 9 && arrayHelpers.push({ position_x: '0', position_y: '0', width: '0', height: '0', z_index: '0' }) }}>
                     {values.length >= 9 ? null : (
                         <>
-                            <img className='pointer' src={PlusIcon} alt="plus" style={{ color: "black" }}></img>
+                            <img className='pointer' src={PlusIcon1} alt="plus" style={{ color: "black" }}></img>
                             <div className="typo-700-regular pointer" >
                                 {t("Ein weiteres Platzhalterbild hinzufügen")}
                             </div>
@@ -169,14 +165,11 @@ export const Loading = () => {
         </div>
     )
 }
-
-
-
 const TemplateEditPanel = () => {
     const { t } = useTranslation();
     const navigate = useNavigate()
-    const { state } = useLocation()
-    const productInfo = state ? state : {}
+    const {id} = useParams()
+    const productInfo = useSelector(state => state.info.templateData.find(item => item.id === parseInt(id)))
     const [backView, setBackView] = useState(productInfo?.bg_image_cdn_url ? true : false);
     const [preView, setPreView] = useState(productInfo?.preview_image_cdn_url ? true : false);
     const [images, setImages] = useState([]);
@@ -264,9 +257,9 @@ const TemplateEditPanel = () => {
 
                     }}
                     validationSchema={validationSchema}
-                    onSubmit={values => {
+                    onSubmit={async (values) => {
                         let formData = new FormData();
-                        setLoading(true)
+                        
                         formData.append("preview_image", values?.preview_image?.file);
                         formData.append("background_image", values?.background_image?.file);
                         formData.append("brands", values.brands
@@ -286,18 +279,22 @@ const TemplateEditPanel = () => {
                         formData.append("resolution_width", values.resolution_width);
                         formData.append("resolution_height", values.resolution_height);
                         formData.append("type", values.type);
-
-                        updateTemplate(formData, token, productInfo?.id, (success) => {
-                            if (success.data.code === 201 || success.data.status === "success") {
+                        try {
+                            setLoading(true)
+                            const response = await updateTemplate(formData, productInfo?.id)
+                            if(response?.code === 200) {
                                 setLoading(false)
                                 toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                                 navigate("/")
-                            }
-                            if (success.data.code === 400 || success.data.status === "failed") {
+                            } else {
                                 setLoading(false)
-                                toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 2000 })
+                                toast.error(response.data, { theme: "colored", hideProgressBar: "true", autoClose: 2000 })
                             }
-                        })
+                        
+                        } catch (e) {
+                            setLoading(false);
+                            toast.error("An error occurred", { theme: "colored", hideProgressBar: true, autoClose: 2000 });
+                        }
                     }}
                 >
                     {({ values, setFieldValue, handleSubmit }) => (
@@ -501,7 +498,7 @@ const TemplateEditPanel = () => {
                                                                                     <div className="product-image-info"></div>
                                                                                 </div>
                                                                                 <div className="product-icon pointer" onClick={(e) => { onImageRemoveAll(); setBackView(false) }}>
-                                                                                    <img src={DeleteIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
+                                                                                    <img src={CrossIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -509,7 +506,7 @@ const TemplateEditPanel = () => {
                                                                             {imageList.map((image, index) => (
                                                                                 <div key={index} className="image-item"
                                                                                     style={{ width: "100%", height: "100%" }}>
-                                                                                    <img src={backLoading ? spinner : image['data_url']} alt="background"
+                                                                                    <img src={backLoading ? SpinnerIcon : image['data_url']} alt="background"
                                                                                         style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                                                                                 </div>
                                                                             ))}
@@ -616,7 +613,7 @@ const TemplateEditPanel = () => {
                                                                                     <div className="product-image-info"></div>
                                                                                 </div>
                                                                                 <div className="product-icon pointer" onClick={(e) => { if (previewImages.length !== 0 && previewImages[0]?.data_url !== undefined) { onImageRemoveAll() } setPreView(false); setDeleteSign(true) }}>
-                                                                                    <img src={DeleteIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
+                                                                                    <img src={CrossIcon} style={{ backgroundColor: "white", border: "none" }} alt="cancelIcon"></img>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -624,7 +621,7 @@ const TemplateEditPanel = () => {
 
                                                                             {imageList.map((image, index) => (
                                                                                 <div key={index} className="image-item" style={{ width: "100%", height: "100%" }}>
-                                                                                    <img src={previewLoading ? spinner : image['data_url']} alt="backimage"
+                                                                                    <img src={previewLoading ? SpinnerIcon : image['data_url']} alt="backimage"
                                                                                         style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                                                                                 </div>
                                                                             ))}

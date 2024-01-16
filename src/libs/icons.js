@@ -6,6 +6,7 @@ import plusIcon from "assets/icons/plus-square.svg"
 import logoIcon from "assets/images/Header_bosch.svg"
 import searchIcon2 from "assets/icons/search2.svg"
 import spinnerIcon from "assets/icons/tube-spinner.svg"
+import plusIcon1 from "assets/icons/add.svg"
 import plusIcon2 from "assets/icons/add-2.svg"
 import listIcon from "assets/icons/drag&drop.svg"
 import crossIcon2 from "assets/icons/cross-white.svg"
@@ -30,6 +31,7 @@ import arrowBLActiveIcon from "assets/icons/arrowBL-active.svg"
 import arrowBCActiveIcon from "assets/icons/arrowBC-active.svg"
 import arrowBRActiveIcon from "assets/icons/arrowBR-active.svg"
 import copyIcon from "assets/icons/copy.svg"
+import dragIcon from "assets/icons/drag&drop.svg"
 export const CrossIcon = crossIcon
 export const CloseIcon = closeIcon
 export const EditIcon = editIcon
@@ -38,6 +40,7 @@ export const LogoIcon = logoIcon
 export const SearchIcon2 = searchIcon2
 export const SpinnerIcon = spinnerIcon
 export const PencelWhiteIcon = editPencilIcon
+export const PlusIcon1 = plusIcon1
 export const PlusIcon2 = plusIcon2
 export const ListIcon = listIcon
 export const CrossIcon2 = crossIcon2
@@ -62,6 +65,7 @@ export const ArrowBLActiveIcon = arrowBLActiveIcon
 export const ArrowBCActiveIcon = arrowBCActiveIcon
 export const ArrowBRActiveIcon = arrowBRActiveIcon
 export const CopyIcon = copyIcon
+export const DragIcon = dragIcon
 export const Loading = () => {
     return (
         <div className="cover-spin" style={{ margin: "0px 0px 0px 0px" }}>
