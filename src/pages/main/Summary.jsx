@@ -69,6 +69,7 @@ const ComposingPreview = () => {
             if (response?.code === 201) {
                 toast.success("Successfully Submitted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 dispatch(composingActions.setSavedCompose(response.data))
+                dispatch(composingActions.setSaveStatus(true))
                 navigate(`/composing/view/${response.data.id}`)
             }else {
                 setLoading(false)

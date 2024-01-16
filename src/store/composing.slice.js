@@ -10,9 +10,29 @@ const composingSlice = createSlice({
         currentListPage: 1,
         comparedListPage: 1,
         renderedCompose: localStorage.getItem('renderedCompose') || '',
-        filterList: []
+        filterList: [],
+        saveStatus: false
     },
     reducers:{
+        initComposingState: (state) => {
+            const initialState = {
+                currentTemplate: {},
+                articleList: [],
+                composingElements: [],
+                savedComposing: {},
+                currentListPage: 1,
+                comparedListPage: 1,
+                renderedCompose: '',
+                filterList: [],
+                saveStatus: false
+            };
+            localStorage.removeItem('currentTemplate');
+            localStorage.removeItem('articleList');
+            localStorage.removeItem('composingElements');
+            localStorage.removeItem('savedComposing');
+            localStorage.removeItem('renderedCompose');
+            return initialState;
+        },
         setTemplate: (state, action) => {
             state.currentTemplate = action.payload
             localStorage.setItem('currentTemplate', JSON.stringify(state.currentTemplate));
@@ -55,6 +75,9 @@ const composingSlice = createSlice({
         setSavedCompose: (state, action) => {
             state.savedComposing = action.payload
             localStorage.setItem('savedComposing', JSON.stringify(action.payload))
+        },
+        setSaveStatus: (state, action) => {
+            state.saveStatus = action.payload
         }
     },
 })

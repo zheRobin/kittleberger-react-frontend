@@ -20,7 +20,7 @@ const ProductView = () => {
     const productData = useSelector(state => state.info.productData)
     const lang = useSelector(state => state.info.language)
     const role = useSelector(state => state.auth.role)
-    let product = savedComposing.id === parseInt(id) ? savedComposing : productData.find(item => item.id === id)
+    let product = savedComposing?.id === parseInt(id) ? savedComposing : productData.find(item => item.id === parseInt(id))
     const [data, setData] = useState({})
     useEffect(() => {
         setData({
@@ -30,6 +30,9 @@ const ProductView = () => {
             articles: product.articles,
         })
     }, [product])
+    useEffect(() => {
+        dispatch(composingActions.setSaveStatus(true))
+    }, [dispatch])
     const handleChange = (event) => {
         setData((prevState) => ({
             ...prevState,

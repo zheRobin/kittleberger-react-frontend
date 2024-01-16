@@ -5,7 +5,8 @@ import { useSelector } from "react-redux"
 import { useTranslation } from "react-i18next"
 
 const SidebarLayout = ({ children }) => {
-    const date = useSelector(state => state.info.updatedDate)
+    const pageData = useSelector(state => state.info.pageData)
+    const date = new Date(pageData.document_last_update)
     const { t } = useTranslation()
     const openInNewTab = (url) => {
         window.open(url, '_blank', 'noreferrer');
@@ -16,7 +17,7 @@ const SidebarLayout = ({ children }) => {
             <div className="sidebar-top">
                 <div style={{ marginLeft: "30px", marginTop: "auto", marginBottom: "auto" }}>
                     <Typography variant="paragraph" sx={{ fontSize: "12px", lineHeight: "16px" }}>
-                        {t("Letztes Update")}: {date}
+                        {t("Letztes Update")}: {date.toLocaleDateString('de-DE',{day: "2-digit",  month: "2-digit", year: "numeric"})}
                     </Typography>
                 </div>
             </div>

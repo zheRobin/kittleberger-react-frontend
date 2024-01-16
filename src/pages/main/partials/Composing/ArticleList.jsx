@@ -20,6 +20,7 @@ const ArticleItem = ({ item, template }) => {
         const index = getIndex(usedArticle, template);
         const article = convArticle(item, template.article_placements.find(i => i.pos_index === index), params)
         dispatch(composingActions.setComposingArticle(article))
+        dispatch(composingActions.setSaveStatus(false))
     }
     useEffect(() => {
         if (template.article_placements.length === usedArticle.length) {

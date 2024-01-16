@@ -57,6 +57,7 @@ const OverlayGroup = ({ article, id }) => {
     useEffect(() => {
         const newArticle = convArticle(article, templateItem.article_placements.find(i => i.pos_index === article.pos_index), params)
         dispatch(composingActions.updateComposingArticle(newArticle))
+        dispatch(composingActions.setSaveStatus(false))
     }, [params]);
 
     return (

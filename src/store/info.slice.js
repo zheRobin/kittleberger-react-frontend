@@ -4,21 +4,17 @@ export const infoSlice = createSlice({
     name: 'info',
     initialState:{
         language:localStorage.getItem("i18nextLng") || "en",
-        updatedDate:"30.10.2023",
         currentTab: localStorage.getItem("currentTab") || "template",
         currentTemplatePage: localStorage.getItem("currentTemplatePage") || 1,
         currentProductPage: localStorage.getItem("currentProductPage") || 1,
         pageData: JSON.parse(localStorage.getItem("pageData")) || {},
-        productData: JSON.parse(localStorage.getItem("productsData")) || [],
+        productData: JSON.parse(localStorage.getItem("productData")) || [],
         usedArticleData: JSON.parse(localStorage.getItem("usedArticleData")) || [],
         templateData: JSON.parse(localStorage.getItem("templateData")) || [],
     },
     reducers:{
         setSelectedLanguage:(state, action) => {
             state.language = action.payload
-        },
-        setUpdatedDate:(state,action) => {
-            state.updatedDate = action.payload
         },
         setPageData: (state, action) => {
             if (action.payload === undefined) {
@@ -41,10 +37,10 @@ export const infoSlice = createSlice({
             state.currentProductPage = action.payload;
         },
         setProductData: (state, action) => {
-            localStorage.setItem('productsData', JSON.stringify(action.payload.products));
+            localStorage.setItem('productData', JSON.stringify(action.payload.products));
             localStorage.setItem('usedArticleData', JSON.stringify(action.payload.articles));
-            state.usedArticleData = action.payload.products;
-            state.productData = action.payload.articles;
+            state.productData = action.payload.products;
+            state.usedArticleData = action.payload.articles;
         },
         setTemplateData: (state, action) => {
             localStorage.setItem('templateData', JSON.stringify(action.payload.templates));

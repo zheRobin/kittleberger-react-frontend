@@ -16,8 +16,9 @@ const EditSidebar = () => {
     const [posIndexGroup, setPosIndexGroup] = useState([])
     const selectedProducts = useSelector(state => state.composing.composingElements)
     const savedComposing = useSelector(state => state.composing.savedComposing)
+    const saveStatus = useSelector(state => state.composing.saveStatus)
     const handleSummary = () => {
-        savedComposing?navigate(`/composing/view/${savedComposing.id}`):navigate(`/composing/view`)
+        savedComposing && saveStatus?navigate(`/composing/view/${savedComposing.id}`):navigate(`/composing/view`)
     }
     useEffect(
         () => {

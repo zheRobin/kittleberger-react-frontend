@@ -14,7 +14,9 @@ const CreateSidebar = () => {
     }
     return (
         <div className="nav-items">
-            <div className="nav-items--inactive pointer" onClick={() => handleSelect()}>{t("Produkte auswählen")}</div>
+            {currentTemplate?.id?
+            <div className="nav-items--inactive pointer" onClick={() => handleSelect()}>{t("Produkte auswählen")}</div>:null
+            }
             {selectedProducts
                 ?.slice()
                 .sort((a, b) => a.pos_index - b.pos_index)

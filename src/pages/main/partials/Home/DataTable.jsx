@@ -2,10 +2,10 @@ import React from "react";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Item from "./Item";
 const DataTable = ({items, index, page, next})=> {
-    
+    console.log(items)
     return(
         <div className='template-tab-1'>
-            {items?.map((el, key) => (index === "template"?<TemplateItem key={key} item={el} />:<TemplateItem key={key} item={el} />))}
+            {items?.map((el, key) => (index === "template"?<TemplateItem key={key} item={el} />:<ProductItem key={key} item={el} />))}
             {/* <div id="scrollableDiv" className='product-container' style={{
                 overflow: 'scroll',
                 overflowX: 'hidden'

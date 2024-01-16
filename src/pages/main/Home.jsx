@@ -9,7 +9,7 @@ import Tab from '@mui/material/Tab';
 
 import { ProductPanel, TemplatePanel } from "./partials/Home/HomePanels";
 import { getPageData } from 'libs/_utils/actions';
-import { infoActions } from "store/info.slice";
+import { infoActions, composingActions } from "store/reducer";
 import './style/organismStyle.scss'
 const theme = createTheme({
     components: {
@@ -40,6 +40,7 @@ const Home = () => {
         const fetchPageData = async() => {
             const response = await getPageData();
             if (response?.code === 200) {
+                dispatch(composingActions.initComposingState())
                 dispatch(infoActions.setPageData(response.data))
             } else {
                 //
@@ -47,6 +48,7 @@ const Home = () => {
         }
         fetchPageData();
     }, [dispatch])
+    const pageData = useSelector(state => state.info.pageData)
     return(
         <div className="organism-tabs">
                 {
@@ -74,8 +76,8 @@ const Home = () => {
                             },
                         }}
                     >
-                        <Tab label={1 + t(" Vorlagen")} value="template" style={styles.tab} />
-                        <Tab label={2 + t(" erstellte Kompositionen")} value="product" style={styles.tab} />
+                        <Tab label={pageData.template_count + t(" Vorlagen")} value="template" style={styles.tab} />
+                        <Tab label={pageData.product_count + t(" erstellte Kompositionen")} value="product" style={styles.tab} />
                     </TabList>
                     <>
                         <TabPanel value="template"><TemplatePanel /></TabPanel>
