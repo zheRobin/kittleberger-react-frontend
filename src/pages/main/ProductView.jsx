@@ -9,7 +9,7 @@ import { getSaveDate } from "libs/_utils/conv";
 import { ToastContainer, toast } from "react-toastify"
 import { updateCompose, replacePreviewImage, getImageFromUrl } from "libs/_utils/actions";
 import { composingActions } from "store/composing.slice";
-import { TemplateButton } from "./TemplatePanel"
+import { TemplateButton } from "./CreateTemplate"
 import { saveAs } from "file-saver";
 const ProductView = () => {
     const {id} = useParams()

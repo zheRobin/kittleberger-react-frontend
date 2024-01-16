@@ -58,6 +58,7 @@ const OverlayGroup = ({ article, id }) => {
         const newArticle = convArticle(article, templateItem.article_placements.find(i => i.pos_index === article.pos_index), params)
         dispatch(composingActions.updateComposingArticle(newArticle))
         dispatch(composingActions.setSaveStatus(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params]);
 
     return (

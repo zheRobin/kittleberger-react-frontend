@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 import { useFormik } from 'formik';
-import { TemplateButton } from "pages/main/TemplatePanel"
+import { TemplateButton } from "pages/main/CreateTemplate"
 import { CrossIcon } from "libs/icons"; 
 import { tokenList, createToken, deleteToken } from "libs/_utils/actions"
 import { ToastContainer, toast } from "react-toastify"

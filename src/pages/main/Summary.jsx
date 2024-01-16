@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 import { useTranslation } from 'react-i18next';
-import { TemplateButton } from "./TemplatePanel"
+import { TemplateButton } from "./CreateTemplate"
 import { ToastContainer, toast } from "react-toastify"
 import { Loading } from "libs/icons"
 import "components/Dialog/_dialog_style.scss"

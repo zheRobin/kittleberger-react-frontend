@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from "react-i18next"
-import { TemplateButton } from "pages/main/TemplatePanel"
+import { TemplateButton } from "pages/main/CreateTemplate"
 import { CloseIcon, CrossIcon, EditIcon } from "libs/icons";
 import 'react-toastify/dist/ReactToastify.css';
 import "./style/AccountSetting.scss"

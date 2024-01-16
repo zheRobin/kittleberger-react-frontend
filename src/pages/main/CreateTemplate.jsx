@@ -257,9 +257,8 @@ const TemplatePanel = () => {
 						type: "",
 					}}
 					validationSchema={validationSchema}
-					onSubmit={values => {
+					onSubmit={async (values) => {
 						let formData = new FormData();
-						setLoading(true)
 						formData.append("preview_image", values.preview_image.file);
 						formData.append("background_image", values.background_image.file);
 						formData.append("brands", values.brands
@@ -274,18 +273,21 @@ const TemplatePanel = () => {
 						formData.append("resolution_width", values.resolution_width);
 						formData.append("resolution_height", values.resolution_height);
 						formData.append("type", values.type);
-						createTemplate(formData, token, (success) => {
-
-							if (success.data.code === 201 || success.data.status === "success") {
+						try {
+							setLoading(true)
+							const response = await createTemplate(formData);
+							if (response?.code === 201) {
 								setLoading(false);
 								toast.success("Successfully Created", { theme: "colored", hideProgressBar: true, autoClose: 1500 });
 								navigate("/");
-							} else if (success.data.code === 400 || success.data.status === "failed") {
+							} else {
 								setLoading(false);
-								toast.error(success.data.data, { theme: "colored", hideProgressBar: true, autoClose: 2000 });
+								toast.error(response?.data?.data, { theme: "colored", hideProgressBar: true, autoClose: 2000 });
 							}
-
-						})
+						} catch (e) {
+							setLoading(false);
+							toast.error("An error occurred", { theme: "colored", hideProgressBar: true, autoClose: 2000 });
+						}
 					}}
 				>
 					{({ values, setFieldValue, handleSubmit }) => (

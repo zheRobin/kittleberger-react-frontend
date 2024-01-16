@@ -1,6 +1,6 @@
 
 import "./style/AccountSetting.scss"
-import { TemplateButton } from "pages/main/TemplatePanel"
+import { TemplateButton } from "pages/main/CreateTemplate"
 import cross from "assets/icons/cross.svg"
 import pencil from "assets/icons/pencil.svg"
 import { useEffect, useState } from "react"
@@ -13,7 +13,7 @@ import * as Yup from 'yup';
 import { useTranslation } from "react-i18next"
 import { createTemplatesTypes, editTemplatesTypes, deleteTemplatesTypes } from "libs/_utils/actions"
 import close from "assets/icons/cross-black.svg"
-import { Loading } from "pages/main/TemplatePanel"
+import { Loading } from "pages/main/CreateTemplate"
 import { authActions } from "../../store/reducer"
 import plus from "assets/icons/plus-square.svg"
 
