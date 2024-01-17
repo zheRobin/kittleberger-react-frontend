@@ -34,10 +34,10 @@ const ProductView = () => {
     const [data, setData] = useState({})
     useEffect(() => {
         setData({
-            id: product.id,        
-            name: product.name,
-            template_id: product.template.id,
-            articles: product.articles,
+            id: product?.id,        
+            name: product?.name,
+            template_id: product?.template.id,
+            articles: product?.articles,
         })
     }, [product])
     useEffect(() => {
@@ -88,7 +88,7 @@ const ProductView = () => {
             setLoading(true)
             const response = await replacePreviewImage({
                 template_id: data.template_id,
-                preview_img: product.cdn_url
+                preview_img: product?.cdn_url
             })
             if (response?.code === 200){
                 setLoading(false)
@@ -103,10 +103,10 @@ const ProductView = () => {
     const handleDownload = () => {
         const getDownloadImage = async () => {
             setLoading(true)
-            const response = await getImageFromUrl(product.cdn_url)
+            const response = await getImageFromUrl(product?.cdn_url)
             if (response?.code === 200) {
                 setLoading(false);
-                const filename = product.cdn_url.split('/').pop();
+                const filename = product?.cdn_url.split('/').pop();
                 saveAs(response.data, filename)
             } else {
                 toast.error("Sorry, failed to download", { theme: "colored", hideProgressBar: "true", autoClose: 2500 })
@@ -117,19 +117,19 @@ const ProductView = () => {
     
     const downloadMetaData = () => {
         const metadata = `
-            ${t('Marke')}: ${product.template.brand.map((brand, index) => brand.name).join(", ")}
-            ${t('Applikation')}: ${product.template.application.map((application, index) => application.name).join(", ")}
-            ${t('Technische Daten')}: ${product.template.resolution_width} x ${product.template.resolution_height} px (${product.template.resolution_dpi} dpi)
-            ${t('Dateiformat')}: ${product.template.file_type} (RGB)
-            ${t('Enthaltene Produkte')}: ${product.articles.map((product, index) => `${product.name} (ID: ${product.article_number}; Mediaobject-ID: ${product.mediaobject_id})`).join(", ")}
-            ${t('Erstellt von ')}${product.created_by.username} ${getSaveDate(lang, product.created)}
-            ${t('Zuletzt bearbeitet von ')}${product.modified_by.username} ${getSaveDate(lang, product.modified)}
+            ${t('Marke')}: ${product?.template.brand.map((brand, index) => brand.name).join(", ")}
+            ${t('Applikation')}: ${product?.template.application.map((application, index) => application.name).join(", ")}
+            ${t('Technische Daten')}: ${product?.template.resolution_width} x ${product?.template.resolution_height} px (${product?.template.resolution_dpi} dpi)
+            ${t('Dateiformat')}: ${product?.template.file_type} (RGB)
+            ${t('Enthaltene Produkte')}: ${product?.articles.map((product, index) => `${product?.name} (ID: ${product?.article_number}; Mediaobject-ID: ${product?.mediaobject_id})`).join(", ")}
+            ${t('Erstellt von ')}${product?.created_by.username} ${getSaveDate(lang, product?.created)}
+            ${t('Zuletzt bearbeitet von ')}${product?.modified_by.username} ${getSaveDate(lang, product?.modified)}
         `;
         const blob = new Blob([metadata], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = product.name + ".txt";
+        link.download = product?.name + ".txt";
         link.click();
         URL.revokeObjectURL(url);
 
@@ -137,7 +137,7 @@ const ProductView = () => {
     const deleteComposing = () => {
         setLoading(true);
         const handleDelete = async () => {
-            const response = await deleteCompose(product.id)
+            const response = await deleteCompose(product?.id)
             if (response?.code === 200) {
                 toast.success("Composing has been deleted successfully", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 setTimeout(() => {
@@ -165,8 +165,8 @@ const ProductView = () => {
     const refresh = () => {
         setLoading(true)
         const composingInfo = {
-            template_id: product.template_id,
-            articles: product.articles,
+            template_id: product?.template.id,
+            articles: product?.articles,
         };
         const refreshComposing = async () => {
             const response = await refreshCompose(composingInfo)
@@ -186,15 +186,17 @@ const ProductView = () => {
     const createPreviewInfo = () => {
         setLoading(true)
         const submitPreviewInfo = {
-            name: product.name,
-            template_id: product.template_id,
+            name: product?.name,
+            template_id: product?.template.id,
             base64_img: previewImage,
-            articles: product.articles
+            articles: product?.articles
         }
         const composeSubmit = async () => {
             const response = await createCompose(submitPreviewInfo)
             if (response?.code === 201) {
+                setOpen(false);
                 toast.success("Successfully Submitted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+                setLoading(false)
                 dispatch(composingActions.setSavedCompose(response.data))
                 dispatch(composingActions.setSaveStatus(true))
                 navigate(`/composing/view/${response.data.id}`)
@@ -208,11 +210,11 @@ const ProductView = () => {
     const replacePreviewInfo = () => {
         setLoading(true)
         const updatePreviewInfo = {
-            id: product.id,
-            name: product.name,
-            template_id: product.template_id,
+            id: product?.id,
+            name: product?.name,
+            template_id: product?.template.id,
             base64_img: previewImage,
-            articles: product.articles
+            articles: product?.articles
         }
         const composeSubmit = async () => {
             setLoading(true)
@@ -237,40 +239,40 @@ const ProductView = () => {
                     <img src={SpinnerIcon} alt="composedProduct"/>
                 </div>
                 <div className="summary__image__content"  style={{display: rendering ? "none" : "block"}}>
-                    <img src={product.png_result !== '' ? product.png_result : product.cdn_url} alt="composedProduct" onLoad={() => setRendering(false)}/>
+                    <img src={product?.png_result !== '' ? product?.png_result : product?.cdn_url} alt="composedProduct" onLoad={() => setRendering(false)}/>
                 </div>
                 <div className="summary__image__desc">
                     <div className="typography-700-bold">{data.name}</div>
                     <div className="typography-400-regular desc__text">
-                        <div>{t('Marke')}: {product.template.brand.map((brand, index) => (
+                        <div>{t('Marke')}: {product?.template.brand.map((brand, index) => (
                             <React.Fragment key={index}>
                                 {index > 0 && ", "}
                                 <span>{brand.name}</span>
                             </React.Fragment>
                         ))}</div>
                         <div style={{ marginTop: "14px" }}></div>
-                        <div>{t('Applikation')}: {product.template.application.map((application, index) => (
+                        <div>{t('Applikation')}: {product?.template.application.map((application, index) => (
                             <React.Fragment key={index}>
                                 {index > 0 && ", "}
                                 <span>{application.name}</span>
                             </React.Fragment>
                         ))}</div>
                         <div>{t('Technische Daten')}:</div>
-                        <div>{product.template.resolution_width} x {product.template.resolution_height} px ({product.template.resolution_dpi} dpi)</div>
-                        <div>{t('Dateiformat')}: {product.template.file_type} (RGB)</div>
+                        <div>{product?.template.resolution_width} x {product?.template.resolution_height} px ({product?.template.resolution_dpi} dpi)</div>
+                        <div>{t('Dateiformat')}: {product?.template.file_type} (RGB)</div>
                         <div style={{ marginTop: "14px" }}></div>
                         <div>{t('Enthaltene Produkte')}:</div>
-                        <div style={{ textAlign: "start" }}>{product.articles.map((product, index) => (
+                        <div style={{ textAlign: "start" }}>{product?.articles.map((product, index) => (
                             <React.Fragment key={index}>
                                 <div>
-                                    <span>&#8226;{" " + product.name + " "}</span>
-                                    <span>(ID: {product.article_number}; Mediaobject-ID: {product.mediaobject_id})</span>
+                                    <span>&#8226;{" " + product?.name + " "}</span>
+                                    <span>(ID: {product?.article_number}; Mediaobject-ID: {product?.mediaobject_id})</span>
                                 </div>
                             </React.Fragment>
                         ))}</div>
                         <div style={{ marginTop: "14px" }}></div>
-                        <p>{t('Erstellt von ')}{product.created_by.username} {getSaveDate(lang, product.created)}</p>
-                        <p>{t('Zuletzt bearbeitet von ')}{product.modified_by.username} {getSaveDate(lang, product.modified)}</p>
+                        <p>{t('Erstellt von ')}{product?.created_by.username} {getSaveDate(lang, product?.created)}</p>
+                        <p>{t('Zuletzt bearbeitet von ')}{product?.modified_by.username} {getSaveDate(lang, product?.modified)}</p>
                     </div>
                 </div>
             </div>
@@ -299,9 +301,9 @@ const ProductView = () => {
                     <div className="typography-700-regular">{t('Bereitstellung')}</div>
                     <div className="url-group">
                         <Typography style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} fontWeight={400} fontSize="14px" color="#00000080" lineHeight="20px" maxWidth="100%">
-                            {product.cdn_url}
+                            {product?.cdn_url}
                         </Typography>
-                        <CopyToClipboard text={product.cdn_url} onCopy={() => toast.success("Image link copied to clipboard.", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })}>
+                        <CopyToClipboard text={product?.cdn_url} onCopy={() => toast.success("Image link copied to clipboard.", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })}>
                             <img className="pointer" src={CopyIcon} alt=" copy" />
                         </CopyToClipboard>
                     </div>

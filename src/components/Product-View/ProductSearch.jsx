@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -7,18 +7,25 @@ import { useTranslation } from "react-i18next";
 import { infoActions } from "store/reducer";
 import { SearchIcon2 } from "libs/icons";
 import "./style/productViewStyle.scss"
+import {createSelector} from 'reselect';
 
+const selectUsedArticleData = (state) => state.info.usedArticleData;
+
+const selectUsedArticles = createSelector(
+  [selectUsedArticleData],
+  (usedArticles) => usedArticles.map((product) => ({
+    value: product.id,
+    label: `${product.name} (${product.article_number})`,
+    article_number: product.article_number
+  }))
+);
 export default function ProductSearch() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   
   const filter = useSelector(state => state.info.filterData);
   const [data, setData] = useState([])
-  const usedArticles = useSelector(state => state.info.usedArticleData.map((product) => ({
-    value: product.id,
-    label: `${product.name} (${product.article_number})`,
-    article_number: product.article_number
-  })));
+  const usedArticles = useSelector(selectUsedArticles);  
   const getUniqueObjects = (array, key) => {
     return [...new Map(array.map(item => [item[key], item])).values()]
   }
