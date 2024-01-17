@@ -27,7 +27,7 @@ const reducers = {
 
 const login = createAsyncThunk('auth/login', async ({ email, password }, {rejectWithValue}) => {
   try {
-    const response = await Request.post(`api/v1/user/login/`, { email, password });
+    const response = await Request.post(`${process.env.REACT_APP_API_URL}api/v1/user/login/`, { email, password });
     return response;
   } catch (err) {
     return rejectWithValue(err.message);
@@ -36,7 +36,7 @@ const login = createAsyncThunk('auth/login', async ({ email, password }, {reject
 
 const getUser = createAsyncThunk('auth/getUser', async ({ token }, { dispatch, rejectWithValue }) => {
   try {
-    const response = await Request.get(`/api/v1/user/profile`, {
+    const response = await Request.get(`${process.env.REACT_APP_API_URL}api/v1/user/profile`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response;

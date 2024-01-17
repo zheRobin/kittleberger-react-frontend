@@ -71,7 +71,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://192.168.118.233:8000",
+  "proxy": "https://backend.dev.cg.kp.technology",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.23.3",
