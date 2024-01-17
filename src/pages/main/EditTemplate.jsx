@@ -11,10 +11,16 @@ import { useTranslation } from 'react-i18next';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { PlusIcon1, CrossIcon, DragIcon, SpinnerIcon } from 'libs/icons';
 import ImageTemplate from "components/Composing/ImageTempate"
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
 import 'react-toastify/dist/ReactToastify.css';
 import "components/Composing/style/composeStyle.scss"
 
-import { updateTemplate } from 'libs/_utils/actions';
+import { updateTemplate, deleteTemplateRequest, deleteTemplate } from 'libs/_utils/actions';
+
+
 export const TemplateButton = ({ content, type = "brown" }) => {
     return (
         <div className='template-button--filled pointer' style={type !== "brown" ? { backgroundColor: "transparent", border: "solid 1px #8F7300" } : {}}>
@@ -177,7 +183,10 @@ const TemplateEditPanel = () => {
     const [width, setWidth] = useState(500);
     const [height, setHeight] = useState(500);
     const [loading, setLoading] = useState(false);
-    const [deleteSign, setDeleteSign] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [message, setMessage] = useState("")
+    const [confirm, setConfirm] = useState(false)
+    const [deleteSign, setDeleteSign] = useState(false);
     const elementRef = useRef(null);
     let backgroundHeight = (tempImages.height / tempImages.width * width) * 100 / height
     let backgroundWidth = (tempImages.width / tempImages.height * height) * 100 / width
@@ -237,7 +246,45 @@ const TemplateEditPanel = () => {
 
         return new Blob([arrayBuffer], { type: contentType });
     }
-
+    const handleOpenModal = () => {
+        setOpen(true)
+    }
+    const handleCloseModal = () => {
+        setOpen(false)
+    }
+    const handleRequest = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const deleteRequest = async () => {
+            setLoading(true)
+            const response = await deleteTemplateRequest(parseInt(id))
+            setLoading(false)
+            if(response?.code === 404){
+                setMessage(`Are you sure you want to delete this template?`)
+                setConfirm(true)
+                handleOpenModal()
+            }
+            if(response?.code === 200){
+                setMessage(`There are existing Composings based on this template. Please delete those Composings first before you can delete this template. The following IDs will help you find the Composings which are based on this template: ${response.data}`)
+                setConfirm(false)
+                handleOpenModal()
+            }
+        }
+        deleteRequest();
+    }
+    const deleteTemplateItem = async () => {
+        setLoading(true)
+        const response = await deleteTemplate(parseInt(id))
+        setLoading(false)
+        if (response?.code === 204){
+            toast.success("Template was deleted successfully", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+            setTimeout(() => {
+                navigate("/");
+            }, 1500); 
+        } else {
+            toast.error("An error occurred", { theme: "colored", hideProgressBar: true, autoClose: 2000 });
+        }
+    }
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -303,13 +350,18 @@ const TemplateEditPanel = () => {
                         <Form className='template-form'>
                             <div className='template-panel'>
                                 <canvas src="assets/images/bali.tif" />
+                                <div className="top-delete-button"
+                                    onClick={(e) => handleRequest(e, values)}
+                                >
+                                    <TemplateButton content={t("Vorlage löschen")} type="transparent"/>
+                                </div>
                                 <div
                                     className="top-template-button"
                                     onClick={handleSubmit}
                                 >
                                     <TemplateButton content={t("Template speichern")} />
-                                    {loading ? <Loading /> : null}
                                 </div>
+                                {loading ? <Loading /> : null}
                                 <div className="panel-group">
                                     <div className="product-setting-panel">
                                         <div className="product-setting-panel__top">
@@ -705,7 +757,33 @@ const TemplateEditPanel = () => {
                         </Form>
                     )}
                 </Formik>
-
+                <Dialog
+                    open={open}
+                    onClose={handleCloseModal}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    className='custom-dialog'
+                >
+                    <div className='custom-dialog__header'>
+                        <DialogTitle id="alert-dialog-title">
+                            {t("Preview Image")}
+                        </DialogTitle>
+                        <p className='pointer' onClick={handleCloseModal}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M21.2301 2.64645C21.2765 2.69288 21.3133 2.74799 21.3385 2.80866C21.3636 2.86932 21.3765 2.93434 21.3765 3C21.3765 3.06566 21.3636 3.13068 21.3385 3.19134C21.3133 3.25201 21.2765 3.30713 21.2301 3.35356L12.584 12L21.2301 20.6464C21.2765 20.6929 21.3133 20.748 21.3385 20.8087C21.3636 20.8693 21.3765 20.9343 21.3765 21C21.3765 21.0657 21.3636 21.1307 21.3385 21.1913C21.3133 21.252 21.2765 21.3071 21.2301 21.3536C21.1837 21.4 21.1285 21.4368 21.0679 21.4619C21.0072 21.4871 20.9422 21.5 20.8765 21.5C20.8109 21.5 20.7458 21.4871 20.6852 21.4619C20.6245 21.4368 20.5694 21.4 20.523 21.3536L11.8765 12.7075L3.47703 21.1066C3.38315 21.1998 3.25615 21.252 3.12384 21.2518C2.99153 21.2516 2.86471 21.1989 2.77115 21.1054C2.6776 21.0118 2.62494 20.885 2.62471 20.7527C2.62448 20.6204 2.6767 20.4934 2.76992 20.3995L11.169 12L2.76992 3.6005C2.72332 3.55411 2.68633 3.49898 2.66106 3.43827C2.6358 3.37757 2.62275 3.31247 2.62268 3.24671C2.62261 3.18096 2.63551 3.11584 2.66063 3.05507C2.68576 2.99431 2.72263 2.9391 2.76913 2.8926C2.81563 2.84611 2.87084 2.80924 2.9316 2.78411C2.99237 2.75898 3.05749 2.74608 3.12325 2.74616C3.189 2.74623 3.2541 2.75928 3.3148 2.78454C3.37551 2.80981 3.43064 2.8468 3.47703 2.8934L11.8765 11.2925L20.523 2.64645C20.6167 2.55268 20.7439 2.5 20.8765 2.5C21.0091 2.5 21.1363 2.55268 21.2301 2.64645Z" fill="black" />
+                            </svg>
+                        </p>
+                    </div>
+                    <DialogContent className='custom-dialog__content'>
+                        <div>{message}</div>
+                    </DialogContent>
+                    <DialogActions>
+                        {
+                            confirm?<><div onClick={deleteTemplateItem}><TemplateButton content={t('Ja')} /></div>
+                            <div onClick={handleCloseModal}><TemplateButton content={t('Stornieren')} /></div></>:<div onClick={handleCloseModal}><TemplateButton content={t('Ok')} /></div>
+                        }
+                    </DialogActions>
+                </Dialog>
             </ThemeProvider >
         </>
     )

@@ -76,3 +76,7 @@ export const createTemplate = (formData) =>
     handleFormRequest('post', `api/v1/compose/templates/`, formData)
 export const updateTemplate = (formData, id) => 
     handleFormRequest('put', `api/v1/compose/templates/${id}/`, formData)
+export const deleteTemplate = (id) => 
+    handleRequest('delete', `api/v1/compose/template/manage/${id}`)
+export const deleteTemplateRequest = (id) => 
+    handleRequest('get', `api/v1/compose/template/manage/${id}`)

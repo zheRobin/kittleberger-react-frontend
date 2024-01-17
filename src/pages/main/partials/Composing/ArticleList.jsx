@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from 'react-i18next';
 import { getArticleList } from "libs/_utils/actions";
@@ -68,15 +68,20 @@ const ArticleList = ({ template }) => {
     const [noMoreArticles, setNoMoreArticles] = useState(false)
     const page = useSelector(state => state.composing.currentListPage)
     const [productInfo, setProductInfo] = useState('');
-    const country = useSelector(state => state.composing.countryList)
+    const countryListFromState = useSelector(state => state.composing.countryList);
+    const country = useMemo(() => 
+        Array.isArray(countryListFromState) ? countryListFromState : []
+    , [countryListFromState]);
+
     const dispatch = useDispatch();
+
     useEffect(() => {
         const getArticlesData = async () => {
             setLoading(true)
             const response = await getArticleList({ 
                 page, 
                 productInfo, 
-                country: country?.length === 0 ? "" : country.join(',') 
+                country: country.length === 0 ? "" : country.join(',') 
             });
             if (response?.code === 200) {
                 dispatch(composingActions.setArticleList(response.data))
@@ -87,7 +92,7 @@ const ArticleList = ({ template }) => {
             setLoading(false)
         }
         getArticlesData();
-      }, [dispatch, page, productInfo, country])
+    }, [dispatch, page, productInfo, country])
   
       const handleLoadMore = () => {
           dispatch(composingActions.setListPage(page + 1))

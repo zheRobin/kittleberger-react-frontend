@@ -39,7 +39,8 @@ export const ProductItem = ({item}) => {
         d: item.template.resolution_dpi,
         f: item.template.file_type,
         u: item.png_result !== '' ? item.png_result : item.cdn_url,
-        l: `composing/view/${item.id}`
+        l: `composing/view/${item.id}`,
+        m: "composing"
     }
     return <Item cardInfo={CardInfo} />
 }
@@ -53,7 +54,8 @@ export const TemplateItem = ({item}) => {
         d: item.resolution_dpi,
         f: item.file_type,
         u: item.preview_image_cdn_url !== '' ? item.preview_image_cdn_url : item.bg_image_cdn_url,
-        l: `composing/edit/${item.id}`
+        l: `composing/edit/${item.id}`,
+        m: "template"
     }
     return <Item cardInfo={CardInfo} />
 }

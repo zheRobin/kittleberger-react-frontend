@@ -30,7 +30,7 @@ const Item = ({cardInfo}) => {
                             <div className="product-name">{cardInfo.n}</div>
                             <div className="product-image-info">{cardInfo.x + '\u00D7' + cardInfo.y + 'px | ' + cardInfo.d + 'dpi | ' + cardInfo.f}</div>
                         </div>
-                        {role === 'admin' ? 
+                        {role === 'admin' && cardInfo.m === 'template' ? 
                         <div className="product-icon pointer" onClick={() => navigate(`/template/${cardInfo.i}`)}>
                             <img src={PencelWhiteIcon} style={{ borderColor: "#FFFFFF" }} alt="editIcon"></img>
                         </div> : null
