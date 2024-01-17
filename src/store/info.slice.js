@@ -5,8 +5,8 @@ export const infoSlice = createSlice({
     initialState:{
         language:localStorage.getItem("i18nextLng") || "en",
         currentTab: localStorage.getItem("currentTab") || "template",
-        currentTemplatePage: localStorage.getItem("currentTemplatePage") || 1,
-        currentProductPage: localStorage.getItem("currentProductPage") || 1,
+        currentTemplatePage: 1,
+        currentProductPage: 1,
         pageData: JSON.parse(localStorage.getItem("pageData")) || {},
         productData: JSON.parse(localStorage.getItem("productData")) || [],
         usedArticleData: JSON.parse(localStorage.getItem("usedArticleData")) || [],
@@ -14,6 +14,16 @@ export const infoSlice = createSlice({
         filterData:{}
     },
     reducers:{
+        initProductData: (state) => {
+            state.productData = []
+            state.usedArticleData = []
+            localStorage.removeItem('productData')
+            localStorage.removeItem('usedArticleData')
+        },
+        initTemplatetData: (state) => {
+            state.templateData = []
+            localStorage.removeItem('templateData')
+        },
         setSelectedLanguage:(state, action) => {
             state.language = action.payload
         },
@@ -30,18 +40,16 @@ export const infoSlice = createSlice({
             state.currentTab = action.payload;
         },
         setTemplatePage: (state, action) => {
-            localStorage.setItem('currentTemplatePage', action.payload);
             state.currentTemplatePage = action.payload;
         },
         setProductPage: (state, action) => {
-            localStorage.setItem('currentProductPage', action.payload);
             state.currentProductPage = action.payload;
         },
         setProductData: (state, action) => {
-            localStorage.setItem('productData', JSON.stringify(action.payload.products));
-            localStorage.setItem('usedArticleData', JSON.stringify(action.payload.articles));
-            state.productData = action.payload.products;
-            state.usedArticleData = action.payload.articles;
+            state.productData = [...state.productData, ...action.payload.products];
+            state.usedArticleData = [...state.usedArticleData, ...action.payload.articles];
+            localStorage.setItem('productData', JSON.stringify(state.productData));
+            localStorage.setItem('usedArticleData', JSON.stringify(state.usedArticleData));
         },
         setTemplateData: (state, action) => {
             localStorage.setItem('templateData', JSON.stringify(action.payload.templates));

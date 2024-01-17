@@ -18,12 +18,20 @@ export const ProductPanel = () => {
         const fetchProducts = async () => {
             const response = await getProducts(page, filter);
             if(response?.code ===200){
-                dispatch(infoActions.setProductData(response.data))
+                if(page === 1) dispatch(infoActions.initProductData())
+                if(response.data.products.length>0) dispatch(infoActions.setProductData(response.data))
             }
         }
         fetchProducts();
         setLoading(false)
     },[dispatch, loading, page, filter])
+    const handeNext = () => {
+        setLoading(true)
+        setTimeout(() => {
+            dispatch(infoActions.setProductPage(page+1))
+        }, 1500); 
+        setLoading(false)
+    }
     return(
         <>
             <ProductSearch />
@@ -32,7 +40,7 @@ export const ProductPanel = () => {
                 <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>
                     {t(`No matching composings found`)}
                 </div> : 
-                <DataTable items={products} index = "product" page={page} next={infoActions.setProductPage}/> )
+                <DataTable items={products} index = "product" page={page} next={handeNext}/> )
             }
         </>
     )
@@ -50,12 +58,20 @@ export const TemplatePanel = () => {
         const fetchTemplates = async () => {
             const response = await getTemplates(page, filter);
             if(response?.code ===200){
-                dispatch(infoActions.setTemplateData(response.data))
+                if(page === 1) dispatch(infoActions.initTemplatetData())
+                if(response.data.templates.length>0) dispatch(infoActions.setTemplateData(response.data))
             }
         }
         fetchTemplates();
         setLoading(false)
     },[dispatch, loading, page, filter])
+    const handeNext = () => {
+        setLoading(true)
+        setTimeout(() => {
+            dispatch(infoActions.setTemplatePage(page+1))
+        }, 1500); 
+        setLoading(false)
+    }
     return(
         <>
             {loading ? <Loading /> : 
@@ -63,7 +79,7 @@ export const TemplatePanel = () => {
                 <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>
                     {t(`No matching templates found`)}
                 </div> : 
-                <DataTable items={templates} page={page} index = "template" next={infoActions.setTemplatePage}/> )
+                <DataTable items={templates} page={page} index = "template" next={handeNext}/> )
             }
         </>
     )
