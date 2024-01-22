@@ -10,6 +10,7 @@ import {
     ArrowCRActiveIcon, ArrowCRIcon, ArrowTCActiveIcon, ArrowTCIcon, ArrowTLActiveIcon, 
     ArrowTLIcon, ArrowTRActiveIcon, ArrowTRIcon, CrossIcon2, ListIcon, SettingIcon, VectorIcon  
 } from "libs/icons";
+import { useTranslation } from 'react-i18next';
 import "./style/productViewStyle.scss";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
@@ -34,7 +35,8 @@ const useOutsideAlerter = (isVisible, onHide) => {
 };
 
 const OverlayGroup = ({ article, id }) => {
-    const dispatch = useDispatch()    
+    const dispatch = useDispatch()
+    const { t } = useTranslation();    
     const [showModal, setShowModal] = useState(false)
     const wrapperRef = useOutsideAlerter(showModal, () => setShowModal(false));
     const templateItem = useSelector(state => state.info.templateData.find(item => item.id === parseInt(id)));
@@ -115,7 +117,7 @@ const OverlayGroup = ({ article, id }) => {
                             </div>
                             <div className="panel-center">
                                 <div className="panel-center__title">
-                                    Produkt freistellen
+                                    {t(`Produkt freistellen`)}
                                 </div>
                                 <div className="panel-center__check-box">
                                 <FormControlLabel
@@ -126,12 +128,12 @@ const OverlayGroup = ({ article, id }) => {
                                             checked={params.is_transparent}
                                         />
                                     }
-                                    label="Transparent" />
+                                    label={t(`Transparent`)} />
                                 </div>
                             </div>
                             <div className="panel-bottom">
                                 <div className="panel-bottom__title">
-                                    Ausrichtung
+                                    {t(`Ausrichtung`)}
                                 </div>
                                 <div className="panel-bottom__drop">
                                     <div className="arrow-Setting">

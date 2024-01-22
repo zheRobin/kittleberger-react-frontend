@@ -14,7 +14,6 @@ export const ProductPanel = () => {
     const page = useSelector(state => state.info.currentProductPage)
     const filter = useSelector(state => state.info.filterData)
     const nomore = useSelector(state => state.info.nomoreProductData)
-    console.log(nomore)
     useEffect(()=>{
         const fetchProducts = async () => {
             setLoading(true)
