@@ -62,6 +62,7 @@ export const infoSlice = createSlice({
         },
         setTemplateData: (state, action) => {
             state.templateData = [...state.templateData,...action.payload.templates];
+            state.currentTemplatePage = state.currentTemplatePage + 1
             if( action.payload.templates.length < 15) state.nomoreTemplateData = true
             localStorage.setItem('templateData', JSON.stringify(state.templateData));
         },
