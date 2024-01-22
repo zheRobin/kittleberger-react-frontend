@@ -17,11 +17,13 @@ export const infoSlice = createSlice({
         initProductData: (state) => {
             state.productData = []
             state.usedArticleData = []
+            state.currentProductPage = 1
             localStorage.removeItem('productData')
             localStorage.removeItem('usedArticleData')
         },
         initTemplatetData: (state) => {
             state.templateData = []
+            state.currentTemplatePage = 1
             localStorage.removeItem('templateData')
         },
         setSelectedLanguage:(state, action) => {

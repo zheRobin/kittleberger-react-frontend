@@ -20,6 +20,8 @@ export const DetailCheckbox = (props) => {
         } else if (!checked && type in newFilterData) {
             newFilterData[type] = newFilterData[type].filter(item => item !== value);
         }
+        dispatch(infoActions.initProductData());
+        dispatch(infoActions.initTemplatetData());
         dispatch(infoActions.setFilterData(newFilterData));
     }
 
@@ -39,7 +41,7 @@ export const DetailCheckbox = (props) => {
 }
 const selectComposing = state => state.composing;
 const selectCountryList = createSelector([selectComposing], 
-  composing => composing?.countryList ?? {}
+  composing => composing?.countryList ?? []
 );
 
 export const CountryCheckbox = (props) => {
@@ -49,22 +51,24 @@ export const CountryCheckbox = (props) => {
         && countryList[props.type].includes(props.element.id);
 
     const handleFilter = (type, id, checked) => {
-        const updatedCountryList = { ...countryList };
+        const updatedCountryList = {...countryList };
+        
         if (checked) {
-        if (type in updatedCountryList) {
-            updatedCountryList[type].push(id);
-        } else {
+            if (type in updatedCountryList) {
+            updatedCountryList[type] = [...updatedCountryList[type], id];
+            } else {
             updatedCountryList[type] = [id];
-        }
+            }
         } else {
-        if (type in updatedCountryList) {
+            if (type in updatedCountryList) {
             updatedCountryList[type] = updatedCountryList[type].filter(
-            countryId => countryId !== id
+                countryId => countryId !== id
             );
+            }
         }
-        }
+        
         dispatch(composingActions.setCountryList(updatedCountryList));
-    };
+        };
 
     return (
         <>

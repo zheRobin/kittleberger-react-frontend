@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Typography } from "@mui/material";
 import {DetailCheckbox, CountryCheckbox} from "components/Composing/CheckboxGroup";
 import { RefreshIcon, MinusIcon, PlusIcon2 } from "libs/icons";
+import { infoActions, composingActions } from "store/reducer";
 import "../Composing/style/composeStyle.scss"
 export const numbers = [
     { id: "1", name: 1 }, 
@@ -22,9 +23,13 @@ const Filterbar = () => {
     const [climit, setCLimit] = useState(5)
     const { t } = useTranslation()
     const data = useSelector(state => state.info.pageData)
+    const resetFilter = () => {
+        dispatch(infoActions.setFilterData({}));
+        dispatch(composingActions.setCountryList([]));
+    }
     return (
         <>
-            <div className="refresh-part pointer" >
+            <div className="refresh-part pointer"  onClick={resetFilter}>
                 <img src={RefreshIcon} alt="refresh"></img>
                 <Typography fontSize="14px" lineHeight="20px" marginLeft="15px">
                     {t("Filter zurücksetzen")}
