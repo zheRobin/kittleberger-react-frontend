@@ -46,7 +46,7 @@ const ImageTemplate = ({
         });
         setTempImages && setTempImages({ width: bg_width, height: bg_height });
 
-    }, [bg_height, bg_width, backgroundWidth, backgroundHeight, article, setTempImages]);
+    }, [bg_height, bg_width, backgroundWidth, backgroundHeight, article, setTempImages, backColor]);
 
     return (
         <div style={style}>

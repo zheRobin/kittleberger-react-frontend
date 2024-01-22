@@ -30,8 +30,7 @@ export const TemplateButton = ({ content, type = "brown" }) => {
         </div >
     )
 }
-
-export const CheckboxGroupComponent = ({ label, values, ...props }) => {
+const CheckboxGroupComponent = ({ label, values, ...props }) => {
     const { setFieldValue } = useFormikContext();
     const [field] = useField(props);
     return (
@@ -45,11 +44,15 @@ export const CheckboxGroupComponent = ({ label, values, ...props }) => {
 
                         < div key={index} className='checkbox-group' >
 
-                            <Checkbox defaultChecked={value.value === false ? false : true} name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }} onChange={(e) => {
-                                var newData = [...field.value];
+                            <Field
+                                as={Checkbox}
+                                checked={value.value === false ? false : true}
+                                name={value.name} style={{ color: 'black', borderColor: 'white', padding: 0, margin: 0 }}
+                                onChange={(e) => {
+                                var newData = JSON.parse(JSON.stringify(field.value));
                                 newData[index].value = e.target.checked;
                                 setFieldValue(props.name, newData);
-                            }} {...props} />
+                            }} />
 
                             <div className='typography-400-regular checkbox-group__label' style={{ color: 'black' }}>{value.name}</div>
                         </div>

@@ -10,7 +10,7 @@ const ReturnPath = () => {
     const returnHistory = () => {
         navigate('/')
     }
-    const { t, i18n } = useTranslation()
+    const { t } = useTranslation()
     return (
         <>
             <div className="return-path pointer" onClick={() => returnHistory()}>
