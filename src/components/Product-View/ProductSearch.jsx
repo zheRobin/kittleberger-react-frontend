@@ -34,6 +34,7 @@ export default function ProductSearch() {
   const handleChange = (event, value) => {
     const selected = value.map(val => val.article_number);
     const updatedFilter = { ...filter, article_list: selected };
+    dispatch(infoActions.initProductData());
     dispatch(infoActions.setFilterData(updatedFilter));
     setData(value)
   };
