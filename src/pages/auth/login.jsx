@@ -20,12 +20,10 @@ const LoginPage = () => {
         },
         onSubmit: async (values) => {
             try {
-                const response = await dispatch(authActions.login({ email: values.username, password: values.password }));
-                if (response?.error?.message === 'Rejected') {
-                    toast.error("Invalid username or password", { theme: "colored", hideProgressBar: "true", autoClose: 2000 });
-                }
+                await dispatch(authActions.login({ email: values.username, password: values.password }));
             }
             catch (error) {
+                toast.error("Invalid username or password", { theme: "colored", hideProgressBar: "true", autoClose: 2000 });
                 formik.setFieldValue("password", "");
             }
         },
