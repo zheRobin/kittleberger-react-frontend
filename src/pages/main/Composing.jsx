@@ -34,7 +34,7 @@ const ComposingEdit = () => {
                 }
                 composeRender();                
             }        
-    }, [articleItems])
+    }, [articleItems, dispatch, id, navigate, templateItem])
     const renderedCompose = useSelector(state => state.composing.renderedCompose);
     return (
         <Suspense fallback={<Loading />}>

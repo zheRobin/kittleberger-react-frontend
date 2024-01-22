@@ -9,6 +9,7 @@ import { SpinnerIcon, PlusIcon2 } from "libs/icons"
 const ArticleItem = ({ item, template }) => {
     const usedArticle = useSelector(state => state.composing.composingElements);
     const [loading, setLoading] = useState(true)
+    const [popupImage, setPopupImage] = useState(false)
     const [visibleIcon, setVisbleIcon] = useState(true)
     const dispatch = useDispatch();
     const params = {
@@ -29,6 +30,23 @@ const ArticleItem = ({ item, template }) => {
             setVisbleIcon(true)
         }
     }, [template, usedArticle])
+
+    const openImagePopUp = () => {
+        setPopupImage(true)
+    }
+
+    const closeImagePopUp = () => {
+        setPopupImage(false)
+    }
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') closeImagePopUp();
+        }
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        }
+    }, []);
     return (
         <div className="product-list-panel">
             <div style={{ display: loading ? "block" : "none" }}>
@@ -43,8 +61,14 @@ const ArticleItem = ({ item, template }) => {
                 <img style={{ width: "100%", height: "100%", objectFit: "contain" }}
                     src={item.render_url}
                     alt="article"
-                    onLoad={() => setLoading(false)} />
+                    onLoad={() => setLoading(false)} 
+                    onClick={openImagePopUp}/>
             </div>
+            {popupImage && 
+                <div onClick={closeImagePopUp} style={{position: "fixed", top:0, left:0, right:0, bottom:0,backgroundColor: "rgba(0,0,0,0.6)", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                    <img style={{ width: "80%", height: "80%", objectFit: "contain" }} src={item.render_url} alt="article"/>
+                </div>
+            }
             <div className="product-info" >
                 <div className="label-info">
                     <div className="label-info__top typography-700-regular">{item.name}</div>
