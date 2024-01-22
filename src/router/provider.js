@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from 'layouts';
 
 import Login from "pages/auth/login"
@@ -45,6 +45,7 @@ const AnonRoutes = () => {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="forgot-password" element={<ForgetPassword />} />
+      <Route path="/*" element={<Navigate to="/" />} />
     </Routes>
   );
 };
