@@ -14,17 +14,17 @@ export const ProductPanel = () => {
     const page = useSelector(state => state.info.currentProductPage)
     const filter = useSelector(state => state.info.filterData)
     useEffect(()=>{
-        setLoading(true)
         const fetchProducts = async () => {
+            setLoading(true)
             const response = await getProducts(page, filter);
             if(response?.code ===200){
                 if(page === 1) dispatch(infoActions.initProductData())
                 if(response.data.products.length>0) dispatch(infoActions.setProductData(response.data))
             }
+            setLoading(false)
         }
         fetchProducts();
-        setLoading(false)
-    },[dispatch, loading, page, filter])
+    },[dispatch, page, filter])
     const handeNext = () => {
         setLoading(true)
         setTimeout(() => {
@@ -54,17 +54,17 @@ export const TemplatePanel = () => {
     const page = useSelector(state => state.info.currentTemplatePage)
     const filter = useSelector(state => state.info.filterData)
     useEffect(()=>{
-        setLoading(true)
         const fetchTemplates = async () => {
-            const response = await getTemplates(page, filter);
+            setLoading(true);            
+            const response = await getTemplates(page, filter);    
             if(response?.code ===200){
-                if(page === 1) dispatch(infoActions.initTemplatetData())
-                if(response.data.templates.length>0) dispatch(infoActions.setTemplateData(response.data))
-            }
-        }
-        fetchTemplates();
-        setLoading(false)
-    },[dispatch, loading, page, filter])
+                if(page === 1) dispatch(infoActions.initTemplatetData());
+                if(response.data.templates.length>0) dispatch(infoActions.setTemplateData(response.data));
+            }            
+            setLoading(false);
+        }    
+        fetchTemplates();    
+    },[dispatch, page, filter]);
     const handeNext = () => {
         setLoading(true)
         setTimeout(() => {
