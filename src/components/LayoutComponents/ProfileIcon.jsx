@@ -1,4 +1,4 @@
-import logo from "../../assets/icons/user.svg"
+import logo from "assets/icons/user.svg"
 
 const ProfileIcon = ({ setModalView, modalView }) => {
     return (

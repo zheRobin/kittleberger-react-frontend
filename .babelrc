@@ -1,0 +1,16 @@
+{
+  "plugins": [
+    "@babel/plugin-proposal-private-property-in-object",
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "alias": {
+          "assets": "./src/assets",
+          "store": "./src/store"
+        }
+      }
+    ]
+  ],
+  "presets": ["@babel/preset-react"]
+}

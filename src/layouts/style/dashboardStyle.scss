@@ -1,0 +1,296 @@
+
+.gradient-bar{
+    width: 100%;
+    height: 10px;
+    background-image: url("../../assets/images/Rectangle.png");
+    background-size: 100%;
+}
+
+.dashboard{
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+    font-family: Roboto;
+    .sidebar-container{
+        width: 355px;
+        min-width: 355px;
+        min-height: calc(100vh - 10px);
+        color: #ffff;
+        position: relative;
+        background: var(--grayscale-dark-gray-dark, #1A1C1D);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .sidebar-top{
+            height: 80px; 
+            display: flex; 
+            flex-direction: row;
+            border-bottom:  solid 1px #FFFFFF40;
+        }
+        .sidebar-bottom{
+            
+            .sidebar-items{
+                position: absolute;                
+                top: 110px;
+                right: 0px;
+                left: 0px;
+                bottom: 180px;
+                padding-bottom: 20px;
+                
+            }
+        }
+        .sidebar-footer{
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0px;
+            padding: 20px;
+            border-top: solid 1px #FFFFFF40;
+        }
+    }
+
+    .body-background{
+        display: flex;
+        justify-content: center;
+        background-color: #E0E2E5;
+        height: calc(100vh - 90px);
+        // overflow-y: scroll;
+        // -ms-overflow-style: none;
+        // scrollbar-width: none;
+        // &::-webkit-scrollbar{
+        //     display: none;
+        // }
+
+    }
+
+    .header-layout{
+        display: flex;
+        flex-direction: column;
+        width: 100vw;        
+    }
+
+    .profile-layout{
+        position: absolute;
+        width: 501px;
+        height: 350px;
+        z-index: 100;
+        top: 75px;
+        right: 30px;
+        background: white;
+        box-shadow: 0px 0px 15px 0px #00000040;
+
+        .profile-info {
+            display: flex;
+            flex-direction: row;
+            margin-top: 15px;
+            border-bottom: solid 1px #00000040;
+            height: 110px;
+            .user-icon{
+                width: 80px;
+                height: 80px;
+                margin-left: 15px;
+                background-color: #8F7300;
+                border: 1px solid #E0E2E5;
+
+                .user-alias{
+                    margin: 27px 10px 27px 10px;
+                    //styleName: 20pt/Regular;
+                    font-family: Roboto;
+                    font-size: 20px;
+                    font-weight: 400;
+                    line-height: 26px;
+                    letter-spacing: 0em;
+                    text-align: center;
+                    color: #FFFFFF;
+                }
+            }
+            .user-account{
+                margin-left: 20px;
+                text-align: start;
+                
+                .user-label{
+                    //styleName: 12pt/Regular;
+                    
+                    font-size: 12px;
+                    font-weight: 400;
+                    line-height: 16px;
+                    letter-spacing: 0em;
+                    text-align: left;
+
+                }
+                .user-name{
+                    //styleName: 20pt/Bold;
+                    font-family: Roboto;
+                    font-size: 20px;
+                    font-weight: 700;
+                    line-height: 26px;
+                    letter-spacing: 0em;
+                    text-align: left;
+
+                }
+                .user-email{
+                    font-size: 12px;
+                    font-weight: 400;
+                    line-height: 16px;
+                    letter-spacing: 0em;
+                    text-align: left;
+                    margin-top: 10px;
+                }
+            }
+        }
+
+        .profile-detail{
+            display: flex;
+            flex-direction: row;
+
+            .set-language{
+                display: flex;
+                flex-direction: column;
+                width: 250px;
+                height: 220px;
+                
+                border-right: solid 1px #00000040;
+
+                div:first-child{
+                    margin-bottom: 15px;
+                    padding-left: 15px;
+                }
+                .language-label{
+                    //styleName: 12pt/Regular;
+                    padding-left: 15px;
+                    font-size: 12px;
+                    font-weight: 400;
+                    line-height: 16px;
+                    letter-spacing: 0em;
+                    text-align: left;
+                    margin-top: 15px;
+
+                }
+                .language-active{
+                    //styleName: 14pt/Bold;
+                    font-size: 14px;
+                    font-weight: 700;
+                    line-height: 20px;
+                    letter-spacing: 0em;
+                    text-align: left;
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 10px 15px 10px 0px;
+                    &:hover{
+                        background-color: #00000040;
+                    }
+                    div{
+                        margin-top: auto;
+                        margin-bottom: auto;
+                    }
+                }
+                .language-inactive{
+                    //styleName: 14pt/Regular;
+                    font-family: Roboto;
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 20px;
+                    letter-spacing: 0em;
+                    display: flex;
+                    justify-content: flex-start;
+                    text-align: left;
+                    padding: 10px 15px 10px 0px;
+                    &:hover{
+                        background-color: #00000040;
+                    }
+                    div{
+                        margin-top: auto;
+                        margin-bottom: auto;
+                    }
+                }
+            }
+            .user-account{
+                width: 250px;
+                margin-top: 15px;
+                .account-label{
+                    margin-left: 15px;
+                    text-align: left;
+                    font-size: 12px;
+                    font-weight: 400;
+                    line-height: 16px;
+                    letter-spacing: 0em;
+                    text-align: left;
+
+                }
+                .account-setting{
+                    display: flex;
+                    flex-direction: column;
+                    margin: 10px 0px 10px 0px;
+
+                    .account-detail{
+                        padding: 5px 15px 5px 15px;
+                        &:hover{
+                            background-color: #00000040;
+                        }
+                        .account-detail-info{
+                            display: flex;
+                            flex-direction: row;
+                            height: 24px;
+                            
+
+                            .account-setting-img{
+                                width: 24px;
+
+                                img{
+                                    margin: auto;
+                                }
+                            }
+                            
+                            .account-description{
+                                margin-left: 10px;
+                                font-size: 14px;
+                                font-weight: 400;
+                                line-height: 20px;
+                                letter-spacing: 0em;
+                                text-align: left;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .header-top-layout{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0;
+        margin-left: 30px;
+        margin-right: 30px;
+        margin-top: 13px;
+        margin-bottom: 20px;
+        
+
+        .bosch-icon{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+        }
+        .profile-info-reference{
+            display: flex;
+            flex-direction: row;
+            gap: 30px;
+            align-items: center;
+        }
+    }
+    
+}
+
+.right-section{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

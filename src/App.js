@@ -1,14 +1,12 @@
-import './App.css';
 import { BrowserRouter} from 'react-router-dom';
-import Router from './Router';
-import i18n from './i18n';
-
+import Router from 'router';
+import 'assets/css/App.css';
 const App = () => {
   return (
     <div className="App">
-    <BrowserRouter>
-      <Router />
-    </BrowserRouter>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
     </div>
   );
 }
