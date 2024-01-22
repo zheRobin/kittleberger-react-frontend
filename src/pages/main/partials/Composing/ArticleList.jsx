@@ -92,11 +92,10 @@ const ArticleList = ({ template }) => {
     const [noMoreArticles, setNoMoreArticles] = useState(false)
     const page = useSelector(state => state.composing.currentListPage)
     const [productInfo, setProductInfo] = useState('');
-    const countryListFromState = useSelector(state => state.composing.countryList);
+    const countryListFromState = useSelector(state => state.info.countryList);
     const country = useMemo(() => 
-        Array.isArray(countryListFromState) ? countryListFromState : []
+        Array.isArray(countryListFromState.country_list) ? countryListFromState.country_list : []
     , [countryListFromState]);
-
     const dispatch = useDispatch();
 
     useEffect(() => {

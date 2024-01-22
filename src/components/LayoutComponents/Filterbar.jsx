@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Typography } from "@mui/material";
 import {DetailCheckbox, CountryCheckbox} from "components/Composing/CheckboxGroup";
 import { RefreshIcon, MinusIcon, PlusIcon2 } from "libs/icons";
-import { infoActions, composingActions } from "store/reducer";
+import { infoActions } from "store/reducer";
 import "../Composing/style/composeStyle.scss"
 export const numbers = [
     { id: "1", name: 1 }, 
@@ -25,7 +25,7 @@ const Filterbar = () => {
     const data = useSelector(state => state.info.pageData)
     const resetFilter = () => {
         dispatch(infoActions.setFilterData({}));
-        dispatch(composingActions.setCountryList([]));
+        dispatch(infoActions.setCountryList({}));
     }
     return (
         <>

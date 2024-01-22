@@ -11,7 +11,8 @@ export const infoSlice = createSlice({
         productData: JSON.parse(localStorage.getItem("productData")) || [],
         usedArticleData: JSON.parse(localStorage.getItem("usedArticleData")) || [],
         templateData: JSON.parse(localStorage.getItem("templateData")) || [],
-        filterData:{}
+        filterData: JSON.parse(localStorage.getItem("filterData")) || {},
+        countryList: JSON.parse(localStorage.getItem('countryList')) || {}
     },
     reducers:{
         initProductData: (state) => {
@@ -59,6 +60,11 @@ export const infoSlice = createSlice({
         },
         setFilterData: (state, action) => {
             state.filterData = action.payload
+            localStorage.setItem('filterData', JSON.stringify(state.filterData))
+        },
+        setCountryList: (state, action) => {
+            state.countryList = action.payload
+            localStorage.setItem('countryList', JSON.stringify(state.countryList));
         }
     }
 })

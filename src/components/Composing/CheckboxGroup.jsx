@@ -1,14 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector } from 'reselect';
 import Checkbox from '@mui/material/Checkbox';
-import { infoActions, composingActions } from 'store/reducer';
+import { infoActions } from 'store/reducer';
 import "./style/composeStyle.scss"
 
 export const DetailCheckbox = (props) => {
     const dispatch = useDispatch();
     const filterData = useSelector(state => state.info.filterData) || {};
     const isChecked = props.type in filterData && filterData[props.type].includes(props.element.id);
-
     function handleFilter(type, value, checked) {
         const newFilterData = { ...filterData };
         if (checked) {
@@ -39,14 +37,11 @@ export const DetailCheckbox = (props) => {
         </>
     )
 }
-const selectComposing = state => state.composing;
-const selectCountryList = createSelector([selectComposing], 
-  composing => composing?.countryList ?? []
-);
 
 export const CountryCheckbox = (props) => {
     const dispatch = useDispatch();
-    const countryList = useSelector(selectCountryList);
+    const countryList = useSelector(state => state.info.countryList) || {};
+    console.log(countryList)
     const isChecked = props.type in countryList 
         && countryList[props.type].includes(props.element.id);
 
@@ -66,8 +61,7 @@ export const CountryCheckbox = (props) => {
             );
             }
         }
-        
-        dispatch(composingActions.setCountryList(updatedCountryList));
+        dispatch(infoActions.setCountryList(updatedCountryList));
         };
 
     return (

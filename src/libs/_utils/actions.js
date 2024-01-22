@@ -27,8 +27,21 @@ export const getImageFromUrl = url =>
     handleRequest('get', `api/v1/core/download/?url=${url}`)
 
 // Product action
-export const getArticleList = (filterArgs = {}) => 
-    handleRequest('get', `api/v1/core/filter?page=${filterArgs.page}&product=${filterArgs.productInfo}${filterArgs.country?("&country="+encodeURIComponent(filterArgs.country)):[]}`)
+export const getArticleList = filterArgs => {
+    let apiUrl = `api/v1/core/filter?`;  
+    if (filterArgs.page) {
+      apiUrl += `page=${filterArgs.page}&`;
+    }  
+    if (filterArgs.productInfo) {
+      apiUrl += `product=${filterArgs.productInfo}&`;
+    }  
+    if (filterArgs.country) {
+      apiUrl += `country=${encodeURIComponent(filterArgs.country)}`;
+    }
+    apiUrl = apiUrl.replace(/[&?]$/, "");
+  
+    return handleRequest('get', apiUrl);
+  }
 export const composeByInfo = composeInfo => 
     handleRequest('post', 'api/v1/core/compose/', composeInfo)
 export const imageComposing = productInfo => 
