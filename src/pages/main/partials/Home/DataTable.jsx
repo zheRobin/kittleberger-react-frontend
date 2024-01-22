@@ -1,7 +1,6 @@
 import React from "react";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Item from "./Item";
-import { Loading } from "libs/icons"
 const DataTable = ({items, index, page, next})=> {
     return(
         <div className='template-tab-1'>
@@ -13,7 +12,7 @@ const DataTable = ({items, index, page, next})=> {
                     dataLength={items.length}
                     next={next}
                     hasMore={true}
-                    loader={items.length < (15*page) ? null : <Loading />}
+                    loader={items.length < (15*page) ? null : <div className="loading">Loading&#8230;</div>}
                     className='infinite-scroll-component'
                     endMessage={
                         <p style={{ textAlign: 'center' }}>
