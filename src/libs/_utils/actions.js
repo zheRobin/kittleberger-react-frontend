@@ -67,8 +67,8 @@ export const getPageData = () =>
     handleRequest('get', 'api/v1/compose/pagedata/')
 export const createTemplatesTypes = templateInfo =>
     handleRequest('post', 'api/v1/compose/pagedata/', templateInfo)
-export const deleteTemplatesTypes = templateInfo =>
-    handleRequest('delete', 'api/v1/compose/pagedata/', templateInfo)
+export const deleteTemplatesTypes = (data) =>
+    handleRequest('delete', 'api/v1/compose/pagedata/', {data:data})
 export const editTemplatesTypes = templateInfo =>
     handleRequest('put', 'api/v1/compose/pagedata/', templateInfo)
 export const getTemplates = (page, dependencies) => {

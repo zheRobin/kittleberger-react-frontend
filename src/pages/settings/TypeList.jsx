@@ -1,211 +1,169 @@
-
-import "./style/AccountSetting.scss"
-import { TemplateButton } from "pages/main/CreateTemplate"
-import cross from "assets/icons/cross.svg"
-import pencil from "assets/icons/pencil.svg"
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useFormik } from 'formik';
-import { ToastContainer, toast } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
-import { Formik } from "formik"
-import * as Yup from 'yup';
+import { useState } from "react"
+import { useDispatch } from "react-redux"
 import { useTranslation } from "react-i18next"
-import { createTemplatesTypes, editTemplatesTypes, deleteTemplatesTypes } from "libs/_utils/actions"
-import close from "assets/icons/cross-black.svg"
-import { Loading } from "pages/main/CreateTemplate"
-import { authActions } from "../../store/reducer"
-import plus from "assets/icons/plus-square.svg"
+import { ToastContainer, toast } from "react-toastify"
+import { EditIcon, CrossIcon, PlusIcon, CloseIcon, Loading } from "libs/icons"
+import { TemplateButton } from "pages/main/EditTemplate"
+import { createTemplatesTypes, deleteTemplatesTypes, editTemplatesTypes } from "libs/_utils/actions"
+import { infoActions } from "store/reducer"
+import './style/AccountSetting.scss'
+import 'react-toastify/dist/ReactToastify.css';
 
-const TypeList = ({ type, label }) => {
-    const dispatch = useDispatch()
-    const pageData = useSelector(state => state.info.pageData)
-    const [templateListInfo, setTemplateListInfo] = useState([])
-    const [loading, setLoading] = useState(false);
-    const [modalView, setModalView] = useState(false)
-    const [selectedId, setSelectedId] = useState(0)
-    const token = useSelector(state => state.auth.token)
-    const [submitType, setSubmitType] = useState(0)
+const ModalBoxComponent = ({ label, children, setOpen }) => {
     const { t } = useTranslation()
-    const schema = Yup.object({
-        name: Yup.string().required("Name field is required"),
-    })
-    const [selectedName, setSelectedName] = useState("")
-    useEffect(
-        () => {
-            setTemplateListInfo(pageData)
-        }, [pageData]
-    )
-    const handleDelete = (id) => {
-        setLoading(true)
-        const updateInfo = {
-            host: label,
-            pk: id
-        }
-        deleteTemplatesTypes(updateInfo, token, (success) => {
-            if (success.data.code === 200 && success.data.status === "success") {
-                dispatch(authActions.setTemplateTypes(success.data.data))
-                toast.success("Successfully Deleted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-            }
-            if (success.data.code === 400 && success.data.status === "failed") {
-                toast.error("Failed to Delete", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-            }
-            setLoading(false)
-        })
-    }
-    const handleEdit = (id, newName) => {
-        setLoading(true)
-        const updateInfo = {
-            host: label,
-            pk: id,
-            value: newName
-        }
-        setModalView(false)
-        editTemplatesTypes(updateInfo, token, (success) => {
-            if (success.data.code === 200 && success.data.status === "success") {
-                dispatch(authActions.setTemplateTypes(success.data.data))
-                toast.success("Successfully Edited", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-            }
-            if (success.data.code === 400 && success.data.status === "failed") {
-                toast.error("Failed to Edit", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-            }
-            setLoading(false)
-        })
-    }
-    const ApiViewList = (token) => {
-        return (
-            <div className="setting-list">
-                <div className="typography-400-regular">{t(token?.token?.name)}</div>
-                <div className="typography-400-regular">
-                    <img className="pointer" src={pencil} alt="cross" onClick={() => { setModalView(true); setSubmitType(0); setSelectedId(token?.token?.id); setSelectedName(token?.token?.name) }} />
-                    <img className="pointer" src={cross} alt="cross" onClick={() => handleDelete(token?.token?.id)} />
-                </div>
+
+    return <div className="modal-box">
+        <div className="label">
+            <div className="typography-700-bold">
+                {t(label)}
             </div>
-        )
-    }
+            <img className="pointer" src={CloseIcon} alt="close" onClick={() => setOpen(false)} />
+        </div>
+        {children}
+    </div>
+}
 
-    const formik = useFormik(
-        {
-            initialValues: {
-                name: ""
-            },
-            validationSchema: schema,
-            onSubmit: () => {
-                setLoading(true)
-                createTemplatesTypes({ host: label, value: formik.values.name }, token, (success) => {
-                    if (success.data.code === 200 && success.data.status === "success") {
-                        dispatch(authActions.setTemplateTypes(success.data.data))
-                        toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                    }
-                    if (success.data.code === 400 && success.data.status === "failed") {
-                        toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                    }
-                    setLoading(false)
-                })
-            }
+const Item = ({ item, label, type, setLoading }) => {
 
+    const [open, setOpen] = useState(false)
+    const [value, setValue] = useState('')
+    const { t } = useTranslation()
+    const dispatch = useDispatch()
+    const handleDelete = async () => {
+        setLoading(true)
+        const data = {
+            host: type,
+            pk: item.id
         }
-    )
-
+        const response = await deleteTemplatesTypes(data)
+        if (response.code === 200) {
+            dispatch(infoActions.setPageData(response.data))
+            toast.success("Successfully Deleted", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+        } else {
+            toast.error("Failed to Delete", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+        }
+        setLoading(false)
+    }
+    const handleChange = async () => {
+        setLoading(true);
+        const data = {
+            host: type,
+            pk: item.id,
+            value: value
+        }
+        const response = await editTemplatesTypes(data)
+        if (response.code === 200) {
+            setOpen(false)
+            dispatch(infoActions.setPageData(response.data))
+            toast.success("Successfully Edited", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+        } else {
+            toast.error("Failed to Edit", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+        }
+        setLoading(false);
+    }
     return (
         <>
-            <form onSubmit={formik.handleSubmit}>
-                {loading ? <Loading /> : <></>}
+            <div className="setting-list">
+                <div className="typography-400-regular">{t(item?.name)}</div>
+                <div className="typography-400-regular">
+                    <img className="pointer" src={EditIcon} onClick={() => setOpen(true)} alt="Edit item" />
+                    <img className="pointer" src={CrossIcon} onClick={handleDelete} alt="Delete item" />
+                </div>
+            </div>
+            {open &&
+                <div className="modal">
+                    <div className="modal-content">
+                        <ModalBoxComponent label={`Edit ${label} Name`} setOpen={setOpen}>
+                            <div className="box">
+                                <div className="label-input-pair">
+                                    <div className="typography-400-regular">{t("Name")} *</div>
+                                    <div>
+                                        <input type="text" defaultValue={t(item?.name)} onChange={(e) => setValue(e.target.value)} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="button-group pointer">
+                                <div onClick={() => setOpen(false)}><TemplateButton content={t("Abbrechen")} type={"transparent"} /></div>
+                                <div onClick={handleChange}><TemplateButton content={t("Bestätigen")} /></div>
+                            </div>
+                        </ModalBoxComponent>
+                    </div>
+                </div>
+            }
+        </>
+    )
+}
+
+const TypeListComponent = ({ items, type, label }) => {
+    const [open, setOpen] = useState(false)
+    const [value, setValue] = useState('')
+    const dispatch = useDispatch()
+
+    const [loading, setLoading] = useState(false)
+    const { t } = useTranslation()
+    const handleCreate = async () => {
+        setLoading(true);
+        const data = {
+            host: type,
+            value: value
+        }
+        const response = await createTemplatesTypes(data)
+        if (response.code === 200) {
+            setOpen(false)
+            dispatch(infoActions.setPageData(response.data))
+            toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+        } else {
+            toast.error("Failed to Create", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
+        }
+        setLoading(false);
+    }
+    return (
+        <>
+            {loading ? <Loading /> :
                 <div className="api-setting">
                     <div>
                         <div className="api-setting__top">
                             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <div className="typography-400-regular">{t(type)}</div>
-                                <div className="pointer" onClick={() => { setModalView(true); setSubmitType(1) }} style={{ marginRight: "16px" }}><img src={plus} alt="plus"></img></div>
+                                <div className="typography-400-regular">{t(label)}</div>
+                                <img className="pointer" style={{ marginRight: "16px" }} onClick={() => setOpen(true)} src={PlusIcon} alt="Create Item" />
                             </div>
-
                         </div>
                         <div className="api-setting__bottom">
                             <div className="api-token">
-                                {
-                                    label === "brand" && templateListInfo?.brands?.map(
-                                        (tokenlist) => {
-                                            return (<ApiViewList key={tokenlist.id} token={tokenlist} />)
-                                        }
-                                    )
-                                }
-                                {
-                                    label === "country" && templateListInfo?.country_list?.map(
-                                        (tokenlist) => {
-                                            return (<ApiViewList key={tokenlist.id} token={tokenlist} />)
-                                        }
-                                    )
-                                }
-                                {
-                                    label === "application" && templateListInfo?.applications?.map(
-                                        (tokenlist) => {
-                                            return (<ApiViewList key={tokenlist.id} token={tokenlist} />)
-                                        }
-                                    )
-                                }
+                                {items.map(item => <Item key={item.id} item={item} label={label} type={type} setLoading={setLoading} />)}
                             </div>
                         </div>
                     </div>
                 </div>
-                {modalView ? (
-                    <Formik
-                        initialValues={{ password: submitType ? '' : selectedName }}
-                        validationSchema={Yup.object({
-                            password: Yup.string()
-                                .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
-                        })}
-                        onSubmit={(values, { setSubmitting }) => {
-                            !submitType && handleEdit(selectedId, values.password)
-                            submitType && createTemplatesTypes({ host: label, value: values.password }, token, (success) => {
-                                if (success.data.code === 200 && success.data.status === "success") {
-                                    dispatch(authActions.setTemplateTypes(success.data.data))
-                                    setModalView(false)
-                                    toast.success("Successfully Created", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                                }
-                                if (success.data.code === 400 && success.data.status === "failed") {
-                                    setModalView(false)
-                                    toast.error(success.data.data, { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
-                                }
-                                setLoading(false)
-                            })
-                        }}
-                    >
-                        {formik => (
-                            <form onSubmit={formik.handleSubmit}>
-                                <div className="modal">
-                                    <div className="modal-content">
-                                        <div className="modal-box">
-                                            <div className="label">
-                                                <div className="typography-700-bold">
-                                                    {submitType === 1 ? t(label[0].toUpperCase() + label.slice(1) + " " + "Name") : t("Edit" + " " + label[0].toUpperCase() + label.slice(1) + " " + "Name")}
-                                                </div>                                                <img className="pointer" src={close} alt="close" onClick={() => setModalView(false)} />
-                                            </div>
-                                            <div className="box">
-                                                <div className="label-input-pair">
-                                                    <div className="typography-400-regular">{submitType == 1 ? t("Neuer Name") : t("Name")} *</div>
-                                                    <div>
-                                                        <input type="text"  {...formik.getFieldProps('password')} />
-                                                        {formik.touched.password && formik.errors.password ? (
-                                                            <div className="validation">{formik.errors.password}</div>
-                                                        ) : null}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="button-group pointer">
-                                                <div onClick={() => setModalView(false)}><TemplateButton content={t("Abbrechen")} type={"transparent"} /></div>
-                                                <div onClick={formik.handleSubmit}><TemplateButton content={t("Bestätigen")} /></div>
-                                            </div>
-                                        </div>
+            }
+            {open &&
+                <div className="modal">
+                    <div className="modal-content">
+                        <ModalBoxComponent label={`${label} Name`}>
+                            <div className="box">
+                                <div className="label-input-pair">
+                                    <div className="typography-400-regular">{t("Neuer Name")} *</div>
+                                    <div>
+                                        <input type="text" onChange={(e) => setValue(e.target.value)}/>
                                     </div>
                                 </div>
-                            </form>
-                        )}
-                    </Formik>
-                ) : null}
-                <ToastContainer />
-            </form>
+                            </div>
+                            <div className="button-group pointer">
+                                <div onClick={() => setOpen(false)}><TemplateButton content={t("Abbrechen")} type={"transparent"} /></div>
+                                <div onClick={handleCreate}><TemplateButton content={t("Bestätigen")} /></div>
+                            </div>
+                        </ModalBoxComponent>
+                    </div>
+                </div>
+            }
         </>
     )
 }
+
+const TypeList = ({ type, label, items }) =>
+    <form>
+        <TypeListComponent key={type} type={type} label={label} items={items} />
+        <ToastContainer />
+    </form>
 
 export default TypeList
