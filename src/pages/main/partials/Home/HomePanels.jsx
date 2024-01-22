@@ -13,24 +13,31 @@ export const ProductPanel = () => {
     const products = useSelector(state => state.info.productData)
     const page = useSelector(state => state.info.currentProductPage)
     const filter = useSelector(state => state.info.filterData)
+    const nomore = useSelector(state => state.info.nomoreProductData)
+    console.log(nomore)
     useEffect(()=>{
         const fetchProducts = async () => {
             setLoading(true)
-            const response = await getProducts(page, filter);
+            const response = await getProducts(1, filter);
             if(response?.code ===200){
-                if(page === 1) dispatch(infoActions.initProductData())
-                if(response.data.products.length>0) dispatch(infoActions.setProductData(response.data))
+                dispatch(infoActions.initProductData())
+                dispatch(infoActions.setProductData(response.data))
             }
-            setLoading(false)
+            setTimeout(()=>{
+                setLoading(false)
+            }, 1000)
         }
         fetchProducts();
-    },[dispatch, page, filter])
-    const handeNext = () => {
-        setLoading(true)
-        setTimeout(() => {
-            dispatch(infoActions.setProductPage(page+1))
-        }, 1500); 
-        setLoading(false)
+    },[dispatch, filter])
+    const handleNext = async () => {
+        if (!nomore) {
+            setTimeout(async () => {
+                const response = await getProducts(page, filter);     
+                if(response?.code ===200){
+                    dispatch(infoActions.setProductData(response.data));
+                }
+            }, 1500);
+        }
     }
     return(
         <>
@@ -40,7 +47,7 @@ export const ProductPanel = () => {
                 <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>
                     {t(`No matching composings found`)}
                 </div> : 
-                <DataTable items={products} index = "product" page={page} next={handeNext}/> )
+                <DataTable items={products} index = "product" page={page-1} next={handleNext}/> )
             }
         </>
     )
@@ -53,24 +60,28 @@ export const TemplatePanel = () => {
     const templates = useSelector(state => state.info.templateData)
     const page = useSelector(state => state.info.currentTemplatePage)
     const filter = useSelector(state => state.info.filterData)
+    const nomore = useSelector(state => state.info.nomoreTemplateData)
     useEffect(()=>{
         const fetchTemplates = async () => {
             setLoading(true);            
-            const response = await getTemplates(page, filter);    
+            const response = await getTemplates(1, filter);    
             if(response?.code ===200){
-                if(page === 1) dispatch(infoActions.initTemplatetData());
-                if(response.data.templates.length>0) dispatch(infoActions.setTemplateData(response.data));
+                dispatch(infoActions.initTemplatetData());
+                dispatch(infoActions.setTemplateData(response.data));
             }            
             setLoading(false);
         }    
         fetchTemplates();    
-    },[dispatch, page, filter]);
-    const handeNext = () => {
-        setLoading(true)
-        setTimeout(() => {
-            dispatch(infoActions.setTemplatePage(page+1))
-        }, 1500); 
-        setLoading(false)
+    },[dispatch, filter]);
+    const handleNext = async () => {
+        if (!nomore) {
+            setTimeout(async () => {
+                const response = await getTemplates(page, filter);     
+                if(response?.code ===200){
+                    dispatch(infoActions.setTemplateData(response.data));
+                }
+            }, 1500);
+        }
     }
     return(
         <>
@@ -79,7 +90,7 @@ export const TemplatePanel = () => {
                 <div className='typography-400-regular' style={{ textAlign: "start", marginTop: "20px" }}>
                     {t(`No matching templates found`)}
                 </div> : 
-                <DataTable items={templates} page={page} index = "template" next={handeNext}/> )
+                <DataTable items={templates} page={page-1} index = "template" next={handleNext}/> )
             }
         </>
     )

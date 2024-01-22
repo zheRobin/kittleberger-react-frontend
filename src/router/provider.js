@@ -36,6 +36,7 @@ const AuthRoutes = () => {
       {routes.map(({ path, component: Component }) => (
         <Route key={path} path={path} element={<Layout><Component /></Layout>} />
       ))}
+      <Route path="/*" element={<Navigate to="/" />} />
     </Routes>
   );
 };

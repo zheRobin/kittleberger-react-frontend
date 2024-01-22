@@ -7,6 +7,8 @@ export const infoSlice = createSlice({
         currentTab: localStorage.getItem("currentTab") || "template",
         currentTemplatePage: 1,
         currentProductPage: 1,
+        nomoreTemplateData: false,
+        nomoreProductData: false,
         pageData: JSON.parse(localStorage.getItem("pageData")) || {},
         productData: JSON.parse(localStorage.getItem("productData")) || [],
         usedArticleData: JSON.parse(localStorage.getItem("usedArticleData")) || [],
@@ -19,12 +21,14 @@ export const infoSlice = createSlice({
             state.productData = []
             state.usedArticleData = []
             state.currentProductPage = 1
+            state.nomoreProductData = false
             localStorage.removeItem('productData')
             localStorage.removeItem('usedArticleData')
         },
         initTemplatetData: (state) => {
             state.templateData = []
             state.currentTemplatePage = 1
+            state.nomoreTemplateData = false
             localStorage.removeItem('templateData')
         },
         setSelectedLanguage:(state, action) => {
@@ -50,12 +54,15 @@ export const infoSlice = createSlice({
         },
         setProductData: (state, action) => {
             state.productData = [...state.productData, ...action.payload.products];
-            state.usedArticleData = [...state.usedArticleData, ...action.payload.articles];
+            state.currentProductPage = state.currentProductPage + 1
+            if( action.payload.products.length < 15) state.nomoreProductData = true
+            state.usedArticleData = action.payload.articles;
             localStorage.setItem('productData', JSON.stringify(state.productData));
             localStorage.setItem('usedArticleData', JSON.stringify(state.usedArticleData));
         },
         setTemplateData: (state, action) => {
             state.templateData = [...state.templateData,...action.payload.templates];
+            if( action.payload.templates.length < 15) state.nomoreTemplateData = true
             localStorage.setItem('templateData', JSON.stringify(state.templateData));
         },
         setFilterData: (state, action) => {

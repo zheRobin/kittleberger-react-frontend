@@ -18,8 +18,6 @@ export const DetailCheckbox = (props) => {
         } else if (!checked && type in newFilterData) {
             newFilterData[type] = newFilterData[type].filter(item => item !== value);
         }
-        dispatch(infoActions.setProductPage(1));
-        dispatch(infoActions.setTemplatePage(1));
         dispatch(infoActions.setFilterData(newFilterData));
     }
 
