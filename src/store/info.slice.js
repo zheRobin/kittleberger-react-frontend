@@ -55,8 +55,8 @@ export const infoSlice = createSlice({
             localStorage.setItem('usedArticleData', JSON.stringify(state.usedArticleData));
         },
         setTemplateData: (state, action) => {
-            localStorage.setItem('templateData', JSON.stringify(action.payload.templates));
-            state.templateData = action.payload.templates;
+            state.templateData = [...state.templateData,...action.payload.templates];
+            localStorage.setItem('templateData', JSON.stringify(state.templateData));
         },
         setFilterData: (state, action) => {
             state.filterData = action.payload

@@ -18,8 +18,8 @@ export const DetailCheckbox = (props) => {
         } else if (!checked && type in newFilterData) {
             newFilterData[type] = newFilterData[type].filter(item => item !== value);
         }
-        dispatch(infoActions.initProductData());
-        dispatch(infoActions.initTemplatetData());
+        dispatch(infoActions.setProductPage(1));
+        dispatch(infoActions.setTemplatePage(1));
         dispatch(infoActions.setFilterData(newFilterData));
     }
 
@@ -41,7 +41,6 @@ export const DetailCheckbox = (props) => {
 export const CountryCheckbox = (props) => {
     const dispatch = useDispatch();
     const countryList = useSelector(state => state.info.countryList) || {};
-    console.log(countryList)
     const isChecked = props.type in countryList 
         && countryList[props.type].includes(props.element.id);
 
