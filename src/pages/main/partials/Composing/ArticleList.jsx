@@ -24,7 +24,7 @@ const ArticleItem = ({ item, template }) => {
         dispatch(composingActions.setSaveStatus(false))
     }
     useEffect(() => {
-        if (template.article_placements.length === usedArticle.length) {
+        if (template?.article_placements?.length === usedArticle.length) {
             setVisbleIcon(false)
         } else {
             setVisbleIcon(true)
@@ -65,8 +65,8 @@ const ArticleItem = ({ item, template }) => {
                     onClick={openImagePopUp}/>
             </div>
             {popupImage && 
-                <div onClick={closeImagePopUp} style={{position: "fixed", top:0, left:0, right:0, bottom:0,backgroundColor: "rgba(0,0,0,0.6)", display:"flex", justifyContent:"center", alignItems:"center"}}>
-                    <img style={{ width: "80%", height: "80%", objectFit: "contain" }} src={item.render_url} alt="article"/>
+                <div onClick={closeImagePopUp} style={{position: "fixed", top:0, left:0, right:0, bottom:0,backgroundColor: "rgba(0,0,0,0.6)", display:"flex", justifyContent:"center", alignItems:"center", zIndex:5 }}>
+                    <img style={{ width: "50%", height: "50%", objectFit: "contain" }} src={item.render_url} alt="article"/>
                 </div>
             }
             <div className="product-info" >
@@ -91,7 +91,7 @@ const ArticleList = ({ template }) => {
     const [loading, setLoading] = useState(true)
     const [noMoreArticles, setNoMoreArticles] = useState(false)
     const page = useSelector(state => state.composing.currentListPage)
-    const [productInfo, setProductInfo] = useState('');
+    const productInfo = useSelector(state => state.composing.articleFilter)
     const countryListFromState = useSelector(state => state.info.countryList);
     const country = useMemo(() => 
         Array.isArray(countryListFromState.country_list) ? countryListFromState.country_list : []
@@ -100,6 +100,7 @@ const ArticleList = ({ template }) => {
 
     useEffect(() => {
         const getArticlesData = async () => {
+            setNoMoreArticles(false)
             setLoading(true)
             const response = await getArticleList({ 
                 page, 
@@ -108,27 +109,41 @@ const ArticleList = ({ template }) => {
             });
             if (response?.code === 200) {
                 dispatch(composingActions.setArticleList(response.data))
-                if(response.data.length === 0 ){ 
+                if(response.data.products.length < 30 ){ 
                     setNoMoreArticles(true)
                 }
             }
             setLoading(false)
         }
         getArticlesData();
-    }, [dispatch, page, productInfo, country])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [productInfo, country])
   
-      const handleLoadMore = () => {
-          dispatch(composingActions.setListPage(page + 1))
-      }
+    const handleLoadMore = async () => {
+        setLoading(true)
+        const response = await getArticleList({ 
+            page: page + 1, 
+            productInfo, 
+            country: country.length === 0 ? "" : country.join(',') 
+        });
+        if (response?.code === 200) {
+            dispatch(composingActions.setArticleList(response.data))
+            if(response.data.products.length < 30){ 
+                setNoMoreArticles(true)
+            }
+        }
+        setLoading(false)
+    }
     const articlesData = useSelector(state => state.composing.articleList)
     const handleChange = (event) => {
-        setProductInfo(event.target.value);
-        dispatch(composingActions.setListPage(1));
+        setTimeout(()=>{
+            dispatch(composingActions.setFilterData(event.target.value));
+        }, 500)
       };
     return (
         <div className="product-select__l">
             <div className="product-search">
-                <input placeholder={t("Produkte durchsuchen")} onChange={handleChange}/>
+                <input placeholder={t("Produkte durchsuchen")} onChange={handleChange} defaultValue={productInfo}/>
             </div>
             <div className="product-add">
                 {articlesData.map((article, index) => <ArticleItem key={index} item={article} template={template} />)}
@@ -137,7 +152,8 @@ const ArticleList = ({ template }) => {
             <div className="" style={{ display: "flex", paddingTop: "10px", justifyContent: "center", height: "50px" }}>
                 <img src={SpinnerIcon} alt="productSpinner" ></img>
             </div> : 
-            noMoreArticles ? <div>{t("Keine Ergebnisse")}</div> : 
+            noMoreArticles ? 
+            <div style={{ textAlign: "center", marginTop: "10px", fontWeight: "bold" }}>{t("Keine weiteren Ergebnisse")}</div> : 
             <div className="typography-400-bold pointer" onClick={handleLoadMore} style={{ textAlign: "center", marginTop: "10px", color: "#8F7300", fontWeight: "bold" }}>{t("Mehr laden")}</div>}
         </div>
     )

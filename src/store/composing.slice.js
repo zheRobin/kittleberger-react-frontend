@@ -7,10 +7,10 @@ const composingSlice = createSlice({
         articleList: JSON.parse(localStorage.getItem('articleList')) || [],
         composingElements: JSON.parse(localStorage.getItem('composingElements')) || [],
         savedComposing: JSON.parse(localStorage.getItem('savedComposing')) || {},
-        currentListPage: 1,
-        comparedListPage: 1,
+        currentListPage: parseInt(localStorage.getItem('currentListPage')) || 1,
         renderedCompose: localStorage.getItem('renderedCompose') || '',
         saveStatus: false,
+        articleFilter: localStorage.getItem('articleFilter') || '',
     },
     reducers:{
         initComposingState: (state) => {
@@ -20,8 +20,8 @@ const composingSlice = createSlice({
                 composingElements: [],
                 savedComposing: {},
                 currentListPage: 1,
-                comparedListPage: 1,
                 renderedCompose: '',
+                articleFilter: '',
                 saveStatus: false
             };
             localStorage.removeItem('currentTemplate');
@@ -29,6 +29,8 @@ const composingSlice = createSlice({
             localStorage.removeItem('composingElements');
             localStorage.removeItem('savedComposing');
             localStorage.removeItem('renderedCompose');
+            localStorage.removeItem('articleFilter');
+            localStorage.removeItem('currentListPage');
             return initialState;
         },
         setTemplate: (state, action) => {
@@ -38,9 +40,9 @@ const composingSlice = createSlice({
         setArticleList: (state, action) => {
             if (action.payload.current_page === 1) {
                 state.articleList = action.payload.products
-            } else if(state.currentListPage === state.comparedListPage + 1) {
+            } else if(state.currentListPage + 1 === action.payload.current_page) {
                 state.articleList = [...state.articleList, ...action.payload.products]
-                state.comparedListPage = action.payload.current_page
+                state.currentListPage = action.payload.current_page
             }
             localStorage.setItem('articleList', JSON.stringify(state.articleList));
         },
@@ -77,6 +79,12 @@ const composingSlice = createSlice({
         setSaveStatus: (state, action) => {
             state.saveStatus = action.payload
         },
+        setFilterData: (state, action) => {
+            state.articleFilter = action.payload
+            state.currentListPage = 1
+            localStorage.setItem('articleFilter', state.articleFilter);
+            localStorage.setItem('currentListPage', state.currentListPage);
+        }
     },
 })
 

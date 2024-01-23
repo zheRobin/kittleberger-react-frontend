@@ -9,32 +9,33 @@ import { composingActions } from "store/composing.slice";
 import "./style/organismStyle.scss"
 const ComposingEdit = () => {
     const { id } = useParams();
-    const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false)
     const templateItem = useSelector(state => state.info.templateData.find(item => item.id === parseInt(id)));
     const articleItems = useSelector(state => state.composing.composingElements);
     
     useEffect(() => {
-            if(!templateItem) {
-                navigate('/')
-            } else {
-                dispatch(composingActions.setTemplate(templateItem))
-                const composeRender = async () => {
-                    const request = {
-                        template_id: id,
-                        articles: articleItems
-                    }
-                    setLoading(true)
-                    const response = await composeByInfo(request);
-                    setLoading(false)
-                    if (response?.code === 200) {
-                        dispatch(composingActions.setRenderedCompose(response.data))
-                    }
+        if(!templateItem) {
+            navigate('/')
+        } else {
+            dispatch(composingActions.setTemplate(templateItem))
+            const composeRender = async () => {
+                const request = {
+                    template_id: id,
+                    articles: articleItems
                 }
-                composeRender();                
-            }        
-    }, [articleItems, dispatch, id, navigate, templateItem])
+                setLoading(true)
+                const response = await composeByInfo(request);
+                setLoading(false)
+                if (response?.code === 200) {
+                    dispatch(composingActions.setRenderedCompose(response.data))
+                }
+            }
+            composeRender();                
+        }        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [articleItems, templateItem])
     const renderedCompose = useSelector(state => state.composing.renderedCompose);
     return (
         <Suspense fallback={<Loading />}>
