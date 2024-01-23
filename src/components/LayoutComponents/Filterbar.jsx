@@ -21,6 +21,8 @@ const Filterbar = () => {
     const dispatch = useDispatch()
     const countryList = useSelector(state => state.info.countryList);
     const filterData = useSelector(state => state.info.filterData);
+    const currentTab = useSelector(state => state.info.currentTab);
+    const article_list = (filterData && Array.isArray(filterData.article_list) && currentTab === 'product') ? filterData.article_list : [];
     const selectedNumbers = (filterData && Array.isArray(filterData.article_number)) ? filterData.article_number : [];
     const selectedNumberIndices = selectedNumbers.map(selectedNumber => 
         numbers.findIndex(number => number.id === selectedNumber)
@@ -39,7 +41,7 @@ const Filterbar = () => {
     const [climit, setCLimit] = useState(initialClimit)
     const { t } = useTranslation()
     const resetFilter = () => {
-        dispatch(infoActions.setFilterData({}));
+        dispatch(infoActions.setFilterData({article_list}));
         dispatch(infoActions.setCountryList({}));
     }
     return (

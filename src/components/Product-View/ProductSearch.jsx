@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -29,7 +29,14 @@ export default function ProductSearch() {
   const getUniqueObjects = (array, key) => {
     return [...new Map(array.map(item => [item[key], item])).values()]
   }
-  
+  useEffect(()=>{
+    if (filter.article_list) {
+      let newFilter = {...filter}
+      delete newFilter.article_list;
+      dispatch(infoActions.setFilterData(newFilter));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   const uniqueUsedArticles = getUniqueObjects(usedArticles, 'article_number');
   const handleChange = (event, value) => {
     const selected = value.map(val => val.article_number);
