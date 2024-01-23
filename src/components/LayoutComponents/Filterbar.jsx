@@ -19,10 +19,25 @@ export const numbers = [
 ]
 const Filterbar = () => {
     const dispatch = useDispatch()
-    const [nlimit, setNLimit] = useState(5)
-    const [climit, setCLimit] = useState(5)
-    const { t } = useTranslation()
+    const countryList = useSelector(state => state.info.countryList);
+    const filterData = useSelector(state => state.info.filterData);
+    const selectedNumbers = filterData ? filterData.article_number : [];
+    const selectedNumberIndices = selectedNumbers.map(selectedNumber => 
+        numbers.findIndex(number => number.id === selectedNumber)
+    );
+    const maxSelectedNumberIndex = Math.max(...selectedNumberIndices);
+    const initialNlimit = maxSelectedNumberIndex > 5 ? maxSelectedNumberIndex + 1 : 5;
+
     const data = useSelector(state => state.info.pageData)
+    const selectedCountries = countryList ? countryList.country_list : [];
+    const selectedCountryIndices = selectedCountries.map(selectedCountry => 
+        data?.country_list?.findIndex(country => country.id === selectedCountry)
+    );
+    const maxSelectedCountryIndex = Math.max(...selectedCountryIndices);
+    const initialClimit = maxSelectedCountryIndex > 5 ? maxSelectedCountryIndex + 1 : 5;
+    const [nlimit, setNLimit] = useState(initialNlimit)
+    const [climit, setCLimit] = useState(initialClimit)
+    const { t } = useTranslation()
     const resetFilter = () => {
         dispatch(infoActions.setFilterData({}));
         dispatch(infoActions.setCountryList({}));
@@ -70,10 +85,10 @@ const Filterbar = () => {
                         <div className="check-group">
                             {data?.country_list?.slice(0, climit).map((el, index) => <CountryCheckbox key={index} type="country_list" element={el} title={t(el.name)} />)}
                         </div>
-                        {climit > 5 ? (<div className="product-list pointer" onClick={(e) => setCLimit(5)}>
+                        {climit !== 5 ? (<div className="product-list pointer" onClick={(e) => setCLimit(5)}>
                             <img style={{ marginLeft: "3px" }} src={MinusIcon} alt="plusButton" />
                             <Typography fontSize="14px" lineHeight="20px">{t('Weniger anzeigen')}</Typography>
-                        </div>) : (<div className="product-list pointer" onClick={(e) => setCLimit(10)}>
+                        </div>) : (<div className="product-list pointer" onClick={(e) => setCLimit(-1)}>
                             <img style={{ marginLeft: "3px" }} src={PlusIcon2} alt="plusButton" />
                             <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
                         </div>)}
