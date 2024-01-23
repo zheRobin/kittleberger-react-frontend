@@ -26,7 +26,7 @@ const Filterbar = () => {
         numbers.findIndex(number => number.id === selectedNumber)
     );
     const maxSelectedNumberIndex = Math.max(...selectedNumberIndices);
-    const initialNlimit = maxSelectedNumberIndex > 5 ? maxSelectedNumberIndex + 1 : 5;
+    const initialNlimit = maxSelectedNumberIndex > 5 ? -1 : 5;
 
     const data = useSelector(state => state.info.pageData)
     const selectedCountries = countryList && Array.isArray(countryList.country_list) ? countryList.country_list : [];
@@ -34,7 +34,7 @@ const Filterbar = () => {
         data?.country_list?.findIndex(country => country.id === selectedCountry)
     );
     const maxSelectedCountryIndex = Math.max(...selectedCountryIndices);
-    const initialClimit = maxSelectedCountryIndex > 5 ? maxSelectedCountryIndex + 1 : 5;
+    const initialClimit = maxSelectedCountryIndex > 5 ? -1 : 5;
     const [nlimit, setNLimit] = useState(initialNlimit)
     const [climit, setCLimit] = useState(initialClimit)
     const { t } = useTranslation()
@@ -60,10 +60,10 @@ const Filterbar = () => {
                         <div className="check-group">
                             {numbers.slice(0, nlimit).map((el, index) => <DetailCheckbox key={index} type="article_number" element={el} title={t(el.name)} />)}
                         </div>
-                        {nlimit > 5 ? (<div className="product-list pointer" onClick={(e) => setNLimit(5)}>
+                        {nlimit !== 5 ? (<div className="product-list pointer" onClick={(e) => setNLimit(5)}>
                             <img style={{ marginLeft: "3px" }} src={MinusIcon} alt="plusButton" />
                             <Typography fontSize="14px" lineHeight="20px">{t('Weniger anzeigen')}</Typography>
-                        </div>) : (<div className="product-list pointer" onClick={(e) => setNLimit(10)}>
+                        </div>) : (<div className="product-list pointer" onClick={(e) => setNLimit(-1)}>
                             <img style={{ marginLeft: "3px" }} src={PlusIcon2} alt="plusButton" />
                             <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
                         </div>)}
