@@ -10,7 +10,7 @@ import { getDynamicContent } from 'libs/_utils/actions';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import ReactHtmlParser from 'react-html-parser'; 
+import parse from 'html-react-parser'; 
 
 export default function AlertDialog({text}) {
   const [open, setOpen] = React.useState(false);
@@ -58,7 +58,7 @@ export default function AlertDialog({text}) {
          </p>
          </div>
         <DialogContent className='custom-dialog__content'>
-          {ReactHtmlParser(content ? content : '')}  
+          {parse(content ? content : '')}  
         </DialogContent>
       </Dialog>
     </React.Fragment>

@@ -3,7 +3,6 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from 'layouts';
 
 import Login from "pages/auth/login"
-import ForgetPassword from "pages/auth/forget-password"
 
 import Home from "pages/main/Home";
 import Composing from "pages/main/Composing";
@@ -44,9 +43,8 @@ const AuthRoutes = () => {
 const AnonRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="forgot-password" element={<ForgetPassword />} />
-      <Route path="/*" element={<Navigate to="/" />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/*" element={<Navigate to="/login" />} />
     </Routes>
   );
 };

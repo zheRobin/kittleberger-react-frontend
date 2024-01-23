@@ -15,12 +15,12 @@ const reducers = {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem("pageData");
-    localStorage.removeItem("composeInfo");
-    localStorage.removeItem("templateInfo");
-    localStorage.removeItem("productsInfo");
-    localStorage.removeItem("i18nextLng");
-    localStorage.removeItem("cardInfo");
-    localStorage.removeItem("currentTab");
+    localStorage.removeItem("articleList");
+    localStorage.removeItem("templateData");
+    localStorage.removeItem("renderedCompose");
+    localStorage.removeItem("usedArticleData");
+    localStorage.removeItem("currentTemplate");
+    localStorage.removeItem("productData");
     window.location.assign("/");
   },
 };

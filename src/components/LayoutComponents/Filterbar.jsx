@@ -63,7 +63,7 @@ const Filterbar = () => {
                         {nlimit !== 5 ? (<div className="product-list pointer" onClick={(e) => setNLimit(5)}>
                             <img style={{ marginLeft: "3px" }} src={MinusIcon} alt="plusButton" />
                             <Typography fontSize="14px" lineHeight="20px">{t('Weniger anzeigen')}</Typography>
-                        </div>) : (<div className="product-list pointer" onClick={(e) => setNLimit(-1)}>
+                        </div>) : (<div className="product-list pointer" onClick={(e) => setNLimit()}>
                             <img style={{ marginLeft: "3px" }} src={PlusIcon2} alt="plusButton" />
                             <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
                         </div>)}
@@ -88,7 +88,7 @@ const Filterbar = () => {
                         {climit !== 5 ? (<div className="product-list pointer" onClick={(e) => setCLimit(5)}>
                             <img style={{ marginLeft: "3px" }} src={MinusIcon} alt="plusButton" />
                             <Typography fontSize="14px" lineHeight="20px">{t('Weniger anzeigen')}</Typography>
-                        </div>) : (<div className="product-list pointer" onClick={(e) => setCLimit(-1)}>
+                        </div>) : (<div className="product-list pointer" onClick={(e) => setCLimit()}>
                             <img style={{ marginLeft: "3px" }} src={PlusIcon2} alt="plusButton" />
                             <Typography fontSize="14px" lineHeight="20px">{t('Mehr anzeigen')}</Typography>
                         </div>)}

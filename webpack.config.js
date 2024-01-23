@@ -20,6 +20,22 @@ module.exports = {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'css-loader',
+          }, {
+            loader: 'resolve-url-loader',
+          }, {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              sourceMapContents: false
+            }
+          }
+        ]
+      }
     ],
   },
   devServer: {

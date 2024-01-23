@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import { useState, useRef } from "react"
 import { SpinnerIcon, PencelWhiteIcon } from "libs/icons"
 import "components/Product-View/style/productViewStyle.scss"
-
+import ErrorImage from "assets/images/img_error.png"
 const Item = ({cardInfo}) => {
     const navigate = useNavigate();
     const role = useSelector(state => state.auth.role)
@@ -43,7 +43,7 @@ const Item = ({cardInfo}) => {
                     </div>
                     <div style={{ display: loading ? "none" : "block" }} onLoad={imageLoaded}>
                         {tempImage?
-                        <img src="assets/images/img_error.png" alt="Preview" />:<img src={cardInfo.u} alt="preview" onError={handleImageError} onLoad={imageLoaded} />                       
+                        <img src={ErrorImage} alt="Preview" />:<img src={cardInfo.u} alt="preview" onError={handleImageError} onLoad={imageLoaded} />                       
                         }
                     </div>
                 </div>

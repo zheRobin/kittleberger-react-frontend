@@ -23,6 +23,10 @@ class AxiosWrapper {
       return response.data;
     } catch (error) {
       console.error(error)
+      if(error?.response?.status === 401) {
+        localStorage.removeItem('token');
+        window.location.assign("/");
+      }
     }
   }
 }
