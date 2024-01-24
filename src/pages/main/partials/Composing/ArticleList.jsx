@@ -47,6 +47,9 @@ const ArticleItem = ({ item, template }) => {
             document.removeEventListener('keydown', handleKeyDown);
         }
     }, []);
+    useEffect(() => {
+        setLoading(true)
+    },[item])
     return (
         <div className="product-list-panel">
             <div style={{ display: loading ? "block" : "none" }}>
@@ -61,7 +64,7 @@ const ArticleItem = ({ item, template }) => {
                 <img style={{ width: "100%", height: "100%", objectFit: "contain" }}
                     src={item.render_url}
                     alt="article"
-                    onLoad={() => setLoading(false)} 
+                    onLoad={() => setLoading(false)}
                     onClick={openImagePopUp}/>
             </div>
             {popupImage && 
