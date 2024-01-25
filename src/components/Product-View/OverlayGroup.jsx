@@ -91,6 +91,7 @@ const OverlayGroup = ({ article, id }) => {
                                 </div>
                                 <div className="panel-top__drag">
                                 <Slider valueLabelDisplay="auto" track={false} 
+                                        valueLabelFormat={value => Math.round(value)}
                                         value={scale * 100} 
                                         onChange={handleSliderChange} 
                                         onMouseUp={handleMouseUp}
@@ -110,7 +111,7 @@ const OverlayGroup = ({ article, id }) => {
                                         }}
                                     />
                                     <div className="percent">
-                                        <input max={100} type="number" className="percent-amount" value={scale * 100} readOnly />
+                                        <input max={100} type="number" className="percent-amount" value={Math.round(scale * 100)} readOnly />
                                         <div className="percent-mark"><p>%</p></div>
                                     </div>
                                 </div>
