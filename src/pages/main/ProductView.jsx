@@ -221,6 +221,7 @@ const ProductView = () => {
             const response = await updateCompose(updatePreviewInfo)
             if (response?.code === 200) {
                 setLoading(false)
+                handleClose()
                 toast.success("Successfully Updated", { theme: "colored", hideProgressBar: "true", autoClose: 1500 })
                 dispatch(composingActions.setSavedCompose(response.data))
             }else {
